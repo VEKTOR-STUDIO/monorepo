@@ -1,0 +1,3 @@
+{
+  "extends": ["@alessandrovaru/eslint-config/next"]
+}

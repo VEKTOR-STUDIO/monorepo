@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default, dark;
+}
+
+@theme {
+  --animate-shimmer: shimmer 3s ease-out infinite alternate;
+  --animate-opacity: opacity 0.25s ease-in-out;
+  --animate-appearFromRight: appearFromRight 300ms ease-in-out;
+  --animate-popup: popup 0.25s ease-in-out;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 0 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes opacity {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes appearFromRight {
+    0% {
+      opacity: 0.3;
+      transform: translate(15%, 0px);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0);
+    }
+  }
+
+  @keyframes popup {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+/* Deportivo: neutros + azul rendimiento (primary) */
+[data-theme="light"] {
+  --color-base-100: #ffffff;
+  --color-base-200: #f3f4f6;
+  --color-base-300: #e5e7eb;
+  --color-base-content: #1f2937;
+  --color-primary: #2563eb;
+  --color-primary-content: #ffffff;
+  --color-secondary: #0f172a;
+  --color-secondary-content: #f8fafc;
+}
+
+[data-theme="dark"] {
+  --color-base-100: #0f172a;
+  --color-base-200: #1e293b;
+  --color-base-300: #334155;
+  --color-base-content: #f1f5f9;
+  --color-primary: #3b82f6;
+  --color-primary-content: #ffffff;
+}
+
+:root {
+  --font-display: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body {
+  scroll-behavior: smooth !important;
+  min-height: 100vh !important;
+}
+
+progress::-webkit-progress-value {
+  transition: 0.6s width ease-out;
+}

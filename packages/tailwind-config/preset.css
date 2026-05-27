@@ -1,0 +1,105 @@
+/**
+ * Alessandrovaru shared Tailwind preset (Tailwind 4 CSS-first).
+ *
+ * Cada app importa este archivo en su `globals.css` así:
+ *
+ *   @import "tailwindcss";
+ *   @import "@alessandrovaru/tailwind-config/preset.css";
+ *   @plugin "daisyui" {
+ *     themes: light --default, dark;
+ *   }
+ *
+ * El preset entrega: animaciones estándar (shimmer, wiggle, popup,
+ * appearFromRight, opacity) + sus keyframes + el background `bg-gradient`.
+ * Los temas DaisyUI los define cada app (cada cliente trae su paleta).
+ */
+
+@theme {
+  --animate-shimmer: shimmer 3s ease-out infinite alternate;
+  --animate-opacity: opacity 0.25s ease-in-out;
+  --animate-appearFromRight: appearFromRight 300ms ease-in-out;
+  --animate-wiggle: wiggle 1.5s ease-in-out infinite;
+  --animate-popup: popup 0.25s ease-in-out;
+
+  --background-image-gradient: linear-gradient(
+    60deg,
+    #f79533,
+    #f37055,
+    #ef4e7b,
+    #a166ab,
+    #5073b8,
+    #1098ad,
+    #07b39b,
+    #6fba82
+  );
+
+  @keyframes shimmer {
+    0% {
+      background-position: 0 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes opacity {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes appearFromRight {
+    0% {
+      opacity: 0.3;
+      transform: translate(15%, 0px);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(0);
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    20%,
+    80%,
+    100% {
+      transform: rotate(0deg);
+    }
+    30%,
+    60% {
+      transform: rotate(-2deg);
+    }
+    40%,
+    70% {
+      transform: rotate(2deg);
+    }
+    45% {
+      transform: rotate(-4deg);
+    }
+    55% {
+      transform: rotate(4deg);
+    }
+  }
+
+  @keyframes popup {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+packages:
+  - "apps/*"
+  - "apps/clients/*"
+  - "packages/*"
+allowBuilds:
+  sharp: true
+  unrs-resolver: true

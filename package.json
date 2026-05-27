@@ -1,0 +1,22 @@
+{
+  "name": "alessandrovaru-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Alessandrovaru monorepo engine — vanilla Shipfast template, client projects and shared packages.",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "start": "turbo run start",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "turbo": "^2.1.3"
+  },
+  "engines": {
+    "node": ">=18.17.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@11.3.0"
+}

@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "@alessandrovaru/tailwind-config/preset.css";
+@import "@alessandrovaru/ui/styles.css";
+
+/**
+ * Tailwind 4 CSS-first config.
+ *  - `@source` reemplaza el viejo `content: []`. Apuntá a los directorios desde
+ *    los que querés que JIT extraiga clases (incluyendo @alessandrovaru/ui).
+ *  - `@plugin "daisyui"` activa DaisyUI v5 con los temas declarados abajo.
+ *
+ * Para arrancar un nuevo cliente: copia esta app a apps/clients/<name>/ y
+ * sustituí los temas DaisyUI por la paleta de la marca.
+ */
+@source "../app/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../../../packages/ui/src/**/*.{js,jsx,ts,tsx}";
+
+@plugin "daisyui" {
+  themes: light --default, dark;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+/* Smooth fill for the native progress element. */
+progress::-webkit-progress-value {
+  transition: 0.6s width ease-out;
+}
+
+@layer components {
+  .btn-gradient {
+    @apply bg-gradient bg-[length:300%_300%] hover:saturate-[1.2] shadow duration-100 animate-shimmer text-white;
+    border: 0;
+    background-color: transparent;
+  }
+
+  .btn-gradient:disabled {
+    @apply bg-gray-500/30;
+    background-image: none;
+  }
+
+  .btn {
+    @apply capitalize;
+  }
+}

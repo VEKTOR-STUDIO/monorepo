@@ -1,0 +1,56 @@
+/**
+ * Utilidades CSS de @alessandrovaru/ui.
+ *
+ * Cada app consume esta hoja desde su `globals.css`:
+ *   @import "@alessandrovaru/ui/styles.css";
+ *
+ * Los colores del gradiente animado son sobreescribibles por app mediante CSS
+ * variables (definirlas en `:root`, en un `@theme {}` o en el tema DaisyUI):
+ *   --alessandrovaru-gradient-from
+ *   --alessandrovaru-gradient-to
+ */
+
+.btn-gradient-animated {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    90deg,
+    var(--alessandrovaru-gradient-from, #0f7edd) 0%,
+    var(--alessandrovaru-gradient-to, #cc26d7) 50%,
+    var(--alessandrovaru-gradient-from, #0f7edd) 100%
+  );
+  background-size: 200% 100%;
+  animation: alessandrovaru-gradient-slide 4s ease-in-out infinite;
+}
+
+.btn-gradient-animated::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s;
+}
+
+.btn-gradient-animated:hover::before {
+  left: 100%;
+}
+
+@keyframes alessandrovaru-gradient-slide {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
