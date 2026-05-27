@@ -1,0 +1,250 @@
+---
+description: Esquema y reglas de base de datos (Supabase) para Francesca D'Apuzzo
+alwaysApply: true
+globs:
+  - app/api/**
+  - libs/supabase/**
+---
+
+<!-- ## Reglas para peticiones a Supabase
+
+Usa estas reglas para hacer consultas consistentes a la base de datos con Supabase en Next.js 15 + React 19. Para contexto adicional (headers, imports, estilos, etc.), revisa también: @template-rules.mdc
+
+### Cliente Supabase
+- **Server Components / Rutas API**: usa `@/libs/supabase/server` y SIEMPRE `await` al crear el cliente.
+- **Client Components**: usa `@/libs/supabase/client` (sin `await`).
+
+```ts
+// Server (RSC, acciones server, y rutas API)
+import { NextResponse } from "next/server";
+import { createClient } from "@/libs/supabase/server";
+
+export async function GET() {
+  const supabase = await createClient(); // Next.js 15: evitar warnings de cookies async
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("id, email")
+    .limit(10);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+  return NextResponse.json({ data });
+}
+```
+
+```ts
+// Client (Componentes interactivos)
+"use client";
+import { useEffect, useState } from "react";
+import { createClient } from "@/libs/supabase/client";
+
+export function UseUserEmail() {
+  const supabase = createClient();
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
+  }, [supabase]);
+
+  return <span>{email}</span>;
+}
+```
+
+### Esquema de peticiones (CRUD recomendado)
+- **select**: devuelve `data` tipada y maneja `error` sin `try/catch` innecesarios.
+```ts
+const { data, error } = await supabase
+  .from("TABLE_NAME")
+  .select("*")
+  .match({ key: value })
+  .order("created_at", { ascending: false })
+  .range(0, 49); // paginación
+```
+
+- **insert**: devuelve la fila creada con `.select().single()`.
+```ts
+const { data, error } = await supabase
+  .from("TABLE_NAME")
+  .insert(payload)
+  .select()
+  .single();
+```
+
+- **update**: filtra por clave(s) y devuelve la fila actualizada.
+```ts
+const { data, error } = await supabase
+  .from("TABLE_NAME")
+  .update(updates)
+  .eq("id", id)
+  .select()
+  .single();
+```
+
+- **upsert**: usa `onConflict` cuando aplique.
+```ts
+const { data, error } = await supabase
+  .from("TABLE_NAME")
+  .upsert(payload, { onConflict: "id" })
+  .select()
+  .single();
+```
+
+- **delete**: evita borrado masivo accidental limitando con filtros estrictos.
+```ts
+const { error } = await supabase
+  .from("TABLE_NAME")
+  .delete()
+  .eq("id", id);
+```
+
+- **RPC** (Funciones SQL):
+```ts
+const { data, error } = await supabase.rpc("function_name", { arg_name: value });
+```
+
+### Autenticación y seguridad
+- Usa RLS (Row Level Security) activa y políticas en Supabase; no uses la service key en el cliente.
+- En Server, puedes obtener el usuario:
+```ts
+const {
+  data: { user },
+  error,
+} = await supabase.auth.getUser();
+```
+
+### Tipos y DX
+- Genera tipos de Supabase y reutilízalos en consultas.
+```ts
+import type { Database } from "@/libs/supabase/types";
+type ProfilesRow = Database["public"]["Tables"]["profiles"]["Row"];
+```
+
+### Convenciones
+- Nombres de tablas y columnas en `snake_case`.
+- Ordena por `created_at desc` para listados recientes.
+- Pagina con `.range(from, to)` o `.limit(n)`; evita cargas completas.
+
+### Esquema de Base de Datos
+
+```sql
+-- WARNING: Este esquema es solo para contexto y no está diseñado para ejecutarse directamente.
+-- El orden de las tablas y constraints puede no ser válido para ejecución.
+
+-- Tabla de perfiles de usuario
+CREATE TABLE public.profiles (
+  id uuid NOT NULL,
+  name text,
+  email text,
+  image text,
+  customer_id text,
+  price_id text,
+  has_access boolean DEFAULT false,
+  created_at timestamp with time zone DEFAULT (now() AT TIME ZONE 'UTC'::text),
+  updated_at timestamp with time zone DEFAULT (now() AT TIME ZONE 'UTC'::text),
+  role text DEFAULT 'user'::text,
+  CONSTRAINT profiles_pkey PRIMARY KEY (id),
+  CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
+);
+
+-- Tabla de leads (usuarios potenciales)
+CREATE TABLE public.leads (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  email text,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT leads_pkey PRIMARY KEY (id)
+);
+
+-- Tabla de citas/consultoría
+CREATE TABLE public.appointments (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  full_name text NOT NULL,
+  email text NOT NULL,
+  phone text,
+  company text,
+  appointment_date date NOT NULL,
+  appointment_time time without time zone NOT NULL,
+  timezone text DEFAULT 'America/Mexico_City'::text,
+  message text,
+  status text DEFAULT 'pending'::text CHECK (status = ANY (ARRAY['pending'::text, 'confirmed'::text, 'cancelled'::text, 'completed'::text])),
+  created_at timestamp with time zone DEFAULT now(),
+  updated_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT appointments_pkey PRIMARY KEY (id),
+  CONSTRAINT appointments_user_id_fkey1 FOREIGN KEY (user_id) REFERENCES public.profiles(id)
+);
+
+-- Índices para appointments
+CREATE INDEX IF NOT EXISTS idx_appointments_user_id ON public.appointments(user_id);
+CREATE INDEX IF NOT EXISTS idx_appointments_status ON public.appointments(status);
+CREATE INDEX IF NOT EXISTS idx_appointments_date ON public.appointments(appointment_date);
+
+-- Row Level Security habilitado en appointments
+ALTER TABLE public.appointments ENABLE ROW LEVEL SECURITY;
+
+-- Políticas RLS para appointments:
+-- 1. Users can view own appointments
+-- 2. Users can create own appointments
+-- 3. Users can update own appointments
+-- 4. Users can delete own appointments
+```
+
+### Tablas Disponibles
+
+#### 1. **profiles**
+- **Propósito**: Datos extendidos del usuario autenticado
+- **Relación**: 1:1 con `auth.users`
+- **Campos clave**: `customer_id` (Stripe), `price_id`, `has_access`, `role`
+
+#### 2. **leads**
+- **Propósito**: Captura de emails para marketing
+- **Uso**: Formularios de suscripción, landing pages
+
+#### 3. **appointments**
+- **Propósito**: Gestión de citas con Francesca D'Apuzzo (micropigmentación, microblading, etc.)
+- **Relación**: N:1 con `profiles` (un usuario puede tener múltiples citas)
+- **Estados**: `pending`, `confirmed`, `cancelled`, `completed`
+- **RLS**: Activo - usuarios solo ven sus propias citas
+
+### Ejemplos de Consultas Comunes
+
+```ts
+// Obtener cita activa del usuario
+const { data: activeAppointment } = await supabase
+  .from("appointments")
+  .select("*")
+  .eq("user_id", user.id)
+  .in("status", ["pending", "confirmed"])
+  .single();
+
+// Crear nueva cita
+const { data, error } = await supabase
+  .from("appointments")
+  .insert({
+    user_id: user.id,
+    full_name: "Juan Pérez",
+    email: "juan@example.com",
+    appointment_date: "2025-10-15",
+    appointment_time: "10:00",
+    status: "pending"
+  })
+  .select()
+  .single();
+
+// Cancelar cita (eliminar)
+const { error } = await supabase
+  .from("appointments")
+  .delete()
+  .eq("id", appointmentId);
+
+// Historial de citas (canceladas/completadas)
+const { data: history } = await supabase
+  .from("appointments")
+  .select("*")
+  .eq("user_id", user.id)
+  .in("status", ["cancelled", "completed"])
+  .order("appointment_date", { ascending: false });
+```
+
+### Referencias
+- Reglas globales y contexto adicional: @template-rules.mdc -->
