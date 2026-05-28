@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
-const OCRE = "#C69C6D";
-const BLACK = "#1A1A1A";
+const GOLD = "#D4AF37";
+const BLACK = "#0A0A0A";
 
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
@@ -17,19 +17,20 @@ export default function Icon() {
           alignItems: "center",
           justifyContent: "center",
           background: BLACK,
+          borderBottom: `4px solid ${GOLD}`,
         }}
       >
         <span
           style={{
-            fontSize: 40,
-            fontWeight: 700,
-            color: OCRE,
-            fontFamily: "Georgia, serif",
+            fontSize: 44,
+            fontWeight: 900,
+            color: GOLD,
+            fontFamily: "Arial, sans-serif",
             lineHeight: 1,
-letterSpacing: "-0.02em",
+            letterSpacing: "-0.04em",
           }}
         >
-          F
+          L
         </span>
       </div>
     ),

@@ -1,94 +1,61 @@
-import Link from "next/link";
 import config from "@/config";
 
 const CTA = () => {
+  const date = new Date(config.event.date)
+    .toLocaleDateString("es-VE", { weekday: "long", day: "numeric", month: "long" })
+    .toUpperCase();
+
   return (
-    <section className="relative py-24 md:py-32 overflow-hidden bg-base-200">
-      {/* Glows */}
-      <div className="absolute top-0 left-0 w-1/2 h-full bg-primary/4 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-accent/4 rounded-full blur-3xl pointer-events-none" />
+    <section className="relative overflow-hidden bg-base-100 text-base-content border-y-4 border-primary">
+      {/* Diagonal gold slashes background */}
+      <div
+        className="absolute inset-0 opacity-[0.07] pointer-events-none"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(-45deg, var(--color-primary) 0 2px, transparent 2px 16px)",
+        }}
+        aria-hidden
+      />
 
-      <div className="max-w-4xl mx-auto px-8 relative z-10">
+      {/* Soft gold radial glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(212,175,55,0.12) 0%, transparent 60%)",
+        }}
+        aria-hidden
+      />
 
-        {/* Framed card */}
-        <div className="relative border border-primary/20 overflow-hidden">
-
-          {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary/60" />
-          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary/60" />
-          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary/60" />
-          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary/60" />
-
-          {/* Content */}
-          <div className="p-10 md:p-16 lg:p-20 text-center space-y-8">
-
-            {/* Ornament */}
-            <div className="flex items-center justify-center gap-4">
-              <div className="h-px flex-1 max-w-16 bg-primary/25" />
-              <div className="w-4 h-4 border border-primary/60 rotate-45" />
-              <div className="h-px flex-1 max-w-16 bg-primary/25" />
-            </div>
-
-            <p
-              className="text-primary font-medium text-xs uppercase"
-              style={{ letterSpacing: "0.35em" }}
-            >
-              ¿Lista para empezar?
-            </p>
-
-            <h2 className="font-bold text-3xl md:text-4xl lg:text-5xl tracking-tight leading-tight">
-              ¿Lista para tu{" "}
-              <span className="text-primary italic">transformación?</span>
-            </h2>
-
-            <p className="text-base-content/60 max-w-lg mx-auto leading-relaxed text-base md:text-lg">
-              Reserva tu cita hoy y da el primer paso hacia la versión más
-              segura y radiante de ti misma.
-            </p>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-              <Link
-                href={config.auth?.loginUrl ?? "/signin"}
-                className="btn btn-primary btn-lg w-full sm:w-auto"
-                style={{
-                  borderRadius: 0,
-                  letterSpacing: "0.18em",
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  paddingLeft: "2.5rem",
-                  paddingRight: "2.5rem",
-                }}
-              >
-                AGENDAR MI CITA
-              </Link>
-
-              {config.business?.whatsapp && (
-                <a
-                  href={config.business.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-ghost btn-lg w-full sm:w-auto border border-primary/35 text-primary"
-                  style={{
-                    borderRadius: 0,
-                    letterSpacing: "0.15em",
-                    fontSize: "0.75rem",
-                  }}
-                >
-                  ESCRIBIR POR WHATSAPP
-                </a>
-              )}
-            </div>
-
-            <p
-              className="text-base-content/35 text-xs uppercase"
-              style={{ letterSpacing: "0.25em" }}
-            >
-              Atención personalizada &nbsp;·&nbsp; Resultados que duran
-            </p>
-
-          </div>
+      <div className="relative max-w-6xl mx-auto px-6 lg:px-10 py-20 lg:py-28 flex flex-col items-center text-center">
+        <div className="inline-flex items-center gap-3 mb-6">
+          <span className="w-10 h-px bg-primary" />
+          <p className="text-primary font-bold text-xs sm:text-sm tracking-[0.5em] uppercase">
+            No te lo pierdas
+          </p>
+          <span className="w-10 h-px bg-primary" />
         </div>
+
+        <h2
+          className="font-display leading-[0.9] mb-4 legion-gold-sheen"
+          style={{ fontSize: "clamp(3rem, 9vw, 7rem)" }}
+        >
+          {date}
+        </h2>
+        <p className="text-base sm:text-lg tracking-[0.25em] uppercase font-bold text-base-content/80 mb-10">
+          {config.event.venue} · {config.event.city}
+        </p>
+        <a
+          href={config.event.ticketUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-3 bg-primary text-primary-content px-12 py-4 font-display text-lg tracking-[0.3em] uppercase hover:bg-accent transition-colors duration-200"
+        >
+          Comprar Entradas
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="square" d="M5 12h14M13 5l7 7-7 7" />
+          </svg>
+        </a>
       </div>
     </section>
   );

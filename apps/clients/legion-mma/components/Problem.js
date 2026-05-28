@@ -1,252 +1,86 @@
-"use client";
+// Renamed in spirit to "AboutLegion" — keep filename so existing imports keep working.
 
-import { useLayoutEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
+const pillars = [
+  {
+    title: "Cambiar el MMA",
+    body:
+      "Repensar cómo se hacen las cosas en las artes marciales mixtas venezolanas. Eventos planificados, organización profesional, transparencia con los peleadores.",
+  },
+  {
+    title: "Proteger al Peleador",
+    body:
+      "Equipos médicos en cada evento, contratos claros, descanso adecuado entre peleas. El bienestar del atleta no es opcional.",
+  },
+  {
+    title: "Mercado Internacional",
+    body:
+      "Darle al peleador venezolano la experiencia y la vitrina necesaria para pelear afuera. Legión es la antesala hacia ligas mundiales.",
+  },
+];
 
-gsap.registerPlugin(ScrollTrigger);
-
-const Pillar = ({ title, description }) => (
-  <div className="pillar-item relative mb-8 last:mb-0 group flex gap-4">
-    {/* Diamond marker */}
-    <div className="flex-shrink-0 mt-1">
-      <div className="w-5 h-5 border border-primary/40 rotate-45 group-hover:border-primary group-hover:scale-110 transition-all duration-300" />
-    </div>
-
-    {/* Content */}
-    <div>
-      <h3 className="font-semibold text-base text-base-content/90 group-hover:text-primary transition-colors duration-300 mb-1">
-        {title}
-      </h3>
-      <p className="text-base-content/55 text-sm leading-relaxed">{description}</p>
-    </div>
-  </div>
-);
-
-const Problem = () => {
-  const imgRef = useRef(null);
-  const contentRef = useRef(null);
-  const titleRef = useRef(null);
-
-  const renderWord = (word, keyPrefix) => (
-    <span key={`w-${keyPrefix}`} className="inline-block whitespace-nowrap">
-      {word.split("").map((ch, i) => (
-        <span key={`c-${keyPrefix}-${i}`} className="char inline-block will-change-transform">
-          {ch}
-        </span>
-      ))}
-    </span>
-  );
-
-  const renderSegment = (text, keyPrefix) => {
-    const words = text.split(" ");
-    return words.map((w, idx) => (
-      <span key={`${keyPrefix}-wrap-${idx}`} className="inline">
-        {renderWord(w, `${keyPrefix}-${idx}`)}
-        {idx < words.length - 1 ? " " : ""}
-      </span>
-    ));
-  };
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate image from left
-      if (imgRef.current) {
-        gsap.from(imgRef.current, {
-          opacity: 0,
-          x: -40,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: imgRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
-
-      // Animate title letter by letter
-      const chars = titleRef.current?.querySelectorAll?.(".char");
-      if (chars && chars.length > 0) {
-        gsap.set(chars, { opacity: 0, y: 40, rotationX: -90 });
-        gsap.to(chars, {
-          opacity: 1,
-          y: 0,
-          rotationX: 0,
-          duration: 0.6,
-          ease: "back.out(1.7)",
-          stagger: 0.03,
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
-
-      // Animate pillars
-      const items = contentRef.current?.querySelectorAll?.(".pillar-item");
-      if (items && items.length > 0) {
-        gsap.from(items, {
-          opacity: 0,
-          x: 40,
-          duration: 0.7,
-          ease: "power3.out",
-          stagger: 0.15,
-          scrollTrigger: {
-            trigger: contentRef.current,
-            start: "top 75%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
-    });
-
-    return () => ctx.revert();
-  }, []);
-
-  const pillars = [
-    {
-      symbol: "✦",
-      title: "Servicio principal 1",
-      description:
-        "Describe aquí el valor diferencial de tu estudio: técnica, acompañamiento y un resultado alineado con la expectativa del cliente.",
-    },
-    {
-      symbol: "✦",
-      title: "Experiencia de sala",
-      description:
-        "Texto plantilla para comunicar comodidad, higiene y una bienvenida que refuerza confianza desde el primer minuto.",
-    },
-    {
-      symbol: "✦",
-      title: "Especialidad 2",
-      description:
-        "Explica en dos líneas cómo este bloque ayuda a tus clientes a mantener resultados duraderos y coherentes con su estilo.",
-    },
-    {
-      symbol: "✦",
-      title: "Actualización y protocolos",
-      description:
-        "Menciona formación continua, materiales premium o protocolos de seguridad — lo que respalde tu posicionamiento premium.",
-    },
-  ];
-
-  return (
-    <section className="relative py-24 md:py-32 bg-base-200 overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-primary/4 to-transparent pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
-
-          {/* LEFT: Imagen de referencia */}
-          <div ref={imgRef} className="flex items-center justify-center lg:justify-end">
-            <div className="relative w-full max-w-xs md:max-w-sm" style={{ aspectRatio: "3/4" }}>
-
-              {/* Offset border — mirror of Hero (offset to the left) */}
-              <div
-                className="absolute inset-0 border border-primary/25 pointer-events-none"
-                style={{ transform: "translate(-14px, 14px)", zIndex: 0 }}
-              />
-              <div
-                className="absolute inset-0 border border-primary/10 pointer-events-none"
-                style={{ transform: "translate(-28px, 28px)", zIndex: 0 }}
-              />
-
-              {/* Image container */}
-              <div
-                className="relative w-full h-full overflow-hidden border border-primary/20 bg-base-300"
-                style={{ zIndex: 1 }}
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1596462780634-896a62bd3e9a?auto=format&fit=crop&w=800&q=80"
-                  alt="Ambiente de estudio de belleza — referencia"
-                  fill
-                  className="object-cover object-top"
-                  sizes="(max-width: 768px) 100vw, 40vw"
-                  style={{
-                    filter: "sepia(0.1) contrast(1.04) brightness(0.96)",
-                  }}
-                />
-
-                {/* Bottom vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-base-200/30 via-transparent to-transparent pointer-events-none" />
-
-                {/* Corner accents */}
-                <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-primary/50 pointer-events-none" style={{ zIndex: 2 }} />
-                <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-primary/50 pointer-events-none" style={{ zIndex: 2 }} />
-                <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-primary/50 pointer-events-none" style={{ zIndex: 2 }} />
-                <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-primary/50 pointer-events-none" style={{ zIndex: 2 }} />
-
-                {/* Top accent line */}
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent pointer-events-none" style={{ zIndex: 2 }} />
-              </div>
+const AboutLegion = () => (
+  <section id="sobre" className="relative bg-base-100 py-20 lg:py-28">
+    <div className="max-w-7xl mx-auto px-6 lg:px-10">
+      <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1.4fr] gap-12 lg:gap-20 items-center">
+        {/* Left: founder block */}
+        <div className="relative">
+          <div className="relative w-full aspect-[3/4] max-w-md mx-auto lg:mx-0 overflow-hidden border-2 border-primary">
+            <div
+              className="absolute inset-0 bg-cover bg-center grayscale"
+              style={{
+                backgroundImage:
+                  'url("https://images.unsplash.com/photo-1517438476312-10d79c077509?auto=format&fit=crop&w=700&q=80")',
+              }}
+              aria-hidden
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-base-100/30 to-transparent" />
+            <div className="absolute inset-0 bg-primary/10 mix-blend-color" />
+            <div className="absolute bottom-0 left-0 right-0 p-6">
+              <p className="text-[0.6rem] tracking-[0.4em] uppercase font-bold text-primary mb-1">
+                Fundador
+              </p>
+              <p className="font-display text-3xl text-base-content leading-none">
+                Omar Morales
+              </p>
+              <p className="text-xs tracking-[0.2em] uppercase text-base-content/60 mt-1">
+                Peleador UFC · Caracas, Venezuela
+              </p>
             </div>
           </div>
+        </div>
 
-          {/* RIGHT: Text content + pillars */}
-          <div ref={contentRef} className="space-y-8">
-
-            <div>
-              <p
-                className="text-primary font-medium text-xs uppercase mb-4"
-                style={{ letterSpacing: "0.35em" }}
-              >
-                Por qué este template
-              </p>
-              <h2
-                ref={titleRef}
-                className="font-bold text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-tight"
-              >
-                {renderSegment("Más que", "seg1")}
-                <br />
-                <span className="text-primary italic">
-                  {renderSegment("un servicio.", "seg2")}
-                </span>
-              </h2>
-            </div>
-
-            <p className="text-base-content/60 text-base leading-relaxed max-w-md">
-              Personaliza este bloque con la historia de tu estudio:{" "}
-              <span className="text-primary/80 font-medium">
-                propuesta clara, tono premium y foco en resultados.
-              </span>
+        {/* Right: pillars */}
+        <div>
+          <div className="inline-flex items-center gap-3 mb-4">
+            <span className="w-10 h-px bg-primary" />
+            <p className="text-primary font-bold text-xs uppercase tracking-[0.4em]">
+              Sobre Legión
             </p>
+          </div>
+          <h2 className="font-display leading-none mb-6" style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}>
+            La <span className="text-primary">misión</span> es clara.
+          </h2>
+          <p className="text-base-content/70 text-lg leading-relaxed mb-10 max-w-xl">
+            Legión MMA nació para cambiar las reglas del juego en Venezuela: una liga que respeta al peleador,
+            profesionaliza el deporte y abre la puerta al circuito internacional. No es solo otra noche de peleas —
+            es una plataforma.
+          </p>
 
-            {/* Decorative divider */}
-            <div className="flex items-center gap-4">
-              <div className="h-px flex-1 max-w-12 bg-primary/25" />
-              <div className="w-2 h-2 border border-primary/40 rotate-45" />
-              <div className="h-px flex-1 max-w-12 bg-primary/25" />
-              <div className="flex-1" />
-            </div>
-
-            {/* Pillars */}
-            <div className="space-y-0">
-              {pillars.map((pillar, idx) => (
-                <Pillar key={idx} {...pillar} />
-              ))}
-            </div>
-
-            {/* Quote */}
-            <blockquote className="border-l-2 border-primary/40 pl-5 mt-6">
-              <p className="text-base-content/45 text-sm leading-relaxed italic">
-                &ldquo;Esta herramienta ha revolucionado la forma en que organizamos citas y
-                comunicamos nuestros servicios.&rdquo;
-              </p>
-              <footer className="mt-2 text-primary/60 text-xs tracking-widest uppercase">
-                — Nombre del cliente · Cargo o profesión
-              </footer>
-            </blockquote>
-
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-base-content/10 border border-base-content/10">
+            {pillars.map((p) => (
+              <div key={p.title} className="bg-base-100 p-6">
+                <div className="w-8 h-1 bg-primary mb-4" />
+                <h3 className="font-display text-xl text-base-content mb-2 leading-tight">
+                  {p.title}
+                </h3>
+                <p className="text-sm text-base-content/65 leading-relaxed">{p.body}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
-export default Problem;
+export default AboutLegion;

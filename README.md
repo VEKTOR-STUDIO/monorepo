@@ -31,7 +31,7 @@ Before creating a new component inside a client folder, **verify if it already e
 
 ### 2. Mandatory Structure
 
-Every new project must start by cloning the structure of `apps/vanilla-template/` (which uses Shipfast) and live inside `apps/clients/`. Do not place client projects anywhere else. Do not introduce a new layout for a new client.
+Every new project must start by cloning the structure of `apps/vanilla-template-supabase/` (which uses Shipfast) and live inside `apps/clients/`. Do not place client projects anywhere else. Do not introduce a new layout for a new client.
 
 ### 3. Styling
 

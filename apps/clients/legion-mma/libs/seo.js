@@ -12,19 +12,21 @@ export const getSEOTags = ({
   extraTags,
 } = {}) => {
   const defaultKeywords = [
-    "micropigmentación",
-    "PMU",
-    "estudio de belleza",
-    "microblading",
-    "cejas",
-    "arte facial",
-    "agenda de citas online",
-    "plantilla belleza",
-    "salón premium",
+    "MMA",
+    "artes marciales mixtas",
+    "Legión MMA",
+    "Omar Morales",
+    "peleas Venezuela",
+    "Caracas",
+    "Maracaibo",
+    "UFC Venezuela",
+    "cartelera MMA",
   ];
 
+  const defaultTitle = `${config.appName} | Liga venezolana de artes marciales mixtas`;
+
   return {
-    title: title || `${config.appName} | Micropigmentación y citas online`,
+    title: title || defaultTitle,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,
@@ -37,7 +39,7 @@ export const getSEOTags = ({
     ),
 
     openGraph: {
-      title: openGraph?.title || `${config.appName} | Micropigmentación y citas online`,
+      title: openGraph?.title || defaultTitle,
       description: openGraph?.description || config.appDescription,
       url: openGraph?.url || `https://${config.domainName}/`,
       siteName: config.appName,
@@ -46,7 +48,7 @@ export const getSEOTags = ({
     },
 
     twitter: {
-      title: openGraph?.title || `${config.appName} | Micropigmentación y citas online`,
+      title: openGraph?.title || defaultTitle,
       description: openGraph?.description || config.appDescription,
       card: "summary_large_image",
     },
@@ -72,10 +74,9 @@ export const getSEOTags = ({
 };
 
 // Schema de datos estructurados para Google Rich Results.
-// Tipo: BeautySalon (LocalBusiness) — plantilla genérica de nicho belleza/PMU.
+// Tipo: SportsOrganization — liga de MMA.
 export const renderSchemaTags = () => {
-  const ogImage =
-    "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&q=80";
+  const ogImage = config.event?.posterImage;
 
   return (
     <script
@@ -83,50 +84,43 @@ export const renderSchemaTags = () => {
       dangerouslySetInnerHTML={{
         __html: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "BeautySalon",
+          "@type": "SportsOrganization",
           name: config.appName,
           description: config.appDescription,
           url: `https://${config.domainName}/`,
           image: ogImage,
-          priceRange: "$$",
-          address: {
-            "@type": "PostalAddress",
-            addressCountry: "XX",
-            addressLocality: "Tu ciudad",
+          sport: "Mixed Martial Arts",
+          founder: {
+            "@type": "Person",
+            name: "Omar Morales",
           },
-          sameAs: [config.business?.instagram].filter(Boolean),
-          hasOfferCatalog: {
-            "@type": "OfferCatalog",
-            name: "Servicios de micropigmentación",
-            itemListElement: [
-              {
-                "@type": "Offer",
-                itemOffered: {
-                  "@type": "Service",
-                  name: "Servicio principal 1",
-                  description:
-                    "Describe aquí cómo este servicio ayuda a tus clientes a lograr el resultado que buscan.",
-                },
-              },
-              {
-                "@type": "Offer",
-                itemOffered: {
-                  "@type": "Service",
-                  name: "Especialidad 2",
-                  description:
-                    "Texto plantilla: duración, beneficio clave y para quién está pensado.",
-                },
-              },
-              {
-                "@type": "Offer",
-                itemOffered: {
-                  "@type": "Service",
-                  name: "Mantenimiento / retoque",
-                  description:
-                    "Plantilla para comunicar seguimiento y cuidados posteriores.",
-                },
-              },
-            ],
+          location: {
+            "@type": "Place",
+            address: {
+              "@type": "PostalAddress",
+              addressCountry: "VE",
+              addressLocality: "Caracas",
+            },
+          },
+          sameAs: [
+            config.social?.instagram,
+            config.social?.facebook,
+            config.social?.x,
+          ].filter(Boolean),
+          event: config.event && {
+            "@type": "SportsEvent",
+            name: `${config.event.name} ${config.event.edition}`,
+            startDate: config.event.date,
+            location: {
+              "@type": "Place",
+              name: config.event.venue,
+              address: config.event.city,
+            },
+            offers: {
+              "@type": "Offer",
+              url: config.event.ticketUrl,
+              availability: "https://schema.org/InStock",
+            },
           },
         }),
       }}

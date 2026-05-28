@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 
-const OCRE = "#C69C6D";
-const BLACK = "#1A1A1A";
+const GOLD = "#D4AF37";
+const BLACK = "#0A0A0A";
+const WHITE = "#F5F1E8";
 
 export const size = { width: 1200, height: 628 };
 export const contentType = "image/png";
@@ -14,22 +15,56 @@ export default function TwitterImage() {
           width: 1200,
           height: 628,
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           background: BLACK,
+          position: "relative",
         }}
       >
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: 12,
+            background: GOLD,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            width: "100%",
+            height: 12,
+            background: GOLD,
+          }}
+        />
         <span
           style={{
-            fontSize: 280,
-            fontWeight: 700,
-            color: OCRE,
-            fontFamily: "Georgia, serif",
+            fontSize: 220,
+            fontWeight: 900,
+            color: WHITE,
+            fontFamily: "Arial, sans-serif",
             lineHeight: 1,
-            letterSpacing: "-0.02em",
+            letterSpacing: "-0.03em",
           }}
         >
-          F
+          LEGIÓN
+        </span>
+        <span
+          style={{
+            fontSize: 64,
+            fontWeight: 900,
+            color: GOLD,
+            fontFamily: "Arial, sans-serif",
+            letterSpacing: "0.2em",
+            marginTop: 8,
+          }}
+        >
+          MMA · VENEZUELA
         </span>
       </div>
     ),

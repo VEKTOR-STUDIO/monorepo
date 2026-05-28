@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `document.documentElement.setAttribute('data-theme', 'luxury-beauty');`,
+            __html: `document.documentElement.setAttribute('data-theme', '${config.colors.theme}');`,
           }}
         />
         {renderSchemaTags()}

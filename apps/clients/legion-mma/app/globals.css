@@ -3,13 +3,15 @@
   themes: all;
 }
 @theme {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Bebas Neue", "Oswald", "Anton", Impact, "Arial Narrow Bold", "Arial Narrow", "Helvetica Inserat", sans-serif;
+
   --animate-shimmer: shimmer 3s ease-out infinite alternate;
   --animate-opacity: opacity 0.25s ease-in-out;
   --animate-appearFromRight: appearFromRight 300ms ease-in-out;
   --animate-wiggle: wiggle 1.5s ease-in-out infinite;
   --animate-popup: popup 0.25s ease-in-out;
+  --animate-pulse-gold: pulse-gold 2.4s ease-in-out infinite;
 
   @keyframes shimmer {
     0% { background-position: 0 50%; }
@@ -40,6 +42,11 @@
     50% { transform: scale(1.1); opacity: 1; }
     100% { transform: scale(1); opacity: 1; }
   }
+
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.55); }
+    50%      { box-shadow: 0 0 0 14px rgba(212, 175, 55, 0); }
+  }
 }
 
 html,
@@ -52,77 +59,132 @@ progress::-webkit-progress-value {
   transition: 0.6s width ease-out;
 }
 
-/* ── LUXURY BEAUTY / PMU — neutros profundos + rosa polvo (calma, confianza) ── */
-[data-theme="luxury-beauty"] {
+/* ── LEGIÓN — championship palette (black + gold + bone white) ──── */
+[data-theme="legion"] {
   color-scheme: dark;
 
-  --color-base-100: oklch(15% 0.01 320);
-  --color-base-200: oklch(12% 0.01 320);
-  --color-base-300: oklch(20% 0.015 320);
-  --color-base-content: oklch(96% 0.01 320);
+  /* Surfaces — deep black with subtle warm undertones */
+  --color-base-100: oklch(8% 0.004 70);     /* #0A0A0A */
+  --color-base-200: oklch(12% 0.005 70);    /* #161412 */
+  --color-base-300: oklch(17% 0.007 70);    /* #211E1A */
+  --color-base-content: oklch(95% 0.012 80); /* warm bone white */
 
-  /* Primary — dusty rose */
-  --color-primary: oklch(62% 0.09 350);
-  --color-primary-content: oklch(14% 0.02 320);
+  /* Primary — championship gold (antique) */
+  --color-primary: oklch(78% 0.13 85);      /* ~#D4AF37 */
+  --color-primary-content: oklch(8% 0.004 70);
 
-  /* Secondary — muted mauve */
-  --color-secondary: oklch(48% 0.06 340);
-  --color-secondary-content: oklch(96% 0.01 320);
+  /* Secondary — pure white for contrast plays */
+  --color-secondary: oklch(97% 0.005 80);   /* off-white */
+  --color-secondary-content: oklch(8% 0.004 70);
 
-  /* Accent — soft blush highlight */
-  --color-accent: oklch(72% 0.08 10);
-  --color-accent-content: oklch(14% 0.02 320);
+  /* Accent — bright gold for hover / glow */
+  --color-accent: oklch(86% 0.14 88);       /* ~#EFC857 */
+  --color-accent-content: oklch(8% 0.004 70);
 
-  --color-neutral: oklch(24% 0.01 320);
-  --color-neutral-content: oklch(90% 0.01 320);
+  --color-neutral: oklch(20% 0.005 70);
+  --color-neutral-content: oklch(92% 0.008 80);
 
-  --color-info: oklch(62% 0.08 230);
-  --color-info-content: oklch(14% 0.02 320);
-  --color-success: oklch(62% 0.1 155);
-  --color-success-content: oklch(14% 0.02 320);
-  --color-warning: oklch(75% 0.1 85);
-  --color-warning-content: oklch(14% 0.02 320);
-  --color-error: oklch(62% 0.14 25);
-  --color-error-content: oklch(14% 0.02 320);
+  --color-info: oklch(72% 0.06 230);
+  --color-info-content: oklch(8% 0.004 70);
+  --color-success: oklch(70% 0.12 145);
+  --color-success-content: oklch(8% 0.004 70);
+  --color-warning: oklch(82% 0.14 80);
+  --color-warning-content: oklch(8% 0.004 70);
+  --color-error: oklch(60% 0.20 25);
+  --color-error-content: oklch(97% 0.005 80);
 
+  /* Hard corners everywhere — championship chrome */
   --radius-selector: 0rem;
   --radius-field: 0rem;
-  --radius-box: 0.125rem;
+  --radius-box: 0rem;
 }
 
-[data-theme="luxury-beauty"] h1,
-[data-theme="luxury-beauty"] h2,
-[data-theme="luxury-beauty"] h3,
-[data-theme="luxury-beauty"] h4 {
+[data-theme="legion"] body {
+  background: var(--color-base-100);
+  color: var(--color-base-content);
   font-family: var(--font-sans);
-  font-weight: 600;
 }
 
-[data-theme="luxury-beauty"] .input,
-[data-theme="luxury-beauty"] .textarea {
-  background: transparent;
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: 1px solid oklch(62% 0.09 350 / 0.45) !important;
+[data-theme="legion"] h1,
+[data-theme="legion"] h2,
+[data-theme="legion"] h3,
+[data-theme="legion"] h4 {
+  font-family: var(--font-display);
+  font-weight: 400; /* Bebas is already heavy */
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Championship display utility */
+[data-theme="legion"] .font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* Diagonal gold slash decorator used in section dividers */
+[data-theme="legion"] .legion-slash {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 48%,
+    var(--color-primary) 48%,
+    var(--color-primary) 52%,
+    transparent 52%,
+    transparent 100%
+  );
+}
+
+/* Gold sheen used on hero / champion titles */
+[data-theme="legion"] .legion-gold-sheen {
+  background: linear-gradient(
+    100deg,
+    #B8893A 0%,
+    #E8C870 30%,
+    #FFF1B8 50%,
+    #E8C870 70%,
+    #B8893A 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+[data-theme="legion"] .btn {
   border-radius: 0 !important;
-  padding-left: 0 !important;
-  box-shadow: none !important;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  font-size: 0.78rem;
 }
 
-[data-theme="luxury-beauty"] .input:focus,
-[data-theme="luxury-beauty"] .textarea:focus {
-  border-bottom-color: oklch(62% 0.09 350) !important;
+[data-theme="legion"] .btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-primary-content);
+}
+
+[data-theme="legion"] .btn-primary:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-content);
+}
+
+[data-theme="legion"] .input,
+[data-theme="legion"] .textarea,
+[data-theme="legion"] .select {
+  background: transparent;
+  border: 1px solid oklch(78% 0.13 85 / 0.4) !important;
+  border-radius: 0 !important;
+  color: var(--color-base-content);
+}
+
+[data-theme="legion"] .input:focus,
+[data-theme="legion"] .textarea:focus,
+[data-theme="legion"] .select:focus {
+  border-color: var(--color-primary) !important;
   outline: none !important;
-  box-shadow: none !important;
-}
-
-[data-theme="luxury-beauty"] .select {
-  background: transparent;
-  border-top: none !important;
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: 1px solid oklch(62% 0.09 350 / 0.45) !important;
-  border-radius: 0 !important;
-  padding-left: 0 !important;
+  box-shadow: 0 0 0 1px var(--color-primary) !important;
 }
