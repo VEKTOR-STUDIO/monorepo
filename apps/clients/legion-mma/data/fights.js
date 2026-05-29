@@ -1,117 +1,92 @@
-// Placeholder data for the upcoming card. Reemplazar con la cartelera real
-// (peleadores confirmados, récords, fotos) cuando estén disponibles.
+// Cartelera oficial — LEGIÓN 10 (16 de mayo de 2026, 18:30).
+//
+// NOTA DE CONTENIDO: los nombres de los peleadores son los reales de la
+// cartelera de Legión 10. Récords, apodos, divisiones de peso y fotos NO son
+// definitivos: están pendientes de los datos oficiales. La UI está construida
+// para verse completa solo con los nombres, así que se puede publicar tal cual
+// y enriquecer cada ficha cuando lleguen los datos reales.
+//
+// Para añadir foto/récord/apodo a un peleador, basta con agregar las claves
+// `photo`, `record`, `nickname`, `weightClass`, `country`, `hometown`.
 
-const UNSPLASH = (id) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=700&q=80`;
-
+// ── Evento estelar ───────────────────────────────────────────────────────────
 export const mainEvent = {
-  weightClass: "Peso Ligero",
-  titleFight: true,
-  red: {
-    name: "Carlos Rivero",
-    nickname: "El Demoledor",
-    record: "12-3-0",
-    weightClass: "Peso Ligero",
-    country: "VE",
-    countryName: "Venezuela",
-    hometown: "Caracas",
-    photo: UNSPLASH("photo-1583473848882-f9a5bc7fd2ee"),
-  },
-  blue: {
-    name: "Andrés Vargas",
-    nickname: "Tormenta",
-    record: "10-4-1",
-    weightClass: "Peso Ligero",
-    country: "VE",
-    countryName: "Venezuela",
-    hometown: "Maracaibo",
-    photo: UNSPLASH("photo-1517438476312-10d79c077509"),
-  },
+  bout: "Main Event",
+  weightClass: "MMA",
+  titleFight: false,
+  red: { name: "Samuel Requena" },
+  blue: { name: "John Gruesso" },
 };
 
+// ── Cartelera MMA (resto de combates, en orden de pelea) ──────────────────────
 export const undercard = [
   {
-    weightClass: "Peso Pluma",
-    red: {
-      name: "Luis Méndez",
-      nickname: "Toro",
-      record: "8-2-0",
-      country: "VE",
-      hometown: "Valencia",
-      photo: UNSPLASH("photo-1571019614242-c5c5dee9f50b"),
-    },
-    blue: {
-      name: "Jorge Ramos",
-      nickname: "Tigre",
-      record: "7-3-0",
-      country: "VE",
-      hometown: "Caracas",
-      photo: UNSPLASH("photo-1518611012118-696072aa579a"),
-    },
+    weightClass: "MMA",
+    red: { name: "Eduardo Pérez" },
+    blue: { name: "Kleider Sandoval" },
   },
   {
-    weightClass: "Peso Mediano",
-    red: {
-      name: "Roberto Silva",
-      nickname: "Acero",
-      record: "9-1-0",
-      country: "VE",
-      hometown: "Barquisimeto",
-      photo: UNSPLASH("photo-1547347298-4074fc3086f0"),
-    },
-    blue: {
-      name: "Diego Castillo",
-      nickname: "Furia",
-      record: "11-5-0",
-      country: "VE",
-      hometown: "Maracay",
-      photo: UNSPLASH("photo-1601758124277-f0086d5ab050"),
-    },
+    weightClass: "MMA Femenino",
+    red: { name: "Angela Maya" },
+    blue: { name: "Paula Maya" },
   },
   {
-    weightClass: "Peso Gallo",
-    red: {
-      name: "Hugo Pérez",
-      nickname: "Relámpago",
-      record: "6-1-1",
-      country: "VE",
-      hometown: "Caracas",
-      photo: UNSPLASH("photo-1532635241-17e820acc59f"),
-    },
-    blue: {
-      name: "Iván Torres",
-      nickname: "Hierro",
-      record: "5-2-0",
-      country: "VE",
-      hometown: "Ciudad Bolívar",
-      photo: UNSPLASH("photo-1599058917212-d750089bc07e"),
-    },
+    weightClass: "MMA Femenino",
+    red: { name: "Daniuska González" },
+    blue: { name: "Gabriela Araque" },
   },
   {
-    weightClass: "Peso Welter",
-    red: {
-      name: "Manuel Ortega",
-      nickname: "Veneno",
-      record: "7-0-0",
-      country: "VE",
-      hometown: "Caracas",
-      photo: UNSPLASH("photo-1577897966608-2c40ca8d5e95"),
-    },
-    blue: {
-      name: "Pablo Núñez",
-      nickname: "Espartano",
-      record: "9-2-1",
-      country: "VE",
-      hometown: "Mérida",
-      photo: UNSPLASH("photo-1571902943202-507ec2618e8f"),
-    },
+    weightClass: "MMA Femenino",
+    red: { name: "Indira Acevedo" },
+    blue: { name: "Sandra Díaz" },
+  },
+  {
+    weightClass: "MMA",
+    red: { name: "Gabriel Ruiz" },
+    blue: { name: "George Tafek" },
+  },
+  {
+    weightClass: "MMA",
+    red: { name: "Pedro Mencia" },
+    blue: { name: "Kevin Dias Junior" },
+  },
+  {
+    weightClass: "MMA Femenino",
+    red: { name: "Nazaret Puerta" },
+    blue: { name: "Génesis Acuña" },
+  },
+  {
+    weightClass: "MMA",
+    red: { name: "Carlos Fernández" },
+    blue: { name: "Derek López" },
   },
 ];
 
+// ── Cartelera de Submission Grappling (Jiu-Jitsu, dentro del mismo evento) ────
+export const grappling = [
+  {
+    weightClass: "Grappling",
+    red: { name: "Ezequiel De Fonseca" },
+    blue: { name: "Carlos Calvete" },
+  },
+  {
+    weightClass: "Grappling",
+    red: { name: "Gabriel Gótera" },
+    blue: { name: "Juan Pablo Álvarez" },
+  },
+  {
+    weightClass: "Grappling Femenino",
+    red: { name: "Maleiva Medina" },
+    blue: { name: "Ivana Ordaz" },
+  },
+];
+
+// Roster derivado de toda la cartelera (MMA + grappling) para la sección de peleadores.
 export const roster = [
   mainEvent.red,
   mainEvent.blue,
   ...undercard.flatMap((f) => [f.red, f.blue]),
+  ...grappling.flatMap((f) => [f.red, f.blue]),
 ];
 
 export const editions = [
@@ -123,4 +98,11 @@ export const editions = [
   { number: "VI", date: "Julio 2023", venue: "Hotel Tamanaco, Caracas", note: "Sexta edición — grappling incluido." },
   { number: "VII", date: "Octubre 2023", venue: "Maracaibo", note: "Primera fuera de Caracas." },
   { number: "VIII", date: "Marzo 2024", venue: "Caracas", note: "Rainier Noguera, nuevo campeón." },
+  { number: "IX", date: "Octubre 2024", venue: "Caracas", note: "Regreso a la capital con cartelera doble." },
+  {
+    number: "X",
+    date: "16 Mayo 2026",
+    venue: "Caracas",
+    note: "Doble disciplina: 9 combates de MMA y 3 de submission grappling. Estelar Samuel Requena vs John Gruesso.",
+  },
 ];

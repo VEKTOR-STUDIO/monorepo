@@ -27,8 +27,11 @@ const TimeBlock = ({ value, label }) => (
 const NextEvent = () => {
   const target = useMemo(() => new Date(config.event.date), []);
   const [t, setT] = useState(() => getRemaining(target));
+  // En render inicial (SSR) no asumimos "finalizado" para evitar mismatch de hidratación.
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const id = setInterval(() => setT(getRemaining(target)), 1000);
     return () => clearInterval(id);
   }, [target]);
@@ -36,6 +39,9 @@ const NextEvent = () => {
   const dateLabel = target
     .toLocaleDateString("es-VE", { weekday: "long", day: "numeric", month: "long", year: "numeric" })
     .toUpperCase();
+
+  // El evento ya pasó: pasamos a modo "recap" en vez de un contador roto.
+  const finished = mounted && t.expired;
 
   return (
     <section
@@ -60,8 +66,8 @@ const NextEvent = () => {
         <div className="inline-flex items-center gap-3 mb-6">
           <span className="w-10 h-px bg-primary" />
           <p className="text-primary font-bold text-xs uppercase tracking-[0.4em] inline-flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-            Próximo Evento
+            <span className={`w-2 h-2 rounded-full bg-primary ${finished ? "" : "animate-pulse"}`} />
+            {finished ? "Último Evento" : "Próximo Evento"}
           </p>
           <span className="w-10 h-px bg-primary" />
         </div>
@@ -78,9 +84,17 @@ const NextEvent = () => {
           {dateLabel} · {config.event.venue} · {config.event.city}
         </p>
 
-        {t.expired ? (
-          <div className="font-display text-4xl text-primary mb-10">
-            ¡Evento en vivo!
+        {finished ? (
+          <div className="mb-12">
+            <span
+              className="inline-block bg-primary text-primary-content px-8 py-3 font-display text-xl sm:text-3xl tracking-[0.3em] italic mb-4"
+              style={{ transform: "skewX(-8deg)" }}
+            >
+              Evento Finalizado
+            </span>
+            <p className="text-base-content/60 text-sm tracking-[0.2em] uppercase font-bold">
+              Revive la cartelera completa de la noche
+            </p>
           </div>
         ) : (
           <div className="flex items-center justify-center gap-3 sm:gap-8 mb-12 flex-wrap">
@@ -94,15 +108,24 @@ const NextEvent = () => {
           </div>
         )}
 
-        <a
-          href={config.event.ticketUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-primary px-12 py-4 text-base"
-          style={{ animation: "var(--animate-pulse-gold)" }}
-        >
-          Comprar Entradas
-        </a>
+        {finished ? (
+          <a
+            href="#cartelera"
+            className="btn btn-primary px-12 py-4 text-base"
+          >
+            Ver Cartelera
+          </a>
+        ) : (
+          <a
+            href={config.event.ticketUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary px-12 py-4 text-base"
+            style={{ animation: "var(--animate-pulse-gold)" }}
+          >
+            Comprar Entradas
+          </a>
+        )}
       </div>
     </section>
   );

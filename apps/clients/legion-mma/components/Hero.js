@@ -155,19 +155,17 @@ const Hero = () => {
             ref={ctaRef}
             className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-3"
           >
-            <a
-              href={config.event.ticketUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-primary w-full sm:w-auto px-10"
-            >
-              Comprar Entradas
-            </a>
             <Link
               href="#cartelera"
-              className="btn btn-ghost w-full sm:w-auto border-2 border-base-content/40 text-base-content hover:border-primary hover:text-primary px-10"
+              className="btn btn-primary w-full sm:w-auto px-10"
             >
               Ver Cartelera
+            </Link>
+            <Link
+              href="#sobre"
+              className="btn btn-ghost w-full sm:w-auto border-2 border-base-content/40 text-base-content hover:border-primary hover:text-primary px-10"
+            >
+              Conoce Legión
             </Link>
           </div>
 

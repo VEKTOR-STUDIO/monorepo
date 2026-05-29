@@ -41,9 +41,9 @@ const config = {
     youtube: "",
   },
   event: {
-    name: "Legión MMA",
-    edition: "XII",
-    date: "2026-11-07T20:00:00-04:00",
+    name: "Legión",
+    edition: "X",
+    date: "2026-05-16T18:30:00-04:00",
     venue: "Hotel Tamanaco",
     city: "Caracas, Venezuela",
     ticketUrl: "https://example.com/entradas",
