@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { createClient } from "@/libs/supabase/client";
 import { STATUS_LABELS } from "@/data/fighterOptions";
 
-const FILTERS = [
+const STATUS_FILTERS = [
   { value: "todos", label: "Todos" },
   { value: "pendiente", label: "Pendientes" },
   { value: "aprobado", label: "Aprobados" },
@@ -17,24 +17,93 @@ const FILTERS = [
 
 const DISCIPLINE_LABELS = { mma: "MMA", bjj: "BJJ", ambas: "MMA + BJJ" };
 
+const SORT_OPTIONS = [
+  { value: "recientes", label: "Más recientes" },
+  { value: "nombre", label: "Nombre A-Z" },
+  { value: "victorias", label: "Más victorias" },
+  { value: "peso", label: "Peso (menor a mayor)" },
+];
+
+// Búsqueda insensible a acentos ("Perez" encuentra "Pérez")
+const normalize = (s = "") =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
 /**
  * AdminRoster — panel de administración de la base de datos de peleadores.
- * Permite filtrar por estado y aprobar / rechazar / desactivar fichas.
+ * Búsqueda por texto, filtros combinables y acciones de aprobación.
  */
 export default function AdminRoster({ fighters = [] }) {
   const supabase = createClient();
   const router = useRouter();
-  const [filter, setFilter] = useState("todos");
+
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("todos");
+  const [disciplineFilter, setDisciplineFilter] = useState("todas");
+  const [weightClassFilter, setWeightClassFilter] = useState("todas");
+  const [levelFilter, setLevelFilter] = useState("todos");
+  const [sortBy, setSortBy] = useState("recientes");
   const [updatingId, setUpdatingId] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
 
-  const filtered =
-    filter === "todos" ? fighters : fighters.filter((f) => f.status === filter);
+  // Divisiones presentes en la base de datos (para el filtro)
+  const weightClasses = useMemo(
+    () =>
+      [...new Set(fighters.map((f) => f.weight_class).filter(Boolean))].sort(),
+    [fighters]
+  );
+
+  const filtered = useMemo(() => {
+    const q = normalize(search.trim());
+    let list = fighters.filter((f) => {
+      if (statusFilter !== "todos" && f.status !== statusFilter) return false;
+      if (disciplineFilter !== "todas" && f.discipline !== disciplineFilter)
+        return false;
+      if (weightClassFilter !== "todas" && f.weight_class !== weightClassFilter)
+        return false;
+      if (levelFilter !== "todos" && f.experience_level !== levelFilter)
+        return false;
+      if (q) {
+        const haystack = normalize(
+          [f.full_name, f.nickname, f.team, f.coach_name, f.city, f.state]
+            .filter(Boolean)
+            .join(" ")
+        );
+        if (!haystack.includes(q)) return false;
+      }
+      return true;
+    });
+
+    const sorters = {
+      recientes: (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      nombre: (a, b) => a.full_name.localeCompare(b.full_name, "es"),
+      victorias: (a, b) => (b.wins || 0) - (a.wins || 0),
+      peso: (a, b) => (a.weight_kg || 0) - (b.weight_kg || 0),
+    };
+    return [...list].sort(sorters[sortBy] || sorters.recientes);
+  }, [fighters, search, statusFilter, disciplineFilter, weightClassFilter, levelFilter, sortBy]);
 
   const counts = fighters.reduce((acc, f) => {
     acc[f.status] = (acc[f.status] || 0) + 1;
     return acc;
   }, {});
+
+  const hasActiveFilters =
+    search.trim() !== "" ||
+    statusFilter !== "todos" ||
+    disciplineFilter !== "todas" ||
+    weightClassFilter !== "todas" ||
+    levelFilter !== "todos";
+
+  const clearFilters = () => {
+    setSearch("");
+    setStatusFilter("todos");
+    setDisciplineFilter("todas");
+    setWeightClassFilter("todas");
+    setLevelFilter("todos");
+  };
 
   const setStatus = async (fighter, status) => {
     setUpdatingId(fighter.id);
@@ -73,27 +142,119 @@ export default function AdminRoster({ fighters = [] }) {
         ))}
       </div>
 
-      {/* Filtros */}
-      <div className="flex flex-wrap gap-2">
-        {FILTERS.map((f) => (
-          <button
-            key={f.value}
-            onClick={() => setFilter(f.value)}
-            className={`btn btn-sm ${
-              filter === f.value
-                ? "btn-primary"
-                : "btn-ghost border border-base-content/20"
-            }`}
+      {/* Búsqueda y filtros */}
+      <div className="border border-primary/20 bg-base-200/60 p-4 md:p-5 space-y-4">
+        <div className="flex flex-col md:flex-row gap-3">
+          {/* Buscador */}
+          <label className="input flex items-center gap-3 flex-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-4 h-4 text-primary/70 shrink-0"
+            >
+              <path
+                fillRule="evenodd"
+                d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <input
+              type="text"
+              className="grow bg-transparent outline-none"
+              placeholder="Buscar por nombre, apodo, equipo, coach o ciudad..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            {search && (
+              <button
+                type="button"
+                className="text-base-content/40 hover:text-base-content"
+                onClick={() => setSearch("")}
+                aria-label="Limpiar búsqueda"
+              >
+                ✕
+              </button>
+            )}
+          </label>
+
+          {/* Orden */}
+          <select
+            className="select w-full md:w-56"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
           >
-            {f.label}
-          </button>
-        ))}
+            {SORT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <select
+            className="select w-full"
+            value={disciplineFilter}
+            onChange={(e) => setDisciplineFilter(e.target.value)}
+          >
+            <option value="todas">Disciplina: todas</option>
+            <option value="mma">MMA</option>
+            <option value="bjj">BJJ / Grappling</option>
+            <option value="ambas">Ambas</option>
+          </select>
+
+          <select
+            className="select w-full"
+            value={weightClassFilter}
+            onChange={(e) => setWeightClassFilter(e.target.value)}
+          >
+            <option value="todas">División: todas</option>
+            {weightClasses.map((wc) => (
+              <option key={wc} value={wc}>{wc}</option>
+            ))}
+          </select>
+
+          <select
+            className="select w-full col-span-2 md:col-span-1"
+            value={levelFilter}
+            onChange={(e) => setLevelFilter(e.target.value)}
+          >
+            <option value="todos">Nivel: todos</option>
+            <option value="amateur">Amateur</option>
+            <option value="profesional">Profesional</option>
+          </select>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {STATUS_FILTERS.map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setStatusFilter(f.value)}
+              className={`btn btn-sm ${
+                statusFilter === f.value
+                  ? "btn-primary"
+                  : "btn-ghost border border-base-content/20"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+          {hasActiveFilters && (
+            <button className="btn btn-sm btn-ghost text-error" onClick={clearFilters}>
+              Limpiar filtros
+            </button>
+          )}
+          <span className="ml-auto text-[0.65rem] tracking-[0.2em] uppercase text-base-content/40 font-bold">
+            {filtered.length} de {fighters.length} peleadores
+          </span>
+        </div>
       </div>
 
       {/* Lista */}
       {filtered.length === 0 ? (
         <div className="border border-base-content/10 bg-base-200 p-10 text-center text-base-content/50 text-sm tracking-[0.2em] uppercase">
-          No hay peleadores en esta categoría
+          {hasActiveFilters
+            ? "Ningún peleador coincide con la búsqueda"
+            : "Aún no hay peleadores registrados"}
         </div>
       ) : (
         <div className="space-y-3">
@@ -132,6 +293,7 @@ export default function AdminRoster({ fighters = [] }) {
                         {f.weight_class && ` · ${f.weight_class}`}
                         {` · ${f.wins}-${f.losses}-${f.draws}`}
                         {` · ${f.experience_level}`}
+                        {f.team && ` · ${f.team}`}
                       </p>
                     </div>
                   </div>

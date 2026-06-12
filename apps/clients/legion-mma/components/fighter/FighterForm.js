@@ -314,7 +314,7 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         ))}
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className={`grid gap-4 ${showBelt ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
         <label className="form-control w-full">
           <div className="label"><Label required>Nivel</Label></div>
           <select

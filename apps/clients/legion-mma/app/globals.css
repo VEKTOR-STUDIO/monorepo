@@ -172,19 +172,86 @@ progress::-webkit-progress-value {
   color: var(--color-accent-content);
 }
 
+/* ── Campos de formulario — cristal glasmórfico oscuro ──────────────── */
 [data-theme="legion"] .input,
 [data-theme="legion"] .textarea,
-[data-theme="legion"] .select {
-  background: transparent;
-  border: 1px solid oklch(78% 0.13 85 / 0.4) !important;
+[data-theme="legion"] .select,
+[data-theme="legion"] .file-input {
+  background: linear-gradient(
+    160deg,
+    oklch(22% 0.008 70 / 0.55),
+    oklch(14% 0.006 70 / 0.65)
+  ) !important;
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid oklch(78% 0.13 85 / 0.35) !important;
   border-radius: 0 !important;
   color: var(--color-base-content);
+  box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.06);
+}
+
+/* Alturas y paddings consistentes en todos los campos */
+[data-theme="legion"] .input,
+[data-theme="legion"] .select {
+  height: 3rem;
+  min-height: 3rem;
+  padding-inline: 1rem;
+  font-size: 0.9rem;
+}
+
+[data-theme="legion"] .select {
+  padding-inline-end: 2.5rem; /* espacio para la flecha */
+}
+
+[data-theme="legion"] .textarea {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+}
+
+[data-theme="legion"] .file-input {
+  height: 3rem;
+  min-height: 3rem;
+}
+
+/* Las <option> no soportan cristal: panel sólido oscuro a juego */
+[data-theme="legion"] .select option {
+  background-color: #161412;
+  color: #f2efe9;
+  padding: 0.5rem 1rem;
 }
 
 [data-theme="legion"] .input:focus,
 [data-theme="legion"] .textarea:focus,
-[data-theme="legion"] .select:focus {
+[data-theme="legion"] .select:focus,
+[data-theme="legion"] .file-input:focus {
   border-color: var(--color-primary) !important;
   outline: none !important;
-  box-shadow: 0 0 0 1px var(--color-primary) !important;
+  box-shadow:
+    0 0 0 1px var(--color-primary),
+    inset 0 1px 0 oklch(100% 0 0 / 0.06) !important;
+}
+
+[data-theme="legion"] .input::placeholder,
+[data-theme="legion"] .textarea::placeholder {
+  color: oklch(95% 0.012 80 / 0.35);
+}
+
+/* Botón del file input en dorado Legión */
+[data-theme="legion"] .file-input::file-selector-button {
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+  border: none;
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  font-size: 0.7rem;
+  padding-inline: 1rem;
+  margin-inline-end: 1rem;
+  height: 100%;
+}
+
+/* Calendario del input date en esquema oscuro */
+[data-theme="legion"] input[type="date"] {
+  color-scheme: dark;
 }

@@ -62,3 +62,30 @@ export const STATUS_LABELS = {
   rechazado: { label: "Rechazado", badge: "badge-error" },
   inactivo: { label: "Inactivo", badge: "badge-ghost" },
 };
+
+// ── Eventos y carteleras ─────────────────────────────────────────────────────
+
+export const EVENT_STATUS_LABELS = {
+  borrador: { label: "Borrador / Simulación", badge: "badge-warning" },
+  publicado: { label: "Publicado", badge: "badge-success" },
+  finalizado: { label: "Finalizado", badge: "badge-info" },
+  cancelado: { label: "Cancelado", badge: "badge-error" },
+};
+
+export const VICTORY_METHODS = [
+  "KO",
+  "TKO",
+  "Sumisión",
+  "Decisión unánime",
+  "Decisión dividida",
+  "Decisión mayoritaria",
+  "Descalificación",
+  "No Contest",
+];
+
+export const BOUT_WINNERS = [
+  { value: "rojo", label: "Esquina roja" },
+  { value: "azul", label: "Esquina azul" },
+  { value: "empate", label: "Empate" },
+  { value: "sin_decision", label: "Sin decisión" },
+];
