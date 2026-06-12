@@ -116,7 +116,15 @@ export default async function Dashboard() {
                   <p className="text-xs text-base-content/50 mt-1">{user.email}</p>
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap justify-center">
+                {isAdmin && (
+                  <Link
+                    href="/dashboard/events"
+                    className="btn btn-primary btn-sm"
+                  >
+                    Carteleras
+                  </Link>
+                )}
                 <Link
                   href="/"
                   className="btn btn-ghost btn-sm border border-primary/30 text-base-content/70 hover:border-primary/60"

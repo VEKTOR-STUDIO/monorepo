@@ -8,7 +8,7 @@ const normalize = (s = "") =>
   s
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "");
+    .replace(/[\u0300-\u036f]/g, "");
 
 /**
  * FighterPicker — combobox con búsqueda para asignar un peleador a una esquina.
@@ -53,7 +53,7 @@ export default function FighterPicker({
           isRed ? "border-primary/60 bg-primary/5" : "border-base-content/30 bg-base-content/5"
         }`}
       >
-        <div className="relative w-10 h-13 bg-base-300 overflow-hidden shrink-0" style={{ height: "3.25rem" }}>
+        <div className="relative w-10 bg-base-300 overflow-hidden shrink-0" style={{ height: "3.25rem" }}>
           {value.photo_url ? (
             <Image
               src={value.photo_url}
