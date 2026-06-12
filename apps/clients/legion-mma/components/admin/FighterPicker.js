@@ -37,12 +37,12 @@ export default function FighterPicker({
       .filter((f) => {
         if (!q) return true;
         return normalize(
-          [f.full_name, f.nickname, f.team, f.weight_class]
+          [f.full_name, f.nickname, f.team, f.weight_class, f.city]
             .filter(Boolean)
             .join(" ")
         ).includes(q);
       })
-      .slice(0, 8);
+      .slice(0, 20);
   }, [fighters, query, excludeId]);
 
   // Esquina ya asignada: chip con opción de quitar
@@ -91,21 +91,53 @@ export default function FighterPicker({
 
   return (
     <div className="relative">
-      <input
-        type="text"
-        className="input w-full"
-        placeholder={`Buscar peleador (esquina ${corner})...`}
-        value={query}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setTimeout(() => setOpen(false), 150)}
-      />
+      <div className="relative">
+        <input
+          type="text"
+          className="input w-full pr-10"
+          placeholder={`Buscar peleador (esquina ${corner})...`}
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+        />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          className="w-4 h-4 text-primary/60 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+        >
+          <path
+            fillRule="evenodd"
+            d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </div>
+
+      {open && results.length === 0 && (
+        <div className="absolute z-30 top-full left-0 right-0 mt-1 border border-primary/40 bg-base-200 shadow-2xl p-4 text-center">
+          <p className="text-sm text-base-content/60">
+            {fighters.length === 0
+              ? "No hay peleadores disponibles."
+              : `Sin resultados para "${query}".`}
+          </p>
+          {fighters.length === 0 && (
+            <p className="text-[0.65rem] tracking-[0.15em] uppercase text-warning font-bold mt-1">
+              Desactiva &ldquo;solo aprobados&rdquo; o aprueba peleadores en el roster
+            </p>
+          )}
+        </div>
+      )}
 
       {open && results.length > 0 && (
-        <ul className="absolute z-30 top-full left-0 right-0 mt-1 border border-primary/40 bg-base-200 shadow-2xl max-h-72 overflow-y-auto">
+        <ul
+          className="absolute z-30 top-full left-0 right-0 mt-1 border border-primary/40 bg-base-200 shadow-2xl max-h-72 overflow-y-auto"
+          onMouseDown={(e) => e.preventDefault()}
+        >
           {results.map((f) => (
             <li key={f.id}>
               <button
