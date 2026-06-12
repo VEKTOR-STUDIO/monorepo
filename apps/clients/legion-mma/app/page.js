@@ -5,6 +5,7 @@ import NextEvent from "@/components/NextEvent";
 import FightCard from "@/components/FightCard";
 import AboutLegion from "@/components/Problem";
 import Roster from "@/components/Roster";
+import JoinRoster from "@/components/JoinRoster";
 import EditionsTimeline from "@/components/FeaturesAccordion";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
@@ -22,6 +23,7 @@ export default function Home() {
         <FightCard />
         <AboutLegion />
         <Roster />
+        <JoinRoster />
         <EditionsTimeline />
         <FAQ />
         <CTA />

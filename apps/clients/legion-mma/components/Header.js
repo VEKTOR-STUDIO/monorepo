@@ -45,14 +45,22 @@ const Header = () => {
   }, [isOpen]);
 
   const cta = (
-    <a
-      href={config.event?.ticketUrl ?? "#proximo-evento"}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="btn btn-primary btn-sm"
-    >
-      Entradas
-    </a>
+    <div className="flex items-center gap-2">
+      <Link
+        href={config.auth?.loginUrl ?? "/signin"}
+        className="btn btn-ghost btn-sm border border-primary/50 text-primary hover:bg-primary hover:text-primary-content"
+      >
+        Soy Peleador
+      </Link>
+      <a
+        href={config.event?.ticketUrl ?? "#proximo-evento"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn btn-primary btn-sm"
+      >
+        Entradas
+      </a>
+    </div>
   );
 
   return (

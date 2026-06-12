@@ -162,6 +162,12 @@ const Hero = () => {
               Ver Cartelera
             </Link>
             <Link
+              href={config.auth?.loginUrl ?? "/signin"}
+              className="btn btn-ghost w-full sm:w-auto border-2 border-primary text-primary hover:bg-primary hover:text-primary-content px-10"
+            >
+              Regístrate como Peleador
+            </Link>
+            <Link
               href="#sobre"
               className="btn btn-ghost w-full sm:w-auto border-2 border-base-content/40 text-base-content hover:border-primary hover:text-primary px-10"
             >
