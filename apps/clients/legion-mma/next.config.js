@@ -18,6 +18,15 @@ const nextConfig = {
         protocol: "https",
         hostname: "logos-world.net",
       },
+      {
+        // Fotos de peleadores en Supabase Storage (bucket público `fighters`)
+        protocol: "https",
+        hostname: "*.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+      },
     ],
   },
   turbopack: {
