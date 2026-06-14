@@ -23,7 +23,6 @@ export const WEIGHT_CLASSES = {
 export const DISCIPLINES = [
   { value: "mma", label: "MMA" },
   { value: "bjj", label: "BJJ / Grappling" },
-  { value: "ambas", label: "Ambas" },
 ];
 
 export const EXPERIENCE_LEVELS = [
