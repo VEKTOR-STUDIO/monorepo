@@ -81,6 +81,8 @@ export const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 // Estilo de combate del peleador (orientación principal en la jaula).
 export const FIGHTING_STYLES = [
   { value: "striker", label: "Striker (golpeo)" },
+  { value: "kickboxer", label: "Kickboxer (golpeo)" },
+  { value: "SLAM", label: "Sistema de Libre de Artes Marciales (SLAM)" },
   { value: "grappler", label: "Grappler (suelo)" },
   { value: "wrestler", label: "Luchador (wrestling)" },
   { value: "boxeo", label: "Boxeo" },
@@ -90,6 +92,7 @@ export const FIGHTING_STYLES = [
   { value: "karate", label: "Karate" },
   { value: "sambo", label: "Sambo" },
   { value: "todoterreno", label: "Todoterreno (completo)" },
+  { value: "otros", label: "Otros" },
 ];
 
 // Tallas de uniforme (short y franela del peleador y del entrenador).
