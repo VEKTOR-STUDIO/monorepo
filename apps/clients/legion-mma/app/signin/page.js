@@ -22,7 +22,9 @@ export default function Login() {
       await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: config.siteUrl + "/api/auth/callback",
+          // Use the current origin so OAuth returns to the same domain the user
+          // is on (localhost, vercel.app, or production), keeping the session valid.
+          redirectTo: `${window.location.origin}/api/auth/callback`,
         },
       });
     } catch (error) {
