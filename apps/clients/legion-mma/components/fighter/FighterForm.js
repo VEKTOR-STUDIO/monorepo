@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { createClient } from "@/libs/supabase/client";
 import {
   WEIGHT_CLASSES,
+  suggestWeightClass,
   DISCIPLINES,
   EXPERIENCE_LEVELS,
   BJJ_BELTS,
@@ -17,6 +18,7 @@ import {
   CLOTHING_SIZES,
   GLOVE_SIZES,
 } from "@/data/fighterOptions";
+import WeightClassGuide from "@/components/fighter/WeightClassGuide";
 
 // Encabezado de sección estilo Legión (línea dorada + título display)
 const SectionTitle = ({ step, children }) => (
@@ -104,6 +106,21 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
 
   const showBelt = form.discipline === "bjj" || form.discipline === "ambas";
   const weightClasses = WEIGHT_CLASSES[form.gender] || WEIGHT_CLASSES.masculino;
+  const weightClassManuallySet = useRef(Boolean(fighter?.weight_class));
+
+  const suggestedWeightClass = useMemo(
+    () => suggestWeightClass(form.weight_kg, form.gender),
+    [form.weight_kg, form.gender]
+  );
+
+  useEffect(() => {
+    if (weightClassManuallySet.current || !suggestedWeightClass) return;
+    setForm((f) =>
+      f.weight_class === suggestedWeightClass
+        ? f
+        : { ...f, weight_class: suggestedWeightClass }
+    );
+  }, [suggestedWeightClass]);
 
   const handlePhoto = (e) => {
     const file = e.target.files?.[0];
@@ -274,9 +291,10 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
             required
             className="select select-bordered w-full"
             value={form.gender}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, gender: e.target.value, weight_class: "" }))
-            }
+            onChange={(e) => {
+              weightClassManuallySet.current = false;
+              setForm((f) => ({ ...f, gender: e.target.value, weight_class: "" }));
+            }}
           >
             <option value="masculino">Masculino</option>
             <option value="femenino">Femenino</option>
@@ -499,16 +517,26 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
           <select
             className="select select-bordered w-full"
             value={form.weight_class}
-            onChange={set("weight_class")}
+            onChange={(e) => {
+              const value = e.target.value;
+              weightClassManuallySet.current = Boolean(value);
+              setForm((f) => ({ ...f, weight_class: value }));
+            }}
           >
             <option value="">Seleccionar división</option>
             {weightClasses.map((wc) => (
               <option key={wc.value} value={wc.value}>
-                {wc.value} (hasta {wc.limit})
+                {wc.value} (hasta {wc.limitLabel})
               </option>
             ))}
           </select>
         </label>
+
+        <WeightClassGuide
+          gender={form.gender}
+          weightKg={form.weight_kg}
+          selectedClass={form.weight_class}
+        />
       </div>
 
       {/* ── 04 · Equipo ────────────────────────────────────────────── */}

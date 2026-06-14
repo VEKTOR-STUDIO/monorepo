@@ -1,24 +1,56 @@
 // Opciones del formulario de registro de peleadores.
-// Divisiones de peso basadas en las oficiales de la UFC.
+// Divisiones de peso basadas en las categorías oficiales de Legión MMA.
+
+const LEGION_WEIGHT_LIMITS = [
+  { value: "Peso Paja", limitKg: 52.3, limitLbs: 115, limitLbsMax: 116, limitKgMax: 52.6 },
+  { value: "Peso Mosca", limitKg: 56.7, limitLbs: 125, limitLbsMax: 126, limitKgMax: 57.1 },
+  { value: "Peso Gallo", limitKg: 61.2, limitLbs: 135, limitLbsMax: 136, limitKgMax: 61.6 },
+  { value: "Peso Pluma", limitKg: 65.8, limitLbs: 145, limitLbsMax: 146, limitKgMax: 66.2 },
+  { value: "Peso Ligero", limitKg: 70.3, limitLbs: 155, limitLbsMax: 156, limitKgMax: 70.7 },
+  { value: "Peso Wélter", limitKg: 77.1, limitLbs: 170, limitLbsMax: 171, limitKgMax: 77.5 },
+  { value: "Peso Mediano", limitKg: 83.9, limitLbs: 185, limitLbsMax: 186, limitKgMax: 84.3 },
+  { value: "Peso Semipesado", limitKg: 93.0, limitLbs: 205, limitLbsMax: 206, limitKgMax: 93.4 },
+  { value: "Peso Pesado", limitKg: 120.2, limitLbs: 265, limitLbsMax: 267, limitKgMax: 121.1 },
+].map((entry) => ({
+  ...entry,
+  limitLabel: `${entry.limitKgMax} kg max`,
+}));
+
+const MALE_WEIGHT_VALUES = [
+  "Peso Mosca",
+  "Peso Gallo",
+  "Peso Pluma",
+  "Peso Ligero",
+  "Peso Wélter",
+  "Peso Mediano",
+  "Peso Semipesado",
+  "Peso Pesado",
+];
+
+const FEMALE_WEIGHT_VALUES = ["Peso Paja", "Peso Mosca", "Peso Gallo", "Peso Pluma"];
 
 export const WEIGHT_CLASSES = {
-  masculino: [
-    { value: "Peso Mosca", limit: "56.7 kg" },
-    { value: "Peso Gallo", limit: "61.2 kg" },
-    { value: "Peso Pluma", limit: "65.8 kg" },
-    { value: "Peso Ligero", limit: "70.3 kg" },
-    { value: "Peso Wélter", limit: "77.1 kg" },
-    { value: "Peso Mediano", limit: "83.9 kg" },
-    { value: "Peso Semipesado", limit: "93.0 kg" },
-    { value: "Peso Pesado", limit: "120.2 kg" },
-  ],
-  femenino: [
-    { value: "Peso Paja", limit: "52.2 kg" },
-    { value: "Peso Mosca", limit: "56.7 kg" },
-    { value: "Peso Gallo", limit: "61.2 kg" },
-    { value: "Peso Pluma", limit: "65.8 kg" },
-  ],
+  masculino: LEGION_WEIGHT_LIMITS.filter((wc) => MALE_WEIGHT_VALUES.includes(wc.value)),
+  femenino: LEGION_WEIGHT_LIMITS.filter((wc) => FEMALE_WEIGHT_VALUES.includes(wc.value)),
 };
+
+/** Sugiere división según peso de combate (kg) y sexo del peleador. */
+export function suggestWeightClass(weightKg, gender) {
+  const weight = Number(weightKg);
+  if (!weight || Number.isNaN(weight) || weight <= 0) return null;
+
+  const classes = [...(WEIGHT_CLASSES[gender] || WEIGHT_CLASSES.masculino)].sort(
+    (a, b) => a.limitKgMax - b.limitKgMax
+  );
+
+  const match = classes.find((wc) => weight <= wc.limitKgMax);
+  if (match) return match.value;
+
+  const heaviest = classes[classes.length - 1];
+  if (heaviest?.value === "Peso Pesado") return heaviest.value;
+
+  return null;
+}
 
 export const DISCIPLINES = [
   { value: "mma", label: "MMA" },
