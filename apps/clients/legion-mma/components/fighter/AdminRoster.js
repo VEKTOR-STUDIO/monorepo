@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { createClient } from "@/libs/supabase/client";
-import { STATUS_LABELS } from "@/data/fighterOptions";
+import { STATUS_LABELS, FIGHTING_STYLES } from "@/data/fighterOptions";
+import { getFighterCompletion } from "@/libs/fighterCompletion";
+
+const styleLabelOf = (value) =>
+  FIGHTING_STYLES.find((s) => s.value === value)?.label || value;
 
 const STATUS_FILTERS = [
   { value: "todos", label: "Todos" },
@@ -103,6 +107,19 @@ export default function AdminRoster({ fighters = [] }) {
     setDisciplineFilter("todas");
     setWeightClassFilter("todas");
     setLevelFilter("todos");
+  };
+
+  const viewIdDocument = async (path) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from("fighter-documents")
+        .createSignedUrl(path, 60);
+      if (error) throw error;
+      window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+    } catch (error) {
+      console.error(error);
+      toast.error("No se pudo abrir el documento");
+    }
   };
 
   const setStatus = async (fighter, status) => {
@@ -261,6 +278,7 @@ export default function AdminRoster({ fighters = [] }) {
           {filtered.map((f) => {
             const status = STATUS_LABELS[f.status] || STATUS_LABELS.pendiente;
             const expanded = expandedId === f.id;
+            const completion = getFighterCompletion(f);
             return (
               <div key={f.id} className="border border-base-content/10 bg-base-200">
                 {/* Fila principal */}
@@ -299,6 +317,16 @@ export default function AdminRoster({ fighters = [] }) {
                   </div>
 
                   <div className="flex items-center gap-2 flex-wrap">
+                    <span
+                      className={`badge badge-sm uppercase text-[0.6rem] font-bold tracking-wider ${
+                        completion.percent === 100
+                          ? "badge-success"
+                          : "border border-base-content/20 text-base-content/60"
+                      }`}
+                      title={`${completion.completed} de ${completion.total} datos`}
+                    >
+                      {completion.percent}% perfil
+                    </span>
                     <span className={`badge ${status.badge} badge-sm uppercase text-[0.6rem] font-bold tracking-wider`}>
                       {f.status}
                     </span>
@@ -340,34 +368,51 @@ export default function AdminRoster({ fighters = [] }) {
 
                 {/* Detalle expandible */}
                 {expanded && (
-                  <div className="border-t border-base-content/10 p-4 grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2 text-sm text-base-content/70">
-                    {[
-                      ["Teléfono", f.phone],
-                      ["Instagram", f.instagram ? `@${f.instagram}` : null],
-                      ["Nacimiento", f.birth_date],
-                      ["Ubicación", [f.city, f.state].filter(Boolean).join(", ")],
-                      ["Peso", f.weight_kg ? `${Number(f.weight_kg)} kg` : null],
-                      ["Estatura", f.height_cm ? `${Number(f.height_cm)} cm` : null],
-                      ["Alcance", f.reach_cm ? `${Number(f.reach_cm)} cm` : null],
-                      ["Guardia", f.stance],
-                      ["Cinturón BJJ", f.bjj_belt],
-                      ["Equipo", f.team],
-                      ["Coach", f.coach_name],
-                      ["Años entrenando", f.years_training],
-                      ["KO/Sum/Dec", `${f.wins_ko || 0}/${f.wins_sub || 0}/${f.wins_dec || 0}`],
-                      ["Emergencia", `${f.emergency_contact_name} — ${f.emergency_contact_phone}`],
-                      ["Tipo de sangre", f.blood_type],
-                      ["Condiciones médicas", f.medical_conditions],
-                    ]
-                      .filter(([, v]) => v != null && v !== "")
-                      .map(([label, value]) => (
-                        <p key={label}>
-                          <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold mr-2">
-                            {label}
-                          </span>
-                          {value}
-                        </p>
-                      ))}
+                  <div className="border-t border-base-content/10 p-4 space-y-4">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2 text-sm text-base-content/70">
+                      {[
+                        ["Teléfono", f.phone],
+                        ["Instagram", f.instagram ? `@${f.instagram}` : null],
+                        ["Cédula / Pasaporte", f.id_document_number],
+                        ["Nacimiento", f.birth_date],
+                        ["Ubicación", [f.city, f.state].filter(Boolean).join(", ")],
+                        ["Estilo de combate", f.fighting_style ? styleLabelOf(f.fighting_style) : null],
+                        ["Peso", f.weight_kg ? `${Number(f.weight_kg)} kg` : null],
+                        ["Estatura", f.height_cm ? `${Number(f.height_cm)} cm` : null],
+                        ["Alcance", f.reach_cm ? `${Number(f.reach_cm)} cm` : null],
+                        ["Guardia", f.stance],
+                        ["Cinturón BJJ", f.bjj_belt],
+                        ["Academia / Equipo", f.team],
+                        ["Coach", f.coach_name],
+                        ["Años entrenando", f.years_training],
+                        ["Récord amateur", `${f.amateur_wins || 0}-${f.amateur_losses || 0}-${f.amateur_draws || 0}`],
+                        ["KO/Sum/Dec", `${f.wins_ko || 0}/${f.wins_sub || 0}/${f.wins_dec || 0}`],
+                        ["Talla short", f.short_size],
+                        ["Talla franela", f.shirt_size],
+                        ["Talla guante", f.glove_size],
+                        ["Franela coach", f.coach_shirt_size],
+                        ["Emergencia", `${f.emergency_contact_name} — ${f.emergency_contact_phone}`],
+                        ["Tipo de sangre", f.blood_type],
+                        ["Condiciones médicas", f.medical_conditions],
+                      ]
+                        .filter(([, v]) => v != null && v !== "")
+                        .map(([label, value]) => (
+                          <p key={label}>
+                            <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold mr-2">
+                              {label}
+                            </span>
+                            {value}
+                          </p>
+                        ))}
+                    </div>
+                    {f.id_document_url && (
+                      <button
+                        onClick={() => viewIdDocument(f.id_document_url)}
+                        className="btn btn-ghost btn-xs border border-primary/30 text-primary"
+                      >
+                        Ver foto de la cédula
+                      </button>
+                    )}
                   </div>
                 )}
               </div>

@@ -47,6 +47,26 @@ export const STANCES = [
 
 export const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
+// Estilo de combate del peleador (orientación principal en la jaula).
+export const FIGHTING_STYLES = [
+  { value: "striker", label: "Striker (golpeo)" },
+  { value: "grappler", label: "Grappler (suelo)" },
+  { value: "wrestler", label: "Luchador (wrestling)" },
+  { value: "boxeo", label: "Boxeo" },
+  { value: "kickboxing", label: "Kickboxing" },
+  { value: "muay_thai", label: "Muay Thai" },
+  { value: "jiu_jitsu", label: "Jiu-Jitsu" },
+  { value: "karate", label: "Karate" },
+  { value: "sambo", label: "Sambo" },
+  { value: "todoterreno", label: "Todoterreno (completo)" },
+];
+
+// Tallas de uniforme (short y franela del peleador y del entrenador).
+export const CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"];
+
+// Tallas de guante de combate de MMA.
+export const GLOVE_SIZES = ["XS", "S", "M", "L", "XL"];
+
 export const NATIONALITIES = [
   { value: "VE", label: "Venezuela 🇻🇪" },
   { value: "CO", label: "Colombia 🇨🇴" },

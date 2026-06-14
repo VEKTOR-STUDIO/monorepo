@@ -13,6 +13,9 @@ import {
   STANCES,
   BLOOD_TYPES,
   NATIONALITIES,
+  FIGHTING_STYLES,
+  CLOTHING_SIZES,
+  GLOVE_SIZES,
 } from "@/data/fighterOptions";
 
 // Encabezado de sección estilo Legión (línea dorada + título display)
@@ -50,6 +53,8 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
   const [isLoading, setIsLoading] = useState(false);
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(fighter?.photo_url || "");
+  const [idDocFile, setIdDocFile] = useState(null);
+  const [idDocName, setIdDocName] = useState("");
 
   const [form, setForm] = useState({
     full_name: fighter?.full_name || user?.user_metadata?.full_name || "",
@@ -61,8 +66,10 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
     state: fighter?.state || "",
     phone: fighter?.phone || "",
     instagram: fighter?.instagram || "",
+    id_document_number: fighter?.id_document_number || "",
     discipline: fighter?.discipline || "mma",
     experience_level: fighter?.experience_level || "amateur",
+    fighting_style: fighter?.fighting_style || "",
     bjj_belt: fighter?.bjj_belt || "",
     years_training: fighter?.years_training ?? "",
     weight_kg: fighter?.weight_kg ?? "",
@@ -72,6 +79,10 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
     weight_class: fighter?.weight_class || "",
     team: fighter?.team || "",
     coach_name: fighter?.coach_name || "",
+    coach_shirt_size: fighter?.coach_shirt_size || "",
+    short_size: fighter?.short_size || "",
+    shirt_size: fighter?.shirt_size || "",
+    glove_size: fighter?.glove_size || "",
     wins: fighter?.wins ?? 0,
     losses: fighter?.losses ?? 0,
     draws: fighter?.draws ?? 0,
@@ -79,6 +90,9 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
     wins_ko: fighter?.wins_ko ?? 0,
     wins_sub: fighter?.wins_sub ?? 0,
     wins_dec: fighter?.wins_dec ?? 0,
+    amateur_wins: fighter?.amateur_wins ?? 0,
+    amateur_losses: fighter?.amateur_losses ?? 0,
+    amateur_draws: fighter?.amateur_draws ?? 0,
     emergency_contact_name: fighter?.emergency_contact_name || "",
     emergency_contact_phone: fighter?.emergency_contact_phone || "",
     blood_type: fighter?.blood_type || "",
@@ -102,6 +116,17 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
     setPhotoPreview(URL.createObjectURL(file));
   };
 
+  const handleIdDoc = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("La foto de la cédula no puede superar 5 MB");
+      return;
+    }
+    setIdDocFile(file);
+    setIdDocName(file.name);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -122,6 +147,20 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         photo_url = publicUrl.publicUrl;
       }
 
+      // La cédula es un documento sensible: va a un bucket PRIVADO y guardamos
+      // solo la ruta (no una URL pública). Se lee con URL firmada cuando hace falta.
+      let id_document_url = fighter?.id_document_url || null;
+
+      if (idDocFile) {
+        const ext = idDocFile.name.split(".").pop().toLowerCase();
+        const path = `${user.id}/cedula-${Date.now()}.${ext}`;
+        const { error: docError } = await supabase.storage
+          .from("fighter-documents")
+          .upload(path, idDocFile, { upsert: true });
+        if (docError) throw docError;
+        id_document_url = path;
+      }
+
       const toIntOrNull = (v) => (v === "" || v === null ? null : parseInt(v, 10));
       const toNumOrNull = (v) => (v === "" || v === null ? null : parseFloat(v));
 
@@ -136,8 +175,10 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         state: form.state.trim() || null,
         phone: form.phone.trim(),
         instagram: form.instagram.trim().replace(/^@/, "") || null,
+        id_document_number: form.id_document_number.trim() || null,
         discipline: form.discipline,
         experience_level: form.experience_level,
+        fighting_style: form.fighting_style || null,
         bjj_belt: showBelt && form.bjj_belt ? form.bjj_belt : null,
         years_training: toIntOrNull(form.years_training),
         weight_kg: toNumOrNull(form.weight_kg),
@@ -147,6 +188,10 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         weight_class: form.weight_class || null,
         team: form.team.trim() || null,
         coach_name: form.coach_name.trim() || null,
+        coach_shirt_size: form.coach_shirt_size || null,
+        short_size: form.short_size || null,
+        shirt_size: form.shirt_size || null,
+        glove_size: form.glove_size || null,
         wins: toIntOrNull(form.wins) ?? 0,
         losses: toIntOrNull(form.losses) ?? 0,
         draws: toIntOrNull(form.draws) ?? 0,
@@ -154,11 +199,15 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         wins_ko: toIntOrNull(form.wins_ko) ?? 0,
         wins_sub: toIntOrNull(form.wins_sub) ?? 0,
         wins_dec: toIntOrNull(form.wins_dec) ?? 0,
+        amateur_wins: toIntOrNull(form.amateur_wins) ?? 0,
+        amateur_losses: toIntOrNull(form.amateur_losses) ?? 0,
+        amateur_draws: toIntOrNull(form.amateur_draws) ?? 0,
         emergency_contact_name: form.emergency_contact_name.trim(),
         emergency_contact_phone: form.emergency_contact_phone.trim(),
         blood_type: form.blood_type || null,
         medical_conditions: form.medical_conditions.trim() || null,
         photo_url,
+        id_document_url,
       };
 
       const { error } = await supabase
@@ -272,7 +321,7 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         </label>
 
         <label className="form-control w-full">
-          <div className="label"><Label>Estado</Label></div>
+          <div className="label"><Label>Estado donde vive</Label></div>
           <input
             type="text"
             className="input input-bordered w-full"
@@ -282,7 +331,18 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
           />
         </label>
 
-        <label className="form-control w-full md:col-span-2">
+        <label className="form-control w-full">
+          <div className="label"><Label>Cédula de identidad o pasaporte</Label></div>
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            placeholder="V-12.345.678"
+            value={form.id_document_number}
+            onChange={set("id_document_number")}
+          />
+        </label>
+
+        <label className="form-control w-full">
           <div className="label"><Label>Instagram</Label></div>
           <input
             type="text"
@@ -313,6 +373,20 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
           </button>
         ))}
       </div>
+
+      <label className="form-control w-full">
+        <div className="label"><Label>Estilo de combate</Label></div>
+        <select
+          className="select select-bordered w-full"
+          value={form.fighting_style}
+          onChange={set("fighting_style")}
+        >
+          <option value="">Seleccionar estilo</option>
+          {FIGHTING_STYLES.map((s) => (
+            <option key={s.value} value={s.value}>{s.label}</option>
+          ))}
+        </select>
+      </label>
 
       <div className={`grid gap-4 ${showBelt ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
         <label className="form-control w-full">
@@ -453,7 +527,7 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         </label>
 
         <label className="form-control w-full">
-          <div className="label"><Label>Entrenador principal</Label></div>
+          <div className="label"><Label>Entrenador principal (esquina 1)</Label></div>
           <input
             type="text"
             className="input input-bordered w-full"
@@ -464,8 +538,72 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         </label>
       </div>
 
+      {/* Tallas de uniforme (peleador + entrenador de esquina) */}
+      <div className="border border-primary/20 p-4">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-base-content/50 font-bold mb-3">
+          Tallas de uniforme
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <label className="form-control w-full">
+            <div className="label"><Label>Talla short</Label></div>
+            <select
+              className="select select-bordered w-full"
+              value={form.short_size}
+              onChange={set("short_size")}
+            >
+              <option value="">—</option>
+              {CLOTHING_SIZES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-control w-full">
+            <div className="label"><Label>Talla franela</Label></div>
+            <select
+              className="select select-bordered w-full"
+              value={form.shirt_size}
+              onChange={set("shirt_size")}
+            >
+              <option value="">—</option>
+              {CLOTHING_SIZES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-control w-full">
+            <div className="label"><Label>Talla guante de combate</Label></div>
+            <select
+              className="select select-bordered w-full"
+              value={form.glove_size}
+              onChange={set("glove_size")}
+            >
+              <option value="">—</option>
+              {GLOVE_SIZES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="form-control w-full">
+            <div className="label"><Label>Talla franela del entrenador</Label></div>
+            <select
+              className="select select-bordered w-full"
+              value={form.coach_shirt_size}
+              onChange={set("coach_shirt_size")}
+            >
+              <option value="">—</option>
+              {CLOTHING_SIZES.map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </div>
+
       {/* ── 05 · Récord ────────────────────────────────────────────── */}
-      <SectionTitle step="05">Récord</SectionTitle>
+      <SectionTitle step="05">Récord profesional de MMA</SectionTitle>
 
       <div className="grid grid-cols-4 gap-3">
         {[
@@ -496,6 +634,31 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
             ["wins_ko", "KO / TKO"],
             ["wins_sub", "Sumisión"],
             ["wins_dec", "Decisión"],
+          ].map(([field, label]) => (
+            <label key={field} className="form-control w-full">
+              <div className="label"><Label>{label}</Label></div>
+              <input
+                type="number"
+                min="0"
+                className="input input-bordered w-full text-center font-display text-xl"
+                value={form[field]}
+                onChange={set(field)}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Récord amateur (aparte del profesional) */}
+      <div className="border border-base-content/20 p-4">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-base-content/50 font-bold mb-3">
+          Récord amateur
+        </p>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            ["amateur_wins", "Victorias"],
+            ["amateur_losses", "Derrotas"],
+            ["amateur_draws", "Empates"],
           ].map(([field, label]) => (
             <label key={field} className="form-control w-full">
               <div className="label"><Label>{label}</Label></div>
@@ -595,6 +758,25 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
             Retrato vertical, fondo neutro. Máx. 5 MB.
           </p>
         </div>
+      </div>
+
+      {/* ── 08 · Foto de la cédula (documento privado) ─────────────── */}
+      <SectionTitle step="08">Foto de la cédula</SectionTitle>
+
+      <div className="space-y-2">
+        <input
+          type="file"
+          accept="image/png,image/jpeg,image/webp,application/pdf"
+          className="file-input file-input-bordered w-full max-w-xs"
+          onChange={handleIdDoc}
+        />
+        <p className="text-[0.6rem] tracking-[0.15em] uppercase text-base-content/40">
+          {idDocName
+            ? `Seleccionado: ${idDocName}`
+            : fighter?.id_document_url
+            ? "Ya tienes un documento cargado. Sube uno nuevo solo si quieres reemplazarlo."
+            : "Foto o PDF de tu cédula / pasaporte. Documento privado, solo visible para ti y Legión. Máx. 5 MB."}
+        </p>
       </div>
 
       {/* ── Submit ─────────────────────────────────────────────────── */}

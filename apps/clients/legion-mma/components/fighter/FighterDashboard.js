@@ -74,7 +74,7 @@ export default function FighterDashboard({ user, fighter }) {
           Editar ficha
         </button>
       </div>
-      <FighterProfileView fighter={fighter} />
+      <FighterProfileView fighter={fighter} onEdit={() => setEditing(true)} />
     </div>
   );
 }
