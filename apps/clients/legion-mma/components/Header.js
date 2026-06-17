@@ -10,6 +10,7 @@ const links = [
   { href: "/#proximo-evento", label: "Próximo Evento" },
   { href: "/#cartelera", label: "Cartelera" },
   { href: "/#peleadores", label: "Peleadores" },
+  { href: "/#galeria", label: "Galería" },
   { href: "/#ediciones", label: "Ediciones" },
   { href: "/#faq", label: "FAQ" },
 ];
