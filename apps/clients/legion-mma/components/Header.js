@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import config from "@/config";
 
 const links = [
@@ -77,19 +78,18 @@ const Header = () => {
       >
         <div className="flex lg:flex-1 relative z-50">
           <Link
-            className="flex items-center gap-3 shrink-0 group"
+            className="flex items-center shrink-0 group"
             href="/"
             title={`${config.appName} — Inicio`}
           >
-            <div
-              className="w-7 h-7 bg-primary group-hover:bg-accent transition-colors shadow-[0_0_18px_rgba(212,175,55,0.35)]"
-              style={{ clipPath: "polygon(0 0, 100% 0, 80% 100%, 0% 100%)" }}
+            <Image
+              src="/dorado.png"
+              alt={`${config.appName} — Logo`}
+              width={1645}
+              height={1502}
+              priority
+              className="h-12 md:h-14 w-auto transition-transform group-hover:scale-105"
             />
-            <span
-              className="font-display text-2xl tracking-wide text-base-content"
-            >
-              LEGIÓN <span className="text-primary">MMA</span>
-            </span>
           </Link>
         </div>
 
@@ -138,11 +138,14 @@ const Header = () => {
           style={{ willChange: "transform", WebkitOverflowScrolling: "touch" }}
         >
           <div className="flex items-center justify-between mb-10">
-            <Link className="flex items-center gap-2 shrink-0" href="/" title="Inicio">
-              <div className="w-5 h-5 bg-primary shadow-[0_0_14px_rgba(212,175,55,0.35)]" style={{ clipPath: "polygon(0 0, 100% 0, 80% 100%, 0% 100%)" }} />
-              <span className="font-display text-xl tracking-wide text-base-content">
-                LEGIÓN <span className="text-primary">MMA</span>
-              </span>
+            <Link className="flex items-center shrink-0" href="/" title="Inicio">
+              <Image
+                src="/dorado.png"
+                alt={`${config.appName} — Logo`}
+                width={1645}
+                height={1502}
+                className="h-11 w-auto"
+              />
             </Link>
             <button
               type="button"

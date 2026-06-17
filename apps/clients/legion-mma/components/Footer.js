@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import config from "@/config";
 
 const SocialIcon = ({ children, href, label }) => (
@@ -24,14 +25,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12 md:gap-10">
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-3 group">
-              <div
-              className="w-8 h-8 bg-primary group-hover:bg-accent transition-colors shadow-[0_0_18px_rgba(212,175,55,0.35)]"
-              style={{ clipPath: "polygon(0 0, 100% 0, 80% 100%, 0% 100%)" }}
-            />
-              <span className="font-display text-3xl text-base-content tracking-wide">
-                LEGIÓN <span className="text-primary">MMA</span>
-              </span>
+            <Link href="/" className="flex items-center group">
+              <Image
+                src="/dorado.png"
+                alt={`${config.appName} — Logo`}
+                width={1645}
+                height={1502}
+                className="h-20 w-auto transition-transform group-hover:scale-105"
+              />
             </Link>
             <p className="text-base-content/60 text-sm leading-relaxed mt-5 max-w-xs">
               {config.business?.tagline}

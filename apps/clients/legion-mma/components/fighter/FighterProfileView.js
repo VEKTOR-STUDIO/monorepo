@@ -56,6 +56,17 @@ export default function FighterProfileView({ fighter, onEdit }) {
       (fighter.amateur_draws || 0) >
     0;
 
+  const hasLegionRecord =
+    (fighter.legion_wins || 0) +
+      (fighter.legion_losses || 0) +
+      (fighter.legion_draws || 0) >
+    0;
+  const hasOtherOrgRecord =
+    (fighter.other_org_wins || 0) +
+      (fighter.other_org_losses || 0) +
+      (fighter.other_org_draws || 0) >
+    0;
+
   const disciplineLabel =
     { mma: "MMA", bjj: "BJJ / Grappling", ambas: "MMA + BJJ" }[fighter.discipline] ||
     fighter.discipline;
@@ -167,6 +178,23 @@ export default function FighterProfileView({ fighter, onEdit }) {
                 <span className="text-primary">{finishRate}% finalización</span>
               )}
             </div>
+            {(hasLegionRecord || hasOtherOrgRecord) && (
+              <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 text-[0.65rem] tracking-[0.2em] uppercase text-base-content/50 font-bold mt-4 pt-3 border-t border-base-content/10">
+                {hasLegionRecord && (
+                  <span>
+                    <span className="text-primary">En Legión:</span>{" "}
+                    {fighter.legion_wins || 0}-{fighter.legion_losses || 0}-
+                    {fighter.legion_draws || 0}
+                  </span>
+                )}
+                {hasOtherOrgRecord && (
+                  <span>
+                    Otras orgs: {fighter.other_org_wins || 0}-
+                    {fighter.other_org_losses || 0}-{fighter.other_org_draws || 0}
+                  </span>
+                )}
+              </div>
+            )}
             {hasAmateurRecord && (
               <p className="text-[0.65rem] tracking-[0.2em] uppercase text-base-content/40 font-bold mt-4 pt-3 border-t border-base-content/10">
                 Récord amateur: {fighter.amateur_wins || 0}-

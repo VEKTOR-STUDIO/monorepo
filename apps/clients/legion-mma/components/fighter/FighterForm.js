@@ -92,6 +92,12 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
     wins_ko: fighter?.wins_ko ?? 0,
     wins_sub: fighter?.wins_sub ?? 0,
     wins_dec: fighter?.wins_dec ?? 0,
+    legion_wins: fighter?.legion_wins ?? 0,
+    legion_losses: fighter?.legion_losses ?? 0,
+    legion_draws: fighter?.legion_draws ?? 0,
+    other_org_wins: fighter?.other_org_wins ?? 0,
+    other_org_losses: fighter?.other_org_losses ?? 0,
+    other_org_draws: fighter?.other_org_draws ?? 0,
     amateur_wins: fighter?.amateur_wins ?? 0,
     amateur_losses: fighter?.amateur_losses ?? 0,
     amateur_draws: fighter?.amateur_draws ?? 0,
@@ -216,6 +222,12 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         wins_ko: toIntOrNull(form.wins_ko) ?? 0,
         wins_sub: toIntOrNull(form.wins_sub) ?? 0,
         wins_dec: toIntOrNull(form.wins_dec) ?? 0,
+        legion_wins: toIntOrNull(form.legion_wins) ?? 0,
+        legion_losses: toIntOrNull(form.legion_losses) ?? 0,
+        legion_draws: toIntOrNull(form.legion_draws) ?? 0,
+        other_org_wins: toIntOrNull(form.other_org_wins) ?? 0,
+        other_org_losses: toIntOrNull(form.other_org_losses) ?? 0,
+        other_org_draws: toIntOrNull(form.other_org_draws) ?? 0,
         amateur_wins: toIntOrNull(form.amateur_wins) ?? 0,
         amateur_losses: toIntOrNull(form.amateur_losses) ?? 0,
         amateur_draws: toIntOrNull(form.amateur_draws) ?? 0,
@@ -674,6 +686,65 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
               />
             </label>
           ))}
+        </div>
+      </div>
+
+      {/* Desglose del récord profesional por organización */}
+      <div className="border border-primary/20 p-4 space-y-4">
+        <p className="text-[0.65rem] tracking-[0.2em] uppercase text-base-content/50 font-bold">
+          Desglose por organización (profesional)
+        </p>
+        <p className="text-[0.6rem] tracking-[0.1em] text-base-content/40 -mt-2">
+          De tu récord profesional, ¿cuántas peleas fueron en Legión y cuántas en
+          otras organizaciones?
+        </p>
+
+        <div>
+          <p className="text-[0.6rem] tracking-[0.2em] uppercase text-primary font-bold mb-2">
+            Peleas en Legión
+          </p>
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              ["legion_wins", "Victorias"],
+              ["legion_losses", "Derrotas"],
+              ["legion_draws", "Empates"],
+            ].map(([field, label]) => (
+              <label key={field} className="form-control w-full">
+                <div className="label"><Label>{label}</Label></div>
+                <input
+                  type="number"
+                  min="0"
+                  className="input input-bordered w-full text-center font-display text-xl"
+                  value={form[field]}
+                  onChange={set(field)}
+                />
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p className="text-[0.6rem] tracking-[0.2em] uppercase text-base-content/60 font-bold mb-2">
+            Otras organizaciones
+          </p>
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              ["other_org_wins", "Victorias"],
+              ["other_org_losses", "Derrotas"],
+              ["other_org_draws", "Empates"],
+            ].map(([field, label]) => (
+              <label key={field} className="form-control w-full">
+                <div className="label"><Label>{label}</Label></div>
+                <input
+                  type="number"
+                  min="0"
+                  className="input input-bordered w-full text-center font-display text-xl"
+                  value={form[field]}
+                  onChange={set(field)}
+                />
+              </label>
+            ))}
+          </div>
         </div>
       </div>
 
