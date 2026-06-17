@@ -9,6 +9,8 @@ import {
   BJJ_BELTS,
   STANCES,
   FIGHTING_STYLES,
+  VE_BANKS,
+  BANK_ACCOUNT_TYPES,
 } from "@/data/fighterOptions";
 
 const calcAge = (birthDate) => {
@@ -40,9 +42,20 @@ const Stat = ({ label, value }) => (
  * Muestra también el % de completado del perfil y qué datos faltan, para que el
  * peleador sepa qué actualizar (incluso cuando Legión agregue campos nuevos).
  */
-export default function FighterProfileView({ fighter, onEdit }) {
+export default function FighterProfileView({ fighter, payment = null, onEdit }) {
   const supabase = createClient();
   const status = STATUS_LABELS[fighter.status] || STATUS_LABELS.pendiente;
+
+  const hasPaymentInfo =
+    payment &&
+    (payment.bank_code ||
+      payment.bank_account_number ||
+      payment.pago_movil_phone ||
+      payment.bank_account_holder);
+  const bankLabel = payment?.bank_code
+    ? labelOf(VE_BANKS, payment.bank_code) || payment.bank_code
+    : null;
+  const accountTypeLabel = labelOf(BANK_ACCOUNT_TYPES, payment?.bank_account_type);
   const age = calcAge(fighter.birth_date);
   const totalWins = fighter.wins || 0;
   const finishes = (fighter.wins_ko || 0) + (fighter.wins_sub || 0);
@@ -274,6 +287,62 @@ export default function FighterProfileView({ fighter, onEdit }) {
               >
                 Ver foto de la cédula
               </button>
+            )}
+          </div>
+
+          {/* Datos de pago (privados: dueño + admin) */}
+          <div className="border border-primary/20 bg-base-200 p-4">
+            <p className="text-[0.6rem] tracking-[0.25em] uppercase text-primary font-bold mb-3">
+              Datos de pago
+            </p>
+            {hasPaymentInfo ? (
+              <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-base-content/70">
+                {bankLabel && (
+                  <p>
+                    <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold block">Banco</span>
+                    {bankLabel}
+                  </p>
+                )}
+                {accountTypeLabel && (
+                  <p>
+                    <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold block">Tipo de cuenta</span>
+                    {accountTypeLabel}
+                  </p>
+                )}
+                {payment.bank_account_number && (
+                  <p>
+                    <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold block">N° de cuenta</span>
+                    {payment.bank_account_number}
+                  </p>
+                )}
+                {payment.bank_account_holder && (
+                  <p>
+                    <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold block">Titular</span>
+                    {payment.bank_account_holder}
+                  </p>
+                )}
+                {payment.bank_account_holder_id && (
+                  <p>
+                    <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold block">Cédula / RIF</span>
+                    {payment.bank_account_holder_id}
+                  </p>
+                )}
+                {payment.pago_movil_phone && (
+                  <p>
+                    <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold block">Pago Móvil</span>
+                    {payment.pago_movil_phone}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-base-content/50">
+                Aún no has cargado tus datos de pago.{" "}
+                {onEdit && (
+                  <button onClick={onEdit} className="text-primary font-bold underline">
+                    Agrégalos aquí
+                  </button>
+                )}
+              </p>
             )}
           </div>
         </div>

@@ -17,6 +17,8 @@ import {
   FIGHTING_STYLES,
   CLOTHING_SIZES,
   GLOVE_SIZES,
+  VE_BANKS,
+  BANK_ACCOUNT_TYPES,
 } from "@/data/fighterOptions";
 import WeightClassGuide from "@/components/fighter/WeightClassGuide";
 
@@ -47,7 +49,7 @@ const Label = ({ children, required }) => (
  *  - fighter: ficha existente o null (modo registro)
  *  - onSaved: callback opcional al guardar con éxito
  */
-export default function FighterForm({ user, fighter = null, onSaved }) {
+export default function FighterForm({ user, fighter = null, payment = null, onSaved }) {
   const supabase = createClient();
   const router = useRouter();
   const isEdit = Boolean(fighter);
@@ -105,6 +107,13 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
     emergency_contact_phone: fighter?.emergency_contact_phone || "",
     blood_type: fighter?.blood_type || "",
     medical_conditions: fighter?.medical_conditions || "",
+    // Datos de pago (tabla aparte fighter_payments)
+    bank_code: payment?.bank_code || "",
+    bank_account_type: payment?.bank_account_type || "",
+    bank_account_number: payment?.bank_account_number || "",
+    bank_account_holder: payment?.bank_account_holder || "",
+    bank_account_holder_id: payment?.bank_account_holder_id || "",
+    pago_movil_phone: payment?.pago_movil_phone || "",
   });
 
   const set = (field) => (e) =>
@@ -243,6 +252,23 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
         .from("fighters")
         .upsert(payload, { onConflict: "user_id" });
       if (error) throw error;
+
+      // Datos de pago en su propia tabla (RLS estricta: dueño + admin).
+      // Se guarda después de la ficha porque su FK apunta a fighters.user_id.
+      const paymentPayload = {
+        user_id: user.id,
+        bank_code: form.bank_code || null,
+        bank_account_type: form.bank_account_type || null,
+        bank_account_number: form.bank_account_number.trim() || null,
+        bank_account_holder: form.bank_account_holder.trim() || null,
+        bank_account_holder_id: form.bank_account_holder_id.trim() || null,
+        pago_movil_phone: form.pago_movil_phone.trim() || null,
+      };
+
+      const { error: paymentError } = await supabase
+        .from("fighter_payments")
+        .upsert(paymentPayload, { onConflict: "user_id" });
+      if (paymentError) throw paymentError;
 
       toast.success(
         isEdit ? "Ficha actualizada" : "¡Registro enviado! Tu ficha está en revisión."
@@ -876,6 +902,92 @@ export default function FighterForm({ user, fighter = null, onSaved }) {
             ? "Ya tienes un documento cargado. Sube uno nuevo solo si quieres reemplazarlo."
             : "Foto o PDF de tu cédula / pasaporte. Documento privado, solo visible para ti y Legión. Máx. 5 MB."}
         </p>
+      </div>
+
+      {/* ── 09 · Datos de pago ─────────────────────────────────────── */}
+      <SectionTitle step="09">Datos de pago</SectionTitle>
+
+      <p className="text-[0.65rem] tracking-[0.15em] uppercase text-base-content/40 -mt-4">
+        Para pagarte tus bolsas. Datos privados: solo tú y el equipo de Legión
+        pueden verlos.
+      </p>
+
+      <div className="grid md:grid-cols-2 gap-4">
+        <label className="form-control w-full">
+          <div className="label"><Label>Banco</Label></div>
+          <select
+            className="select select-bordered w-full"
+            value={form.bank_code}
+            onChange={set("bank_code")}
+          >
+            <option value="">Seleccionar banco</option>
+            {VE_BANKS.map((b) => (
+              <option key={b.value} value={b.value}>
+                {b.value} — {b.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="form-control w-full">
+          <div className="label"><Label>Tipo de cuenta</Label></div>
+          <select
+            className="select select-bordered w-full"
+            value={form.bank_account_type}
+            onChange={set("bank_account_type")}
+          >
+            <option value="">Seleccionar</option>
+            {BANK_ACCOUNT_TYPES.map((t) => (
+              <option key={t.value} value={t.value}>{t.label}</option>
+            ))}
+          </select>
+        </label>
+
+        <label className="form-control w-full md:col-span-2">
+          <div className="label"><Label>Número de cuenta (20 dígitos)</Label></div>
+          <input
+            type="text"
+            inputMode="numeric"
+            maxLength={20}
+            className="input input-bordered w-full"
+            placeholder="0000 0000 0000 0000 0000"
+            value={form.bank_account_number}
+            onChange={set("bank_account_number")}
+          />
+        </label>
+
+        <label className="form-control w-full">
+          <div className="label"><Label>Titular de la cuenta</Label></div>
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            placeholder="Nombre y apellido"
+            value={form.bank_account_holder}
+            onChange={set("bank_account_holder")}
+          />
+        </label>
+
+        <label className="form-control w-full">
+          <div className="label"><Label>Cédula / RIF del titular</Label></div>
+          <input
+            type="text"
+            className="input input-bordered w-full"
+            placeholder="V-12.345.678"
+            value={form.bank_account_holder_id}
+            onChange={set("bank_account_holder_id")}
+          />
+        </label>
+
+        <label className="form-control w-full md:col-span-2">
+          <div className="label"><Label>Teléfono de Pago Móvil</Label></div>
+          <input
+            type="tel"
+            className="input input-bordered w-full"
+            placeholder="0412 0000000"
+            value={form.pago_movil_phone}
+            onChange={set("pago_movil_phone")}
+          />
+        </label>
       </div>
 
       {/* ── Submit ─────────────────────────────────────────────────── */}

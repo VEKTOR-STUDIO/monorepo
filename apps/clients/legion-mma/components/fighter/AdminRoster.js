@@ -5,11 +5,27 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { createClient } from "@/libs/supabase/client";
-import { STATUS_LABELS, FIGHTING_STYLES } from "@/data/fighterOptions";
+import {
+  STATUS_LABELS,
+  FIGHTING_STYLES,
+  VE_BANKS,
+  BANK_ACCOUNT_TYPES,
+} from "@/data/fighterOptions";
 import { getFighterCompletion } from "@/libs/fighterCompletion";
 
 const styleLabelOf = (value) =>
   FIGHTING_STYLES.find((s) => s.value === value)?.label || value;
+
+const bankLabelOf = (code) =>
+  VE_BANKS.find((b) => b.value === code)?.label || code;
+const accountTypeLabelOf = (value) =>
+  BANK_ACCOUNT_TYPES.find((t) => t.value === value)?.label || value;
+
+// El embedded select (fighter_payments) llega como objeto o arreglo.
+const paymentOf = (f) =>
+  Array.isArray(f?.fighter_payments)
+    ? f.fighter_payments[0] || null
+    : f?.fighter_payments || null;
 
 const STATUS_FILTERS = [
   { value: "todos", label: "Todos" },
@@ -387,6 +403,18 @@ export default function AdminRoster({ fighters = [] }) {
                         ["Años entrenando", f.years_training],
                         ["Récord amateur", `${f.amateur_wins || 0}-${f.amateur_losses || 0}-${f.amateur_draws || 0}`],
                         ["KO/Sum/Dec", `${f.wins_ko || 0}/${f.wins_sub || 0}/${f.wins_dec || 0}`],
+                        [
+                          "En Legión (V-D-E)",
+                          (f.legion_wins || 0) + (f.legion_losses || 0) + (f.legion_draws || 0) > 0
+                            ? `${f.legion_wins || 0}-${f.legion_losses || 0}-${f.legion_draws || 0}`
+                            : null,
+                        ],
+                        [
+                          "Otras orgs (V-D-E)",
+                          (f.other_org_wins || 0) + (f.other_org_losses || 0) + (f.other_org_draws || 0) > 0
+                            ? `${f.other_org_wins || 0}-${f.other_org_losses || 0}-${f.other_org_draws || 0}`
+                            : null,
+                        ],
                         ["Talla short", f.short_size],
                         ["Talla franela", f.shirt_size],
                         ["Talla guante", f.glove_size],
@@ -413,6 +441,49 @@ export default function AdminRoster({ fighters = [] }) {
                         Ver foto de la cédula
                       </button>
                     )}
+
+                    {/* Datos de pago (para liquidar bolsas) */}
+                    {(() => {
+                      const p = paymentOf(f);
+                      const has =
+                        p &&
+                        (p.bank_code ||
+                          p.bank_account_number ||
+                          p.pago_movil_phone ||
+                          p.bank_account_holder);
+                      return (
+                        <div className="border border-primary/20 bg-base-100/40 p-3">
+                          <p className="text-[0.6rem] tracking-[0.25em] uppercase text-primary font-bold mb-2">
+                            Datos de pago
+                          </p>
+                          {has ? (
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-2 text-sm text-base-content/70">
+                              {[
+                                ["Banco", p.bank_code ? bankLabelOf(p.bank_code) : null],
+                                ["Tipo de cuenta", p.bank_account_type ? accountTypeLabelOf(p.bank_account_type) : null],
+                                ["N° de cuenta", p.bank_account_number],
+                                ["Titular", p.bank_account_holder],
+                                ["Cédula / RIF", p.bank_account_holder_id],
+                                ["Pago Móvil", p.pago_movil_phone],
+                              ]
+                                .filter(([, v]) => v != null && v !== "")
+                                .map(([label, value]) => (
+                                  <p key={label}>
+                                    <span className="text-base-content/40 uppercase text-[0.6rem] tracking-[0.2em] font-bold mr-2">
+                                      {label}
+                                    </span>
+                                    {value}
+                                  </p>
+                                ))}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-base-content/40">
+                              Sin datos de pago cargados.
+                            </p>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
               </div>

@@ -110,6 +110,40 @@ export const NATIONALITIES = [
   { value: "US", label: "Estados Unidos 🇺🇸" },
 ];
 
+// ── Datos de pago (Venezuela) ────────────────────────────────────────────────
+// Bancos principales de Venezuela. El `value` es el código bancario de 4 dígitos
+// (el mismo que se usa para Pago Móvil y como prefijo del número de cuenta).
+export const VE_BANKS = [
+  { value: "0102", label: "Banco de Venezuela" },
+  { value: "0104", label: "Banco Venezolano de Crédito" },
+  { value: "0105", label: "Mercantil" },
+  { value: "0108", label: "BBVA Provincial" },
+  { value: "0114", label: "Bancaribe" },
+  { value: "0115", label: "Banco Exterior" },
+  { value: "0128", label: "Banco Caroní" },
+  { value: "0134", label: "Banesco" },
+  { value: "0137", label: "Banco Sofitasa" },
+  { value: "0138", label: "Banco Plaza" },
+  { value: "0146", label: "Bangente" },
+  { value: "0151", label: "BFC Banco Fondo Común" },
+  { value: "0156", label: "100% Banco" },
+  { value: "0157", label: "DelSur Banco" },
+  { value: "0163", label: "Banco del Tesoro" },
+  { value: "0166", label: "Banco Agrícola de Venezuela" },
+  { value: "0168", label: "Bancrecer" },
+  { value: "0169", label: "Mi Banco" },
+  { value: "0171", label: "Banco Activo" },
+  { value: "0172", label: "Bancamiga" },
+  { value: "0174", label: "Banplus" },
+  { value: "0175", label: "Banco Bicentenario" },
+  { value: "0191", label: "Banco Nacional de Crédito (BNC)" },
+];
+
+export const BANK_ACCOUNT_TYPES = [
+  { value: "ahorro", label: "Ahorro" },
+  { value: "corriente", label: "Corriente" },
+];
+
 export const STATUS_LABELS = {
   pendiente: { label: "Pendiente de aprobación", badge: "badge-warning" },
   aprobado: { label: "Aprobado — en el roster", badge: "badge-success" },

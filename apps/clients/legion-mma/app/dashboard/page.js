@@ -35,13 +35,13 @@ export default async function Dashboard() {
   if (isAdmin) {
     const { data } = await supabase
       .from("fighters")
-      .select("*")
+      .select("*, fighter_payments(*)")
       .order("created_at", { ascending: false });
     allFighters = data || [];
   } else {
     const { data } = await supabase
       .from("fighters")
-      .select("*")
+      .select("*, fighter_payments(*)")
       .eq("user_id", user.id)
       .maybeSingle();
     fighter = data;

@@ -11,6 +11,11 @@ import FighterProfileView from "./FighterProfileView";
 export default function FighterDashboard({ user, fighter }) {
   const [editing, setEditing] = useState(false);
 
+  // El embedded select (fighter_payments) puede venir como objeto o como arreglo.
+  const payment = Array.isArray(fighter?.fighter_payments)
+    ? fighter.fighter_payments[0] || null
+    : fighter?.fighter_payments || null;
+
   // Registro inicial: aún no existe ficha
   if (!fighter) {
     return (
@@ -31,7 +36,7 @@ export default function FighterDashboard({ user, fighter }) {
             oficial de Legión.
           </p>
         </div>
-        <FighterForm user={user} />
+        <FighterForm user={user} payment={payment} />
       </div>
     );
   }
@@ -54,6 +59,7 @@ export default function FighterDashboard({ user, fighter }) {
         <FighterForm
           user={user}
           fighter={fighter}
+          payment={payment}
           onSaved={() => setEditing(false)}
         />
       </div>
@@ -74,7 +80,11 @@ export default function FighterDashboard({ user, fighter }) {
           Editar ficha
         </button>
       </div>
-      <FighterProfileView fighter={fighter} onEdit={() => setEditing(true)} />
+      <FighterProfileView
+        fighter={fighter}
+        payment={payment}
+        onEdit={() => setEditing(true)}
+      />
     </div>
   );
 }

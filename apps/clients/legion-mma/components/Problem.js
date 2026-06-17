@@ -26,10 +26,9 @@ const AboutLegion = () => (
         <div className="relative">
           <div className="relative w-full aspect-[3/4] max-w-md mx-auto lg:mx-0 overflow-hidden border-2 border-primary">
             <div
-              className="absolute inset-0 bg-cover bg-center grayscale"
+              className="absolute inset-0 bg-cover bg-top grayscale"
               style={{
-                backgroundImage:
-                  'url("https://images.unsplash.com/photo-1517438476312-10d79c077509?auto=format&fit=crop&w=700&q=80")',
+                backgroundImage: 'url("/fotos/campeon-bandera.jpg")',
               }}
               aria-hidden
             />
