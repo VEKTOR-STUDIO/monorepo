@@ -47,8 +47,7 @@ const config = {
     venue: "Hotel Tamanaco",
     city: "Caracas, Venezuela",
     ticketUrl: "https://example.com/entradas",
-    posterImage:
-      "https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=900&q=80",
+    posterImage: "/cartelera.png",
   },
   auth: {
     loginUrl: "/signin",

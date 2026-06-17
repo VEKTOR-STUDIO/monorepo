@@ -201,24 +201,9 @@ const Hero = () => {
                 priority
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
-                style={{ filter: "grayscale(0.35) contrast(1.1)" }}
               />
-              {/* Vignette */}
-              <div className="absolute inset-0 bg-gradient-to-t from-base-100 via-base-100/40 to-transparent pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary/15 pointer-events-none" />
-
-              {/* Poster footer */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
-                <p className="text-[0.6rem] tracking-[0.4em] text-primary uppercase font-bold mb-1">
-                  Edición {config.event.edition}
-                </p>
-                <p className="font-display text-3xl text-base-content leading-none">
-                  {dateLabel.split(",")[0]}
-                </p>
-                <p className="text-xs tracking-[0.2em] text-base-content/70 uppercase mt-1">
-                  {config.event.venue} · {config.event.city}
-                </p>
-              </div>
+              {/* Sutil lavado dorado para integrar con la marca, sin tapar el arte */}
+              <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-primary/10 pointer-events-none" />
             </div>
           </div>
         </div>
