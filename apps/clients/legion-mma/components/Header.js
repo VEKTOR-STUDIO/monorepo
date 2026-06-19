@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { createClient } from "@/libs/supabase/client";
 import config from "@/config";
 
 const links = [
@@ -19,10 +20,28 @@ const Header = () => {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     setIsOpen(false);
   }, [searchParams]);
+
+  // Detecta si hay sesión activa para mostrar el acceso al dashboard.
+  useEffect(() => {
+    const supabase = createClient();
+
+    supabase.auth
+      .getUser()
+      .then(({ data: { user } }) => setIsLoggedIn(!!user));
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) =>
+      setIsLoggedIn(!!session?.user)
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -49,10 +68,10 @@ const Header = () => {
   const cta = (
     <div className="flex items-center gap-2">
       <Link
-        href={config.auth?.loginUrl ?? "/signin"}
+        href={isLoggedIn ? config.auth?.callbackUrl ?? "/dashboard" : config.auth?.loginUrl ?? "/signin"}
         className="btn btn-ghost btn-sm border border-primary/50 text-primary hover:bg-primary hover:text-primary-content"
       >
-        Soy Peleador
+        {isLoggedIn ? "Ir a Dashboard" : "Soy Peleador"}
       </Link>
       <a
         href={config.event?.ticketUrl ?? "#proximo-evento"}
