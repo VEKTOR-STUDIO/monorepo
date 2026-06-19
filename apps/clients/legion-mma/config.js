@@ -2,11 +2,11 @@ const config = {
   appName: "Legión MMA",
   appDescription:
     "Legión MMA — la liga venezolana de artes marciales mixtas fundada por el peleador UFC Omar Morales. Eventos en Caracas, Maracaibo y todo el país.",
-  domainName: "legionmma.ve",
+  domainName: "legionmmaoficial.com",
   siteUrl:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : "https://legionmma.ve",
+      : "https://legionmmaoficial.com",
   crisp: {
     id: "",
     onlyShowOnRoutes: ["/"],
@@ -20,9 +20,9 @@ const config = {
     cdn: "",
   },
   resend: {
-    fromNoReply: `Legión MMA <noreply@legionmma.ve>`,
-    fromAdmin: `Legión MMA <admin@legionmma.ve>`,
-    supportEmail: "contacto@legionmma.ve",
+    fromNoReply: `Legión MMA <noreply@legionmmaoficial.com>`,
+    fromAdmin: `Legión MMA <admin@legionmmaoficial.com>`,
+    supportEmail: "contacto@legionmmaoficial.com",
   },
   colors: {
     theme: "legion",
