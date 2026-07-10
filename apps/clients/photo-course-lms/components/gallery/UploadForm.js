@@ -1,0 +1,168 @@
+"use client";
+
+import { useRef, useState } from "react";
+import Image from "next/image";
+import toast from "react-hot-toast";
+import { createGalleryPost } from "@/app/actions";
+import {
+  MAX_AUTHOR_LENGTH,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FILE_SIZE_MB,
+} from "@/libs/gallery";
+
+/**
+ * Formulario público para publicar una foto + texto breve en la galería.
+ * Maneja preview de la imagen, contador de caracteres, estado de carga
+ * y feedback con toasts. `onSuccess` se invoca tras publicar (p. ej. para
+ * cerrar el modal que lo contiene).
+ */
+export default function UploadForm({ onSuccess }) {
+  const formRef = useRef(null);
+  const [preview, setPreview] = useState(null);
+  const [description, setDescription] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+
+    if (preview) URL.revokeObjectURL(preview);
+
+    if (!file) {
+      setPreview(null);
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      toast.error(`La imagen supera el límite de ${MAX_FILE_SIZE_MB} MB.`);
+      e.target.value = "";
+      setPreview(null);
+      return;
+    }
+
+    setPreview(URL.createObjectURL(file));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
+      const result = await createGalleryPost(new FormData(e.currentTarget));
+
+      if (result?.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success("¡Tu foto ya es parte de la galería!");
+      formRef.current?.reset();
+      if (preview) URL.revokeObjectURL(preview);
+      setPreview(null);
+      setDescription("");
+      onSuccess?.();
+    } catch {
+      toast.error("Algo salió mal. Intenta de nuevo.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      className="card w-full border border-base-content/15 bg-base-100 shadow-sm"
+    >
+      <div className="card-body gap-4">
+        <h2 className="card-title">Comparte tu fotografía</h2>
+
+        {/* Imagen */}
+        <div className="form-control gap-2">
+          <label className="label p-0" htmlFor="image">
+            <span className="label-text">
+              Tu foto (JPG, PNG, WebP o GIF · máx. {MAX_FILE_SIZE_MB} MB)
+            </span>
+          </label>
+          <input
+            id="image"
+            name="image"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            required
+            disabled={isSubmitting}
+            onChange={handleFileChange}
+            className="file-input file-input-bordered w-full"
+          />
+        </div>
+
+        {preview && (
+          <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-base-content/15">
+            <Image
+              src={preview}
+              alt="Vista previa de tu foto"
+              fill
+              unoptimized
+              className="object-contain"
+            />
+          </div>
+        )}
+
+        {/* Autor */}
+        <div className="form-control gap-2">
+          <label className="label p-0" htmlFor="author_name">
+            <span className="label-text">Tu nombre o usuario (opcional)</span>
+          </label>
+          <input
+            id="author_name"
+            name="author_name"
+            type="text"
+            maxLength={MAX_AUTHOR_LENGTH}
+            disabled={isSubmitting}
+            placeholder="¿Cómo quieres firmar tu foto?"
+            autoComplete="name"
+            className="input input-bordered w-full"
+          />
+        </div>
+
+        {/* Texto breve */}
+        <div className="form-control gap-2">
+          <label className="label p-0" htmlFor="description">
+            <span className="label-text">¿Qué expresa esta imagen?</span>
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            required
+            rows={3}
+            maxLength={MAX_DESCRIPTION_LENGTH}
+            value={description}
+            disabled={isSubmitting}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Un texto breve que acompañe tu fotografía…"
+            className="textarea textarea-bordered w-full resize-none"
+          />
+          <span className="text-right text-xs opacity-60">
+            {description.length}/{MAX_DESCRIPTION_LENGTH}
+          </span>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="btn border-0 bg-white text-black hover:bg-white/85 disabled:bg-white/30"
+        >
+          {isSubmitting ? (
+            <>
+              <span className="loading loading-spinner loading-sm" />
+              Publicando…
+            </>
+          ) : (
+            "Publicar en la galería"
+          )}
+        </button>
+      </div>
+    </form>
+  );
+}

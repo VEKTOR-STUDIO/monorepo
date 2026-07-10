@@ -1,0 +1,94 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { createClient } from "@/libs/supabase/server";
+import {
+  MAX_AUTHOR_LENGTH,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FILE_SIZE_MB,
+} from "@/libs/gallery";
+
+const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024; // mismo límite que el bucket
+const ALLOWED_TYPES = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+  "image/gif": "gif",
+};
+
+/**
+ * Sube la foto al bucket `gallery` y registra la publicación en
+ * `gallery_posts`. La galería es anónima: no requiere sesión (RLS permite
+ * insert a `anon`, ver supabase/gallery-schema.sql).
+ */
+export async function createGalleryPost(formData) {
+  const file = formData.get("image");
+  const description = formData.get("description")?.trim();
+  const authorName = formData.get("author_name")?.trim() || null;
+
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: "Adjunta una imagen para publicar." };
+  }
+
+  const extension = ALLOWED_TYPES[file.type];
+  if (!extension) {
+    return { error: "Formato no soportado. Usa JPG, PNG, WebP o GIF." };
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    return { error: `La imagen supera el límite de ${MAX_FILE_SIZE_MB} MB.` };
+  }
+
+  if (!description) {
+    return { error: "Escribe un texto breve para acompañar tu foto." };
+  }
+
+  if (description.length > MAX_DESCRIPTION_LENGTH) {
+    return {
+      error: `El texto no puede superar los ${MAX_DESCRIPTION_LENGTH} caracteres.`,
+    };
+  }
+
+  if (authorName && authorName.length > MAX_AUTHOR_LENGTH) {
+    return {
+      error: `El nombre no puede superar los ${MAX_AUTHOR_LENGTH} caracteres.`,
+    };
+  }
+
+  const supabase = await createClient();
+
+  // 1. Subir la imagen al bucket con un nombre único.
+  const imagePath = `uploads/${crypto.randomUUID()}.${extension}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("gallery")
+    .upload(imagePath, file, { contentType: file.type });
+
+  if (uploadError) {
+    console.error("Error subiendo imagen:", uploadError.message);
+    return { error: "No se pudo subir la imagen. Intenta de nuevo." };
+  }
+
+  // 2. Obtener la URL pública del archivo recién subido.
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from("gallery").getPublicUrl(imagePath);
+
+  // 3. Registrar la publicación en la base de datos.
+  const { error: insertError } = await supabase.from("gallery_posts").insert({
+    image_url: publicUrl,
+    image_path: imagePath,
+    description,
+    author_name: authorName,
+  });
+
+  if (insertError) {
+    // No dejar imágenes huérfanas en el bucket si el registro falló.
+    await supabase.storage.from("gallery").remove([imagePath]);
+    console.error("Error registrando publicación:", insertError.message);
+    return { error: "No se pudo guardar la publicación. Intenta de nuevo." };
+  }
+
+  revalidatePath("/");
+  return { success: true };
+}

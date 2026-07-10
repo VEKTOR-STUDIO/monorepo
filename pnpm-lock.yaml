@@ -173,6 +173,100 @@ importers:
         specifier: ^4.0.0
         version: 4.3.0
 
+  apps/clients/photo-course-lms:
+    dependencies:
+      '@alessandrovaru/lib':
+        specifier: workspace:*
+        version: link:../../../packages/lib
+      '@alessandrovaru/ui':
+        specifier: workspace:*
+        version: link:../../../packages/ui
+      '@headlessui/react':
+        specifier: ^2.2.0
+        version: 2.2.10(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@supabase/ssr':
+        specifier: ^0.5.2
+        version: 0.5.2(@supabase/supabase-js@2.106.1)
+      '@supabase/supabase-js':
+        specifier: ^2.46.2
+        version: 2.106.1
+      axios:
+        specifier: ^1.7.9
+        version: 1.16.1
+      crisp-sdk-web:
+        specifier: ^1.0.25
+        version: 1.1.2
+      form-data:
+        specifier: ^4.0.1
+        version: 4.0.5
+      gsap:
+        specifier: ^3.15.0
+        version: 3.15.0
+      next:
+        specifier: ^15.1.3
+        version: 15.5.18(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      next-sitemap:
+        specifier: ^4.2.3
+        version: 4.2.3(next@15.5.18(react-dom@19.0.0(react@19.0.0))(react@19.0.0))
+      nextjs-toploader:
+        specifier: ^3.7.15
+        version: 3.9.17(next@15.5.18(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      nodemailer:
+        specifier: ^6.9.16
+        version: 6.10.1
+      react:
+        specifier: 19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: 19.0.0
+        version: 19.0.0(react@19.0.0)
+      react-hot-toast:
+        specifier: ^2.4.1
+        version: 2.6.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-syntax-highlighter:
+        specifier: ^15.6.1
+        version: 15.6.6(react@19.0.0)
+      react-tooltip:
+        specifier: ^5.28.0
+        version: 5.30.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      resend:
+        specifier: ^4.0.1
+        version: 4.8.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      stripe:
+        specifier: ^17.3.1
+        version: 17.7.0
+    devDependencies:
+      '@alessandrovaru/eslint-config':
+        specifier: workspace:*
+        version: link:../../../packages/eslint-config
+      '@alessandrovaru/tailwind-config':
+        specifier: workspace:*
+        version: link:../../../packages/tailwind-config
+      '@alessandrovaru/tsconfig':
+        specifier: workspace:*
+        version: link:../../../packages/tsconfig
+      '@tailwindcss/postcss':
+        specifier: ^4.0.0
+        version: 4.3.0
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.5.0(postcss@8.5.15)
+      daisyui:
+        specifier: ^5.0.50
+        version: 5.5.20
+      eslint:
+        specifier: ^9.17.0
+        version: 9.39.4(jiti@2.7.0)
+      eslint-config-next:
+        specifier: ^15.1.3
+        version: 15.5.18(eslint@9.39.4(jiti@2.7.0))(typescript@6.0.3)
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.15
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.0
+
   apps/clients/roll-prep:
     dependencies:
       '@alessandrovaru/lib':
