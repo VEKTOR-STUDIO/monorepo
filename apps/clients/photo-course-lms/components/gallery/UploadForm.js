@@ -4,11 +4,8 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { createGalleryPost } from "@/app/actions";
-import {
-  MAX_AUTHOR_LENGTH,
-  MAX_DESCRIPTION_LENGTH,
-  MAX_FILE_SIZE_MB,
-} from "@/libs/gallery";
+import { MAX_AUTHOR_LENGTH, MAX_FILE_SIZE_MB, stripHtml } from "@/libs/gallery";
+import RichTextEditor from "./RichTextEditor";
 
 /**
  * Formulario público para publicar una foto + texto breve en la galería.
@@ -45,6 +42,11 @@ export default function UploadForm({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (!stripHtml(description)) {
+      toast.error("Escribe un texto para acompañar tu foto.");
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -126,26 +128,20 @@ export default function UploadForm({ onSuccess }) {
           />
         </div>
 
-        {/* Texto breve */}
+        {/* Texto (rich text, sin límite de caracteres) */}
         <div className="form-control gap-2">
           <label className="label p-0" htmlFor="description">
             <span className="label-text">¿Qué expresa esta imagen?</span>
           </label>
-          <textarea
-            id="description"
-            name="description"
-            required
-            rows={3}
-            maxLength={MAX_DESCRIPTION_LENGTH}
+          <RichTextEditor
             value={description}
+            onChange={setDescription}
             disabled={isSubmitting}
-            onChange={(e) => setDescription(e.target.value)}
-            placeholder="Un texto breve que acompañe tu fotografía…"
-            className="textarea textarea-bordered w-full resize-none"
+            placeholder="Cuenta lo que quieras sobre tu fotografía…"
           />
-          <span className="text-right text-xs opacity-60">
-            {description.length}/{MAX_DESCRIPTION_LENGTH}
-          </span>
+          {/* FormData lee este input oculto; el editor de texto rico no es
+              un elemento de formulario nativo. */}
+          <input type="hidden" name="description" value={description} />
         </div>
 
         <button

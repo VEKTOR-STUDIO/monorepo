@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getSEOTags } from "@/libs/seo";
 import { createClient } from "@/libs/supabase/server";
 import { createAdminClient } from "@/libs/supabase/admin";
+import { stripHtml } from "@/libs/gallery";
 import DeletePostButton from "@/components/admin/DeletePostButton";
 import config from "@/config";
 
@@ -64,36 +65,39 @@ export default async function AdminPage() {
         </p>
       ) : (
         <ul className="flex flex-col gap-3">
-          {posts.map((post) => (
-            <li
-              key={post.id}
-              className="flex items-center gap-4 rounded-xl border border-base-content/15 bg-base-100 p-3"
-            >
-              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-base-content/5">
-                <Image
-                  src={post.image_url}
-                  alt={post.description}
-                  fill
-                  sizes="80px"
-                  className="object-cover"
-                />
-              </div>
+          {posts.map((post) => {
+            const plainText = stripHtml(post.description);
+            return (
+              <li
+                key={post.id}
+                className="flex items-center gap-4 rounded-xl border border-base-content/15 bg-base-100 p-3"
+              >
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-base-content/5">
+                  <Image
+                    src={post.image_url}
+                    alt={plainText}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </div>
 
-              <div className="min-w-0 flex-1">
-                <p className="line-clamp-2 text-sm">{post.description}</p>
-                <p className="mt-1 text-xs opacity-50">
-                  {post.author_name || "Anónimo"} ·{" "}
-                  {new Date(post.created_at).toLocaleDateString("es", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })}
-                </p>
-              </div>
+                <div className="min-w-0 flex-1">
+                  <p className="line-clamp-2 text-sm">{plainText}</p>
+                  <p className="mt-1 text-xs opacity-50">
+                    {post.author_name || "Anónimo"} ·{" "}
+                    {new Date(post.created_at).toLocaleDateString("es", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
 
-              <DeletePostButton postId={post.id} />
-            </li>
-          ))}
+                <DeletePostButton postId={post.id} />
+              </li>
+            );
+          })}
         </ul>
       )}
     </main>

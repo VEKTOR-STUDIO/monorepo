@@ -1,11 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import DOMPurify from "isomorphic-dompurify";
 import { createClient } from "@/libs/supabase/server";
 import {
+  ALLOWED_DESCRIPTION_ATTR,
+  ALLOWED_DESCRIPTION_TAGS,
   MAX_AUTHOR_LENGTH,
-  MAX_DESCRIPTION_LENGTH,
   MAX_FILE_SIZE_MB,
+  stripHtml,
 } from "@/libs/gallery";
 
 const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024; // mismo límite que el bucket
@@ -23,7 +26,7 @@ const ALLOWED_TYPES = {
  */
 export async function createGalleryPost(formData) {
   const file = formData.get("image");
-  const description = formData.get("description")?.trim();
+  const rawDescription = formData.get("description")?.trim();
   const authorName = formData.get("author_name")?.trim() || null;
 
   if (!(file instanceof File) || file.size === 0) {
@@ -39,14 +42,20 @@ export async function createGalleryPost(formData) {
     return { error: `La imagen supera el límite de ${MAX_FILE_SIZE_MB} MB.` };
   }
 
-  if (!description) {
-    return { error: "Escribe un texto breve para acompañar tu foto." };
+  if (!rawDescription) {
+    return { error: "Escribe un texto para acompañar tu foto." };
   }
 
-  if (description.length > MAX_DESCRIPTION_LENGTH) {
-    return {
-      error: `El texto no puede superar los ${MAX_DESCRIPTION_LENGTH} caracteres.`,
-    };
+  // El editor de texto rico manda HTML: se sanitiza (solo tags/atributos
+  // permitidos, sin scripts ni estilos inline) antes de guardarlo. No hay
+  // límite de longitud: el texto puede ser tan largo como quiera el autor.
+  const description = DOMPurify.sanitize(rawDescription, {
+    ALLOWED_TAGS: ALLOWED_DESCRIPTION_TAGS,
+    ALLOWED_ATTR: ALLOWED_DESCRIPTION_ATTR,
+  });
+
+  if (!stripHtml(description)) {
+    return { error: "Escribe un texto para acompañar tu foto." };
   }
 
   if (authorName && authorName.length > MAX_AUTHOR_LENGTH) {

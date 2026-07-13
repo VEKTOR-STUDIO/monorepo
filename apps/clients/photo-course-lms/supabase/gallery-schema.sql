@@ -20,7 +20,7 @@ create table if not exists public.gallery_posts (
   id uuid primary key default gen_random_uuid(),
   image_url text not null,
   image_path text not null,
-  description text not null check (char_length(description) between 1 and 280),
+  description text not null check (char_length(description) >= 1),
   author_name text check (author_name is null or char_length(author_name) between 1 and 40),
   created_at timestamptz not null default now()
 );
@@ -29,6 +29,16 @@ create table if not exists public.gallery_posts (
 alter table public.gallery_posts
   add column if not exists author_name text
   check (author_name is null or char_length(author_name) between 1 and 40);
+
+-- Migración: la descripción ahora admite texto enriquecido (HTML) sin
+-- límite de caracteres. Se quita el tope de 280 que tenía el check
+-- constraint original; se conserva solo la validación de "no vacío".
+-- El sanitizado de las etiquetas HTML permitidas se hace en la Server
+-- Action (ver app/actions.js), no aquí, porque Postgres no valida HTML.
+alter table public.gallery_posts
+  drop constraint if exists gallery_posts_description_check;
+alter table public.gallery_posts
+  add constraint gallery_posts_description_check check (char_length(description) >= 1);
 
 create index if not exists gallery_posts_created_idx
   on public.gallery_posts (created_at desc);
@@ -48,7 +58,7 @@ create policy "gallery_posts_public_select" on public.gallery_posts
 drop policy if exists "gallery_posts_public_insert" on public.gallery_posts;
 create policy "gallery_posts_public_insert" on public.gallery_posts
   for insert to anon, authenticated
-  with check (char_length(description) between 1 and 280);
+  with check (char_length(description) >= 1);
 
 -- ----------------------------------------------------------------------------
 -- 3. STORAGE — bucket público "gallery"
