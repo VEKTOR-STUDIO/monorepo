@@ -8,12 +8,14 @@ import { MAX_AUTHOR_LENGTH, MAX_FILE_SIZE_MB, stripHtml } from "@/libs/gallery";
 import RichTextEditor from "./RichTextEditor";
 
 /**
- * Formulario público para publicar una foto + texto breve en la galería.
- * Maneja preview de la imagen, contador de caracteres, estado de carga
- * y feedback con toasts. `onSuccess` se invoca tras publicar (p. ej. para
- * cerrar el modal que lo contiene).
+ * Formulario público para publicar una foto + texto en la galería. Maneja
+ * preview de la imagen, estado de carga y feedback con toasts. Si hay
+ * conceptos ya revelados (`concepts`), muestra un desplegable para elegir a
+ * cuál pertenece la foto; si todavía no se reveló ninguno, se omite y la
+ * foto queda como "General". `onSuccess` se invoca tras publicar (p. ej.
+ * para cerrar el modal que lo contiene).
  */
-export default function UploadForm({ onSuccess }) {
+export default function UploadForm({ concepts, onSuccess }) {
   const formRef = useRef(null);
   const [preview, setPreview] = useState(null);
   const [description, setDescription] = useState("");
@@ -108,6 +110,32 @@ export default function UploadForm({ onSuccess }) {
               unoptimized
               className="object-contain"
             />
+          </div>
+        )}
+
+        {/* Concepto: solo se muestra si ya hay al menos uno revelado */}
+        {concepts?.length > 0 && (
+          <div className="form-control gap-2">
+            <label className="label p-0" htmlFor="concept_id">
+              <span className="label-text">¿A qué concepto pertenece?</span>
+            </label>
+            <select
+              id="concept_id"
+              name="concept_id"
+              required
+              disabled={isSubmitting}
+              defaultValue=""
+              className="select select-bordered w-full"
+            >
+              <option value="" disabled>
+                Elige un concepto…
+              </option>
+              {concepts.map((concept) => (
+                <option key={concept.id} value={concept.id}>
+                  {concept.name}
+                </option>
+              ))}
+            </select>
           </div>
         )}
 

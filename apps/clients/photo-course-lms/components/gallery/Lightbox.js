@@ -112,6 +112,11 @@ export default function Lightbox({ post, onClose }) {
 
         {/* Texto: mitad derecha en desktop, abajo (con scroll) en mobile */}
         <figcaption className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-6 text-white md:w-2/5 md:p-8">
+          {post.concept_name && (
+            <span className="badge badge-outline w-fit border-white/30 text-white/70">
+              {post.concept_name}
+            </span>
+          )}
           <div
             className="gallery-rich-text flex-1 text-base leading-relaxed md:text-lg"
             dangerouslySetInnerHTML={{ __html: safeHtml }}

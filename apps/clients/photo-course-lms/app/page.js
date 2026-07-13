@@ -9,24 +9,56 @@ export const metadata = getSEOTags({
   canonicalUrlRelative: "/",
 });
 
-async function getGalleryPosts() {
+export const dynamic = "force-dynamic";
+
+/**
+ * Trae los conceptos ya revelados (la política RLS de `gallery_concepts`
+ * oculta el resto automáticamente) y las publicaciones. Las fotos con un
+ * concepto que todavía no está revelado (o que dejó de estarlo) se
+ * excluyen de la galería pública; las que no tienen concepto se muestran
+ * siempre, agrupadas como "General".
+ */
+async function getGalleryData() {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
-    .from("gallery_posts")
-    .select("id, image_url, description, author_name, created_at")
-    .order("created_at", { ascending: false });
+  const [{ data: concepts, error: conceptsError }, { data: posts, error: postsError }] =
+    await Promise.all([
+      supabase
+        .from("gallery_concepts")
+        .select("id, name, sort_order")
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: true }),
+      supabase
+        .from("gallery_posts")
+        .select("id, image_url, description, author_name, created_at, concept_id")
+        .order("created_at", { ascending: false }),
+    ]);
 
-  if (error) {
-    console.error("Error cargando la galería:", error.message);
-    return [];
+  if (conceptsError) {
+    console.error("Error cargando los conceptos:", conceptsError.message);
+  }
+  if (postsError) {
+    console.error("Error cargando la galería:", postsError.message);
   }
 
-  return data;
+  const revealedConcepts = concepts || [];
+  const revealedConceptIds = new Set(revealedConcepts.map((c) => c.id));
+  const conceptNameById = new Map(revealedConcepts.map((c) => [c.id, c.name]));
+
+  const visiblePosts = (posts || [])
+    .filter((post) => !post.concept_id || revealedConceptIds.has(post.concept_id))
+    .map((post) => ({
+      ...post,
+      concept_name: post.concept_id
+        ? conceptNameById.get(post.concept_id)
+        : null,
+    }));
+
+  return { concepts: revealedConcepts, posts: visiblePosts };
 }
 
 export default async function Page() {
-  const posts = await getGalleryPosts();
+  const { concepts, posts } = await getGalleryData();
 
   return (
     <main className="mx-auto max-w-6xl px-4 pb-28">
@@ -46,10 +78,10 @@ export default async function Page() {
       </header>
 
       {/* La galería es la protagonista */}
-      <PhotoGallery posts={posts} />
+      <PhotoGallery posts={posts} concepts={concepts} />
 
       {/* Botón flotante + modal de subida */}
-      <UploadModal />
+      <UploadModal concepts={concepts} />
 
       <footer className="mt-16 pb-4 text-center text-xs uppercase tracking-widest opacity-40">
         {posts.length} {posts.length === 1 ? "fotografía" : "fotografías"} · vas

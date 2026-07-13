@@ -37,10 +37,18 @@ export default async function AdminPage() {
 
   if (profile?.role !== "admin") redirect("/");
 
-  const { data: posts } = await admin
-    .from("gallery_posts")
-    .select("id, image_url, description, author_name, created_at")
-    .order("created_at", { ascending: false });
+  const [{ data: posts }, { data: concepts }] = await Promise.all([
+    admin
+      .from("gallery_posts")
+      .select("id, image_url, description, author_name, created_at, concept_id")
+      .order("created_at", { ascending: false }),
+    admin
+      .from("gallery_concepts")
+      .select("id, name")
+      .order("sort_order", { ascending: true }),
+  ]);
+
+  const conceptNameById = new Map((concepts || []).map((c) => [c.id, c.name]));
 
   return (
     <main className="mx-auto max-w-4xl px-4 pb-24">
@@ -54,9 +62,14 @@ export default async function AdminPage() {
             {posts?.length === 1 ? "publicación" : "publicaciones"}
           </p>
         </div>
-        <Link href="/" className="btn btn-outline btn-sm">
-          Ver la galería
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/admin/conceptos" className="btn btn-outline btn-sm">
+            Gestionar conceptos
+          </Link>
+          <Link href="/" className="btn btn-outline btn-sm">
+            Ver la galería
+          </Link>
+        </div>
       </header>
 
       {!posts?.length ? (
@@ -67,6 +80,9 @@ export default async function AdminPage() {
         <ul className="flex flex-col gap-3">
           {posts.map((post) => {
             const plainText = stripHtml(post.description);
+            const conceptName = post.concept_id
+              ? conceptNameById.get(post.concept_id) || "Concepto borrado"
+              : "General";
             return (
               <li
                 key={post.id}
@@ -84,7 +100,10 @@ export default async function AdminPage() {
 
                 <div className="min-w-0 flex-1">
                   <p className="line-clamp-2 text-sm">{plainText}</p>
-                  <p className="mt-1 text-xs opacity-50">
+                  <p className="mt-1 flex flex-wrap items-center gap-2 text-xs opacity-50">
+                    <span className="badge badge-ghost badge-xs">
+                      {conceptName}
+                    </span>
                     {post.author_name || "Anónimo"} ·{" "}
                     {new Date(post.created_at).toLocaleDateString("es", {
                       day: "numeric",

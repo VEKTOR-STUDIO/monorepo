@@ -28,6 +28,7 @@ export async function createGalleryPost(formData) {
   const file = formData.get("image");
   const rawDescription = formData.get("description")?.trim();
   const authorName = formData.get("author_name")?.trim() || null;
+  const conceptId = formData.get("concept_id")?.trim() || null;
 
   if (!(file instanceof File) || file.size === 0) {
     return { error: "Adjunta una imagen para publicar." };
@@ -66,6 +67,25 @@ export async function createGalleryPost(formData) {
 
   const supabase = await createClient();
 
+  // Si viene un concepto, confirmar que sigue existiendo y revelado (la
+  // política RLS de select en gallery_concepts ya filtra por eso). Evita
+  // subir la imagen para nada si el concepto se ocultó justo antes de que
+  // el participante publique.
+  if (conceptId) {
+    const { data: concept } = await supabase
+      .from("gallery_concepts")
+      .select("id")
+      .eq("id", conceptId)
+      .maybeSingle();
+
+    if (!concept) {
+      return {
+        error:
+          "Ese concepto ya no está disponible. Actualiza la página e intenta de nuevo.",
+      };
+    }
+  }
+
   // 1. Subir la imagen al bucket con un nombre único.
   const imagePath = `uploads/${crypto.randomUUID()}.${extension}`;
 
@@ -89,6 +109,7 @@ export async function createGalleryPost(formData) {
     image_path: imagePath,
     description,
     author_name: authorName,
+    concept_id: conceptId,
   });
 
   if (insertError) {

@@ -5,9 +5,11 @@ import UploadForm from "./UploadForm";
 
 /**
  * Botón flotante "+" (siempre visible, abajo a la derecha) que abre un
- * modal con el formulario para publicar en la galería.
+ * modal con el formulario para publicar en la galería. `concepts` son los
+ * conceptos ya revelados (si hay alguno, el formulario muestra el
+ * desplegable para elegir a cuál pertenece la foto).
  */
-export default function UploadModal() {
+export default function UploadModal({ concepts }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -33,7 +35,7 @@ export default function UploadModal() {
             >
               ✕
             </button>
-            <UploadForm onSuccess={() => setIsOpen(false)} />
+            <UploadForm concepts={concepts} onSuccess={() => setIsOpen(false)} />
           </div>
           <button
             type="button"

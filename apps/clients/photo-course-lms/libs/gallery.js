@@ -38,3 +38,15 @@ export function stripHtml(html) {
     .replace(/\s+/g, " ")
     .trim();
 }
+
+/**
+ * Un concepto está "efectivamente revelado" si el admin lo marcó a mano
+ * (`is_revealed`) o si ya pasó su fecha de revelado programado
+ * (`reveal_at`). Se usa tanto en el servidor (filtrar qué se muestra/qué se
+ * puede elegir al subir) como en el admin (mostrar el estado calculado).
+ */
+export function isConceptRevealed(concept) {
+  if (!concept) return false;
+  if (concept.is_revealed) return true;
+  return Boolean(concept.reveal_at) && new Date(concept.reveal_at).getTime() <= Date.now();
+}
