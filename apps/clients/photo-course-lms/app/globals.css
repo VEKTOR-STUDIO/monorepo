@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@import "@alessandrovaru/tailwind-config/preset.css";
+@import "@alessandrovaru/ui/styles.css";
+
+@source "../app/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../../../packages/ui/src/**/*.{js,jsx,ts,tsx}";
+
+@plugin "daisyui" {
+  themes: light, black --default;
+}
+
+@theme {
+  --font-display: "Satoshi", "sans-serif";
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+progress::-webkit-progress-value {
+  transition: 0.6s width ease-out;
+}
+
+.btn-gradient {
+  background: linear-gradient(
+    60deg,
+    #f79533,
+    #f37055,
+    #ef4e7b,
+    #a166ab,
+    #5073b8,
+    #1098ad,
+    #07b39b,
+    #6fba82
+  ) !important;
+  background-size: 300% 300% !important;
+  animation: var(--animate-shimmer) !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  color: white !important;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+}
+
+.btn-gradient:hover {
+  filter: saturate(1.2) !important;
+}
+
+.btn-gradient:disabled {
+  background: rgb(107 114 128 / 0.3) !important;
+  color: rgb(156 163 175) !important;
+}
+
+.btn {
+  text-transform: capitalize !important;
+}
+
+/* Texto enriquecido de las publicaciones de la galería (editor y Lightbox). */
+.gallery-rich-text p {
+  margin-bottom: 0.75em;
+}
+
+.gallery-rich-text p:last-child {
+  margin-bottom: 0;
+}
+
+.gallery-rich-text h3 {
+  margin-bottom: 0.5em;
+  font-size: 1.15em;
+  font-weight: 700;
+}
+
+.gallery-rich-text ul,
+.gallery-rich-text ol {
+  margin-bottom: 0.75em;
+  padding-left: 1.4em;
+}
+
+.gallery-rich-text ul {
+  list-style-type: disc;
+}
+
+.gallery-rich-text ol {
+  list-style-type: decimal;
+}
+
+.gallery-rich-text blockquote {
+  margin-bottom: 0.75em;
+  padding-left: 1em;
+  border-left: 2px solid currentColor;
+  opacity: 0.85;
+  font-style: italic;
+}
+
+.gallery-rich-text a {
+  text-decoration: underline;
+  text-decoration-color: currentColor;
+  text-underline-offset: 2px;
+}
+
+.gallery-rich-text a:hover {
+  opacity: 0.75;
+}
+
+/* Placeholder de ProseMirror (Tiptap) cuando el editor está vacío. */
+.gallery-rich-text p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: currentColor;
+  opacity: 0.4;
+  pointer-events: none;
+}

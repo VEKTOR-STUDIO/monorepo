@@ -1,0 +1,60 @@
+{
+  "name": "@alessandrovaru/photo-course-lms",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Fotografía como Expresión del Ser — galería colectiva del taller: los participantes suben una foto + texto breve (Supabase + Tailwind v4 + Next 15 + React 19).",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "postbuild": "next-sitemap",
+    "start": "next start",
+    "lint": "next lint",
+    "clean": "rm -rf .next .turbo node_modules"
+  },
+  "dependencies": {
+    "@alessandrovaru/lib": "workspace:*",
+    "@alessandrovaru/ui": "workspace:*",
+    "@headlessui/react": "^2.2.0",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.46.2",
+    "@tiptap/extensions": "^3.27.3",
+    "@tiptap/pm": "^3.27.3",
+    "@tiptap/react": "^3.27.3",
+    "@tiptap/starter-kit": "^3.27.3",
+    "axios": "^1.7.9",
+    "crisp-sdk-web": "^1.0.25",
+    "dompurify": "^3.4.12",
+    "form-data": "^4.0.1",
+    "gsap": "^3.15.0",
+    "next": "^15.1.3",
+    "next-sitemap": "^4.2.3",
+    "nextjs-toploader": "^3.7.15",
+    "nodemailer": "^6.9.16",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-hot-toast": "^2.4.1",
+    "react-syntax-highlighter": "^15.6.1",
+    "react-tooltip": "^5.28.0",
+    "resend": "^4.0.1",
+    "sanitize-html": "^2.17.6",
+    "stripe": "^17.3.1"
+  },
+  "devDependencies": {
+    "@alessandrovaru/eslint-config": "workspace:*",
+    "@alessandrovaru/tailwind-config": "workspace:*",
+    "@alessandrovaru/tsconfig": "workspace:*",
+    "@tailwindcss/postcss": "^4.0.0",
+    "autoprefixer": "^10.4.20",
+    "daisyui": "^5.0.50",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "^15.1.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^4.0.0"
+  },
+  "overrides": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0"
+  }
+}
