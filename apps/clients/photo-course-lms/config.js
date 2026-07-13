@@ -5,8 +5,9 @@ const config = {
   appDescription:
     "Galería colectiva del taller Fotografía como Expresión del Ser (Mediación Artística y Psicoanálisis Junguiano). Comparte una foto y un texto breve; pasa el cursor sobre cada imagen para leer su historia.",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
-  // TODO: reemplazar por el dominio definitivo cuando el cliente lo compre.
-  domainName: "expresiondelser.vashermeticum.com",
+  // Dominio real del deploy en Vercel. Reemplazar cuando el cliente compre
+  // un dominio propio (y actualizar next-sitemap.config.js también).
+  domainName: "latercerafoto.vercel.app",
   // Zona horaria usada para decidir el modo del dashboard (tarea vs. votación)
   timezone: "America/Caracas",
   crisp: {

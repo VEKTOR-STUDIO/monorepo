@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
             height: 660,
           },
         ],
-        locale: "en_US",
+        locale: "es_LA",
         type: "website",
       },
     },
