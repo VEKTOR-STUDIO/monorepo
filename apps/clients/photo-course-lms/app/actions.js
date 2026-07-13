@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 import { createClient } from "@/libs/supabase/server";
 import {
   ALLOWED_DESCRIPTION_ATTR,
@@ -50,9 +50,11 @@ export async function createGalleryPost(formData) {
   // El editor de texto rico manda HTML: se sanitiza (solo tags/atributos
   // permitidos, sin scripts ni estilos inline) antes de guardarlo. No hay
   // límite de longitud: el texto puede ser tan largo como quiera el autor.
-  const description = DOMPurify.sanitize(rawDescription, {
-    ALLOWED_TAGS: ALLOWED_DESCRIPTION_TAGS,
-    ALLOWED_ATTR: ALLOWED_DESCRIPTION_ATTR,
+  // sanitize-html no depende de jsdom (a diferencia de isomorphic-dompurify),
+  // así que funciona sin problemas en el servidor con Turbopack.
+  const description = sanitizeHtml(rawDescription, {
+    allowedTags: ALLOWED_DESCRIPTION_TAGS,
+    allowedAttributes: { a: ALLOWED_DESCRIPTION_ATTR },
   });
 
   if (!stripHtml(description)) {

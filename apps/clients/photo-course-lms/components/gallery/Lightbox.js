@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import gsap from "gsap";
-import DOMPurify from "isomorphic-dompurify";
+import DOMPurify from "dompurify";
 import {
   ALLOWED_DESCRIPTION_ATTR,
   ALLOWED_DESCRIPTION_TAGS,
