@@ -22,7 +22,7 @@ const HeroFrank = () => {
             constancia, recuperación y resultados medibles.
           </p>
           <Link
-            href="/signin"
+            href="/entrenamientos"
             className="btn btn-primary rounded-md border border-primary/80 shadow-sm inline-flex items-center gap-2 px-8"
           >
             Entrar al área de atletas

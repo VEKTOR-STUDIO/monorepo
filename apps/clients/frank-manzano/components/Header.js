@@ -8,7 +8,7 @@ import ThemeSwitch from "@/components/ThemeSwitch";
 
 const links = [
   { href: "/#intro", label: "Filosofía" },
-  { href: "/#features", label: "Entrenamientos" },
+  { href: "/entrenamientos", label: "Entrenamientos" },
   { href: "/#horarios", label: "Horarios" },
 ];
 
@@ -45,7 +45,7 @@ const Header = () => {
   }, [isOpen]);
 
   const cta = (
-    <Link href="/signin" className="btn btn-primary btn-sm rounded-md border border-primary/80 shadow-sm" title="Acceder">
+    <Link href="/entrenamientos" className="btn btn-primary btn-sm rounded-md border border-primary/80 shadow-sm" title="Ver entrenamientos">
       Área atletas
     </Link>
   );

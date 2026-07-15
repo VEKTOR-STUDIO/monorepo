@@ -12,11 +12,11 @@ const CTASection = () => {
           Zona de atletas
         </h2>
         <p className="text-base-content/70 mb-8">
-          Accede con tu cuenta para ver sesiones en video, material descargable y el estado de tus reservas (según
-          integres tu backend).
+          Explora los programas de entrenamiento funcional, rutinas por sesión y videos guiados. Pronto detrás de tu
+          cuenta; por ahora, acceso libre para la demo.
         </p>
-        <Link href="/signin" className="btn btn-primary rounded-md border border-primary/80 shadow-sm px-8">
-          Iniciar sesión
+        <Link href="/entrenamientos" className="btn btn-primary rounded-md border border-primary/80 shadow-sm px-8">
+          Ver entrenamientos
         </Link>
       </div>
     </section>
