@@ -216,17 +216,17 @@ Use Conventional Commits:
 - [ ] No unused imports
 - [ ] All async functions properly awaited
 - [ ] No ESLint warnings
-- [ ] Build passes (`npm run build`)
+- [ ] Build passes (`pnpm build`)
 - [ ] All environment variables checked
 - [ ] Proper error handling in API routes
 - [ ] Server/client components used correctly
 
 ## 🛠️ Development Commands
 ```bash
-npm run dev          # Development with Turbopack
-npm run build        # Production build
-npm run lint         # ESLint check
-npm run lint:fix     # Auto-fix ESLint issues
+pnpm dev             # Development with Turbopack
+pnpm build           # Production build
+pnpm lint            # ESLint check
+pnpm lint --fix      # Auto-fix ESLint issues
 ```
 
 Remember: This codebase uses the latest Next.js 15, React 19, Tailwind v4, and DaisyUI v5. Always follow the new patterns and APIs for these versions. 
