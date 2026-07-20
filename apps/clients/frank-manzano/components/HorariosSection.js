@@ -11,33 +11,38 @@ const HorariosSection = () => {
   return (
     <section
       id="horarios"
-      className="py-16 md:py-24 px-6 sm:px-8 bg-base-100 border-t border-base-300"
+      className="border-t border-base-300 bg-base-100 px-6 py-20 sm:px-8 md:py-28"
       aria-labelledby="horarios-heading"
     >
-      <div className="max-w-2xl mx-auto">
-        <h2 id="horarios-heading" className="text-2xl sm:text-3xl font-bold text-base-content mb-10 text-center">
-          Horarios de piso / grupos
+      <div className="mx-auto max-w-3xl">
+        <p className="mb-3 text-center text-xs font-bold uppercase tracking-[0.2em] text-primary">
+          Agenda
+        </p>
+        <h2
+          id="horarios-heading"
+          className="display mb-12 text-center text-4xl text-base-content sm:text-5xl md:text-6xl"
+        >
+          Horarios de piso
         </h2>
-        <div className="border border-base-300 rounded-md overflow-hidden shadow-sm">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="border-b border-base-300 bg-base-200">
-                <th className="p-4 text-xs uppercase tracking-wide font-semibold text-base-content/80">Día</th>
-                <th className="p-4 text-xs uppercase tracking-wide font-semibold text-base-content/80">Ventana</th>
-              </tr>
-            </thead>
-            <tbody>
-              {horarios.map((row) => (
-                <tr key={row.dia} className="border-b border-base-200 last:border-b-0">
-                  <td className="p-4 font-medium text-base-content">{row.dia}</td>
-                  <td className="p-4 text-base-content/80">{row.hora}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="divide-y divide-base-300 border-y border-base-300">
+          {horarios.map((row) => (
+            <div
+              key={row.dia}
+              className="flex items-center justify-between gap-4 py-5"
+            >
+              <span className="display text-2xl text-base-content md:text-3xl">
+                {row.dia}
+              </span>
+              <span className="text-right text-sm font-medium text-base-content/60 md:text-base">
+                {row.hora}
+              </span>
+            </div>
+          ))}
         </div>
-        <p className="mt-4 text-sm text-base-content/50 text-center">
-          Datos de ejemplo. Ajusta horarios reales o enlaza a tu agenda en producción.
+
+        <p className="mt-6 text-center text-xs uppercase tracking-widest text-base-content/40">
+          Datos de ejemplo · Ajusta horarios reales en producción
         </p>
       </div>
     </section>

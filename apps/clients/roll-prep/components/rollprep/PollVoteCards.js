@@ -27,8 +27,8 @@ export default function PollVoteCards({ poll, options, currentVoteOptionId }) {
   };
 
   return (
-    <div className="space-y-4">
-      {options.map((option) => {
+    <div className="space-y-3">
+      {options.map((option, index) => {
         const isSelected = selected === option.id;
 
         return (
@@ -36,22 +36,42 @@ export default function PollVoteCards({ poll, options, currentVoteOptionId }) {
             key={option.id}
             onClick={() => handleVote(option.id)}
             disabled={isPending}
-            className={`card w-full text-left transition-all border-2 ${
+            className={`group relative w-full overflow-hidden border text-left transition-all duration-200 ${
               isSelected
-                ? "border-primary bg-primary/10 shadow-lg"
-                : "border-base-300 bg-base-100 hover:border-primary/50"
+                ? "border-primary bg-primary/10 shadow-[0_0_30px_-10px] shadow-primary/60"
+                : "border-base-300 bg-base-100 hover:border-primary/60 hover:bg-base-200"
             }`}
           >
-            <div className="card-body flex-row items-center gap-4 p-5">
+            {/* Barra lateral que se enciende al seleccionar */}
+            <span
+              className={`absolute inset-y-0 left-0 w-1 transition-colors ${
+                isSelected ? "bg-primary" : "bg-transparent group-hover:bg-primary/40"
+              }`}
+            />
+
+            <div className="flex items-center gap-4 p-5">
+              <span
+                className={`display text-4xl transition-colors ${
+                  isSelected ? "text-primary" : "text-stroke"
+                }`}
+              >
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
               <div className="flex-1">
-                <h3 className="card-title text-lg">{option.title}</h3>
+                <h3 className="display text-xl">{option.title}</h3>
                 {option.description && (
-                  <p className="text-sm opacity-70">{option.description}</p>
+                  <p className="mt-1 text-sm font-medium opacity-70">
+                    {option.description}
+                  </p>
                 )}
               </div>
+
               <div
-                className={`h-6 w-6 shrink-0 rounded-full border-2 flex items-center justify-center ${
-                  isSelected ? "border-primary bg-primary text-primary-content" : "border-base-300"
+                className={`flex h-6 w-6 shrink-0 items-center justify-center border-2 transition-colors ${
+                  isSelected
+                    ? "border-primary bg-primary text-primary-content"
+                    : "border-base-300"
                 }`}
               >
                 {isSelected && (
@@ -70,8 +90,8 @@ export default function PollVoteCards({ poll, options, currentVoteOptionId }) {
       })}
 
       {selected && (
-        <p className="text-center text-sm opacity-60">
-          Puedes cambiar tu voto hasta que cierre la encuesta.
+        <p className="text-center text-xs font-semibold uppercase tracking-widest opacity-50">
+          Puedes cambiar tu voto hasta que cierre la encuesta
         </p>
       )}
     </div>

@@ -1,13 +1,65 @@
 @import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
 @plugin "daisyui" {
-  themes: light --default, dark;
+  themes: false;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tema "frank" — inspirado en Nike / deporte de combate:            */
+/* negro profundo + rojo eléctrico + blanco.                          */
+/* Para cambiar el color de marca, ajusta --color-primary aquí y      */
+/* config.colors.main en config.js.                                   */
+/* ------------------------------------------------------------------ */
+@plugin "daisyui/theme" {
+  name: "frank";
+  default: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(14% 0.006 25);
+  --color-base-200: oklch(18% 0.008 25);
+  --color-base-300: oklch(26% 0.01 25);
+  --color-base-content: oklch(96% 0.004 90);
+
+  --color-primary: oklch(60% 0.238 25);
+  --color-primary-content: oklch(98% 0 0);
+
+  --color-secondary: oklch(98% 0 0);
+  --color-secondary-content: oklch(14% 0.006 25);
+
+  --color-accent: oklch(78% 0.17 60);
+  --color-accent-content: oklch(14% 0.006 25);
+
+  --color-neutral: oklch(22% 0.008 25);
+  --color-neutral-content: oklch(96% 0.004 90);
+
+  --color-info: oklch(74% 0.16 232);
+  --color-info-content: oklch(13% 0.004 270);
+  --color-success: oklch(84% 0.21 145);
+  --color-success-content: oklch(13% 0.004 270);
+  --color-warning: oklch(85% 0.17 85);
+  --color-warning-content: oklch(13% 0.004 270);
+  --color-error: oklch(63% 0.24 27);
+  --color-error-content: oklch(98% 0 0);
+
+  --radius-selector: 0.125rem;
+  --radius-field: 0.125rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
 }
 
 @theme {
+  --font-display: var(--font-anton), "Impact", "Haettenschweiler", sans-serif;
+  --font-sans: var(--font-barlow), "Helvetica Neue", Arial, sans-serif;
+  --color-ink: oklch(14% 0.006 25);
+
   --animate-shimmer: shimmer 3s ease-out infinite alternate;
-  --animate-opacity: opacity 0.25s ease-in-out;
-  --animate-appearFromRight: appearFromRight 300ms ease-in-out;
-  --animate-popup: popup 0.25s ease-in-out;
 
   @keyframes shimmer {
     0% {
@@ -20,75 +72,104 @@
       background-position: 0% 50%;
     }
   }
-
-  @keyframes opacity {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes appearFromRight {
-    0% {
-      opacity: 0.3;
-      transform: translate(15%, 0px);
-    }
-    100% {
-      opacity: 1;
-      transform: translate(0);
-    }
-  }
-
-  @keyframes popup {
-    0% {
-      transform: scale(0.8);
-      opacity: 0.8;
-    }
-    50% {
-      transform: scale(1.1);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-}
-
-/* Deportivo: neutros + azul rendimiento (primary) */
-[data-theme="light"] {
-  --color-base-100: #ffffff;
-  --color-base-200: #f3f4f6;
-  --color-base-300: #e5e7eb;
-  --color-base-content: #1f2937;
-  --color-primary: #2563eb;
-  --color-primary-content: #ffffff;
-  --color-secondary: #0f172a;
-  --color-secondary-content: #f8fafc;
-}
-
-[data-theme="dark"] {
-  --color-base-100: #0f172a;
-  --color-base-200: #1e293b;
-  --color-base-300: #334155;
-  --color-base-content: #f1f5f9;
-  --color-primary: #3b82f6;
-  --color-primary-content: #ffffff;
-}
-
-:root {
-  --font-display: ui-sans-serif, system-ui, sans-serif;
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
 }
 
 html,
 body {
-  scroll-behavior: smooth !important;
-  min-height: 100vh !important;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
 }
 
 progress::-webkit-progress-value {
   transition: 0.6s width ease-out;
+}
+
+/* --------------------------- Utilidades Nike ---------------------- */
+
+/* Titulares tipo póster: condensados, mayúsculas, apretados. */
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+  font-weight: 400;
+}
+
+/* Etiqueta inclinada estilo dorsal / swoosh. */
+.tag-skew {
+  display: inline-block;
+  transform: skewX(-12deg);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.tag-skew > * {
+  display: inline-block;
+  transform: skewX(12deg);
+}
+
+/* Botones: mayúsculas, sin curvas suaves, con pegada. */
+.btn {
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+}
+
+/* Cinta en movimiento (marquee) para la landing. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+/* Entradas con revelado escalonado. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rise-1 { animation-delay: 0.05s; }
+.rise-2 { animation-delay: 0.15s; }
+.rise-3 { animation-delay: 0.25s; }
+.rise-4 { animation-delay: 0.35s; }
+.rise-5 { animation-delay: 0.45s; }
+
+/* Textura sutil de ruido para dar atmósfera al fondo. */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* Texto contorneado (outline) para números / palabras gigantes de fondo. */
+.text-stroke {
+  -webkit-text-stroke: 1.5px color-mix(in oklch, var(--color-base-content) 22%, transparent);
+  color: transparent;
 }

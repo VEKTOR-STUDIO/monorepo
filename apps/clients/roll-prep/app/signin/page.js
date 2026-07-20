@@ -54,14 +54,28 @@ export default function Login() {
   };
 
   return (
-    <main className="p-8 md:p-24" data-theme={config.colors.theme}>
-      <div className="text-center mb-4">
-        <Link href="/" className="btn btn-ghost btn-sm">
+    <main
+      className="relative flex min-h-screen flex-col overflow-hidden bg-base-100 text-base-content"
+      data-theme={config.colors.theme}
+    >
+      {/* Número gigante de fondo */}
+      <span
+        aria-hidden="true"
+        className="display text-stroke pointer-events-none absolute -bottom-10 -right-4 select-none text-[12rem] leading-none md:text-[20rem]"
+      >
+        OSS
+      </span>
+
+      <header className="relative z-10 mx-auto w-full max-w-6xl px-5 py-5">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-70 transition-opacity hover:opacity-100"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="w-5 h-5"
+            className="h-4 w-4"
           >
             <path
               fillRule="evenodd"
@@ -71,86 +85,98 @@ export default function Login() {
           </svg>
           Inicio
         </Link>
-      </div>
-      <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-center mb-12">
-        Entra a {config.appName} 🥋
-      </h1>
+      </header>
 
-      <div className="space-y-8 max-w-xl mx-auto">
-        <button
-          className="btn btn-block"
-          onClick={(e) =>
-            handleSignup(e, { type: "oauth", provider: "google" })
-          }
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <span className="loading loading-spinner loading-xs"></span>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
-              viewBox="0 0 48 48"
-            >
-              <path
-                fill="#FFC107"
-                d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
-              />
-              <path
-                fill="#FF3D00"
-                d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"
-              />
-              <path
-                fill="#4CAF50"
-                d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"
-              />
-              <path
-                fill="#1976D2"
-                d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
-              />
-            </svg>
-          )}
-          Continuar con Google
-        </button>
+      <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col justify-center px-5 pb-16">
+        <span className="tag-skew rise rise-1 self-start bg-primary px-3 py-1 text-xs text-primary-content">
+          <span>Acceso al equipo</span>
+        </span>
 
-        <div className="divider text-xs text-base-content/50 font-medium">
-          O
-        </div>
+        <h1 className="display rise rise-2 mt-5 text-5xl md:text-6xl">
+          Entra a{" "}
+          <span className="text-primary">{config.appName}</span>
+        </h1>
 
-        <form
-          className="form-control w-full space-y-4"
-          onSubmit={(e) => handleSignup(e, { type: "magic_link" })}
-        >
-          <input
-            type="text"
-            value={fullName}
-            autoComplete="name"
-            placeholder="Tu nombre (ej. Carlos Gracie)"
-            className="input input-bordered w-full placeholder:opacity-60"
-            onChange={(e) => setFullName(e.target.value)}
-          />
-
-          <input
-            required
-            type="email"
-            value={email}
-            autoComplete="email"
-            placeholder="tu@correo.com"
-            className="input input-bordered w-full placeholder:opacity-60"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
+        <div className="rise rise-3 mt-10 space-y-6">
           <button
-            className="btn btn-primary btn-block"
-            disabled={isLoading || isDisabled}
-            type="submit"
+            className="btn btn-secondary btn-block btn-lg"
+            onClick={(e) =>
+              handleSignup(e, { type: "oauth", provider: "google" })
+            }
+            disabled={isLoading}
           >
-            {isLoading && (
+            {isLoading ? (
               <span className="loading loading-spinner loading-xs"></span>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-5 h-5"
+                viewBox="0 0 48 48"
+              >
+                <path
+                  fill="#FFC107"
+                  d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
+                />
+                <path
+                  fill="#FF3D00"
+                  d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"
+                />
+                <path
+                  fill="#4CAF50"
+                  d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"
+                />
+                <path
+                  fill="#1976D2"
+                  d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"
+                />
+              </svg>
             )}
-            Enviar Magic Link
+            Continuar con Google
           </button>
-        </form>
+
+          <div className="flex items-center gap-4">
+            <span className="h-px flex-1 bg-base-300" />
+            <span className="text-xs font-bold uppercase tracking-widest opacity-50">
+              o con tu correo
+            </span>
+            <span className="h-px flex-1 bg-base-300" />
+          </div>
+
+          <form
+            className="space-y-4"
+            onSubmit={(e) => handleSignup(e, { type: "magic_link" })}
+          >
+            <input
+              type="text"
+              value={fullName}
+              autoComplete="name"
+              placeholder="Tu nombre (ej. Carlos Gracie)"
+              className="input input-bordered input-lg w-full placeholder:opacity-50"
+              onChange={(e) => setFullName(e.target.value)}
+            />
+
+            <input
+              required
+              type="email"
+              value={email}
+              autoComplete="email"
+              placeholder="tu@correo.com"
+              className="input input-bordered input-lg w-full placeholder:opacity-50"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <button
+              className="btn btn-primary btn-block btn-lg"
+              disabled={isLoading || isDisabled}
+              type="submit"
+            >
+              {isLoading && (
+                <span className="loading loading-spinner loading-xs"></span>
+              )}
+              Enviar Magic Link
+            </button>
+          </form>
+        </div>
       </div>
     </main>
   );

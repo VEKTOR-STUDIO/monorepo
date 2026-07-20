@@ -1,7 +1,7 @@
 const config = {
-  appName: "AthleteVOD",
+  appName: "Frank Manzano",
   appDescription:
-    "Plataforma para deportistas: entrenamiento, video bajo demanda y seguimiento de rendimiento. Sustituye este texto por tu marca y propuesta.",
+    "Entrenamiento, preparación física y contenido en video para deportistas. Método, constancia y rendimiento real.",
   domainName: "yourdomain.com",
   siteUrl:
     process.env.NODE_ENV === "development"
@@ -27,13 +27,15 @@ const config = {
     cdn: "",
   },
   resend: {
-    fromNoReply: `AthleteVOD <noreply@yourdomain.com>`,
-    fromAdmin: `AthleteVOD <admin@yourdomain.com>`,
+    fromNoReply: `Frank Manzano <noreply@yourdomain.com>`,
+    fromAdmin: `Frank Manzano <admin@yourdomain.com>`,
     supportEmail: "support@yourdomain.com",
   },
   colors: {
-    theme: "light",
-    main: "#2563EB",
+    // Tema único oscuro estilo Nike (definido en app/globals.css).
+    theme: "frank",
+    // Color de marca (rojo eléctrico). Cambia también --color-primary en globals.css.
+    main: "#E11D2A",
   },
   business: {
     address: "Instalaciones / Centro de entrenamiento — Ciudad, País",

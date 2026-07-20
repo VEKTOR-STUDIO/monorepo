@@ -59,14 +59,12 @@ const CrispChat = () => {
   return null;
 };
 
-// Sincronizar tema con localStorage (light por defecto)
+// Tema único oscuro estilo Nike ("frank"). Se fuerza en el cliente por si algún
+// valor antiguo quedó guardado en localStorage.
 const useThemeSync = () => {
   useEffect(() => {
-    const key = "template-app-theme";
-    const stored = typeof window !== "undefined" ? window.localStorage.getItem(key) : null;
-    const theme = stored === "dark" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", theme);
-    document.documentElement.style.colorScheme = theme === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", config.colors.theme);
+    document.documentElement.style.colorScheme = "dark";
   }, []);
 };
 

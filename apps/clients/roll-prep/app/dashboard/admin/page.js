@@ -57,42 +57,54 @@ export default async function AdminPanel() {
   const totalVotes = votes?.length ?? 0;
 
   return (
-    <main className="min-h-screen p-4 md:p-8">
+    <main className="min-h-screen bg-base-100 p-4 text-base-content md:p-8">
       <AdminLiveRefresh />
 
       <section className="mx-auto max-w-3xl space-y-10">
-        <div>
-          <h1 className="text-2xl font-extrabold">Panel del Profesor 📊</h1>
-          <p className="opacity-70">
-            {studentCount ?? 0} alumno{studentCount === 1 ? "" : "s"} registrado
-            {studentCount === 1 ? "" : "s"}
+        <div className="rise rise-1">
+          <span className="tag-skew bg-primary px-3 py-1 text-xs text-primary-content">
+            <span>Coach mode</span>
+          </span>
+          <h1 className="display mt-4 text-5xl">
+            Panel del <span className="text-primary">Profesor</span>
+          </h1>
+          <p className="mt-2 text-sm font-semibold uppercase tracking-widest opacity-60">
+            {studentCount ?? 0} alumno{studentCount === 1 ? "" : "s"} en el
+            equipo
           </p>
         </div>
 
         {/* ------------------------------ MÉTRICAS ------------------------ */}
         <div className="grid gap-6 md:grid-cols-2">
-          <div className="card bg-base-100 border border-base-300">
-            <div className="card-body">
-              <h2 className="card-title text-lg">📋 Tarea activa</h2>
+          <div className="rise rise-2 border border-base-300 bg-base-200">
+            <div className="border-b border-base-300 px-6 py-4">
+              <h2 className="display text-xl">Tarea activa</h2>
+            </div>
+            <div className="space-y-4 p-6">
               {assignment ? (
                 <>
-                  <p className="font-medium">{assignment.title}</p>
-                  <div className="stat p-0">
-                    <div className="stat-value text-primary text-3xl">
+                  <p className="font-semibold">{assignment.title}</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="display text-6xl text-primary">
                       {completions?.length ?? 0}
-                      <span className="text-base font-normal opacity-60">
-                        {" "}
-                        / {studentCount ?? 0}
-                      </span>
-                    </div>
-                    <div className="stat-desc">marcaron “Visto y Estudiado”</div>
+                    </span>
+                    <span className="display text-stroke text-3xl">
+                      / {studentCount ?? 0}
+                    </span>
                   </div>
-                  <ul className="mt-2 space-y-1 text-sm">
+                  <p className="text-xs font-bold uppercase tracking-widest opacity-60">
+                    Marcaron &ldquo;Visto y Estudiado&rdquo;
+                  </p>
+                  <ul className="space-y-2 text-sm">
                     {completions?.map((completion, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <span className="text-success">✓</span>
-                        <span>{completion.profiles?.full_name ?? "Alumno"}</span>
-                        <span className="ml-auto opacity-50 text-xs">
+                      <li
+                        key={i}
+                        className="flex items-center gap-3 border-l-2 border-primary bg-base-100 px-3 py-2"
+                      >
+                        <span className="font-semibold">
+                          {completion.profiles?.full_name ?? "Alumno"}
+                        </span>
+                        <span className="ml-auto text-xs font-semibold uppercase tracking-wider opacity-50">
                           {new Date(completion.completed_at).toLocaleDateString(
                             "es-VE",
                             { day: "numeric", month: "short" }
@@ -101,26 +113,32 @@ export default async function AdminPanel() {
                       </li>
                     ))}
                     {!completions?.length && (
-                      <li className="opacity-60">Nadie la ha completado aún.</li>
+                      <li className="text-sm opacity-60">
+                        Nadie la ha completado aún.
+                      </li>
                     )}
                   </ul>
                 </>
               ) : (
-                <p className="opacity-60">No hay tarea activa.</p>
+                <p className="text-sm opacity-60">No hay tarea activa.</p>
               )}
             </div>
           </div>
 
-          <div className="card bg-base-100 border border-base-300">
-            <div className="card-body">
-              <h2 className="card-title text-lg">
-                🗳️ Votación activa
-                <span className="badge badge-success badge-sm">en vivo</span>
-              </h2>
+          <div className="rise rise-3 border border-base-300 bg-base-200">
+            <div className="flex items-center justify-between border-b border-base-300 px-6 py-4">
+              <h2 className="display text-xl">Votación activa</h2>
+              {poll && (
+                <span className="tag-skew bg-primary px-2 py-0.5 text-[0.65rem] text-primary-content">
+                  <span>En vivo</span>
+                </span>
+              )}
+            </div>
+            <div className="space-y-4 p-6">
               {poll ? (
                 <>
-                  <p className="font-medium">{poll.question}</p>
-                  <div className="mt-2 space-y-3">
+                  <p className="font-semibold">{poll.question}</p>
+                  <div className="space-y-4">
                     {poll.poll_options.map((option) => {
                       const count = voteCounts[option.id] ?? 0;
                       const pct = totalVotes
@@ -129,27 +147,34 @@ export default async function AdminPanel() {
 
                       return (
                         <div key={option.id}>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span>{option.title}</span>
-                            <span className="font-bold">
+                          <div className="mb-1 flex justify-between text-sm">
+                            <span className="font-semibold">
+                              {option.title}
+                            </span>
+                            <span className="display text-primary">
                               {count} ({pct}%)
                             </span>
                           </div>
-                          <progress
-                            className="progress progress-secondary w-full"
-                            value={count}
-                            max={Math.max(totalVotes, 1)}
-                          />
+                          <div className="h-2 w-full bg-base-300">
+                            <div
+                              className="h-full bg-primary transition-all duration-500"
+                              style={{
+                                width: `${
+                                  totalVotes ? (count / totalVotes) * 100 : 0
+                                }%`,
+                              }}
+                            />
+                          </div>
                         </div>
                       );
                     })}
                   </div>
-                  <p className="text-xs opacity-60 mt-1">
+                  <p className="text-xs font-bold uppercase tracking-widest opacity-50">
                     {totalVotes} voto{totalVotes === 1 ? "" : "s"} en total
                   </p>
                 </>
               ) : (
-                <p className="opacity-60">No hay votación activa.</p>
+                <p className="text-sm opacity-60">No hay votación activa.</p>
               )}
             </div>
           </div>
@@ -157,24 +182,28 @@ export default async function AdminPanel() {
 
         {/* ------------------------------ FORMULARIOS --------------------- */}
         <div className="grid gap-6 md:grid-cols-2">
-          <div className="card bg-base-100 border border-base-300">
-            <div className="card-body">
-              <h2 className="card-title text-lg">Nueva tarea</h2>
-              <p className="text-sm opacity-60">
+          <div className="rise rise-4 border border-base-300 bg-base-200">
+            <div className="border-b border-base-300 px-6 py-4">
+              <h2 className="display text-xl">Nueva tarea</h2>
+              <p className="mt-1 text-xs font-medium opacity-60">
                 Reemplaza la tarea activa. Los alumnos la verán de martes a
                 jueves.
               </p>
+            </div>
+            <div className="p-6">
               <AdminAssignmentForm />
             </div>
           </div>
 
-          <div className="card bg-base-100 border border-base-300">
-            <div className="card-body">
-              <h2 className="card-title text-lg">Nueva votación</h2>
-              <p className="text-sm opacity-60">
+          <div className="rise rise-5 border border-base-300 bg-base-200">
+            <div className="border-b border-base-300 px-6 py-4">
+              <h2 className="display text-xl">Nueva votación</h2>
+              <p className="mt-1 text-xs font-medium opacity-60">
                 Reemplaza la votación activa. Los alumnos votan de jueves a
                 martes.
               </p>
+            </div>
+            <div className="p-6">
               <AdminPollForm />
             </div>
           </div>

@@ -57,65 +57,86 @@ export default async function Dashboard() {
   }
 
   return (
-    <main className="min-h-screen p-4 md:p-8">
-      <section className="mx-auto max-w-xl space-y-6">
+    <main className="relative min-h-screen bg-base-100 p-4 text-base-content md:p-8">
+      <section className="relative z-10 mx-auto max-w-xl space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-extrabold">RollPrep 🥋</h1>
+          <h1 className="display text-3xl">
+            Roll<span className="text-primary">Prep</span>
+          </h1>
           <ButtonAccount />
         </div>
 
         {mode === "task" && (
           <div className="space-y-5">
-            <div className="badge badge-primary badge-outline">
-              📋 Tarea de la semana
-            </div>
-            <h2 className="text-3xl font-extrabold leading-tight">
+            <span className="tag-skew rise rise-1 bg-primary px-3 py-1 text-xs text-primary-content">
+              <span>Tarea de la semana</span>
+            </span>
+
+            <h2 className="display rise rise-2 text-4xl md:text-5xl">
               {assignment.title}
             </h2>
 
-            <VideoEmbed videoUrl={assignment.video_url} title={assignment.title} />
+            <div className="rise rise-3">
+              <VideoEmbed
+                videoUrl={assignment.video_url}
+                title={assignment.title}
+              />
+            </div>
 
             {assignment.notes && (
-              <div className="rounded-2xl bg-base-200 p-4">
-                <p className="text-sm font-semibold mb-1">Notas del profesor</p>
-                <p className="text-sm opacity-80 whitespace-pre-line">
+              <div className="rise rise-4 border-l-4 border-primary bg-base-200 p-4">
+                <p className="mb-1 text-xs font-bold uppercase tracking-widest text-primary">
+                  Notas del profesor
+                </p>
+                <p className="whitespace-pre-line text-sm leading-relaxed opacity-80">
                   {assignment.notes}
                 </p>
               </div>
             )}
 
-            <CompleteAssignmentButton
-              assignmentId={assignment.id}
-              isCompleted={Boolean(completion)}
-            />
+            <div className="rise rise-5">
+              <CompleteAssignmentButton
+                assignmentId={assignment.id}
+                isCompleted={Boolean(completion)}
+              />
+            </div>
           </div>
         )}
 
         {mode === "poll" && (
           <div className="space-y-5">
-            <div className="badge badge-secondary badge-outline">
-              🗳️ Votación abierta
-            </div>
-            <h2 className="text-3xl font-extrabold leading-tight">
+            <span className="tag-skew rise rise-1 bg-secondary px-3 py-1 text-xs text-secondary-content">
+              <span>Votación abierta</span>
+            </span>
+
+            <h2 className="display rise rise-2 text-4xl md:text-5xl">
               {poll.question}
             </h2>
-            <p className="opacity-70">
+
+            <p className="rise rise-3 text-sm font-medium opacity-70">
               Elige el tema que quieres estudiar en la próxima clase.
             </p>
 
-            <PollVoteCards
-              poll={poll}
-              options={poll.poll_options}
-              currentVoteOptionId={currentVote?.option_id ?? null}
-            />
+            <div className="rise rise-4">
+              <PollVoteCards
+                poll={poll}
+                options={poll.poll_options}
+                currentVoteOptionId={currentVote?.option_id ?? null}
+              />
+            </div>
           </div>
         )}
 
         {mode === "empty" && (
-          <div className="rounded-2xl bg-base-200 p-10 text-center space-y-3">
-            <p className="text-5xl">🧘</p>
-            <h2 className="text-xl font-bold">Nada pendiente por ahora</h2>
-            <p className="opacity-70">
+          <div className="rise rise-2 relative overflow-hidden border border-base-300 bg-base-200 p-10 text-center">
+            <span
+              aria-hidden="true"
+              className="display text-stroke pointer-events-none absolute -bottom-6 -right-2 select-none text-8xl"
+            >
+              REST
+            </span>
+            <h2 className="display text-3xl">Día de descanso</h2>
+            <p className="mt-3 text-sm font-medium opacity-70">
               El profesor todavía no ha publicado la tarea ni la votación.
               Mientras tanto, repasa la videoteca.
             </p>

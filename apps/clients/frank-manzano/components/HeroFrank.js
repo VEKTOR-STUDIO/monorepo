@@ -6,41 +6,61 @@ const HeroFrank = () => {
   return (
     <section
       id="hero"
-      className="hero-section relative min-h-screen flex flex-col lg:flex-row items-center pt-24 pb-16 lg:pt-28 lg:pb-20 bg-gradient-to-b from-base-100 to-base-200/60 overflow-hidden"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden pt-24 pb-16"
       aria-label="Hero"
     >
-      <div className="container relative z-10 mx-auto px-6 sm:px-8 w-full flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-12 lg:gap-10">
-        <div className="max-w-3xl lg:max-w-2xl mx-auto lg:mx-0 text-center lg:text-left order-2 lg:order-1">
-          <p className="text-primary text-xs uppercase tracking-widest mb-4 font-semibold text-base-content/80">
-            VOD · Preparación física · Rendimiento
-          </p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight tracking-tight text-base-content mb-5">
-            Tu próximo nivel empieza aquí
+      {/* Fondo en video con capa oscura para contraste */}
+      <video
+        className="absolute inset-0 h-full w-full object-cover opacity-40"
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster=""
+      >
+        <source src="/hero-background.mp4" type="video/mp4" />
+      </video>
+      <div className="absolute inset-0 bg-gradient-to-b from-base-100/70 via-base-100/50 to-base-100" />
+
+      {/* Palabra gigante contorneada de fondo */}
+      <span
+        aria-hidden="true"
+        className="display text-stroke pointer-events-none absolute -top-4 right-0 select-none text-[7rem] leading-none opacity-70 md:text-[16rem]"
+      >
+        FIGHT
+      </span>
+
+      <div className="container relative z-10 mx-auto w-full px-6 sm:px-8">
+        <div className="max-w-4xl">
+          <div className="rise rise-1">
+            <span className="tag-skew bg-primary px-3 py-1 text-xs text-primary-content">
+              <span>VOD · Preparación física · Rendimiento</span>
+            </span>
+          </div>
+
+          <h1 className="display rise rise-2 mt-6 text-6xl text-base-content sm:text-7xl md:text-8xl lg:text-9xl">
+            Tu próximo nivel
+            <br />
+            <span className="text-primary">empieza aquí</span>
           </h1>
-          <p className="text-lg md:text-xl text-base-content/80 leading-relaxed mb-8 max-w-xl mx-auto lg:mx-0">
-            Entrena con método: sesiones en video, planificación y contenido pensado para deportistas que buscan
-            constancia, recuperación y resultados medibles.
+
+          <p className="rise rise-3 mt-8 max-w-xl text-lg font-medium leading-relaxed text-base-content/70">
+            Entrena con método: sesiones en video, planificación y contenido
+            pensado para deportistas que buscan constancia, recuperación y
+            resultados medibles.
           </p>
-          <Link
-            href="/entrenamientos"
-            className="btn btn-primary rounded-md border border-primary/80 shadow-sm inline-flex items-center gap-2 px-8"
-          >
-            Entrar al área de atletas
-          </Link>
-          <p className="mt-8 text-base-content/50 text-xs uppercase tracking-wide">
-            Demo · Sustituye sede y ciudad en config
-          </p>
-        </div>
-        <div className="relative w-full max-w-md lg:max-w-lg flex-shrink-0 order-1 lg:order-2">
-          <div
-            className="aspect-square w-full max-h-[420px] lg:max-h-[520px] mx-auto rounded-md border border-base-300 bg-base-200 shadow-sm flex items-center justify-center text-base-content/30 text-sm font-medium"
-            role="img"
-            aria-label="Espacio para imagen o video de entrenamiento"
-          >
-            16:9 / sesión
+
+          <div className="rise rise-4 mt-10 flex flex-wrap items-center gap-4">
+            <Link href="/entrenamientos" className="btn btn-primary btn-lg px-10">
+              Entrar al área de atletas
+            </Link>
+            <Link href="/signin" className="btn btn-outline btn-lg">
+              Ya tengo cuenta
+            </Link>
           </div>
         </div>
       </div>
+
       <div className="absolute bottom-0 left-0 right-0 h-px bg-base-300" />
     </section>
   );

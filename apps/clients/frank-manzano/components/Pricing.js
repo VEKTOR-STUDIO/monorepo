@@ -5,55 +5,88 @@ const plans = [
     name: "Base",
     price: "$0",
     period: "/mes",
-    benefits: ["Biblioteca básica de sesiones", "1 plan de entrenamiento demo", "Soporte por email"],
+    benefits: [
+      "Biblioteca básica de sesiones",
+      "1 plan de entrenamiento demo",
+      "Soporte por email",
+    ],
     highlighted: false,
   },
   {
     name: "Atleta Pro",
     price: "$29",
     period: "/mes",
-    benefits: ["Todo en Base", "VOD completo y nuevas sesiones", "Prioridad en consultas"],
+    benefits: [
+      "Todo en Base",
+      "VOD completo y nuevas sesiones",
+      "Prioridad en consultas",
+    ],
     highlighted: true,
   },
   {
     name: "Equipo",
     price: "A medida",
     period: "",
-    benefits: ["Varios perfiles / club", "Contenido exclusivo", "Facturación y SLA"],
+    benefits: [
+      "Varios perfiles / club",
+      "Contenido exclusivo",
+      "Facturación y SLA",
+    ],
     highlighted: false,
   },
 ];
 
 const Pricing = () => {
   return (
-    <section className="py-16 md:py-24 px-6 sm:px-8 bg-base-200/40 border-t border-base-300" id="pricing">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold text-base-content mb-3">Planes para deportistas</h2>
-          <p className="text-base-content/70 max-w-xl mx-auto">
-            Estructura tipo SaaS: conecta Stripe en <code className="text-xs bg-base-300/80 px-1 rounded">config.js</code>{" "}
-            cuando tengas precios reales.
+    <section
+      className="border-t border-base-300 bg-base-200 px-6 py-20 sm:px-8 md:py-28"
+      id="pricing"
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-12 text-center">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+            Planes
           </p>
+          <h2 className="display text-4xl text-base-content sm:text-5xl md:text-6xl">
+            Elige tu nivel
+          </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`flex flex-col border rounded-md p-6 shadow-sm bg-base-100 ${
-                plan.highlighted ? "border-primary border-2" : "border-base-300"
+              className={`flex flex-col border bg-base-100 p-8 ${
+                plan.highlighted
+                  ? "border-primary"
+                  : "border-base-300"
               }`}
             >
-              <h3 className="text-lg font-semibold text-base-content">{plan.name}</h3>
-              <p className="mt-2 flex items-baseline gap-1">
-                <span className="text-3xl font-bold text-base-content">{plan.price}</span>
-                {plan.period ? <span className="text-sm text-base-content/60">{plan.period}</span> : null}
+              {plan.highlighted && (
+                <span className="tag-skew mb-4 self-start bg-primary px-3 py-1 text-[10px] text-primary-content">
+                  <span>Más elegido</span>
+                </span>
+              )}
+              <h3 className="display text-2xl text-base-content">{plan.name}</h3>
+              <p className="mt-3 flex items-baseline gap-1">
+                <span className="display text-5xl text-base-content">
+                  {plan.price}
+                </span>
+                {plan.period ? (
+                  <span className="text-sm text-base-content/50">
+                    {plan.period}
+                  </span>
+                ) : null}
               </p>
-              <ul className="mt-6 space-y-2 flex-1">
+              <ul className="mt-8 flex-1 space-y-3">
                 {plan.benefits.map((b) => (
-                  <li key={b} className="flex items-center gap-2 text-sm text-base-content/80">
+                  <li
+                    key={b}
+                    className="flex items-center gap-2 text-sm text-base-content/70"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-primary shrink-0"
+                      className="h-4 w-4 shrink-0 text-primary"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -69,7 +102,9 @@ const Pricing = () => {
               </ul>
               <Link
                 href="/signin"
-                className={`btn btn-sm mt-6 rounded-md shadow-sm w-full ${plan.highlighted ? "btn-primary" : "btn-outline border-base-300"}`}
+                className={`btn mt-8 w-full ${
+                  plan.highlighted ? "btn-primary" : "btn-outline"
+                }`}
               >
                 Elegir plan
               </Link>

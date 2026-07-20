@@ -1,12 +1,20 @@
-import { Inter } from "next/font/google";
+import { Anton, Barlow } from "next/font/google";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import config from "@/config";
 import "./globals.css";
 
-const inter = Inter({
+// Tipografía estilo Nike: display condensado (Anton) + cuerpo atlético (Barlow).
+const anton = Anton({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: "400",
+  variable: "--font-anton",
+});
+
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-barlow",
 });
 
 export const viewport = {
@@ -15,24 +23,17 @@ export const viewport = {
   initialScale: 1,
 };
 
-export const metadata = getSEOTags({
-  title: "AthleteVOD — Entrenamiento y contenido para deportistas",
-  description: config.appDescription,
-  canonicalUrlRelative: "/",
-});
+export const metadata = getSEOTags();
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" suppressHydrationWarning className={inter.variable}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var k="template-app-theme";var d="dark";var l="light";var s=typeof localStorage!="undefined"?localStorage.getItem(k):null;var t=(s===d)?d:l;document.documentElement.setAttribute("data-theme",t);document.documentElement.style.colorScheme=t===l?"light":"dark";})();`,
-          }}
-        />
-        {renderSchemaTags()}
-      </head>
-      <body className={inter.className}>
+    <html
+      lang="es"
+      data-theme={config.colors.theme}
+      className={`${anton.variable} ${barlow.variable}`}
+    >
+      <head>{renderSchemaTags()}</head>
+      <body className="grain font-sans antialiased bg-base-100 text-base-content">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

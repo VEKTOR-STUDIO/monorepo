@@ -11,16 +11,25 @@ export default function Login() {
   return (
     <main className="min-h-screen relative overflow-hidden" data-theme={config.colors.theme}>
       <div className="relative grid md:grid-cols-2 min-h-screen z-10">
-        <div className="relative hidden md:block bg-base-200 border-r border-base-300">
-          <div
-            className="absolute inset-4 md:inset-8 rounded-md border border-base-300 bg-base-200 animate-pulse shadow-sm"
-            aria-hidden
-          />
+        <div className="relative hidden overflow-hidden border-r border-base-300 bg-base-200 md:block">
+          <span
+            aria-hidden="true"
+            className="display text-stroke pointer-events-none absolute inset-0 flex items-center justify-center select-none text-[9rem] leading-none opacity-60"
+          >
+            FM
+          </span>
+          <div className="absolute bottom-10 left-10 max-w-xs">
+            <span className="display text-4xl leading-none text-base-content">
+              Entrena
+              <br />
+              <span className="text-primary">sin excusas.</span>
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center justify-center p-8 md:p-12">
           <div className="w-full max-w-md space-y-6">
-            <div className="bg-base-100 border border-base-300 rounded-md p-6 md:p-8 shadow-sm">
+            <div className="border border-base-300 bg-base-100 p-6 md:p-8">
               <div className="flex items-center justify-between mb-4">
                 <Link href="/" className="btn btn-ghost btn-sm rounded-md">
                   <svg
@@ -40,7 +49,7 @@ export default function Login() {
                 <span className="text-xs text-base-content/60">{config.appName}</span>
               </div>
 
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">Acceso atletas</h1>
+              <h1 className="display mb-2 text-4xl md:text-5xl">Acceso atletas</h1>
               <p className="text-base-content/70 text-sm mb-6">
                 Entra a tu cuenta para ver sesiones, material y reservas. Configura Google OAuth en Supabase y despliega
                 las variables de entorno.

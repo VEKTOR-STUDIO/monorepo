@@ -7,7 +7,7 @@ export default function VideoEmbed({ videoUrl, title }) {
 
   if (type === "youtube") {
     return (
-      <div className="aspect-video w-full overflow-hidden rounded-2xl bg-black">
+      <div className="aspect-video w-full overflow-hidden border border-base-300 bg-black">
         <iframe
           src={embedUrl}
           title={title}
@@ -21,7 +21,7 @@ export default function VideoEmbed({ videoUrl, title }) {
 
   if (type === "instagram") {
     return (
-      <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl bg-black">
+      <div className="aspect-[4/5] w-full overflow-hidden border border-base-300 bg-black">
         <iframe
           src={embedUrl}
           title={title}
@@ -39,7 +39,7 @@ export default function VideoEmbed({ videoUrl, title }) {
       rel="noopener noreferrer"
       className="btn btn-outline btn-block"
     >
-      Ver video 🎥
+      Ver video
     </a>
   );
 }

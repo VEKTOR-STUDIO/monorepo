@@ -28,15 +28,21 @@ export default async function EntrenamientosPage() {
 
       <main className="pt-24">
         {/* Encabezado */}
-        <section className="border-b border-base-300 bg-gradient-to-b from-base-100 to-base-200/50 px-6 py-16 sm:px-8 md:py-20">
-          <div className="mx-auto max-w-5xl text-center">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-primary">
+        <section className="relative overflow-hidden border-b border-base-300 bg-base-200 px-6 py-20 sm:px-8 md:py-24">
+          <span
+            aria-hidden="true"
+            className="display text-stroke pointer-events-none absolute -right-2 top-2 select-none text-[7rem] leading-none opacity-50 md:text-[13rem]"
+          >
+            VOD
+          </span>
+          <div className="relative mx-auto max-w-5xl text-center">
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-primary">
               Área de entrenamiento
             </p>
-            <h1 className="mb-4 text-3xl font-bold tracking-tight text-base-content sm:text-4xl md:text-5xl">
+            <h1 className="display mb-4 text-5xl text-base-content sm:text-6xl md:text-7xl">
               Entrena con método
             </h1>
-            <p className="mx-auto max-w-2xl text-base text-base-content/70 md:text-lg">
+            <p className="mx-auto max-w-2xl text-base text-base-content/60 md:text-lg">
               Programas de entrenamiento funcional, rutinas por sesión y videos
               guiados paso a paso. Elige tu plan y empieza a moverte mejor.
             </p>
@@ -48,7 +54,7 @@ export default async function EntrenamientosPage() {
           <div className="mx-auto max-w-6xl">
             <div className="mb-8 flex items-end justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-bold text-base-content sm:text-3xl">
+                <h2 className="display text-3xl text-base-content sm:text-4xl">
                   Programas
                 </h2>
                 <p className="mt-1 text-sm text-base-content/60">
@@ -66,10 +72,10 @@ export default async function EntrenamientosPage() {
 
         {/* Biblioteca de video */}
         {videos.length > 0 && (
-          <section className="border-t border-base-300 bg-base-200/40 px-6 py-16 sm:px-8 md:py-20">
+          <section className="border-t border-base-300 bg-base-200 px-6 py-16 sm:px-8 md:py-20">
             <div className="mx-auto max-w-6xl">
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-base-content sm:text-3xl">
+                <h2 className="display text-3xl text-base-content sm:text-4xl">
                   Biblioteca de video
                 </h2>
                 <p className="mt-1 text-sm text-base-content/60">

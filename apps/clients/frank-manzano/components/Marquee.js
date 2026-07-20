@@ -1,31 +1,36 @@
 "use client";
 
 const ITEMS = [
-  "Fisioterapia",
+  "Fuerza",
   "BJJ",
   "Rehabilitación deportiva",
-  "Total Elite Training",
-  "Caracas",
-  "Terapia a domicilio",
-  "Consultorio",
+  "Rendimiento",
+  "Movilidad",
   "Brazilian Jiu Jitsu",
   "Recuperación",
-  "Rendimiento",
+  "Preparación física",
 ];
 
 export default function Marquee() {
   return (
-    <section className="relative overflow-hidden border-y border-primary/20 bg-base-200/80 py-3 md:py-4" aria-hidden="true">
-      <div className="marquee-inner flex w-max gap-8 md:gap-12 whitespace-nowrap">
-        {[...ITEMS, ...ITEMS].map((label, i) => (
-          <span
-            key={`${label}-${i}`}
-            className="text-sm md:text-base font-medium uppercase tracking-wider text-primary/90"
-          >
-            {label}
-          </span>
+    <div
+      className="overflow-hidden border-y border-base-300 bg-primary py-3 text-primary-content"
+      aria-hidden="true"
+    >
+      <div className="marquee-track">
+        {[0, 1].map((copy) => (
+          <div key={copy} className="flex shrink-0">
+            {ITEMS.concat(ITEMS).map((item, i) => (
+              <span
+                key={`${copy}-${i}`}
+                className="display mx-6 whitespace-nowrap text-xl tracking-wide"
+              >
+                {item} <span className="mx-2 opacity-40">/</span>
+              </span>
+            ))}
+          </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

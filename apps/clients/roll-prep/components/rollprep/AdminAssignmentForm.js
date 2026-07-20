@@ -26,8 +26,10 @@ export default function AdminAssignmentForm() {
 
   return (
     <form ref={formRef} action={handleSubmit} className="space-y-4">
-      <label className="form-control w-full">
-        <span className="label-text font-medium mb-1">Título</span>
+      <label className="block w-full">
+        <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
+          Título
+        </span>
         <input
           name="title"
           required
@@ -36,8 +38,8 @@ export default function AdminAssignmentForm() {
         />
       </label>
 
-      <label className="form-control w-full">
-        <span className="label-text font-medium mb-1">
+      <label className="block w-full">
+        <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
           URL del video (YouTube o Instagram)
         </span>
         <input
@@ -49,8 +51,10 @@ export default function AdminAssignmentForm() {
         />
       </label>
 
-      <label className="form-control w-full">
-        <span className="label-text font-medium mb-1">Notas (opcional)</span>
+      <label className="block w-full">
+        <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
+          Notas (opcional)
+        </span>
         <textarea
           name="notes"
           rows={3}

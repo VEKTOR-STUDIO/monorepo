@@ -11,10 +11,17 @@ export default function CompleteAssignmentButton({ assignmentId, isCompleted }) 
 
   if (completed) {
     return (
-      <div className="rounded-2xl bg-success/10 border border-success/30 p-6 text-center">
-        <p className="text-4xl mb-2">✅</p>
-        <p className="text-lg font-bold text-success">¡Tarea completada!</p>
-        <p className="text-sm opacity-70">Nos vemos en el tatami 🥋</p>
+      <div className="relative overflow-hidden border border-primary bg-primary/10 p-6 text-center">
+        <span
+          aria-hidden="true"
+          className="display text-stroke pointer-events-none absolute -bottom-5 -right-1 select-none text-7xl"
+        >
+          DONE
+        </span>
+        <p className="display text-3xl text-primary">Tarea completada</p>
+        <p className="mt-2 text-sm font-semibold uppercase tracking-widest opacity-70">
+          Nos vemos en el tatami
+        </p>
       </div>
     );
   }
@@ -37,12 +44,12 @@ export default function CompleteAssignmentButton({ assignmentId, isCompleted }) 
     <button
       onClick={handleClick}
       disabled={isPending}
-      className="btn btn-primary btn-block h-auto min-h-20 text-xl font-extrabold rounded-2xl shadow-lg"
+      className="btn btn-primary btn-block h-auto min-h-20 text-2xl shadow-[0_0_40px_-8px] shadow-primary/50 transition-transform active:scale-[0.98]"
     >
       {isPending ? (
         <span className="loading loading-spinner loading-md" />
       ) : (
-        <>👁️ Visto y Estudiado</>
+        <span className="display">Visto y estudiado</span>
       )}
     </button>
   );

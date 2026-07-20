@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { createClient } from "@/libs/supabase/server";
 import Header from "@/components/Header";
 import HeroFrank from "@/components/HeroFrank";
+import Marquee from "@/components/Marquee";
 import ManifiestoSection from "@/components/ManifiestoSection";
 import CredencialesSection from "@/components/CredencialesSection";
 import DisciplinesSection from "@/components/DisciplinesSection";
@@ -33,6 +34,7 @@ export default async function Home() {
       </Suspense>
       <main>
         <HeroFrank />
+        <Marquee />
         <ManifiestoSection />
         <CredencialesSection />
         <DisciplinesSection disciplines={disciplines} />

@@ -1,10 +1,21 @@
-import { Inter } from "next/font/google";
+import { Anton, Barlow } from "next/font/google";
 import { getSEOTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import config from "@/config";
 import "./globals.css";
 
-const font = Inter({ subsets: ["latin"] });
+// Tipografía estilo Nike: display condensado (Anton) + cuerpo atlético (Barlow).
+const anton = Anton({
+	subsets: ["latin"],
+	weight: "400",
+	variable: "--font-anton",
+});
+
+const barlow = Barlow({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700", "800", "900"],
+	variable: "--font-barlow",
+});
 
 export const viewport = {
 	// Will use the primary color of your theme to show a nice theme color in the URL bar of supported browsers
@@ -20,11 +31,11 @@ export const metadata = getSEOTags();
 export default function RootLayout({ children }) {
 	return (
 		<html
-			lang="en"
+			lang="es"
 			data-theme={config.colors.theme}
-			className={font.className}
+			className={`${anton.variable} ${barlow.variable}`}
 		>
-			<body>
+			<body className="grain font-sans antialiased">
 				{/* ClientLayout contains all the client wrappers (Crisp chat support, toast messages, tooltips, etc.) */}
 				<ClientLayout>{children}</ClientLayout>
 			</body>

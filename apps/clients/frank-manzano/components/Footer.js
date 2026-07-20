@@ -4,33 +4,47 @@ import config from "@/config";
 const Footer = () => {
   const year = new Date().getFullYear();
   const { business } = config;
-  const mailto = business?.email ? `mailto:${business.email}` : "mailto:support@yourdomain.com";
+  const mailto = business?.email
+    ? `mailto:${business.email}`
+    : "mailto:support@yourdomain.com";
   const tel = business?.phone?.replace(/\s/g, "") ?? "";
   const whatsapp = business?.whatsapp?.replace(/\s/g, "") ?? "";
 
   return (
-    <footer className="relative bg-base-100 border-t border-base-300 rounded-none">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 items-start">
+    <footer className="relative border-t border-base-300 bg-base-100">
+      <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8">
+        <div className="grid grid-cols-1 items-start gap-10 md:grid-cols-3 md:gap-12">
           <div className="flex flex-col gap-4">
-            <Link href="/" aria-current="page" className="flex gap-2 items-center group">
-              <div className="text-base font-bold text-base-content">
-                <span className="text-primary">Athlete</span>VOD
-              </div>
+            <Link href="/" aria-current="page" className="group">
+              <span className="display text-2xl leading-none">
+                Frank<span className="text-primary">Manzano</span>
+              </span>
             </Link>
-            <p className="text-sm text-base-content/60 max-w-xs leading-relaxed">{config.appDescription}</p>
+            <p className="max-w-xs text-sm leading-relaxed text-base-content/50">
+              {config.appDescription}
+            </p>
           </div>
 
           <div>
-            <p className="font-semibold text-base-content/50 tracking-wide text-xs mb-4 uppercase">Contacto</p>
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-base-content/40">
+              Contacto
+            </p>
             <div className="flex flex-col gap-3 text-sm">
-              <p className="text-base-content/70 leading-relaxed">{business?.address}</p>
+              <p className="leading-relaxed text-base-content/60">
+                {business?.address}
+              </p>
               {business?.phone && (
-                <a href={`tel:${tel}`} className="text-base-content/60 hover:text-primary transition-colors">
+                <a
+                  href={`tel:${tel}`}
+                  className="text-base-content/60 transition-colors hover:text-primary"
+                >
                   {business.phone}
                 </a>
               )}
-              <a href={mailto} className="text-base-content/60 hover:text-primary transition-colors break-all">
+              <a
+                href={mailto}
+                className="break-all text-base-content/60 transition-colors hover:text-primary"
+              >
                 {business?.email || "support@yourdomain.com"}
               </a>
               {business?.instagram && (
@@ -38,7 +52,7 @@ const Footer = () => {
                   href={business.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base-content/60 hover:text-primary transition-colors"
+                  className="text-base-content/60 transition-colors hover:text-primary"
                 >
                   Red social
                 </a>
@@ -46,36 +60,45 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-start md:items-end gap-4">
-            <p className="text-base-content/50 text-sm md:text-right max-w-xs leading-relaxed">{config.business?.tagline}</p>
+          <div className="flex flex-col items-start gap-4 md:items-end">
+            <p className="max-w-xs text-sm leading-relaxed text-base-content/50 md:text-right">
+              {config.business?.tagline}
+            </p>
             {(whatsapp || tel) && (
               <a
                 href={whatsapp ? `https://wa.me/${whatsapp}` : `tel:${tel}`}
-                className="btn btn-primary btn-sm rounded-md border border-primary/80 shadow-sm"
+                className="btn btn-primary btn-sm"
               >
                 {whatsapp ? "Mensaje" : "Llamar"}
               </a>
             )}
-            <p className="text-xs text-base-content/40 md:text-right">{business?.location ?? "City, Country"}</p>
+            <p className="text-xs text-base-content/40 md:text-right">
+              {business?.location ?? "City, Country"}
+            </p>
           </div>
         </div>
 
-        <div className="mt-10 h-px bg-base-300" />
+        <div className="mt-12 h-px bg-base-300" />
 
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-base-content/40">
-          <p>© {year} {config.appName}</p>
+        <div className="flex flex-col items-center justify-between gap-4 pt-6 text-xs uppercase tracking-widest text-base-content/40 md:flex-row">
+          <p>
+            © {year} {config.appName}
+          </p>
           <div className="flex items-center gap-6">
-            <Link href="/privacy-policy" className="hover:text-primary transition-colors">
+            <Link
+              href="/privacy-policy"
+              className="transition-colors hover:text-primary"
+            >
               Privacidad
             </Link>
-            <Link href="/tos" className="hover:text-primary transition-colors">
+            <Link href="/tos" className="transition-colors hover:text-primary">
               Términos
             </Link>
             <a
               href="https://wadoom.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-primary transition-colors font-semibold"
+              className="font-bold transition-colors hover:text-primary"
             >
               WADOOM
             </a>

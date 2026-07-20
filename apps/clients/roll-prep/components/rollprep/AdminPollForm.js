@@ -26,8 +26,10 @@ export default function AdminPollForm() {
 
   return (
     <form ref={formRef} action={handleSubmit} className="space-y-4">
-      <label className="form-control w-full">
-        <span className="label-text font-medium mb-1">Pregunta</span>
+      <label className="block w-full">
+        <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
+          Pregunta
+        </span>
         <input
           name="question"
           placeholder="¿Qué estudiamos en la próxima clase?"
@@ -36,8 +38,13 @@ export default function AdminPollForm() {
       </label>
 
       {[1, 2, 3].map((i) => (
-        <fieldset key={i} className="rounded-xl border border-base-300 p-4 space-y-2">
-          <legend className="px-2 text-sm font-semibold">Opción {i}</legend>
+        <fieldset
+          key={i}
+          className="space-y-2 border border-base-300 bg-base-100 p-4"
+        >
+          <legend className="tag-skew bg-secondary px-2 py-0.5 text-[0.65rem] text-secondary-content">
+            <span>Opción {i}</span>
+          </legend>
           <input
             name={`option_${i}_title`}
             required
