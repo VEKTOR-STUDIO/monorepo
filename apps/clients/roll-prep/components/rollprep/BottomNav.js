@@ -92,7 +92,10 @@ export default function BottomNav({ isAdmin }) {
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-base-300 bg-base-100/90 backdrop-blur">
       <div className="mx-auto flex max-w-xl">
         {links.map(({ href, label, Icon }) => {
-          const isActive = pathname === href;
+          const isActive =
+            href === "/dashboard"
+              ? pathname === href
+              : pathname === href || pathname.startsWith(`${href}/`);
 
           return (
             <Link

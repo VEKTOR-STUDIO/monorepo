@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
+import config from "@/config";
 
 async function getAuthedClient() {
   const supabase = await createClient();
@@ -22,6 +23,31 @@ async function assertAdmin(supabase, user) {
     .single();
 
   if (profile?.role !== "admin") throw new Error("Solo el profesor puede hacer esto");
+}
+
+function revalidateAssignmentPaths(assignmentId) {
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/admin");
+  revalidatePath("/dashboard/clase");
+  revalidatePath("/dashboard/calendario");
+  revalidatePath("/dashboard/videoteca");
+  if (assignmentId) revalidatePath(`/dashboard/clase/${assignmentId}`);
+}
+
+function todayInTimezone(timeZone = config.timezone) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
+function parseScheduledFor(value) {
+  const raw = typeof value === "string" ? value.trim() : "";
+  if (!raw) return todayInTimezone();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
+  return raw;
 }
 
 // ---------------------------------------------------------------------------
@@ -48,6 +74,8 @@ export async function markAssignmentCompleted(assignmentId) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/clase");
+  revalidatePath("/dashboard/perfil");
+  revalidatePath("/dashboard/ranking");
   return { success: true };
 }
 
@@ -72,6 +100,8 @@ export async function submitVote(pollId, optionId) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/votar");
+  revalidatePath("/dashboard/perfil");
+  revalidatePath("/dashboard/ranking");
   return { success: true };
 }
 
@@ -98,6 +128,8 @@ export async function addComment(assignmentId, body) {
 
   revalidatePath("/dashboard/clase");
   revalidatePath(`/dashboard/clase/${assignmentId}`);
+  revalidatePath("/dashboard/perfil");
+  revalidatePath("/dashboard/ranking");
   return { success: true };
 }
 
@@ -147,7 +179,7 @@ export async function updateProfileName(formData) {
 // ---------------------------------------------------------------------------
 
 /**
- * Crea la tarea en curso (desactiva las anteriores).
+ * Crea una clase. Si se marca como activa, desactiva las anteriores.
  */
 export async function createAssignment(formData) {
   const { supabase, user } = await getAuthedClient();
@@ -156,21 +188,104 @@ export async function createAssignment(formData) {
   const title = formData.get("title")?.trim();
   const videoUrl = formData.get("video_url")?.trim();
   const notes = formData.get("notes")?.trim() || null;
+  const scheduledFor = parseScheduledFor(formData.get("scheduled_for"));
+  const makeActive = formData.get("is_active") === "on";
 
   if (!title || !videoUrl) {
     return { error: "El título y la URL del video son obligatorios." };
   }
+  if (!scheduledFor) {
+    return { error: "La fecha de la clase no es válida." };
+  }
+
+  if (makeActive) {
+    await supabase.from("assignments").update({ is_active: false }).eq("is_active", true);
+  }
+
+  const { data, error } = await supabase
+    .from("assignments")
+    .insert({
+      title,
+      video_url: videoUrl,
+      notes,
+      scheduled_for: scheduledFor,
+      is_active: makeActive,
+    })
+    .select("id")
+    .single();
+
+  if (error) return { error: "No se pudo crear la tarea." };
+
+  revalidateAssignmentPaths(data?.id);
+  return { success: true };
+}
+
+/**
+ * Edita una clase existente (título, video, notas, fecha y/o activa).
+ */
+export async function updateAssignment(formData) {
+  const { supabase, user } = await getAuthedClient();
+  await assertAdmin(supabase, user);
+
+  const id = formData.get("id")?.trim();
+  const title = formData.get("title")?.trim();
+  const videoUrl = formData.get("video_url")?.trim();
+  const notes = formData.get("notes")?.trim() || null;
+  const scheduledFor = parseScheduledFor(formData.get("scheduled_for"));
+  const makeActive = formData.get("is_active") === "on";
+
+  if (!id) return { error: "Falta el id de la clase." };
+  if (!title || !videoUrl) {
+    return { error: "El título y la URL del video son obligatorios." };
+  }
+  if (!scheduledFor) {
+    return { error: "La fecha de la clase no es válida." };
+  }
+
+  if (makeActive) {
+    await supabase
+      .from("assignments")
+      .update({ is_active: false })
+      .eq("is_active", true)
+      .neq("id", id);
+  }
+
+  const { error } = await supabase
+    .from("assignments")
+    .update({
+      title,
+      video_url: videoUrl,
+      notes,
+      scheduled_for: scheduledFor,
+      is_active: makeActive,
+    })
+    .eq("id", id);
+
+  if (error) return { error: "No se pudo guardar la clase." };
+
+  revalidateAssignmentPaths(id);
+  return { success: true };
+}
+
+/**
+ * Marca una clase como la activa (y desactiva las demás).
+ */
+export async function setActiveAssignment(assignmentId) {
+  const { supabase, user } = await getAuthedClient();
+  await assertAdmin(supabase, user);
+
+  if (!assignmentId) return { error: "Falta el id de la clase." };
 
   await supabase.from("assignments").update({ is_active: false }).eq("is_active", true);
 
   const { error } = await supabase
     .from("assignments")
-    .insert({ title, video_url: videoUrl, notes, is_active: true });
+    .update({ is_active: true })
+    .eq("id", assignmentId);
 
-  if (error) return { error: "No se pudo crear la tarea." };
+  if (error) return { error: "No se pudo activar la clase." };
 
-  revalidatePath("/dashboard");
-  revalidatePath("/dashboard/admin");
+  revalidateAssignmentPaths(assignmentId);
   return { success: true };
 }
 
@@ -214,5 +329,6 @@ export async function createPoll(formData) {
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/admin");
+  revalidatePath("/dashboard/votar");
   return { success: true };
 }

@@ -1,4 +1,5 @@
 import AdminAssignmentForm from "@/components/rollprep/AdminAssignmentForm";
+import AdminAssignmentsList from "@/components/rollprep/AdminAssignmentsList";
 import AdminPollForm from "@/components/rollprep/AdminPollForm";
 import AdminLiveRefresh from "@/components/rollprep/AdminLiveRefresh";
 import { createClient } from "@/libs/supabase/server";
@@ -6,33 +7,42 @@ import { createClient } from "@/libs/supabase/server";
 export const dynamic = "force-dynamic";
 
 // Dashboard del Profesor (panel de control):
-// - Asignar la tarea en curso (video, título, notas).
+// - Publicar / editar clases (video, título, notas, fecha).
 // - Crear la votación del fin de semana (3 opciones).
 // - Métricas: quién completó la tarea activa y conteo de votos en vivo.
 export default async function AdminPanel() {
   const supabase = await createClient();
 
-  const [{ data: assignment }, { data: poll }, { count: studentCount }] =
-    await Promise.all([
-      supabase
-        .from("assignments")
-        .select("id, title, created_at")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from("polls")
-        .select("id, question, created_at, poll_options (id, title)")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from("profiles")
-        .select("id", { count: "exact", head: true })
-        .eq("role", "student"),
-    ]);
+  const [
+    { data: assignment },
+    { data: allAssignments },
+    { data: poll },
+    { count: studentCount },
+  ] = await Promise.all([
+    supabase
+      .from("assignments")
+      .select("id, title, scheduled_for, created_at")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("assignments")
+      .select("id, title, video_url, notes, scheduled_for, is_active, created_at")
+      .order("scheduled_for", { ascending: false })
+      .order("created_at", { ascending: false }),
+    supabase
+      .from("polls")
+      .select("id, question, created_at, poll_options (id, title)")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from("profiles")
+      .select("id", { count: "exact", head: true })
+      .eq("role", "student"),
+  ]);
 
   const [{ data: completions }, { data: votes }] = await Promise.all([
     assignment
@@ -84,6 +94,17 @@ export default async function AdminPanel() {
               {assignment ? (
                 <>
                   <p className="font-semibold">{assignment.title}</p>
+                  {assignment.scheduled_for && (
+                    <p className="text-xs font-bold uppercase tracking-widest text-primary">
+                      {new Date(
+                        `${assignment.scheduled_for}T12:00:00`
+                      ).toLocaleDateString("es-VE", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long",
+                      })}
+                    </p>
+                  )}
                   <div className="flex items-baseline gap-2">
                     <span className="display text-6xl text-primary">
                       {completions?.length ?? 0}
@@ -184,10 +205,10 @@ export default async function AdminPanel() {
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rise rise-4 border border-base-300 bg-base-200">
             <div className="border-b border-base-300 px-6 py-4">
-              <h2 className="display text-xl">Nueva tarea</h2>
+              <h2 className="display text-xl">Nueva clase</h2>
               <p className="mt-1 text-xs font-medium opacity-60">
-                Reemplaza la tarea activa. Los alumnos la verán de martes a
-                jueves.
+                Define título, video, notas y la fecha en el calendario. Si la
+                marcas activa, reemplaza la clase de hoy.
               </p>
             </div>
             <div className="p-6">
@@ -207,6 +228,18 @@ export default async function AdminPanel() {
               <AdminPollForm />
             </div>
           </div>
+        </div>
+
+        {/* ------------------------------ HISTORIAL DE CLASES ------------- */}
+        <div className="rise rise-5 border border-base-300 bg-base-200">
+          <div className="border-b border-base-300 px-6 py-4">
+            <h2 className="display text-xl">Todas las clases</h2>
+            <p className="mt-1 text-xs font-medium opacity-60">
+              Edita fechas, contenido o cuál es la clase activa. Sirve para
+              corregir clases pasadas y alinear el calendario.
+            </p>
+          </div>
+          <AdminAssignmentsList assignments={allAssignments ?? []} />
         </div>
       </section>
     </main>

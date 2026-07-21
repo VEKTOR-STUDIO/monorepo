@@ -10,7 +10,8 @@ export default async function Videoteca() {
 
   const { data: assignments } = await supabase
     .from("assignments")
-    .select("id, title, video_url, notes, created_at, is_active")
+    .select("id, title, video_url, notes, scheduled_for, created_at, is_active")
+    .order("scheduled_for", { ascending: false })
     .order("created_at", { ascending: false });
 
   return (
@@ -56,7 +57,9 @@ export default async function Videoteca() {
                     )}
                   </div>
                   <p className="mt-1 text-xs font-semibold uppercase tracking-widest opacity-50">
-                    {new Date(assignment.created_at).toLocaleDateString("es-VE", {
+                    {new Date(
+                      `${assignment.scheduled_for ?? assignment.created_at.slice(0, 10)}T12:00:00`
+                    ).toLocaleDateString("es-VE", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
