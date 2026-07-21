@@ -36,6 +36,21 @@ const Footer = () => {
             <p className="mt-3 text-sm text-base-content/60">
               Copyright © {new Date().getFullYear()} - All rights reserved
             </p>
+            <p className="mt-2 text-sm text-base-content/60">
+              Hecho por{" "}
+              <a
+                href="https://alessandrovaru.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link link-hover transition-colors hover:text-accent uppercase"
+                style={{
+                  fontFamily: "var(--microgramma-font)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Alessandrovaru
+              </a>
+            </p>
 
             <a
               href="https://shipfa.st/?ref=shipfast_badge"
