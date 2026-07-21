@@ -42,6 +42,18 @@ export function resolveDashboardMode({ assignment, poll, date = new Date() }) {
 }
 
 /**
+ * Devuelve la miniatura (splash art) de un video de YouTube, o null si la
+ * URL no es de YouTube. Se usa para el arte de fondo de los tiles del menú.
+ */
+export function getVideoThumbnail(videoUrl) {
+  const { type, embedUrl } = getVideoEmbed(videoUrl);
+  if (type !== "youtube" || !embedUrl) return null;
+
+  const videoId = embedUrl.split("/embed/")[1];
+  return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
+}
+
+/**
  * Convierte una URL de YouTube o Instagram en una URL embebible en iframe.
  * Devuelve { type: "youtube" | "instagram" | "unknown", embedUrl }.
  */

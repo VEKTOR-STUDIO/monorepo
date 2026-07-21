@@ -159,3 +159,175 @@ progress::-webkit-progress-value {
   -webkit-text-stroke: 1.5px color-mix(in oklch, var(--color-base-content) 22%, transparent);
   color: transparent;
 }
+
+/* ------------------------------------------------------------------ */
+/* Utilidades "arcade" — menú estilo videojuego de pelea (2XKO-ish).  */
+/* ------------------------------------------------------------------ */
+
+/* Trama de puntos halftone, marca de la casa de los fighting games. */
+.halftone {
+  background-image: radial-gradient(
+    color-mix(in oklch, var(--color-base-content) 14%, transparent) 1px,
+    transparent 1.5px
+  );
+  background-size: 10px 10px;
+}
+
+/* Rayas diagonales de peligro / hazard. */
+.stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklch, var(--color-base-content) 10%, transparent) 0 6px,
+    transparent 6px 14px
+  );
+}
+
+/* Panel cortado en diagonal (esquina inferior derecha rebanada). */
+.clip-cut {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
+}
+
+/* Tile del menú principal: bloque agresivo con pegada al hover. */
+.menu-tile {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border: 2px solid var(--color-base-300);
+  background: var(--color-base-200);
+  transition:
+    transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.menu-tile:hover,
+.menu-tile:focus-visible {
+  transform: translate(-3px, -3px) skewX(-1deg);
+  border-color: var(--color-primary);
+  box-shadow:
+    6px 6px 0 0 var(--color-primary),
+    0 0 42px -12px var(--color-primary);
+  z-index: 2;
+}
+
+.menu-tile:active {
+  transform: translate(0, 0) skewX(0deg);
+  box-shadow: 2px 2px 0 0 var(--color-primary);
+}
+
+/* Destello diagonal que cruza el tile al hacer hover. */
+.menu-tile::after {
+  content: "";
+  position: absolute;
+  inset: -20% -60%;
+  background: linear-gradient(
+    105deg,
+    transparent 42%,
+    color-mix(in oklch, var(--color-secondary) 14%, transparent) 50%,
+    transparent 58%
+  );
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.menu-tile:hover::after {
+  animation: tile-shine 0.65s ease forwards;
+}
+
+@keyframes tile-shine {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+/* Imagen splash que se asoma dentro del tile (media imagen, muy juego). */
+.tile-splash {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.22;
+  transform: scale(1.06);
+  filter: saturate(1.15) contrast(1.05);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.menu-tile:hover .tile-splash {
+  opacity: 0.5;
+  transform: scale(1);
+}
+
+/* Degradé para que el texto siga leyéndose sobre la splash. */
+.tile-splash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    var(--color-base-200) 22%,
+    color-mix(in oklch, var(--color-base-200) 55%, transparent) 55%,
+    transparent 100%
+  );
+}
+
+/* Flecha "PRESS START" que empuja al hover. */
+.tile-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: transform 0.18s ease;
+}
+
+.menu-tile:hover .tile-cta {
+  transform: translateX(6px);
+}
+
+/* Barra de XP con brillo animado. */
+.xp-bar {
+  position: relative;
+  height: 0.65rem;
+  overflow: hidden;
+  background: var(--color-base-300);
+  transform: skewX(-12deg);
+}
+
+.xp-bar-fill {
+  position: relative;
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.xp-bar-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  animation: xp-shine 2.2s ease-in-out infinite;
+}
+
+@keyframes xp-shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  60%,
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Parpadeo lento para chips "LIVE" / "+XP". */
+@keyframes blink-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.blink-soft {
+  animation: blink-soft 1.6s ease-in-out infinite;
+}

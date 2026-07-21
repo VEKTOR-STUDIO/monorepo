@@ -1,3 +1,4 @@
+import Link from "next/link";
 import VideoEmbed from "@/components/rollprep/VideoEmbed";
 import { createClient } from "@/libs/supabase/server";
 
@@ -74,6 +75,22 @@ export default async function Videoteca() {
                   {assignment.notes}
                 </p>
               )}
+
+              <Link
+                href={`/dashboard/clase/${assignment.id}`}
+                className="tile-cta block border-t border-base-300 p-4 text-[0.65rem] font-black uppercase tracking-[0.2em] text-primary"
+              >
+                Ver clase y comentarios
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  className="h-3 w-3"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
             </article>
           ))}
         </div>

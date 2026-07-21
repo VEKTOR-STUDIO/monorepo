@@ -47,6 +47,7 @@ export async function markAssignmentCompleted(assignmentId) {
   }
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/clase");
   return { success: true };
 }
 
@@ -70,6 +71,74 @@ export async function submitVote(pollId, optionId) {
   }
 
   revalidatePath("/dashboard");
+  revalidatePath("/dashboard/votar");
+  return { success: true };
+}
+
+/**
+ * Publica un comentario/pregunta en una clase.
+ * El primer comentario en cada clase otorga puntos (trigger en DB).
+ */
+export async function addComment(assignmentId, body) {
+  const { supabase, user } = await getAuthedClient();
+
+  const text = body?.trim();
+  if (!text) return { error: "Escribe algo antes de enviar." };
+  if (text.length > 1000) return { error: "Máximo 1000 caracteres." };
+
+  const { error } = await supabase.from("assignment_comments").insert({
+    assignment_id: assignmentId,
+    student_id: user.id,
+    body: text,
+  });
+
+  if (error) {
+    return { error: "No se pudo publicar el comentario. Intenta de nuevo." };
+  }
+
+  revalidatePath("/dashboard/clase");
+  revalidatePath(`/dashboard/clase/${assignmentId}`);
+  return { success: true };
+}
+
+/**
+ * Borra un comentario propio (o cualquiera, si es el profesor — RLS decide).
+ */
+export async function deleteComment(commentId, assignmentId) {
+  const { supabase } = await getAuthedClient();
+
+  const { error } = await supabase
+    .from("assignment_comments")
+    .delete()
+    .eq("id", commentId);
+
+  if (error) return { error: "No se pudo borrar el comentario." };
+
+  revalidatePath("/dashboard/clase");
+  revalidatePath(`/dashboard/clase/${assignmentId}`);
+  return { success: true };
+}
+
+/**
+ * Actualiza el nombre del perfil. Completarlo por primera vez otorga
+ * puntos (trigger en DB).
+ */
+export async function updateProfileName(formData) {
+  const { supabase, user } = await getAuthedClient();
+
+  const fullName = formData.get("full_name")?.trim();
+  if (!fullName) return { error: "El nombre no puede estar vacío." };
+  if (fullName.length > 80) return { error: "Máximo 80 caracteres." };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ full_name: fullName })
+    .eq("id", user.id);
+
+  if (error) return { error: "No se pudo guardar el nombre." };
+
+  revalidatePath("/dashboard");
+  revalidatePath("/dashboard/perfil");
   return { success: true };
 }
 
