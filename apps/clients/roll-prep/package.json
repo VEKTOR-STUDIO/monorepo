@@ -12,11 +12,12 @@
     "clean": "rm -rf .next .turbo node_modules"
   },
   "dependencies": {
+    "@alessandrovaru/lib": "workspace:*",
+    "@alessandrovaru/ui": "workspace:*",
     "@headlessui/react": "^2.2.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.2",
-    "@alessandrovaru/lib": "workspace:*",
-    "@alessandrovaru/ui": "workspace:*",
+    "@vercel/analytics": "^2.0.1",
     "axios": "^1.7.9",
     "crisp-sdk-web": "^1.0.25",
     "form-data": "^4.0.1",
@@ -33,10 +34,10 @@
     "stripe": "^17.3.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.0",
     "@alessandrovaru/eslint-config": "workspace:*",
     "@alessandrovaru/tailwind-config": "workspace:*",
     "@alessandrovaru/tsconfig": "workspace:*",
+    "@tailwindcss/postcss": "^4.0.0",
     "autoprefixer": "^10.4.20",
     "daisyui": "^5.0.50",
     "eslint": "^9.17.0",
