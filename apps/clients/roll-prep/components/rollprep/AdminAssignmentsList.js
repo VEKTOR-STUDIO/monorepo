@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import {
@@ -160,6 +161,12 @@ export default function AdminAssignmentsList({ assignments }) {
               </div>
 
               <div className="flex shrink-0 flex-col gap-1 sm:flex-row">
+                <Link
+                  href={`/dashboard/admin/clase/${assignment.id}`}
+                  className="btn btn-ghost btn-xs"
+                >
+                  Analíticas
+                </Link>
                 {!assignment.is_active && (
                   <button
                     type="button"
