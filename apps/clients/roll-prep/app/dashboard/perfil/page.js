@@ -30,7 +30,7 @@ export default async function Perfil() {
   return (
     <main className="min-h-screen bg-base-100 p-4 text-base-content md:p-8">
       <section className="mx-auto max-w-xl space-y-6">
-        <div className="rise rise-1 flex items-center justify-between">
+        <div className="rise rise-1 relative z-50 flex items-center justify-between">
           <Link
             href="/dashboard"
             className="tile-cta text-[0.65rem] font-black uppercase tracking-[0.2em] opacity-60 hover:text-primary hover:opacity-100"

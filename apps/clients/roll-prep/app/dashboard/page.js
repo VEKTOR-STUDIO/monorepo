@@ -84,7 +84,7 @@ export default async function Dashboard() {
       </span>
 
       <section className="relative z-10 mx-auto max-w-xl space-y-5">
-        <div className="rise rise-1 flex items-center justify-between">
+        <div className="rise rise-1 relative z-50 flex items-center justify-between">
           <div>
             <h1 className="display text-3xl">
               Roll<span className="text-primary">Prep</span>
