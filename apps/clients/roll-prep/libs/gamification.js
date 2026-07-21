@@ -23,12 +23,13 @@ export const POINT_EVENT_LABELS = {
 };
 
 // Rangos estilo cinturones de BJJ. El umbral es el XP acumulado necesario.
+// ~3x respecto a la primera versión (150 / 400 / 800 / 1500).
 export const BELTS = [
   { name: "Cinturón Blanco", short: "Blanca", threshold: 0, color: "#f5f5f0" },
-  { name: "Cinturón Azul", short: "Azul", threshold: 150, color: "#3b82f6" },
-  { name: "Cinturón Violeta", short: "Violeta", threshold: 400, color: "#a855f7" },
-  { name: "Cinturón Marrón", short: "Marrón", threshold: 800, color: "#92400e" },
-  { name: "Cinturón Negro", short: "Negra", threshold: 1500, color: "#18181b" },
+  { name: "Cinturón Azul", short: "Azul", threshold: 450, color: "#3b82f6" },
+  { name: "Cinturón Violeta", short: "Violeta", threshold: 1200, color: "#a855f7" },
+  { name: "Cinturón Marrón", short: "Marrón", threshold: 2400, color: "#92400e" },
+  { name: "Cinturón Negro", short: "Negra", threshold: 4500, color: "#18181b" },
 ];
 
 /**
