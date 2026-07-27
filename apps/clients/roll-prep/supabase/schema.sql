@@ -54,7 +54,7 @@ CREATE TABLE public.poll_votes (
 );
 CREATE TABLE public.point_events (
   student_id uuid NOT NULL,
-  kind text NOT NULL CHECK (kind = ANY (ARRAY['signup'::text, 'profile_completed'::text, 'assignment_completed'::text, 'poll_voted'::text, 'comment_posted'::text])),
+  kind text NOT NULL CHECK (kind = ANY (ARRAY['signup'::text, 'profile_completed'::text, 'assignment_completed'::text, 'poll_voted'::text, 'comment_posted'::text, 'tournament_participation'::text, 'tournament_finalist'::text, 'tournament_champion'::text])),
   points integer NOT NULL CHECK (points > 0),
   ref_id uuid,
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -71,4 +71,39 @@ CREATE TABLE public.assignment_comments (
   CONSTRAINT assignment_comments_pkey PRIMARY KEY (id),
   CONSTRAINT assignment_comments_assignment_id_fkey FOREIGN KEY (assignment_id) REFERENCES public.assignments(id),
   CONSTRAINT assignment_comments_student_id_fkey FOREIGN KEY (student_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.tournaments (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL DEFAULT 'Tope interno'::text CHECK (char_length(btrim(title)) >= 1 AND char_length(btrim(title)) <= 80),
+  status text NOT NULL DEFAULT 'active'::text CHECK (status = ANY (ARRAY['active'::text, 'completed'::text])),
+  created_by uuid,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  completed_at timestamp with time zone,
+  CONSTRAINT tournaments_pkey PRIMARY KEY (id),
+  CONSTRAINT tournaments_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.tournament_participants (
+  tournament_id uuid NOT NULL,
+  student_id uuid NOT NULL,
+  seed integer NOT NULL CHECK (seed >= 1),
+  CONSTRAINT tournament_participants_pkey PRIMARY KEY (tournament_id, student_id),
+  CONSTRAINT tournament_participants_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(id),
+  CONSTRAINT tournament_participants_student_id_fkey FOREIGN KEY (student_id) REFERENCES public.profiles(id)
+);
+CREATE TABLE public.tournament_matches (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  tournament_id uuid NOT NULL,
+  round integer NOT NULL CHECK (round >= 1),
+  slot integer NOT NULL CHECK (slot >= 0),
+  student1_id uuid,
+  student2_id uuid,
+  winner_id uuid,
+  method text CHECK (method = ANY (ARRAY['submission'::text, 'points'::text, 'decision'::text, 'dq'::text, 'walkover'::text])),
+  decided_at timestamp with time zone,
+  CONSTRAINT tournament_matches_pkey PRIMARY KEY (id),
+  CONSTRAINT tournament_matches_tournament_round_slot_key UNIQUE (tournament_id, round, slot),
+  CONSTRAINT tournament_matches_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(id),
+  CONSTRAINT tournament_matches_student1_id_fkey FOREIGN KEY (student1_id) REFERENCES public.profiles(id),
+  CONSTRAINT tournament_matches_student2_id_fkey FOREIGN KEY (student2_id) REFERENCES public.profiles(id),
+  CONSTRAINT tournament_matches_winner_id_fkey FOREIGN KEY (winner_id) REFERENCES public.profiles(id)
 );

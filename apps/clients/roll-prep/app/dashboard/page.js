@@ -176,16 +176,23 @@ export default async function Dashboard() {
             description="El tatami habla: top del gym por XP"
           />
 
-          {/* 06 — Perfil */}
-          <div className="md:col-span-2">
-            <MenuTile
-              href="/dashboard/perfil"
-              index={6}
-              kicker="Jugador"
-              title="Mi perfil"
-              description={`${belt.name} · historial de XP y datos`}
-            />
-          </div>
+          {/* 06 — Torneos */}
+          <MenuTile
+            href="/dashboard/torneos"
+            index={6}
+            kicker="Tatami"
+            title="Torneos"
+            description="Brackets de los topes internos del gym"
+          />
+
+          {/* 07 — Perfil */}
+          <MenuTile
+            href="/dashboard/perfil"
+            index={7}
+            kicker="Jugador"
+            title="Mi perfil"
+            description={`${belt.name} · historial de XP y datos`}
+          />
         </div>
       </section>
     </main>
