@@ -12,6 +12,9 @@ export const POINT_VALUES = {
   assignment_completed: 50,
   poll_voted: 10,
   comment_posted: 5,
+  tournament_participation: 15,
+  tournament_finalist: 50,
+  tournament_champion: 100,
 };
 
 export const POINT_EVENT_LABELS = {
@@ -20,6 +23,9 @@ export const POINT_EVENT_LABELS = {
   assignment_completed: "Clase estudiada",
   poll_voted: "Voto emitido",
   comment_posted: "Comentario en clase",
+  tournament_participation: "Peleaste en un tope",
+  tournament_finalist: "Finalista del tope",
+  tournament_champion: "Campeón del tope",
 };
 
 // Rangos estilo cinturones de BJJ. El umbral es el XP acumulado necesario.
