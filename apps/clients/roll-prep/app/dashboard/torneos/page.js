@@ -14,7 +14,7 @@ export default async function Torneos() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data: profile }, { data: tournaments }] = await Promise.all([
+  const [{ data: profile }, { data: tournaments, error }] = await Promise.all([
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
       .from("tournaments")
@@ -26,6 +26,10 @@ export default async function Torneos() {
 
   const isAdmin = profile?.role === "admin";
   const list = tournaments ?? [];
+  // Si falta una columna de la migración del CAOS, el query falla entero y
+  // la lista llega vacía. Sin esto, un torneo lleno se ve como "no hay
+  // torneos" y no hay forma de saber que lo que falta es correr el SQL.
+  const missingMigration = error?.code === "42703";
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
@@ -89,7 +93,35 @@ export default async function Torneos() {
           </Link>
         </div>
 
-        {!list.length && (
+        {error && (
+          <div className="rise rise-2 clip-cut border-2 border-error bg-error/10 p-5">
+            <p className="text-[0.65rem] font-black uppercase tracking-[0.3em] text-error">
+              No se pudo leer los torneos
+            </p>
+            {missingMigration ? (
+              <>
+                <p className="mt-2 text-sm font-semibold">
+                  Falta correr la migración del modo CAOS en Supabase. Tus
+                  topes están guardados: no se perdió nada, solo no se pueden
+                  listar hasta que la base tenga las columnas nuevas.
+                </p>
+                <p className="mt-2 text-xs font-medium opacity-70">
+                  Corre{" "}
+                  <code className="bg-base-300 px-1">
+                    supabase/migrations/20260806120000_caos.sql
+                  </code>{" "}
+                  en el SQL Editor. Se puede correr varias veces sin problema.
+                </p>
+              </>
+            ) : (
+              <p className="mt-2 text-sm font-semibold opacity-80">
+                {error.message}
+              </p>
+            )}
+          </div>
+        )}
+
+        {!error && !list.length && (
           <div className="rise rise-2 stripes border border-base-300 p-10 text-center">
             <p className="text-xs font-semibold uppercase tracking-widest opacity-60">
               Todavía no hay torneos.

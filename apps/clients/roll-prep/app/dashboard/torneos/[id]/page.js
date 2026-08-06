@@ -7,6 +7,36 @@ import { CAOS_POINTS, OUTFITS } from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
 
+// La base todavía no tiene las columnas del modo CAOS.
+function MissingMigration({ message }) {
+  return (
+    <main className="min-h-screen bg-base-100 p-4 text-base-content md:p-8">
+      <section className="mx-auto max-w-xl space-y-4">
+        <Link
+          href="/dashboard/torneos"
+          className="tile-cta text-[0.65rem] font-black uppercase tracking-[0.2em] opacity-60 hover:text-primary hover:opacity-100"
+        >
+          Torneos
+        </Link>
+        <div className="clip-cut border-2 border-error bg-error/10 p-5">
+          <p className="text-[0.65rem] font-black uppercase tracking-[0.3em] text-error">
+            Falta la migración del CAOS
+          </p>
+          <p className="mt-2 text-sm font-semibold">
+            El torneo sigue guardado en la base: lo que falta es correr{" "}
+            <code className="bg-base-300 px-1">
+              supabase/migrations/20260806120000_caos.sql
+            </code>{" "}
+            en el SQL Editor de Supabase. Se puede correr varias veces sin
+            problema.
+          </p>
+          <p className="mt-2 text-xs font-medium opacity-60">{message}</p>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 // Detalle de un tope: el bracket completo. Los alumnos lo ven; el profesor
 // carga resultados, re-sortea o lo borra.
 export default async function TorneoDetalle({ params }) {
@@ -17,7 +47,7 @@ export default async function TorneoDetalle({ params }) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data: profile }, { data: tournament }] = await Promise.all([
+  const [{ data: profile }, { data: tournament, error }] = await Promise.all([
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
       .from("tournaments")
@@ -26,6 +56,9 @@ export default async function TorneoDetalle({ params }) {
       .maybeSingle(),
   ]);
 
+  // Falta una columna de la migración del CAOS: el torneo existe, pero el
+  // query no corre. Mejor decirlo que devolver un 404 que no es verdad.
+  if (error?.code === "42703") return <MissingMigration message={error.message} />;
   if (!tournament) notFound();
 
   const isCaos = tournament.mode === "caos";
