@@ -4,7 +4,7 @@
   "private": true,
   "description": "Alessandrovaru Shipfast vanilla template (Supabase variant) — base para clientes que usan Supabase + Tailwind v4 + Next 15 + React 19.",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "NODE_OPTIONS=--max-http-header-size=65536 next dev --turbopack",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
