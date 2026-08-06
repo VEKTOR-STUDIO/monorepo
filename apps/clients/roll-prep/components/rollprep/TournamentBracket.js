@@ -24,10 +24,14 @@ export default function TournamentBracket({
   tournament,
   matches,
   names,
+  guestIds = [],
   isAdmin,
   rolls = {},
 }) {
   const router = useRouter();
+  // Los invitados se marcan en el bracket: no tienen cuenta, así que su
+  // nombre no le suena a nadie que no estuviera en la clase.
+  const guests = new Set(guestIds);
   const [isPending, startTransition] = useTransition();
   const [openMatchId, setOpenMatchId] = useState(null);
   const [winnerId, setWinnerId] = useState(null);
@@ -225,12 +229,14 @@ export default function TournamentBracket({
                     >
                       <PlayerRow
                         name={match.student1_id ? names[match.student1_id] : null}
+                        isGuest={guests.has(match.student1_id)}
                         isWinner={decided && match.winner_id === match.student1_id}
                         isLoser={decided && !bye && match.winner_id !== match.student1_id}
                       />
                       <div className="border-t border-base-300" />
                       <PlayerRow
                         name={match.student2_id ? names[match.student2_id] : null}
+                        isGuest={guests.has(match.student2_id)}
                         isWinner={decided && match.winner_id === match.student2_id}
                         isLoser={decided && !bye && match.winner_id !== match.student2_id}
                         placeholder={bye ? "Pase directo" : "Por definir"}
@@ -381,7 +387,13 @@ export default function TournamentBracket({
   );
 }
 
-function PlayerRow({ name, isWinner, isLoser, placeholder = "Por definir" }) {
+function PlayerRow({
+  name,
+  isGuest,
+  isWinner,
+  isLoser,
+  placeholder = "Por definir",
+}) {
   return (
     <div className="flex items-center gap-2 px-3 py-2">
       <span
@@ -397,6 +409,11 @@ function PlayerRow({ name, isWinner, isLoser, placeholder = "Por definir" }) {
       >
         {name ?? placeholder}
       </span>
+      {isGuest && name && (
+        <span className="shrink-0 text-[0.5rem] font-black uppercase tracking-widest opacity-50">
+          Inv
+        </span>
+      )}
       {isWinner && (
         <span className="ml-auto shrink-0 text-[0.6rem] font-black uppercase tracking-widest text-primary">
           Win

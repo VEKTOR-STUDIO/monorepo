@@ -28,6 +28,66 @@ export const TOURNAMENT_STATUS_LABELS = {
   completed: "Finalizado",
 };
 
+// ---------------------------------------------------------------------------
+// INVITADOS
+// Al tope cae gente sin cuenta (el amigo, el de otro gym, el que vino a
+// probar). Entran al bracket con un nombre de guerra inventado: el profesor
+// no tiene que preguntar cómo se llama cada uno antes de sortear, y en el
+// bracket se distingue quién es quién. Si quiere, lo edita a mano.
+//
+// Los dos pedazos se combinan sin género para que nada quede mal escrito:
+// sustantivo + frase con "de/sin". Da ~500 combinaciones.
+// ---------------------------------------------------------------------------
+export const MAX_GUESTS = 32;
+export const MAX_GUEST_NAME = 60;
+
+const GUEST_ALIASES = [
+  "Anaconda", "Tiburón", "Machete", "Cocodrilo", "Relámpago", "Tornado",
+  "Pantera", "Mandíbula", "Candado", "Guillotina", "Trompo", "Chancleta",
+  "Escorpión", "Avalancha", "Bulldog", "Culebra", "Martillo", "Terremoto",
+  "Kimura", "Berimbolo", "Araña", "Búfalo", "Ciclón", "Rinoceronte",
+];
+
+const GUEST_TAGS = [
+  "del Tatami", "de la Esquina", "sin Kimono", "de Otro Gym", "sin Cinturón",
+  "de Visita", "del Barrio", "sin Nombre", "de Turno", "del Fondo",
+  "de Estreno", "sin Récord", "de Última Hora", "del Sótano",
+];
+
+const pick = (list) => list[Math.floor(Math.random() * list.length)];
+
+/**
+ * Un nombre de guerra al azar. `taken` (array o Set de nombres ya usados)
+ * evita repetidos: si la combinación choca, reintenta; si el azar se pone
+ * terco, le pega un número al final.
+ */
+export function randomGuestName(taken = []) {
+  const used = taken instanceof Set ? taken : new Set(taken);
+
+  for (let attempt = 0; attempt < 40; attempt++) {
+    const name = `${pick(GUEST_ALIASES)} ${pick(GUEST_TAGS)}`;
+    if (!used.has(name)) return name;
+  }
+
+  return `${pick(GUEST_ALIASES)} ${used.size + 1}`;
+}
+
+/**
+ * `count` nombres de guerra distintos entre sí.
+ */
+export function randomGuestNames(count, taken = []) {
+  const used = new Set(taken);
+  const names = [];
+
+  for (let i = 0; i < count; i++) {
+    const name = randomGuestName(used);
+    used.add(name);
+    names.push(name);
+  }
+
+  return names;
+}
+
 /**
  * Nombre de la ronda según cuántas peleas tiene.
  */

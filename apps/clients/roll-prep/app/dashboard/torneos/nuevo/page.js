@@ -59,8 +59,9 @@ export default async function NuevoTorneo() {
             Nuevo tope<span className="text-primary">.</span>
           </h1>
           <p className="mt-1 text-sm font-medium opacity-70">
-            Quita a los que faltaron hoy y sortea el bracket. Después puedes
-            re-sortear o borrarlo si era de prueba.
+            Quita a los que faltaron hoy, suma los invitados que cayeron y
+            sortea el bracket. Después puedes re-sortear o borrarlo si era de
+            prueba.
           </p>
         </div>
 

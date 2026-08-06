@@ -6,15 +6,27 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { createTournament } from "@/app/dashboard/torneos/actions";
 import { CAOS_POINTS, OUTFITS, DEFAULT_OUTFIT, deckFor } from "@/libs/caos";
+import {
+  randomGuestName,
+  randomGuestNames,
+  MAX_GUESTS,
+  MAX_GUEST_NAME,
+} from "@/libs/tournaments";
 
 // Formulario del profesor para armar un tope: elige la modalidad, todos los
 // alumnos aparecen marcados y solo hay que quitar a los que faltaron. Al
 // enviar se sortea el bracket y se navega directo al torneo.
+//
+// Los invitados (gente sin cuenta que cayó al tope) se piden aparte: cuántos
+// son y listo, el sistema les inventa el nombre de guerra. Pelean igual que
+// todos, pero no cobran XP porque no tienen dónde acumularlo.
 export default function TournamentCreateForm({ students }) {
   const router = useRouter();
   const [selected, setSelected] = useState(() => new Set(students.map((s) => s.id)));
   const [mode, setMode] = useState("classic");
   const [outfit, setOutfit] = useState(DEFAULT_OUTFIT);
+  const [hasGuests, setHasGuests] = useState(null);
+  const [guests, setGuests] = useState([]);
   const [isPending, startTransition] = useTransition();
   const deck = deckFor(outfit);
 
@@ -27,9 +39,45 @@ export default function TournamentCreateForm({ students }) {
     });
   };
 
+  // Cuántos invitados hay. Al subir la cifra se inventan los que faltan; al
+  // bajarla se cortan los últimos (los nombres ya editados no se pierden).
+  const setGuestCount = (raw) => {
+    const count = Math.max(0, Math.min(MAX_GUESTS, Number(raw) || 0));
+    setGuests((prev) => {
+      if (count <= prev.length) return prev.slice(0, count);
+      return [...prev, ...randomGuestNames(count - prev.length, prev)];
+    });
+  };
+
+  const renameGuest = (index, name) =>
+    setGuests((prev) => prev.map((g, i) => (i === index ? name : g)));
+
+  const rerollGuest = (index) =>
+    setGuests((prev) =>
+      prev.map((g, i) =>
+        i === index ? randomGuestName(prev.filter((_, j) => j !== i)) : g
+      )
+    );
+
+  const rerollAllGuests = () =>
+    setGuests((prev) => randomGuestNames(prev.length));
+
+  const answerGuests = (yes) => {
+    setHasGuests(yes);
+    if (yes) setGuests((prev) => (prev.length ? prev : randomGuestNames(1)));
+    else setGuests([]);
+  };
+
   const allSelected = selected.size === students.length;
+  const guestCount = hasGuests ? guests.length : 0;
+  const totalFighters = selected.size + guestCount;
 
   const handleSubmit = (formData) => {
+    if (hasGuests && guests.some((g) => !g.trim())) {
+      toast.error("Hay un invitado sin nombre.");
+      return;
+    }
+
     startTransition(async () => {
       const result = await createTournament(formData);
 
@@ -194,15 +242,114 @@ export default function TournamentCreateForm({ students }) {
         </div>
       </div>
 
+      <div className="border border-base-300 bg-base-200">
+        <div className="border-b border-base-300 px-4 py-3">
+          <p className="text-xs font-black uppercase tracking-[0.2em]">
+            ¿Hay invitados hoy?
+          </p>
+          <p className="mt-1 text-[0.65rem] font-semibold opacity-60">
+            Gente sin cuenta en la app. Pelean el bracket completo, pero no
+            cobran XP.
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => answerGuests(false)}
+              aria-pressed={hasGuests === false}
+              className={`btn btn-xs flex-1 uppercase ${
+                hasGuests === false ? "btn-primary" : "btn-outline"
+              }`}
+            >
+              No, solo alumnos
+            </button>
+            <button
+              type="button"
+              onClick={() => answerGuests(true)}
+              aria-pressed={hasGuests === true}
+              className={`btn btn-xs flex-1 uppercase ${
+                hasGuests === true ? "btn-primary" : "btn-outline"
+              }`}
+            >
+              Sí, hay invitados
+            </button>
+          </div>
+        </div>
+
+        {hasGuests && (
+          <div className="space-y-3 p-4">
+            <label className="block">
+              <span className="mb-1 block text-[0.65rem] font-bold uppercase tracking-widest opacity-70">
+                ¿Cuántos son?
+              </span>
+              <input
+                type="number"
+                min={0}
+                max={MAX_GUESTS}
+                value={guests.length}
+                onChange={(e) => setGuestCount(e.target.value)}
+                className="input input-bordered input-sm w-24"
+              />
+            </label>
+
+            {guests.length > 0 && (
+              <>
+                <div className="flex items-center justify-between">
+                  <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60">
+                    Nombres de guerra
+                  </p>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-xs uppercase"
+                    onClick={rerollAllGuests}
+                  >
+                    Regenerar 🎲
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {guests.map((guest, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span className="w-5 shrink-0 text-[0.65rem] font-black opacity-40">
+                        {i + 1}
+                      </span>
+                      <input
+                        name="guest_names"
+                        value={guest}
+                        maxLength={MAX_GUEST_NAME}
+                        onChange={(e) => renameGuest(i, e.target.value)}
+                        className="input input-bordered input-sm w-full"
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-ghost btn-sm shrink-0 px-2"
+                        onClick={() => rerollGuest(i)}
+                        title="Otro nombre"
+                      >
+                        🎲
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="text-[0.6rem] font-semibold opacity-50">
+                  Se pueden editar si prefieres el nombre real.
+                </p>
+              </>
+            )}
+          </div>
+        )}
+      </div>
+
       <button
         className={`btn btn-block ${mode === "caos" ? "btn-accent" : "btn-primary"}`}
-        disabled={isPending || selected.size < 2}
+        disabled={isPending || totalFighters < 2}
       >
         {isPending && <span className="loading loading-spinner loading-xs" />}
-        Sortear bracket ({selected.size} peleador{selected.size === 1 ? "" : "es"})
+        Sortear bracket ({totalFighters} peleador{totalFighters === 1 ? "" : "es"}
+        {guestCount > 0 ? `, ${guestCount} inv.` : ""})
       </button>
 
-      {selected.size < 2 && (
+      {totalFighters < 2 && (
         <p className="text-center text-xs font-semibold uppercase tracking-widest opacity-50">
           Se necesitan al menos 2 peleadores
         </p>

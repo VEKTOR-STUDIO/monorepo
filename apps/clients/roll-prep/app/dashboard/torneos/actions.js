@@ -2,7 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
-import { buildBracket, MATCH_METHODS } from "@/libs/tournaments";
+import {
+  buildBracket,
+  MATCH_METHODS,
+  MAX_GUESTS,
+  MAX_GUEST_NAME,
+} from "@/libs/tournaments";
 import { rollMatch, TOURNAMENT_MODES, OUTFITS, DEFAULT_OUTFIT } from "@/libs/caos";
 
 async function getAdminClient() {
@@ -43,9 +48,22 @@ function shuffle(list) {
   return result;
 }
 
+// La base todavía no tiene las columnas de invitados.
+function isMissingGuestColumns(error) {
+  return error?.code === "42703" || error?.code === "PGRST204";
+}
+
+const MISSING_GUESTS_MIGRATION =
+  "Falta correr supabase/migrations/20260806140000_tournament_guests.sql " +
+  "en el SQL Editor de Supabase.";
+
 /**
  * Crea el tope: sortea a los peleadores seleccionados y genera el bracket
  * completo (los byes de la ronda 1 quedan resueltos de una vez).
+ *
+ * Un invitado es alguien sin cuenta: se le inventa un uuid aquí mismo y su
+ * nombre viaja en la fila de participante. Pelea el bracket completo, pero
+ * el XP no lo cobra (lo filtra award_points en la base).
  */
 export async function createTournament(formData) {
   const { supabase, user } = await getAdminClient();
@@ -61,11 +79,35 @@ export async function createTournament(formData) {
   if (title.length > 80) return { error: "El título es muy largo (máx. 80)." };
 
   const studentIds = [...new Set(formData.getAll("student_ids"))].filter(Boolean);
-  if (studentIds.length < 2) {
+
+  const guestNames = formData
+    .getAll("guest_names")
+    .map((name) => String(name).trim())
+    .filter(Boolean);
+
+  if (guestNames.length > MAX_GUESTS) {
+    return { error: `Máximo ${MAX_GUESTS} invitados.` };
+  }
+  if (guestNames.some((name) => name.length > MAX_GUEST_NAME)) {
+    return { error: `Un nombre de invitado es muy largo (máx. ${MAX_GUEST_NAME}).` };
+  }
+
+  // Alumnos e invitados entran al sorteo en igualdad de condiciones: lo
+  // único que los distingue es de dónde sale el nombre.
+  const fighters = [
+    ...studentIds.map((id) => ({ id, isGuest: false, name: null })),
+    ...guestNames.map((name) => ({
+      id: crypto.randomUUID(),
+      isGuest: true,
+      name,
+    })),
+  ];
+
+  if (fighters.length < 2) {
     return { error: "Se necesitan al menos 2 peleadores." };
   }
 
-  const shuffled = shuffle(studentIds);
+  const shuffled = shuffle(fighters);
 
   const { data: tournament, error } = await supabase
     .from("tournaments")
@@ -78,22 +120,28 @@ export async function createTournament(formData) {
   const { error: participantsError } = await supabase
     .from("tournament_participants")
     .insert(
-      shuffled.map((studentId, i) => ({
+      shuffled.map((fighter, i) => ({
         tournament_id: tournament.id,
-        student_id: studentId,
+        student_id: fighter.id,
         seed: i + 1,
+        is_guest: fighter.isGuest,
+        guest_name: fighter.name,
       }))
     );
 
   if (participantsError) {
     await supabase.from("tournaments").delete().eq("id", tournament.id);
-    return { error: "No se pudieron registrar los peleadores." };
+    return {
+      error: isMissingGuestColumns(participantsError)
+        ? MISSING_GUESTS_MIGRATION
+        : "No se pudieron registrar los peleadores.",
+    };
   }
 
   const { error: matchesError } = await supabase
     .from("tournament_matches")
     .insert(
-      buildBracket(shuffled).map((match) => ({
+      buildBracket(shuffled.map((fighter) => fighter.id)).map((match) => ({
         ...match,
         tournament_id: tournament.id,
       }))
@@ -127,23 +175,29 @@ export async function rerollTournament(tournamentId) {
     return { error: "Ya hay resultados cargados: no se puede re-sortear." };
   }
 
-  const { data: participants } = await supabase
+  const { data: participants, error: participantsError } = await supabase
     .from("tournament_participants")
-    .select("student_id")
+    .select("student_id, is_guest, guest_name")
     .eq("tournament_id", tournamentId);
+
+  if (isMissingGuestColumns(participantsError)) {
+    return { error: MISSING_GUESTS_MIGRATION };
+  }
 
   if (!participants || participants.length < 2) {
     return { error: "El torneo no tiene suficientes peleadores." };
   }
 
-  const shuffled = shuffle(participants.map((p) => p.student_id));
+  const shuffled = shuffle(participants);
 
+  // El upsert reescribe la fila entera: si no viajan los datos del invitado
+  // se perdería su nombre en el re-sorteo.
   const { error: seedError } = await supabase
     .from("tournament_participants")
     .upsert(
-      shuffled.map((studentId, i) => ({
+      shuffled.map((participant, i) => ({
+        ...participant,
         tournament_id: tournamentId,
-        student_id: studentId,
         seed: i + 1,
       }))
     );
@@ -160,7 +214,7 @@ export async function rerollTournament(tournamentId) {
   const { error: matchesError } = await supabase
     .from("tournament_matches")
     .insert(
-      buildBracket(shuffled).map((match) => ({
+      buildBracket(shuffled.map((p) => p.student_id)).map((match) => ({
         ...match,
         tournament_id: tournamentId,
       }))

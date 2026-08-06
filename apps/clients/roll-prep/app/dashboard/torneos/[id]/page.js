@@ -7,8 +7,11 @@ import { CAOS_POINTS, OUTFITS } from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
 
-// La base todavía no tiene las columnas del modo CAOS.
-function MissingMigration({ message }) {
+// La base todavía no tiene alguna columna nueva (modo CAOS, invitados...).
+function MissingMigration({
+  file = "supabase/migrations/20260806120000_caos.sql",
+  message,
+}) {
   return (
     <main className="min-h-screen bg-base-100 p-4 text-base-content md:p-8">
       <section className="mx-auto max-w-xl space-y-4">
@@ -20,15 +23,12 @@ function MissingMigration({ message }) {
         </Link>
         <div className="clip-cut border-2 border-error bg-error/10 p-5">
           <p className="text-[0.65rem] font-black uppercase tracking-[0.3em] text-error">
-            Falta la migración del CAOS
+            Falta una migración
           </p>
           <p className="mt-2 text-sm font-semibold">
             El torneo sigue guardado en la base: lo que falta es correr{" "}
-            <code className="bg-base-300 px-1">
-              supabase/migrations/20260806120000_caos.sql
-            </code>{" "}
-            en el SQL Editor de Supabase. Se puede correr varias veces sin
-            problema.
+            <code className="bg-base-300 px-1">{file}</code> en el SQL Editor
+            de Supabase. Se puede correr varias veces sin problema.
           </p>
           <p className="mt-2 text-xs font-medium opacity-60">{message}</p>
         </div>
@@ -63,35 +63,67 @@ export default async function TorneoDetalle({ params }) {
 
   const isCaos = tournament.mode === "caos";
 
-  const [{ data: participants }, { data: matches }, { data: rollRows }] =
-    await Promise.all([
-      supabase
-        .from("tournament_participants")
-        .select("student_id, seed, profiles:student_id (full_name)")
-        .eq("tournament_id", tournament.id)
-        .order("seed", { ascending: true }),
-      supabase
-        .from("tournament_matches")
-        .select("id, round, slot, student1_id, student2_id, winner_id, method")
-        .eq("tournament_id", tournament.id)
-        .order("round", { ascending: true })
-        .order("slot", { ascending: true }),
-      isCaos
-        ? supabase
-            .from("tournament_match_rolls")
-            .select(
-              "match_id, tier, terrain_key, duel_key, student1_weight, student2_weight"
-            )
-            .eq("tournament_id", tournament.id)
-        : Promise.resolve({ data: [] }),
-    ]);
+  const [
+    { data: participants, error: participantsError },
+    { data: matches },
+    { data: rollRows },
+  ] = await Promise.all([
+    supabase
+      .from("tournament_participants")
+      .select("student_id, seed, is_guest, guest_name")
+      .eq("tournament_id", tournament.id)
+      .order("seed", { ascending: true }),
+    supabase
+      .from("tournament_matches")
+      .select("id, round, slot, student1_id, student2_id, winner_id, method")
+      .eq("tournament_id", tournament.id)
+      .order("round", { ascending: true })
+      .order("slot", { ascending: true }),
+    isCaos
+      ? supabase
+          .from("tournament_match_rolls")
+          .select(
+            "match_id, tier, terrain_key, duel_key, student1_weight, student2_weight"
+          )
+          .eq("tournament_id", tournament.id)
+      : Promise.resolve({ data: [] }),
+  ]);
+
+  if (participantsError?.code === "42703") {
+    return (
+      <MissingMigration
+        file="supabase/migrations/20260806140000_tournament_guests.sql"
+        message={participantsError.message}
+      />
+    );
+  }
+
+  // El nombre de un alumno vive en su perfil; el de un invitado, en su
+  // propia fila de participante (no tiene cuenta que consultar).
+  const studentIds = (participants ?? [])
+    .filter((p) => !p.is_guest)
+    .map((p) => p.student_id);
+
+  const { data: profiles } = studentIds.length
+    ? await supabase.from("profiles").select("id, full_name").in("id", studentIds)
+    : { data: [] };
+
+  const fullNames = Object.fromEntries(
+    (profiles ?? []).map((p) => [p.id, p.full_name])
+  );
 
   const names = Object.fromEntries(
     (participants ?? []).map((p) => [
       p.student_id,
-      p.profiles?.full_name || "Alumno",
+      p.is_guest
+        ? p.guest_name || "Invitado"
+        : fullNames[p.student_id] || "Alumno",
     ])
   );
+
+  const guestIds = (participants ?? [])
+    .filter((p) => p.is_guest)
+    .map((p) => p.student_id);
 
   const rolls = Object.fromEntries(
     (rollRows ?? []).map((roll) => [roll.match_id, roll])
@@ -166,6 +198,8 @@ export default async function TorneoDetalle({ params }) {
             })}
             {" · "}
             {(participants ?? []).length} peleadores
+            {guestIds.length > 0 &&
+              ` · ${guestIds.length} invitado${guestIds.length === 1 ? "" : "s"}`}
           </p>
           <p className="mt-2 text-[0.65rem] font-black uppercase tracking-[0.2em] text-primary">
             Pelear +{TOURNAMENT_POINTS.participation} XP · Finalista +
@@ -184,6 +218,7 @@ export default async function TorneoDetalle({ params }) {
           tournament={tournament}
           matches={matches ?? []}
           names={names}
+          guestIds={guestIds}
           isAdmin={isAdmin}
           rolls={rolls}
         />
