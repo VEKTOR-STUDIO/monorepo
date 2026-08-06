@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import TournamentBracket from "@/components/rollprep/TournamentBracket";
 import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
+import { CAOS_POINTS } from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
 
@@ -20,32 +21,47 @@ export default async function TorneoDetalle({ params }) {
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
       .from("tournaments")
-      .select("id, title, status, created_at, completed_at")
+      .select("id, title, status, mode, created_at, completed_at")
       .eq("id", id)
       .maybeSingle(),
   ]);
 
   if (!tournament) notFound();
 
-  const [{ data: participants }, { data: matches }] = await Promise.all([
-    supabase
-      .from("tournament_participants")
-      .select("student_id, seed, profiles:student_id (full_name)")
-      .eq("tournament_id", tournament.id)
-      .order("seed", { ascending: true }),
-    supabase
-      .from("tournament_matches")
-      .select("id, round, slot, student1_id, student2_id, winner_id, method")
-      .eq("tournament_id", tournament.id)
-      .order("round", { ascending: true })
-      .order("slot", { ascending: true }),
-  ]);
+  const isCaos = tournament.mode === "caos";
+
+  const [{ data: participants }, { data: matches }, { data: rollRows }] =
+    await Promise.all([
+      supabase
+        .from("tournament_participants")
+        .select("student_id, seed, profiles:student_id (full_name)")
+        .eq("tournament_id", tournament.id)
+        .order("seed", { ascending: true }),
+      supabase
+        .from("tournament_matches")
+        .select("id, round, slot, student1_id, student2_id, winner_id, method")
+        .eq("tournament_id", tournament.id)
+        .order("round", { ascending: true })
+        .order("slot", { ascending: true }),
+      isCaos
+        ? supabase
+            .from("tournament_match_rolls")
+            .select(
+              "match_id, tier, terrain_key, duel_key, student1_weight, student2_weight"
+            )
+            .eq("tournament_id", tournament.id)
+        : Promise.resolve({ data: [] }),
+    ]);
 
   const names = Object.fromEntries(
     (participants ?? []).map((p) => [
       p.student_id,
       p.profiles?.full_name || "Alumno",
     ])
+  );
+
+  const rolls = Object.fromEntries(
+    (rollRows ?? []).map((roll) => [roll.match_id, roll])
   );
 
   const isAdmin = profile?.role === "admin";
@@ -57,7 +73,7 @@ export default async function TorneoDetalle({ params }) {
         aria-hidden="true"
         className="display text-stroke pointer-events-none fixed -right-8 top-28 select-none text-[10rem] leading-none md:text-[14rem]"
       >
-        VS
+        {isCaos ? "CAOS" : "VS"}
       </span>
 
       <section className="relative z-10 mx-auto max-w-3xl space-y-6">
@@ -89,6 +105,11 @@ export default async function TorneoDetalle({ params }) {
         </div>
 
         <div className="rise rise-1">
+          {isCaos && (
+            <span className="tag-skew mb-2 inline-block bg-accent px-2 py-0.5 text-[0.6rem] text-accent-content">
+              <span>Modalidad CAOS</span>
+            </span>
+          )}
           <h1 className="display text-4xl md:text-5xl">
             {tournament.title}
             <span className="text-primary">.</span>
@@ -108,6 +129,12 @@ export default async function TorneoDetalle({ params }) {
             {TOURNAMENT_POINTS.finalist} XP · Campeón +
             {TOURNAMENT_POINTS.champion} XP
           </p>
+          {isCaos && (
+            <p className="mt-1 text-[0.65rem] font-black uppercase tracking-[0.2em] text-accent">
+              Remontar desde la carga +20 / +40 / +60 XP · Finalizar por
+              sumisión +{CAOS_POINTS.finish} XP
+            </p>
+          )}
         </div>
 
         <TournamentBracket
@@ -115,6 +142,7 @@ export default async function TorneoDetalle({ params }) {
           matches={matches ?? []}
           names={names}
           isAdmin={isAdmin}
+          rolls={rolls}
         />
       </section>
     </main>

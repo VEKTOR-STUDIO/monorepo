@@ -317,6 +317,195 @@ progress::-webkit-progress-value {
   }
 }
 
+/* ------------------------------------------------------------------ */
+/* TORNEO CAOS — ceremonia de roleo, pensada para grabar en pantalla.  */
+/* Todo es CSS puro (compositor: transform/opacity) para que grabe     */
+/* limpio a 60fps.                                                     */
+/* ------------------------------------------------------------------ */
+
+/* El overlay entero tiembla mientras el dado carga. */
+@keyframes caos-shake {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  10% { transform: translate3d(-4px, 2px, 0); }
+  20% { transform: translate3d(5px, -3px, 0); }
+  30% { transform: translate3d(-3px, -2px, 0); }
+  40% { transform: translate3d(4px, 3px, 0); }
+  50% { transform: translate3d(-5px, 1px, 0); }
+  60% { transform: translate3d(3px, -4px, 0); }
+  70% { transform: translate3d(-2px, 3px, 0); }
+  80% { transform: translate3d(4px, -1px, 0); }
+  90% { transform: translate3d(-3px, -3px, 0); }
+}
+
+.caos-shake {
+  animation: caos-shake 0.5s linear infinite;
+}
+
+/* Líneas de velocidad que barren el fondo (manga / fighting game). */
+@keyframes caos-speed {
+  from { transform: translateX(0) skewX(-18deg); }
+  to { transform: translateX(-33.333%) skewX(-18deg); }
+}
+
+.caos-speed {
+  position: absolute;
+  inset: -20% -60%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--color-primary) 55%, transparent) 0 2px,
+    transparent 2px 26px
+  );
+  opacity: 0.28;
+  animation: caos-speed 0.35s linear infinite;
+  pointer-events: none;
+}
+
+/* Estallido radial del impacto. */
+@keyframes caos-burst {
+  0% { transform: scale(0.2); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+.caos-burst {
+  animation: caos-burst 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Flash blanco de un frame, como el hit-stop de un combo. */
+@keyframes caos-flash {
+  0% { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+.caos-flash {
+  animation: caos-flash 0.28s ease-out forwards;
+}
+
+/* El dado girando en el aire antes de caer. */
+@keyframes caos-tumble {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(1080deg) scale(1.15); }
+}
+
+.caos-tumble {
+  animation: caos-tumble 1.1s cubic-bezier(0.3, 0, 0.2, 1) forwards;
+}
+
+/* La carta de TERRENO cae desde arriba y clava. */
+@keyframes caos-slam {
+  0% { transform: translateY(-140%) scale(1.4) rotate(-6deg); opacity: 0; }
+  55% { transform: translateY(6%) scale(0.96) rotate(1deg); opacity: 1; }
+  75% { transform: translateY(-3%) scale(1.02) rotate(0deg); }
+  100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+}
+
+.caos-slam {
+  animation: caos-slam 0.55s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+
+/* Las cartas de duelo entran desde cada esquina y chocan en el centro. */
+@keyframes caos-fly-left {
+  0% { transform: translateX(-160%) skewX(14deg); opacity: 0; }
+  70% { transform: translateX(6%) skewX(-4deg); opacity: 1; }
+  100% { transform: translateX(0) skewX(0deg); opacity: 1; }
+}
+
+@keyframes caos-fly-right {
+  0% { transform: translateX(160%) skewX(-14deg); opacity: 0; }
+  70% { transform: translateX(-6%) skewX(4deg); opacity: 1; }
+  100% { transform: translateX(0) skewX(0deg); opacity: 1; }
+}
+
+.caos-fly-left { animation: caos-fly-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.caos-fly-right { animation: caos-fly-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* El veredicto (quién carga y cuánto XP paga) sube al final. */
+@keyframes caos-verdict {
+  0% { transform: translateY(30px) scale(0.9); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.caos-verdict {
+  animation: caos-verdict 0.45s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+}
+
+/* Nombre de la carta con doble sombra tipo cartel de arcade. */
+.caos-title {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+/* Carta del CAOS: bloque cortado con borde grueso y aura según el lado. */
+.caos-card {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid var(--color-base-300);
+  background: var(--color-base-200);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+}
+
+/* ALFA — el que agarró la ventaja. Volt, el color de la casa. */
+.caos-card-alfa {
+  border-color: var(--color-primary);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--color-primary) 30%, transparent),
+    0 0 34px -14px var(--color-primary);
+}
+
+/* OMEGA — el que carga. Rojo de peligro. */
+.caos-card-omega {
+  border-color: var(--color-accent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, var(--color-accent) 30%, transparent),
+    0 0 34px -14px var(--color-accent);
+}
+
+/* NEUTRO — duelo simétrico, nadie carga nada. */
+.caos-card-neutro {
+  border-color: var(--color-secondary);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, var(--color-secondary) 22%, transparent);
+}
+
+/* Aura extra para el tier 3: la carta respira. */
+@keyframes caos-brutal {
+  0%, 100% { box-shadow: 0 0 26px -12px var(--color-accent); }
+  50% { box-shadow: 0 0 52px -6px var(--color-accent); }
+}
+
+.caos-brutal {
+  animation: caos-brutal 1.4s ease-in-out infinite;
+}
+
+/* Franja de tier arriba de la carta. */
+.caos-tier-bar {
+  height: 4px;
+  background: repeating-linear-gradient(
+    -45deg,
+    currentColor 0 5px,
+    transparent 5px 10px
+  );
+}
+
+/* Respeta a quien pidió menos movimiento: se ve el resultado, sin el show. */
+@media (prefers-reduced-motion: reduce) {
+  .caos-shake,
+  .caos-speed,
+  .caos-brutal {
+    animation: none;
+  }
+
+  .caos-tumble,
+  .caos-slam,
+  .caos-fly-left,
+  .caos-fly-right,
+  .caos-verdict,
+  .caos-burst,
+  .caos-flash {
+    animation-duration: 0.01s;
+  }
+}
+
 /* Parpadeo lento para chips "LIVE" / "+XP". */
 @keyframes blink-soft {
   0%,

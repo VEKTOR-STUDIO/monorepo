@@ -15,6 +15,10 @@ export const POINT_VALUES = {
   tournament_participation: 15,
   tournament_finalist: 50,
   tournament_champion: 100,
+  // caos_upset es variable (20 / 40 / 60 según la carta): lo calcula el
+  // trigger del CAOS. Aquí queda el piso, solo para referencia.
+  caos_upset: 20,
+  caos_finish: 20,
 };
 
 export const POINT_EVENT_LABELS = {
@@ -26,6 +30,8 @@ export const POINT_EVENT_LABELS = {
   tournament_participation: "Peleaste en un tope",
   tournament_finalist: "Finalista del tope",
   tournament_champion: "Campeón del tope",
+  caos_upset: "Remontaste desde la desventaja",
+  caos_finish: "Finalizaste en el CAOS",
 };
 
 // Rangos estilo cinturones de BJJ. El umbral es el XP acumulado necesario.

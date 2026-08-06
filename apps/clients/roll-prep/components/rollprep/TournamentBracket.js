@@ -8,18 +8,35 @@ import {
   undoResult,
   rerollTournament,
   deleteTournament,
+  rollMatchChaos,
 } from "@/app/dashboard/torneos/actions";
 import { MATCH_METHODS, roundName, isBye } from "@/libs/tournaments";
+import CaosRollCeremony from "@/components/rollprep/CaosRollCeremony";
+import CaosMatchPanel from "@/components/rollprep/CaosMatchPanel";
 
 // Bracket de eliminación simple. Todos lo ven; el profesor (isAdmin) carga
 // resultados pelea por pelea, corrige, re-sortea o borra el torneo.
-export default function TournamentBracket({ tournament, matches, names, isAdmin }) {
+//
+// En modalidad CAOS cada pelea lista se rolea antes de pelearse: sale un
+// terreno compartido y una carta de duelo partida entre los dos. La
+// ceremonia se abre a pantalla completa (y se puede repetir para grabarla).
+export default function TournamentBracket({
+  tournament,
+  matches,
+  names,
+  isAdmin,
+  rolls = {},
+}) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [openMatchId, setOpenMatchId] = useState(null);
   const [winnerId, setWinnerId] = useState(null);
   const [method, setMethod] = useState(null);
+  // Roll que se está mostrando a pantalla completa, con sus dos peleadores.
+  const [ceremony, setCeremony] = useState(null);
+  const [rollingMatchId, setRollingMatchId] = useState(null);
 
+  const isCaos = tournament.mode === "caos";
   const isActive = tournament.status === "active";
   const hasResults = matches.some((m) => m.method !== null);
 
@@ -90,8 +107,47 @@ export default function TournamentBracket({ tournament, matches, names, isAdmin 
     run(() => undoResult(match.id), "Resultado corregido");
   };
 
+  // Rolea (o re-rolea) el CAOS de una pelea y abre la ceremonia de una vez
+  // con el resultado que devolvió el servidor.
+  const handleRoll = (match) => {
+    if (rolls[match.id] && !window.confirm("¿Volver a rolear esta pelea?")) return;
+
+    setRollingMatchId(match.id);
+    startTransition(async () => {
+      const result = await rollMatchChaos(match.id);
+      setRollingMatchId(null);
+
+      if (result?.error) {
+        toast.error(result.error);
+        return;
+      }
+
+      setCeremony({
+        roll: result.roll,
+        student1Id: match.student1_id,
+        student2Id: match.student2_id,
+      });
+    });
+  };
+
+  const openCeremony = (match) =>
+    setCeremony({
+      roll: rolls[match.id],
+      student1Id: match.student1_id,
+      student2Id: match.student2_id,
+    });
+
   return (
     <div className="space-y-4">
+      {ceremony && (
+        <CaosRollCeremony
+          roll={ceremony.roll}
+          student1Id={ceremony.student1Id}
+          student2Id={ceremony.student2Id}
+          names={names}
+          onClose={() => setCeremony(null)}
+        />
+      )}
       {championName && (
         <div className="rise rise-2 clip-cut border-2 border-primary bg-primary/10 p-5 text-center">
           <p className="text-[0.65rem] font-black uppercase tracking-[0.3em] text-primary">
@@ -107,9 +163,11 @@ export default function TournamentBracket({ tournament, matches, names, isAdmin 
             <span>Coach mode</span>
           </span>
           <p className="text-[0.6rem] font-bold uppercase tracking-widest opacity-60">
-            {isActive
-              ? "Toca una pelea para cargar el resultado"
-              : "Torneo finalizado"}
+            {!isActive
+              ? "Torneo finalizado"
+              : isCaos
+                ? "Rolea cada pelea y después carga el resultado"
+                : "Toca una pelea para cargar el resultado"}
           </p>
           <div className="ml-auto flex gap-2">
             {isActive && !hasResults && (
@@ -149,6 +207,9 @@ export default function TournamentBracket({ tournament, matches, names, isAdmin 
                   const ready =
                     Boolean(match.student1_id) && Boolean(match.student2_id);
                   const isOpen = openMatchId === match.id;
+                  const roll = isCaos ? rolls[match.id] : null;
+                  // En el CAOS no se carga resultado sin haber roleado.
+                  const canReport = !isCaos || Boolean(roll);
 
                   return (
                     <div
@@ -185,8 +246,12 @@ export default function TournamentBracket({ tournament, matches, names, isAdmin 
                               <span>{MATCH_METHODS[match.method]}</span>
                             </span>
                           ) : (
-                            <span className="blink-soft text-[0.6rem] font-bold uppercase tracking-widest text-primary">
-                              Lista para pelear
+                            <span
+                              className={`blink-soft text-[0.6rem] font-bold uppercase tracking-widest ${
+                                canReport ? "text-primary" : "text-accent"
+                              }`}
+                            >
+                              {canReport ? "Lista para pelear" : "Falta rolear"}
                             </span>
                           )}
 
@@ -202,7 +267,8 @@ export default function TournamentBracket({ tournament, matches, names, isAdmin 
                                   Corregir
                                 </button>
                               ) : (
-                                isActive && (
+                                isActive &&
+                                canReport && (
                                   <button
                                     type="button"
                                     className="btn btn-primary btn-xs uppercase"
@@ -219,6 +285,35 @@ export default function TournamentBracket({ tournament, matches, names, isAdmin 
                               )}
                             </span>
                           )}
+                        </div>
+                      )}
+
+                      {/* CAOS: el roleo de la pelea y sus cartas */}
+                      {roll && (
+                        <CaosMatchPanel
+                          roll={roll}
+                          student1Id={match.student1_id}
+                          student2Id={match.student2_id}
+                          names={names}
+                          onOpen={() => openCeremony(match)}
+                        />
+                      )}
+
+                      {isCaos && isAdmin && isActive && ready && !bye && !decided && (
+                        <div className="border-t-2 border-base-300 px-2 pb-4 pt-2">
+                          <button
+                            type="button"
+                            className={`btn btn-xs btn-block uppercase ${
+                              roll ? "btn-ghost opacity-70" : "btn-accent"
+                            }`}
+                            onClick={() => handleRoll(match)}
+                            disabled={isPending}
+                          >
+                            {rollingMatchId === match.id ? (
+                              <span className="loading loading-spinner loading-xs" />
+                            ) : null}
+                            {roll ? "Re-rolear" : "Rolear el CAOS 🎲"}
+                          </button>
                         </div>
                       )}
 

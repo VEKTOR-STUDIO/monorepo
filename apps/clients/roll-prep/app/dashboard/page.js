@@ -182,7 +182,7 @@ export default async function Dashboard() {
             index={6}
             kicker="Tatami"
             title="Torneos"
-            description="Brackets de los topes internos del gym"
+            description="Topes internos: bracket clásico o modalidad CAOS"
           />
 
           {/* 07 — Perfil */}

@@ -4,13 +4,15 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { createTournament } from "@/app/dashboard/torneos/actions";
+import { CAOS_POINTS } from "@/libs/caos";
 
-// Formulario del profesor para armar un tope: todos los alumnos aparecen
-// marcados y solo hay que quitar a los que faltaron. Al enviar se sortea
-// el bracket y se navega directo al torneo.
+// Formulario del profesor para armar un tope: elige la modalidad, todos los
+// alumnos aparecen marcados y solo hay que quitar a los que faltaron. Al
+// enviar se sortea el bracket y se navega directo al torneo.
 export default function TournamentCreateForm({ students }) {
   const router = useRouter();
   const [selected, setSelected] = useState(() => new Set(students.map((s) => s.id)));
+  const [mode, setMode] = useState("classic");
   const [isPending, startTransition] = useTransition();
 
   const toggle = (id) => {
@@ -40,6 +42,53 @@ export default function TournamentCreateForm({ students }) {
 
   return (
     <form action={handleSubmit} className="space-y-4">
+      <input type="hidden" name="mode" value={mode} />
+
+      <div>
+        <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
+          Modalidad
+        </span>
+        <div className="grid grid-cols-2 gap-2">
+          <ModeCard
+            active={mode === "classic"}
+            onClick={() => setMode("classic")}
+            title="Clásico"
+            description="Bracket normal. Las reglas de siempre."
+          />
+          <ModeCard
+            active={mode === "caos"}
+            onClick={() => setMode("caos")}
+            title="CAOS"
+            accent
+            description="Cada pelea se rolea: terreno y cartas de duelo."
+          />
+        </div>
+
+        {mode === "caos" && (
+          <div className="mt-2 border border-accent/40 bg-accent/5 p-3">
+            <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
+              Cómo funciona
+            </p>
+            <ul className="mt-1.5 space-y-1 text-xs font-medium opacity-80">
+              <li>
+                · Antes de cada pelea sale un <b>terreno</b> que aplica a los
+                dos y una <b>carta de duelo</b> partida: uno arranca con
+                ventaja, el otro con carga.
+              </li>
+              <li>
+                · Si el que carga la desventaja gana, cobra{" "}
+                <b>+20 / +40 / +60 XP</b> según lo dura que estaba la carta.
+              </li>
+              <li>
+                · Ganar por sumisión paga <b>+{CAOS_POINTS.finish} XP</b> extra,
+                venga del lado que venga. Así nadie se guinda de la ventaja a
+                estancar la pelea.
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+
       <label className="block w-full">
         <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
           Nombre del tope
@@ -47,7 +96,7 @@ export default function TournamentCreateForm({ students }) {
         <input
           name="title"
           maxLength={80}
-          placeholder="Tope interno"
+          placeholder={mode === "caos" ? "Torneo CAOS" : "Tope interno"}
           className="input input-bordered w-full"
         />
       </label>
@@ -110,7 +159,7 @@ export default function TournamentCreateForm({ students }) {
       </div>
 
       <button
-        className="btn btn-primary btn-block"
+        className={`btn btn-block ${mode === "caos" ? "btn-accent" : "btn-primary"}`}
         disabled={isPending || selected.size < 2}
       >
         {isPending && <span className="loading loading-spinner loading-xs" />}
@@ -123,5 +172,33 @@ export default function TournamentCreateForm({ students }) {
         </p>
       )}
     </form>
+  );
+}
+
+function ModeCard({ active, onClick, title, description, accent }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`clip-cut border-2 p-3 text-left transition-colors ${
+        active
+          ? accent
+            ? "border-accent bg-accent/10"
+            : "border-primary bg-primary/10"
+          : "border-base-300 bg-base-200 hover:border-base-content/30"
+      }`}
+    >
+      <p
+        className={`display text-2xl ${
+          active ? (accent ? "text-accent" : "text-primary") : "opacity-70"
+        }`}
+      >
+        {title}
+      </p>
+      <p className="mt-1 text-[0.65rem] font-semibold leading-snug opacity-60">
+        {description}
+      </p>
+    </button>
   );
 }

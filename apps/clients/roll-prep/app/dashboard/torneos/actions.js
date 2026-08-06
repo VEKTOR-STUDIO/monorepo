@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
 import { buildBracket, MATCH_METHODS } from "@/libs/tournaments";
+import { rollMatch, TOURNAMENT_MODES } from "@/libs/caos";
 
 async function getAdminClient() {
   const supabase = await createClient();
@@ -49,7 +50,11 @@ function shuffle(list) {
 export async function createTournament(formData) {
   const { supabase, user } = await getAdminClient();
 
-  const title = formData.get("title")?.trim() || "Tope interno";
+  const mode = formData.get("mode") || "classic";
+  if (!TOURNAMENT_MODES[mode]) return { error: "Modalidad inválida." };
+
+  const fallbackTitle = mode === "caos" ? "Torneo CAOS" : "Tope interno";
+  const title = formData.get("title")?.trim() || fallbackTitle;
   if (title.length > 80) return { error: "El título es muy largo (máx. 80)." };
 
   const studentIds = [...new Set(formData.getAll("student_ids"))].filter(Boolean);
@@ -61,7 +66,7 @@ export async function createTournament(formData) {
 
   const { data: tournament, error } = await supabase
     .from("tournaments")
-    .insert({ title, created_by: user.id })
+    .insert({ title, mode, created_by: user.id })
     .select("id")
     .single();
 
@@ -209,6 +214,23 @@ export async function reportResult(matchId, winnerId, method) {
     return { error: "El ganador no está en esta pelea." };
   }
 
+  // En el CAOS no se pelea sin cartas: primero se rolea.
+  const { data: tournamentMode } = await supabase
+    .from("tournaments")
+    .select("mode")
+    .eq("id", match.tournament_id)
+    .maybeSingle();
+
+  if (tournamentMode?.mode === "caos") {
+    const { data: roll } = await supabase
+      .from("tournament_match_rolls")
+      .select("match_id")
+      .eq("match_id", matchId)
+      .maybeSingle();
+
+    if (!roll) return { error: "Primero hay que rolear el CAOS de esta pelea." };
+  }
+
   const { error } = await supabase
     .from("tournament_matches")
     .update({
@@ -304,4 +326,60 @@ export async function undoResult(matchId) {
 
   revalidateTournamentPaths(match.tournament_id);
   return { success: true };
+}
+
+/**
+ * TORNEO CAOS — rolea (o re-rolea) los modificadores de una pelea: un
+ * terreno compartido y una carta de duelo partida entre los dos peleadores.
+ *
+ * Solo se puede rolear si la pelea tiene los dos peleadores y todavía no
+ * tiene resultado. Devuelve el roll para que el cliente lo anime de una vez,
+ * sin esperar a que la página revalide.
+ */
+export async function rollMatchChaos(matchId) {
+  const { supabase, user } = await getAdminClient();
+
+  if (!matchId) return { error: "Falta el id de la pelea." };
+
+  const { data: match } = await supabase
+    .from("tournament_matches")
+    .select("id, tournament_id, student1_id, student2_id, winner_id")
+    .eq("id", matchId)
+    .maybeSingle();
+
+  if (!match) return { error: "Pelea no encontrada." };
+  if (!match.student1_id || !match.student2_id) {
+    return { error: "La pelea aún no tiene los dos peleadores." };
+  }
+  if (match.winner_id) {
+    return { error: "Esta pelea ya se peleó: el CAOS queda como quedó." };
+  }
+
+  const { data: tournament } = await supabase
+    .from("tournaments")
+    .select("id, mode, status")
+    .eq("id", match.tournament_id)
+    .maybeSingle();
+
+  if (tournament?.mode !== "caos") {
+    return { error: "Este torneo no es de modalidad CAOS." };
+  }
+  if (tournament.status !== "active") {
+    return { error: "El torneo ya está finalizado." };
+  }
+
+  const roll = rollMatch();
+
+  const { error } = await supabase.from("tournament_match_rolls").upsert({
+    match_id: match.id,
+    tournament_id: match.tournament_id,
+    ...roll,
+    rolled_at: new Date().toISOString(),
+    rolled_by: user.id,
+  });
+
+  if (error) return { error: "No se pudo rolear el CAOS." };
+
+  revalidateTournamentPaths(match.tournament_id);
+  return { success: true, roll: { match_id: match.id, ...roll } };
 }

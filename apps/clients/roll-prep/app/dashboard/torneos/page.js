@@ -17,7 +17,7 @@ export default async function Torneos() {
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
       .from("tournaments")
-      .select("id, title, status, created_at, tournament_participants (count)")
+      .select("id, title, status, mode, created_at, tournament_participants (count)")
       .order("created_at", { ascending: false }),
   ]);
 
@@ -101,9 +101,16 @@ export default async function Torneos() {
                 className="clip-cut group relative flex items-center gap-4 border-2 border-base-300 bg-base-200 p-4 transition-colors hover:border-primary"
               >
                 <div className="min-w-0 flex-1">
-                  <p className="display truncate text-xl group-hover:text-primary">
-                    {tournament.title}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    {tournament.mode === "caos" && (
+                      <span className="tag-skew shrink-0 bg-accent px-1.5 py-0.5 text-[0.55rem] text-accent-content">
+                        <span>Caos</span>
+                      </span>
+                    )}
+                    <p className="display truncate text-xl group-hover:text-primary">
+                      {tournament.title}
+                    </p>
+                  </div>
                   <p className="mt-1 text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
                     {new Date(tournament.created_at).toLocaleDateString("es-VE", {
                       day: "numeric",
