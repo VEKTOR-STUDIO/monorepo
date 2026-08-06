@@ -9,6 +9,7 @@
 --
 -- Qué agrega:
 --   1. tournaments.mode              → 'classic' | 'caos'
+--      tournaments.outfit            → 'nogi' | 'gi' (qué mazo se juega)
 --   2. tournament_match_rolls        → el roll de cada pelea (terreno + duelo
 --                                      + el peso que cargó cada peleador)
 --   3. Nuevos tipos de puntos:
@@ -29,8 +30,13 @@
 -- ============================================================================
 
 -- ----------------------------------------------------------------------------
--- 1. MODALIDAD DEL TORNEO
+-- 1. MODALIDAD Y RULESET DEL TORNEO
 --    Los torneos que ya existen quedan en 'classic' sin tocar nada.
+--
+--    `outfit` define qué mazo de cartas se juega: con kimono entran las de
+--    solapa y cinturón, sin kimono entran las de piernas y control de
+--    cuerpo. La mayoría de las cartas sirven para los dos. El default es
+--    'nogi' porque es lo que se entrena a diario en el gym.
 -- ----------------------------------------------------------------------------
 alter table public.tournaments
   add column if not exists mode text not null default 'classic';
@@ -38,6 +44,13 @@ alter table public.tournaments
 alter table public.tournaments drop constraint if exists tournaments_mode_check;
 alter table public.tournaments add constraint tournaments_mode_check
   check (mode in ('classic', 'caos'));
+
+alter table public.tournaments
+  add column if not exists outfit text not null default 'nogi';
+
+alter table public.tournaments drop constraint if exists tournaments_outfit_check;
+alter table public.tournaments add constraint tournaments_outfit_check
+  check (outfit in ('nogi', 'gi'));
 
 -- ----------------------------------------------------------------------------
 -- 2. TOURNAMENT_MATCH_ROLLS

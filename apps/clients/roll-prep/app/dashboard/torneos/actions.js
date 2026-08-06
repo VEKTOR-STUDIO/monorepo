@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
 import { buildBracket, MATCH_METHODS } from "@/libs/tournaments";
-import { rollMatch, TOURNAMENT_MODES } from "@/libs/caos";
+import { rollMatch, TOURNAMENT_MODES, OUTFITS, DEFAULT_OUTFIT } from "@/libs/caos";
 
 async function getAdminClient() {
   const supabase = await createClient();
@@ -53,6 +53,9 @@ export async function createTournament(formData) {
   const mode = formData.get("mode") || "classic";
   if (!TOURNAMENT_MODES[mode]) return { error: "Modalidad inválida." };
 
+  const outfit = formData.get("outfit") || DEFAULT_OUTFIT;
+  if (!OUTFITS[outfit]) return { error: "Ruleset inválido." };
+
   const fallbackTitle = mode === "caos" ? "Torneo CAOS" : "Tope interno";
   const title = formData.get("title")?.trim() || fallbackTitle;
   if (title.length > 80) return { error: "El título es muy largo (máx. 80)." };
@@ -66,7 +69,7 @@ export async function createTournament(formData) {
 
   const { data: tournament, error } = await supabase
     .from("tournaments")
-    .insert({ title, mode, created_by: user.id })
+    .insert({ title, mode, outfit, created_by: user.id })
     .select("id")
     .single();
 
@@ -357,7 +360,7 @@ export async function rollMatchChaos(matchId) {
 
   const { data: tournament } = await supabase
     .from("tournaments")
-    .select("id, mode, status")
+    .select("id, mode, outfit, status")
     .eq("id", match.tournament_id)
     .maybeSingle();
 
@@ -368,7 +371,9 @@ export async function rollMatchChaos(matchId) {
     return { error: "El torneo ya está finalizado." };
   }
 
-  const roll = rollMatch();
+  // El mazo se arma con el ruleset del torneo: gi y no-gi no comparten
+  // todas las cartas.
+  const roll = rollMatch(tournament.outfit);
 
   const { error } = await supabase.from("tournament_match_rolls").upsert({
     match_id: match.id,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { readRoll, cardTone, TIER_LABELS, CAOS_POINTS } from "@/libs/caos";
+import { readRoll, cardTone, TIER_LABELS, CAOS_POINTS, OUTFITS } from "@/libs/caos";
 
 // Ceremonia de roleo del Torneo CAOS: pantalla completa, pensada para
 // grabarla. Va por fases —el dado carga, impacta, cae el TERRENO, chocan
@@ -15,6 +15,7 @@ export default function CaosRollCeremony({
   student1Id,
   student2Id,
   names,
+  outfit,
   onClose,
 }) {
   const [phase, setPhase] = useState(0);
@@ -108,7 +109,10 @@ export default function CaosRollCeremony({
             {/* ---------------- Encabezado ---------------- */}
             <div className="caos-slam flex items-center justify-between gap-3">
               <span className="tag-skew bg-primary px-3 py-1 text-xs text-primary-content">
-                <span>Torneo CAOS</span>
+                <span>
+                  Torneo CAOS
+                  {OUTFITS[outfit] ? ` · ${OUTFITS[outfit].short}` : ""}
+                </span>
               </span>
               <span
                 className={`tag-skew px-3 py-1 text-xs ${

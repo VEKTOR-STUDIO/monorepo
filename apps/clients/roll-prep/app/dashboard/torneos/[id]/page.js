@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import TournamentBracket from "@/components/rollprep/TournamentBracket";
 import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
-import { CAOS_POINTS } from "@/libs/caos";
+import { CAOS_POINTS, OUTFITS } from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +21,7 @@ export default async function TorneoDetalle({ params }) {
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
       .from("tournaments")
-      .select("id, title, status, mode, created_at, completed_at")
+      .select("id, title, status, mode, outfit, created_at, completed_at")
       .eq("id", id)
       .maybeSingle(),
   ]);
@@ -106,9 +106,19 @@ export default async function TorneoDetalle({ params }) {
 
         <div className="rise rise-1">
           {isCaos && (
-            <span className="tag-skew mb-2 inline-block bg-accent px-2 py-0.5 text-[0.6rem] text-accent-content">
-              <span>Modalidad CAOS</span>
-            </span>
+            <div className="mb-2 flex items-center gap-2">
+              <span className="tag-skew inline-block bg-accent px-2 py-0.5 text-[0.6rem] text-accent-content">
+                <span>
+                  Modalidad CAOS · {OUTFITS[tournament.outfit]?.label ?? "No-Gi"}
+                </span>
+              </span>
+              <Link
+                href="/dashboard/torneos/manual"
+                className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60 hover:text-primary hover:opacity-100"
+              >
+                Manual
+              </Link>
+            </div>
           )}
           <h1 className="display text-4xl md:text-5xl">
             {tournament.title}

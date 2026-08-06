@@ -145,6 +145,7 @@ export default function TournamentBracket({
           student1Id={ceremony.student1Id}
           student2Id={ceremony.student2Id}
           names={names}
+          outfit={tournament.outfit}
           onClose={() => setCeremony(null)}
         />
       )}

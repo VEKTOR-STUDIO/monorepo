@@ -3,8 +3,9 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Link from "next/link";
 import { createTournament } from "@/app/dashboard/torneos/actions";
-import { CAOS_POINTS } from "@/libs/caos";
+import { CAOS_POINTS, OUTFITS, DEFAULT_OUTFIT, deckFor } from "@/libs/caos";
 
 // Formulario del profesor para armar un tope: elige la modalidad, todos los
 // alumnos aparecen marcados y solo hay que quitar a los que faltaron. Al
@@ -13,7 +14,9 @@ export default function TournamentCreateForm({ students }) {
   const router = useRouter();
   const [selected, setSelected] = useState(() => new Set(students.map((s) => s.id)));
   const [mode, setMode] = useState("classic");
+  const [outfit, setOutfit] = useState(DEFAULT_OUTFIT);
   const [isPending, startTransition] = useTransition();
+  const deck = deckFor(outfit);
 
   const toggle = (id) => {
     setSelected((prev) => {
@@ -43,6 +46,7 @@ export default function TournamentCreateForm({ students }) {
   return (
     <form action={handleSubmit} className="space-y-4">
       <input type="hidden" name="mode" value={mode} />
+      <input type="hidden" name="outfit" value={outfit} />
 
       <div>
         <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
@@ -65,11 +69,36 @@ export default function TournamentCreateForm({ students }) {
         </div>
 
         {mode === "caos" && (
-          <div className="mt-2 border border-accent/40 bg-accent/5 p-3">
-            <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
-              Cómo funciona
-            </p>
-            <ul className="mt-1.5 space-y-1 text-xs font-medium opacity-80">
+          <div className="mt-2 space-y-2 border border-accent/40 bg-accent/5 p-3">
+            <div>
+              <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
+                Ruleset · define el mazo de cartas
+              </p>
+              <div className="mt-1.5 flex gap-2">
+                {Object.entries(OUTFITS).map(([key, meta]) => {
+                  const active = outfit === key;
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setOutfit(key)}
+                      aria-pressed={active}
+                      className={`btn btn-xs flex-1 ${
+                        active ? "btn-accent" : "btn-outline"
+                      }`}
+                    >
+                      {meta.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-1.5 text-[0.65rem] font-semibold opacity-70">
+                {OUTFITS[outfit].tagline} — {deck.terrains.length} terrenos y{" "}
+                {deck.duels.length} duelos en el mazo.
+              </p>
+            </div>
+
+            <ul className="space-y-1 border-t border-accent/20 pt-2 text-xs font-medium opacity-80">
               <li>
                 · Antes de cada pelea sale un <b>terreno</b> que aplica a los
                 dos y una <b>carta de duelo</b> partida: uno arranca con
@@ -85,6 +114,13 @@ export default function TournamentCreateForm({ students }) {
                 estancar la pelea.
               </li>
             </ul>
+
+            <Link
+              href="/dashboard/torneos/manual"
+              className="btn btn-outline btn-xs btn-block"
+            >
+              Ver el manual completo
+            </Link>
           </div>
         )}
       </div>

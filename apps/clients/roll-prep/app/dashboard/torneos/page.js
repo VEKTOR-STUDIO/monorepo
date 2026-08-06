@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/libs/supabase/server";
 import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
+import { OUTFITS } from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,9 @@ export default async function Torneos() {
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
       .from("tournaments")
-      .select("id, title, status, mode, created_at, tournament_participants (count)")
+      .select(
+        "id, title, status, mode, outfit, created_at, tournament_participants (count)"
+      )
       .order("created_at", { ascending: false }),
   ]);
 
@@ -69,14 +72,22 @@ export default async function Torneos() {
           </p>
         </div>
 
-        {isAdmin && (
+        <div className="rise rise-2 flex gap-2">
+          {isAdmin && (
+            <Link
+              href="/dashboard/torneos/nuevo"
+              className="btn btn-primary flex-1"
+            >
+              + Nuevo tope
+            </Link>
+          )}
           <Link
-            href="/dashboard/torneos/nuevo"
-            className="rise rise-2 btn btn-primary btn-block"
+            href="/dashboard/torneos/manual"
+            className={`btn btn-outline ${isAdmin ? "" : "btn-block"}`}
           >
-            + Nuevo tope
+            Manual CAOS
           </Link>
-        )}
+        </div>
 
         {!list.length && (
           <div className="rise rise-2 stripes border border-base-300 p-10 text-center">
@@ -104,7 +115,9 @@ export default async function Torneos() {
                   <div className="flex items-center gap-2">
                     {tournament.mode === "caos" && (
                       <span className="tag-skew shrink-0 bg-accent px-1.5 py-0.5 text-[0.55rem] text-accent-content">
-                        <span>Caos</span>
+                        <span>
+                          Caos {OUTFITS[tournament.outfit]?.short ?? ""}
+                        </span>
                       </span>
                     )}
                     <p className="display truncate text-xl group-hover:text-primary">

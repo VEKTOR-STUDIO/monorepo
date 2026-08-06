@@ -21,6 +21,11 @@
 // (upset), y el ALFA solo saca XP extra si FINALIZA (nada de guindarse de
 // la ventaja y estancar la pelea). Los dos tienen algo que buscar.
 //
+// GI vs NO-GI: cada carta trae un `outfit`. La mayoría son 'both' (funcionan
+// igual con o sin kimono); las demás son propias de su ruleset —agarres de
+// solapa y cinturón en gi, leglocks y controles de cuerpo en no-gi— y solo
+// entran al mazo del torneo que las puede jugar.
+//
 // El peso (weight) es lo único que la base de datos necesita para repartir
 // los puntos: se guarda junto al roll en tournament_match_rolls.
 // Ver supabase/migrations/20260806120000_caos.sql.
@@ -36,6 +41,22 @@ export const TOURNAMENT_MODES = {
     tagline: "Cada pelea se rolea: terreno aleatorio y cartas de duelo.",
   },
 };
+
+// Con o sin kimono. Define qué cartas entran al mazo del torneo.
+export const OUTFITS = {
+  nogi: {
+    label: "No-Gi",
+    short: "No-Gi",
+    tagline: "Sin kimono. Controles de cuerpo, piernas y scrambles.",
+  },
+  gi: {
+    label: "Gi",
+    short: "Gi",
+    tagline: "Con kimono. Solapa, manga y cinturón entran al juego.",
+  },
+};
+
+export const DEFAULT_OUTFIT = "nogi";
 
 // XP extra que solo existe en la modalidad CAOS.
 // Debe coincidir con los triggers de la migración.
@@ -63,59 +84,114 @@ export const TIER_LABELS = {
   3: "Brutal",
 };
 
+export const TIER_ODDS_LABELS = Object.fromEntries(
+  TIER_ODDS.map(({ tier, chance }) => [tier, `${Math.round(chance * 100)}%`])
+);
+
 // ----------------------------------------------------------------------------
 // TERRENOS — regla de arena, igual para los dos. Nunca define el arranque.
 // ----------------------------------------------------------------------------
 export const TERRAINS = [
+  // ---- Sirven con o sin kimono --------------------------------------------
   {
     key: "muerte_subita",
+    outfit: "both",
     name: "Muerte Súbita",
     rule: "No hay puntos. Solo la sumisión decide. Si nadie finaliza, gana quien haya tenido la última posición dominante.",
   },
   {
     key: "esquina_caliente",
+    outfit: "both",
     name: "Esquina Caliente",
     rule: "El área se reduce a la mitad del tatami. Salirse = reinicio de pie y una ventaja para el rival.",
   },
   {
     key: "reloj_roto",
+    outfit: "both",
     name: "Reloj Roto",
     rule: "Tres minutos, sin prórroga. Si terminan empatados, gana el que arrancó en la posición peor.",
   },
   {
     key: "tierra_de_piernas",
+    outfit: "both",
     name: "Tierra de Piernas",
     rule: "Las sumisiones a las piernas valen doble. Las estrangulaciones no terminan la pelea, solo dan ventaja.",
   },
   {
-    key: "tatami_resbaloso",
-    name: "Tatami Resbaloso",
-    rule: "Prohibido agarrar solapa, manga y cinturón. Todo a cuerpo, como si fuera no-gi.",
-  },
-  {
     key: "suelo_de_lava",
+    outfit: "both",
     name: "Suelo de Lava",
     rule: "Nadie puede quedarse de espaldas más de cinco segundos. Al sexto, ventaja para el rival.",
   },
   {
     key: "aire_viciado",
+    outfit: "both",
     name: "Aire Viciado",
     rule: "Cada sesenta segundos suena el silbato: los dos se sueltan y reinician de pie desde cero.",
   },
   {
     key: "sin_retirada",
+    outfit: "both",
     name: "Sin Retirada",
     rule: "Prohibido reiniciar de pie. Lo que empieza en el suelo se resuelve en el suelo.",
   },
   {
     key: "mundo_al_reves",
+    outfit: "both",
     name: "Mundo al Revés",
     rule: "Barrer vale 4, montar vale 2, pasar la guardia vale 1. Todo lo demás igual.",
   },
   {
     key: "presion_total",
+    outfit: "both",
     name: "Presión Total",
     rule: "Cada diez segundos seguidos en posición dominante suman un punto extra. Se acumula.",
+  },
+  {
+    key: "sin_manos",
+    outfit: "both",
+    name: "Manos de Piedra",
+    rule: "Prohibido entrelazar los dedos y prohibido el gable grip. Todo control es con antebrazo, palma abierta y presión.",
+  },
+
+  // ---- Solo GI -------------------------------------------------------------
+  {
+    key: "tatami_resbaloso",
+    outfit: "gi",
+    name: "Tatami Resbaloso",
+    rule: "Prohibido agarrar solapa, manga y cinturón. Se pelea como si fuera no-gi, aunque estén de kimono.",
+  },
+  {
+    key: "guerra_de_solapas",
+    outfit: "gi",
+    name: "Guerra de Solapas",
+    rule: "Solo valen agarres de solapa y cinturón. Manga y pantalón prohibidos, para los dos.",
+  },
+  {
+    key: "cuello_abierto",
+    outfit: "gi",
+    name: "Cuello Abierto",
+    rule: "Las estrangulaciones con solapa valen doble. Todo lo demás puntúa normal.",
+  },
+
+  // ---- Solo NO-GI ----------------------------------------------------------
+  {
+    key: "piel_de_anguila",
+    outfit: "nogi",
+    name: "Piel de Anguila",
+    rule: "Nadie puede mantener la misma posición de control más de quince segundos. Al dieciséis, reinicio neutro de pie.",
+  },
+  {
+    key: "zona_de_talones",
+    outfit: "nogi",
+    name: "Zona de Talones",
+    rule: "Se abren todos los leglocks. Se para al enganchar limpio: nadie rota, y el enganche cuenta como sumisión.",
+  },
+  {
+    key: "cuerpo_a_cuerpo",
+    outfit: "nogi",
+    name: "Cuerpo a Cuerpo",
+    rule: "Prohibido agarrar el short y la rashguard. Todo el control sale de cabeza, cadera y presión.",
   },
 ];
 
@@ -129,6 +205,7 @@ export const DUELS = [
   {
     key: "n_espalda_con_espalda",
     tier: 0,
+    outfit: "both",
     name: "Espalda con Espalda",
     start: "Sentados en el centro, espalda contra espalda.",
     alfa: { name: "Espalda con Espalda", rule: "Al silbato, a pelear. El primero que tome la espalda del otro decide la pelea." },
@@ -137,6 +214,7 @@ export const DUELS = [
   {
     key: "n_agarre_ciego",
     tier: 0,
+    outfit: "both",
     name: "Agarre Ciego",
     start: "De rodillas, frente con frente, ya agarrados.",
     alfa: { name: "Agarre Ciego", rule: "Arrancan con el agarre puesto y no se puede soltar los primeros diez segundos." },
@@ -145,6 +223,7 @@ export const DUELS = [
   {
     key: "n_pie_de_guerra",
     tier: 0,
+    outfit: "both",
     name: "Pie de Guerra",
     start: "Los dos de pie, a distancia de agarre.",
     alfa: { name: "Pie de Guerra", rule: "Prohibido sentarse a la guardia. Hay que derribar. Sentarse regala dos puntos." },
@@ -153,6 +232,7 @@ export const DUELS = [
   {
     key: "n_doble_guardia",
     tier: 0,
+    outfit: "both",
     name: "Doble Guardia",
     start: "Los dos sentados, manos agarradas.",
     alfa: { name: "Doble Guardia", rule: "Nadie puede pararse. El que llegue arriba primero se lleva la ventaja." },
@@ -161,6 +241,7 @@ export const DUELS = [
   {
     key: "n_cazadores",
     tier: 0,
+    outfit: "both",
     name: "Cazadores",
     start: "Los dos de pie.",
     alfa: { name: "Cazadores", rule: "Solo las sumisiones a las piernas terminan la pelea. Lo de arriba no cuenta." },
@@ -169,16 +250,36 @@ export const DUELS = [
   {
     key: "n_tortugas",
     tier: 0,
+    outfit: "both",
     name: "Tortugas",
     start: "Los dos en tortuga, hombro con hombro.",
     alfa: { name: "Tortugas", rule: "Nadie puede voltearse de espaldas. Se sale hacia arriba o hacia la espalda del otro." },
     omega: { name: "Tortugas", rule: "Nadie puede voltearse de espaldas. Se sale hacia arriba o hacia la espalda del otro." },
+  },
+  {
+    key: "n_solapa_amarrada",
+    tier: 0,
+    outfit: "gi",
+    name: "Solapa Amarrada",
+    start: "De pie, cada uno con la solapa del otro en la mano.",
+    alfa: { name: "Solapa Amarrada", rule: "Nadie puede soltar la solapa que tiene agarrada. Si la sueltas, el rival gana una ventaja." },
+    omega: { name: "Solapa Amarrada", rule: "Nadie puede soltar la solapa que tiene agarrada. Si la sueltas, el rival gana una ventaja." },
+  },
+  {
+    key: "n_collar_tie",
+    tier: 0,
+    outfit: "nogi",
+    name: "Mano en la Nuca",
+    start: "De pie, los dos con collar tie puesto.",
+    alfa: { name: "Mano en la Nuca", rule: "Arrancan con la mano en la nuca del otro. El primero que rompa el cuello del rival decide por dónde va la pelea." },
+    omega: { name: "Mano en la Nuca", rule: "Arrancan con la mano en la nuca del otro. El primero que rompa el cuello del rival decide por dónde va la pelea." },
   },
 
   // ---- Tier 1 · ±1 ---------------------------------------------------------
   {
     key: "t1_primer_agarre",
     tier: 1,
+    outfit: "both",
     name: "La Ventaja del Agarre",
     start: "De pie, a distancia de agarre.",
     alfa: { name: "Primer Agarre", rule: "Escoges y pones tu agarre antes de que suene el silbato." },
@@ -187,6 +288,7 @@ export const DUELS = [
   {
     key: "t1_media_guardia",
     tier: 1,
+    outfit: "both",
     name: "Media Guardia",
     start: "En el suelo, media guardia armada.",
     alfa: { name: "Encima", rule: "Arrancas arriba en media guardia. Tu meta: pasar." },
@@ -195,6 +297,7 @@ export const DUELS = [
   {
     key: "t1_mano_muerta",
     tier: 1,
+    outfit: "both",
     name: "Mano Muerta",
     start: "De pie, sin agarres.",
     alfa: { name: "Manos Libres", rule: "Peleas sin restricción de agarres." },
@@ -203,6 +306,7 @@ export const DUELS = [
   {
     key: "t1_boton_de_panico",
     tier: 1,
+    outfit: "both",
     name: "Botón de Pánico",
     start: "De rodillas, frente con frente.",
     alfa: { name: "Botón de Pánico", rule: "Una vez en la pelea puedes pedir reinicio de pie, en el momento que quieras." },
@@ -211,16 +315,36 @@ export const DUELS = [
   {
     key: "t1_guardia_cerrada",
     tier: 1,
+    outfit: "both",
     name: "Guardia Cerrada",
     start: "En el suelo, guardia cerrada.",
     alfa: { name: "Dentro", rule: "Arrancas dentro de la guardia cerrada. Tu meta: abrir y pasar." },
     omega: { name: "Fuera", rule: "Arrancas con la guardia cerrada puesta. Tu meta: barrer o finalizar." },
+  },
+  {
+    key: "t1_sin_solapa",
+    tier: 1,
+    outfit: "gi",
+    name: "Kimono Cerrado",
+    start: "De pie, a distancia de agarre.",
+    alfa: { name: "Agarre Completo", rule: "Agarras lo que quieras: solapa, manga, pantalón, cinturón." },
+    omega: { name: "Sin Solapa", rule: "No puedes agarrar solapa ni cinturón del rival. Solo manga y pantalón." },
+  },
+  {
+    key: "t1_sin_cuello",
+    tier: 1,
+    outfit: "nogi",
+    name: "Cuello Cerrado",
+    start: "De pie, a distancia de agarre.",
+    alfa: { name: "Cuello Libre", rule: "Atacas el cuello cuando quieras: guillotina, D'arce, lo que salga." },
+    omega: { name: "Sin Cuello", rule: "Prohibido el front headlock y cualquier ataque al cuello desde el frente. Tienes que ir a la espalda o a las piernas." },
   },
 
   // ---- Tier 2 · ±2 ---------------------------------------------------------
   {
     key: "t2_guardia_partida",
     tier: 2,
+    outfit: "both",
     name: "Guardia Partida",
     start: "En el suelo, cien kilos armado.",
     alfa: { name: "Cien Kilos", rule: "Arrancas en control lateral, con la guardia ya pasada." },
@@ -229,6 +353,7 @@ export const DUELS = [
   {
     key: "t2_rodilla_en_barriga",
     tier: 2,
+    outfit: "both",
     name: "Rodilla en la Barriga",
     start: "En el suelo, rodilla en la barriga puesta.",
     alfa: { name: "Rodilla Puesta", rule: "Arrancas con la rodilla en la barriga y dos puntos ya en el marcador." },
@@ -237,6 +362,7 @@ export const DUELS = [
   {
     key: "t2_cazador_de_piernas",
     tier: 2,
+    outfit: "both",
     name: "Cazador de Piernas",
     start: "Los dos sentados, a distancia.",
     alfa: { name: "Todo Vale", rule: "Ganas por lo que sea: puntos, sumisión, lo que salga." },
@@ -245,6 +371,7 @@ export const DUELS = [
   {
     key: "t2_segunda_vida",
     tier: 2,
+    outfit: "both",
     name: "Segunda Vida",
     start: "De pie, a distancia de agarre.",
     alfa: { name: "Segunda Vida", rule: "La primera sumisión que te metan no cuenta: se reinicia neutro y sigue la pelea." },
@@ -253,16 +380,36 @@ export const DUELS = [
   {
     key: "t2_reloj_en_contra",
     tier: 2,
+    outfit: "both",
     name: "Reloj en Contra",
     start: "De pie, a distancia de agarre.",
     alfa: { name: "El Tiempo Juega", rule: "Si pasan dos minutos sin resultado, la pelea es tuya." },
     omega: { name: "Reloj en Contra", rule: "Tienes dos minutos para ganar. Si suenan, pierdes." },
+  },
+  {
+    key: "t2_lapel_libre",
+    tier: 2,
+    outfit: "gi",
+    name: "Tela de Araña",
+    start: "En el suelo, guardia abierta.",
+    alfa: { name: "Lapel Libre", rule: "Puedes desenrollar tu propia solapa y usarla para atrapar, enredar y estrangular." },
+    omega: { name: "Tela Prohibida", rule: "No puedes agarrar tela: ni la del rival ni la tuya. Todo a cuerpo." },
+  },
+  {
+    key: "t2_pierna_enredada",
+    tier: 2,
+    outfit: "nogi",
+    name: "Nudo de Piernas",
+    start: "En el suelo, ashi garami armado.",
+    alfa: { name: "Ashi Garami", rule: "Arrancas con la pierna del rival enredada y el control puesto. Tu meta: la sumisión." },
+    omega: { name: "Pierna Comprometida", rule: "Arrancas con tu pierna atrapada. Tu meta: sacarla y llegar arriba." },
   },
 
   // ---- Tier 3 · ±3 ---------------------------------------------------------
   {
     key: "t3_depredador",
     tier: 3,
+    outfit: "both",
     name: "Depredador",
     start: "En el suelo, espalda tomada con cinturón de seguridad y dos ganchos.",
     alfa: { name: "Depredador", rule: "Arrancas con la espalda del rival tomada, ganchos puestos." },
@@ -271,32 +418,81 @@ export const DUELS = [
   {
     key: "t3_rey_de_la_montada",
     tier: 3,
+    outfit: "both",
     name: "Rey de la Montada",
     start: "En el suelo, montada armada.",
     alfa: { name: "Rey de la Montada", rule: "Arrancas montado, con cuatro puntos ya en el marcador." },
     omega: { name: "Bajo la Montada", rule: "Arrancas debajo de la montada, cuatro puntos abajo. Tu meta: escapar." },
   },
   {
-    key: "t3_brazo_atado",
-    tier: 3,
-    name: "Brazo Atado",
-    start: "De pie, a distancia de agarre.",
-    alfa: { name: "Dos Brazos", rule: "Peleas completo, sin restricción." },
-    omega: { name: "Brazo Atado", rule: "Peleas con un solo brazo: el otro va metido en el cinturón y ahí se queda." },
-  },
-  {
     key: "t3_todo_o_nada",
     tier: 3,
+    outfit: "both",
     name: "Todo o Nada",
     start: "Los dos sentados, a distancia.",
     alfa: { name: "Marcador Limpio", rule: "Ganas por puntos, por sumisión o por decisión. Lo normal." },
     omega: { name: "Todo o Nada", rule: "Los puntos no te cuentan. O finalizas, o pierdes." },
   },
+  {
+    key: "t3_brazo_atado_gi",
+    tier: 3,
+    outfit: "gi",
+    name: "Brazo Atado",
+    start: "De pie, a distancia de agarre.",
+    alfa: { name: "Dos Brazos", rule: "Peleas completo, sin restricción." },
+    omega: { name: "Brazo Atado", rule: "Peleas con un solo brazo: el otro va metido en tu propio cinturón y ahí se queda toda la pelea." },
+  },
+  {
+    key: "t3_brazo_atado_nogi",
+    tier: 3,
+    outfit: "nogi",
+    name: "Brazo Muerto",
+    start: "De pie, a distancia de agarre.",
+    alfa: { name: "Dos Brazos", rule: "Peleas completo, sin restricción." },
+    omega: { name: "Brazo Muerto", rule: "Peleas con un solo brazo: el otro va agarrado a tu propio short y no se suelta." },
+  },
+  {
+    key: "t3_solo_la_espalda",
+    tier: 3,
+    outfit: "nogi",
+    name: "Solo la Espalda",
+    start: "Los dos de pie.",
+    alfa: { name: "Camino Libre", rule: "Ganas por donde quieras: puntos, cualquier sumisión, decisión." },
+    omega: { name: "Solo la Espalda", rule: "Únicamente ganas tomando la espalda y finalizando desde ahí. Nada más te cuenta." },
+  },
 ];
 
 // Índices por clave, para leer un roll guardado sin recorrer los mazos.
+// Se indexa TODO el mazo (gi y no-gi) para que un roll viejo siga leyéndose
+// aunque el torneo haya sido de otro ruleset.
 const TERRAIN_BY_KEY = Object.fromEntries(TERRAINS.map((t) => [t.key, t]));
 const DUEL_BY_KEY = Object.fromEntries(DUELS.map((d) => [d.key, d]));
+
+/**
+ * Una carta entra al mazo si sirve para los dos rulesets o si es justo la
+ * del ruleset que se está jugando.
+ */
+function fitsOutfit(card, outfit) {
+  return card.outfit === "both" || card.outfit === outfit;
+}
+
+/**
+ * El mazo completo de un ruleset, agrupado como lo pide el manual.
+ */
+export function deckFor(outfit) {
+  const terrains = TERRAINS.filter((t) => fitsOutfit(t, outfit));
+  const duels = DUELS.filter((d) => fitsOutfit(d, outfit));
+
+  return {
+    terrains,
+    duels,
+    // Duelos por nivel, de neutro a brutal.
+    duelsByTier: [0, 1, 2, 3].map((tier) => ({
+      tier,
+      duels: duels.filter((d) => d.tier === tier),
+    })),
+  };
+}
 
 function pick(list) {
   return list[Math.floor(Math.random() * list.length)];
@@ -316,25 +512,31 @@ function rollTier() {
 }
 
 /**
- * Rolea una pelea completa. El lado ALFA se sortea entre los dos peleadores,
- * así que estar de primero en el bracket no te da nada.
+ * Rolea una pelea completa con el mazo del ruleset que se esté jugando. El
+ * lado ALFA se sortea entre los dos peleadores, así que estar de primero en
+ * el bracket no te da nada.
  *
  * Devuelve exactamente las columnas de datos de tournament_match_rolls.
  */
-export function rollMatch() {
-  const terrain = pick(TERRAINS);
+export function rollMatch(outfit = DEFAULT_OUTFIT) {
+  const deck = deckFor(OUTFITS[outfit] ? outfit : DEFAULT_OUTFIT);
+
+  const terrain = pick(deck.terrains);
   const tier = rollTier();
-  const duel = pick(DUELS.filter((d) => d.tier === tier));
+  const candidates = deck.duels.filter((d) => d.tier === tier);
+  // Cada tier siempre tiene cartas 'both', así que candidates nunca va
+  // vacío; el fallback es solo por si alguien poda el mazo a mano.
+  const duel = pick(candidates.length ? candidates : deck.duels);
   const alfaIsStudent1 = Math.random() < 0.5;
 
   return {
-    tier,
+    tier: duel.tier,
     terrain_key: terrain.key,
     duel_key: duel.key,
     // Peso: +tier para el que tiene la ventaja, -tier para el que carga.
     // En los duelos neutros los dos van en 0 y no hay upset que pagar.
-    student1_weight: alfaIsStudent1 ? tier : -tier,
-    student2_weight: alfaIsStudent1 ? -tier : tier,
+    student1_weight: alfaIsStudent1 ? duel.tier : -duel.tier,
+    student2_weight: alfaIsStudent1 ? -duel.tier : duel.tier,
   };
 }
 
