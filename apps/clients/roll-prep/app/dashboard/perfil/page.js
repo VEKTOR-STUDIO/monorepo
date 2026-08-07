@@ -40,7 +40,7 @@ export default async function Perfil() {
               fill="none"
               stroke="currentColor"
               strokeWidth="3"
-              className="h-3 w-3 rotate-180"
+              className="h-3 w-3  rotate-180"
             >
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
