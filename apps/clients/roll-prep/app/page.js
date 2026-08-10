@@ -1,13 +1,13 @@
 import Link from "next/link";
 import ButtonSignin from "@/components/ButtonSignin";
 import BeltBadge from "@/components/rollprep/BeltBadge";
+import CaosRollDemo from "@/components/rollprep/CaosRollDemo";
 import JoinCta from "@/components/rollprep/JoinCta";
 import config from "@/config";
 import { createPublicClient } from "@/libs/supabase/public";
 import { daysUntil } from "@/libs/rollprep";
 import { BELTS, POINT_VALUES, formatXp } from "@/libs/gamification";
 import {
-  CAOS_POINTS,
   DUELS,
   OUTFITS,
   TERRAINS,
@@ -96,11 +96,6 @@ const extras = [
       "Cada punto con su fecha y su motivo. Tu expediente, no un número suelto.",
   },
 ];
-
-// Una pelea de ejemplo del mazo, para enseñar la anatomía de un roleo.
-const sampleTerrain = TERRAINS.find((t) => t.key === "muerte_subita");
-const sampleDuel = DUELS.find((d) => d.key === "t3_rey_de_la_montada");
-const sampleBounty = sampleDuel.tier * 2 * CAOS_POINTS.upsetPerWeight;
 
 const nogiDeck = deckFor("nogi");
 const giDeck = deckFor("gi");
@@ -408,116 +403,29 @@ export default async function Page() {
           </div>
 
           {/* ------------------- ANATOMÍA DE UN ROLEO ------------------- */}
+          {/* Interactivo: el visitante rolea y ve rotar los tres ejemplos. */}
+          <CaosRollDemo />
+
           <div className="mt-16">
-            <p className="text-[0.6rem] font-black uppercase tracking-[0.3em] text-primary">
-              Anatomía de un roleo
-            </p>
-            <h3 className="display mt-2 text-3xl md:text-4xl">
-              Así se ve una pelea del CAOS
-            </h3>
-
-            <div className="mt-6 space-y-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="tag-skew bg-base-300 px-3 py-1 text-xs">
-                  <span>
-                    Nivel {sampleDuel.tier} · {TIER_LABELS[sampleDuel.tier]}
-                  </span>
-                </span>
-                <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
-                  {sampleDuel.start}
-                </span>
-              </div>
-
-              {/* TERRENO — igual para los dos */}
-              <div className="caos-card caos-card-neutro">
-                <div className="caos-tier-bar text-secondary" aria-hidden="true" />
-                <div className="stripes p-5">
-                  <p className="text-[0.6rem] font-black uppercase tracking-[0.3em] opacity-60">
-                    Terreno · aplica a los dos
+            {/* Probabilidades */}
+            <div className="grid gap-px overflow-hidden border border-base-300 bg-base-300 sm:grid-cols-4">
+              {[0, 1, 2, 3].map((tier) => (
+                <div key={tier} className="bg-base-100 p-5">
+                  <p className="text-[0.6rem] font-black uppercase tracking-[0.25em] opacity-50">
+                    Nivel {tier}
                   </p>
-                  <p className="caos-title mt-1 text-3xl md:text-4xl">
-                    {sampleTerrain.name}
+                  <p
+                    className={`display mt-1 text-2xl ${
+                      tier === 3 ? "text-accent" : ""
+                    }`}
+                  >
+                    {TIER_LABELS[tier]}
                   </p>
-                  <p className="mt-2 text-sm font-medium opacity-80">
-                    {sampleTerrain.rule}
+                  <p className="display mt-2 text-4xl text-primary">
+                    {TIER_ODDS_LABELS[tier]}
                   </p>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <div className="h-px flex-1 bg-base-300" />
-                <p className="display text-2xl">
-                  {sampleDuel.name}
-                  <span className="text-primary">.</span>
-                </p>
-                <div className="h-px flex-1 bg-base-300" />
-              </div>
-
-              {/* DUELO — la carta doble */}
-              <div className="grid gap-3 sm:grid-cols-2">
-                <DuelCard
-                  tone="alfa"
-                  role="Ventaja +3"
-                  card={sampleDuel.alfa}
-                />
-                <DuelCard
-                  tone="omega"
-                  role="Carga −3"
-                  card={sampleDuel.omega}
-                />
-              </div>
-
-              {/* La regla de oro */}
-              <div className="clip-cut border-2 border-base-300 bg-base-200 p-6">
-                <p className="text-[0.6rem] font-black uppercase tracking-[0.3em] text-primary">
-                  La regla de oro
-                </p>
-                <p className="display mt-2 text-2xl md:text-3xl">
-                  La desventaja no se compensa cambiando la regla.{" "}
-                  <span className="text-primary">Se compensa con el premio.</span>
-                </p>
-                <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                  <div className="border-l-2 border-accent pl-4">
-                    <p className="display text-3xl text-accent">
-                      +{sampleBounty} XP
-                    </p>
-                    <p className="mt-1 text-xs font-semibold uppercase tracking-wider opacity-70">
-                      Para el que carga, si se lleva la pelea. Diez XP por cada
-                      punto de diferencia: 20 / 40 / 60 según el nivel.
-                    </p>
-                  </div>
-                  <div className="border-l-2 border-primary pl-4">
-                    <p className="display text-3xl text-primary">
-                      +{CAOS_POINTS.finish} XP
-                    </p>
-                    <p className="mt-1 text-xs font-semibold uppercase tracking-wider opacity-70">
-                      Para quien finalice. El que arranca con ventaja solo cobra
-                      si termina la pelea — nada de guindarse a estancarla.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Probabilidades */}
-              <div className="grid gap-px overflow-hidden border border-base-300 bg-base-300 sm:grid-cols-4">
-                {[0, 1, 2, 3].map((tier) => (
-                  <div key={tier} className="bg-base-100 p-5">
-                    <p className="text-[0.6rem] font-black uppercase tracking-[0.25em] opacity-50">
-                      Nivel {tier}
-                    </p>
-                    <p
-                      className={`display mt-1 text-2xl ${
-                        tier === 3 ? "text-accent" : ""
-                      }`}
-                    >
-                      {TIER_LABELS[tier]}
-                    </p>
-                    <p className="display mt-2 text-4xl text-primary">
-                      {TIER_ODDS_LABELS[tier]}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
 
             <p className="mt-6 max-w-3xl text-sm font-medium leading-relaxed opacity-60">
@@ -922,36 +830,6 @@ function StorySlot({ number, title, status = "Bloqueado", unlocked = false }) {
       <p className="relative mt-4 text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
         {status}
       </p>
-    </div>
-  );
-}
-
-function DuelCard({ tone, role, card }) {
-  const isAlfa = tone === "alfa";
-
-  return (
-    <div className={`caos-card caos-card-${tone}`}>
-      <div
-        className={`caos-tier-bar ${isAlfa ? "text-primary" : "text-accent"}`}
-        aria-hidden="true"
-      />
-      <div className="p-5">
-        <p
-          className={`text-[0.6rem] font-black uppercase tracking-[0.25em] ${
-            isAlfa ? "text-primary" : "text-accent"
-          }`}
-        >
-          {role}
-        </p>
-        <p
-          className={`caos-title mt-1 text-2xl md:text-3xl ${
-            isAlfa ? "text-primary" : "text-accent"
-          }`}
-        >
-          {card.name}
-        </p>
-        <p className="mt-2 text-sm font-medium opacity-80">{card.rule}</p>
-      </div>
     </div>
   );
 }
