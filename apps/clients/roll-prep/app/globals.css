@@ -145,15 +145,65 @@ progress::-webkit-progress-value {
 .rise-4 { animation-delay: 0.35s; }
 .rise-5 { animation-delay: 0.45s; }
 
-/* Textura sutil de ruido para dar atmósfera al fondo. */
-.grain::before {
+/* ------------------------------------------------------------------ */
+/* TEXTURA DEL FONDO — bolsa de plástico arrugada sobre grano de papel */
+/*                                                                    */
+/* Dos capas fijas sobre TODA la web (van en el <body> del layout      */
+/* raíz), sin imágenes externas: puro SVG en data URI.                 */
+/*   .plastic::before → pliegues del plástico + reflejo diagonal       */
+/*   .grain::after    → grano de impresión, que lo unifica todo        */
+/*                                                                    */
+/* El plástico se dibuja con feSpecularLighting: sale negro con los    */
+/* brillos de los pliegues encima, así que en `screen` solo SUMA luz   */
+/* donde hay arruga y no ensucia los negros del tema.                  */
+/*                                                                    */
+/* Para regular la intensidad, mueve las dos variables de abajo (en 0  */
+/* desaparecen); para quitarlas del todo, saca la clase del <body>.    */
+/* ------------------------------------------------------------------ */
+:root {
+  --texture-plastic: 0.4;
+  --texture-grain: 0.055;
+}
+
+.plastic::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
-  opacity: 0.05;
+  z-index: 60;
+  opacity: var(--texture-plastic);
+  mix-blend-mode: screen;
+  background-image:
+    linear-gradient(
+      112deg,
+      transparent 8%,
+      rgba(255, 255, 255, 0.1) 20%,
+      transparent 34%,
+      transparent 58%,
+      rgba(255, 255, 255, 0.07) 70%,
+      transparent 86%
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.011' numOctaves='4' seed='13' stitchTiles='stitch' result='t'/%3E%3CfeSpecularLighting in='t' surfaceScale='5' specularConstant='1.2' specularExponent='20' lighting-color='%23ffffff'%3E%3CfeDistantLight azimuth='228' elevation='60'/%3E%3C/feSpecularLighting%3E%3C/filter%3E%3Crect width='800' height='800' filter='url(%23p)'/%3E%3C/svg%3E");
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 61;
+  opacity: var(--texture-grain);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* En papel las texturas solo ensucian. */
+@media print {
+  .plastic::before,
+  .grain::after {
+    display: none;
+  }
 }
 
 /* Texto contorneado (outline) para números gigantes de fondo. */
