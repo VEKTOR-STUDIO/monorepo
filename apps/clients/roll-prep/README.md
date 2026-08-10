@@ -1,5 +1,9 @@
 # RollPrep 🥋
 
+> 📖 **¿Qué es RollPrep como producto?** El concepto completo —la tesis, la progresión, los
+> modos de juego y hacia dónde va— está en [`CONCEPTO.md`](./CONCEPTO.md). Este README es
+> solo el setup técnico.
+
 App de gestión de alumnos para una clase de **Jiu-Jitsu Brasileño**, construida sobre la base **ShipFast** (Next.js App Router + Supabase + Tailwind CSS v4 / DaisyUI 5) dentro del monorepo (pnpm workspaces).
 
 Los alumnos entrenan presencial los **martes y jueves**. RollPrep mantiene la conexión fuera del tatami con dos dinámicas que alternan según el día de la semana:

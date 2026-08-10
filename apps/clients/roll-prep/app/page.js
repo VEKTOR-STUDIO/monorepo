@@ -479,6 +479,60 @@ export default function Page() {
           </div>
         </section>
 
+        {/* ------------------------ MODO HISTORIA ------------------------ */}
+        <section className="relative overflow-hidden border-y border-base-300 bg-base-200">
+          <div
+            className="halftone absolute inset-0 opacity-40"
+            aria-hidden="true"
+          />
+          <span
+            aria-hidden="true"
+            className="display text-stroke pointer-events-none absolute -left-8 bottom-0 select-none text-[9rem] leading-none md:text-[16rem]"
+          >
+            ???
+          </span>
+
+          <div className="relative mx-auto max-w-6xl px-5 py-20">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="tag-skew blink-soft bg-accent px-3 py-1 text-xs text-accent-content">
+                <span>Próximamente</span>
+              </span>
+              <span className="tag-skew bg-base-300 px-3 py-1 text-xs">
+                <span>Tercer modo de juego</span>
+              </span>
+            </div>
+
+            <h2 className="display mt-6 max-w-3xl text-5xl md:text-7xl">
+              Modo <span className="text-primary">Historia</span>
+            </h2>
+
+            <p className="mt-6 max-w-2xl text-base font-medium leading-relaxed opacity-70">
+              Los topes son el multijugador. Falta la campaña: un camino de un
+              solo jugador que recorre el arte posición por posición, con
+              capítulos que se desbloquean al completar el anterior, objetivos
+              que se cumplen en el tatami y un jefe al final de cada uno — un
+              tope donde toca demostrar lo que se estudió.
+            </p>
+
+            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+              <StorySlot
+                number="01"
+                title="La Guardia"
+                status="En desarrollo"
+                unlocked
+              />
+              <StorySlot number="02" title="El Pase" />
+              <StorySlot number="03" title="La Espalda" />
+            </div>
+
+            <p className="mt-8 max-w-2xl text-sm font-medium leading-relaxed opacity-50">
+              El sistema de modos ya está probado: el bracket, los participantes
+              y el XP base son idénticos entre modos, así que sumar uno nuevo no
+              es reescribir el torneo. La campaña es el siguiente en la fila.
+            </p>
+          </div>
+        </section>
+
         {/* ---------------------------- EXTRAS --------------------------- */}
         <section className="border-t border-base-300 bg-base-200">
           <div className="mx-auto max-w-6xl px-5 py-20">
@@ -584,6 +638,44 @@ function Pace({ rank, time, highlight }) {
         {time}
       </span>
     </li>
+  );
+}
+
+/**
+ * Slot de capítulo del Modo Historia: como una casilla de personaje sin
+ * desbloquear en la pantalla de selección. El primero se asoma; los demás
+ * siguen cerrados.
+ */
+function StorySlot({ number, title, status = "Bloqueado", unlocked = false }) {
+  return (
+    <div
+      className={`clip-cut stripes relative overflow-hidden border-2 p-6 ${
+        unlocked
+          ? "border-primary/50 bg-base-100"
+          : "border-base-300 bg-base-100/40"
+      }`}
+    >
+      <span
+        aria-hidden="true"
+        className="display text-stroke pointer-events-none absolute -bottom-5 right-2 select-none text-8xl leading-none"
+      >
+        {number}
+      </span>
+
+      <p
+        className={`text-[0.6rem] font-black uppercase tracking-[0.25em] ${
+          unlocked ? "text-primary" : "opacity-40"
+        }`}
+      >
+        Capítulo {number}
+      </p>
+      <p className={`display mt-2 text-3xl ${unlocked ? "" : "text-stroke"}`}>
+        {title}
+      </p>
+      <p className="relative mt-4 text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
+        {status}
+      </p>
+    </div>
   );
 }
 

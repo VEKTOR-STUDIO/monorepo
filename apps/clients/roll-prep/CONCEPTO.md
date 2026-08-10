@@ -408,10 +408,23 @@ participantes y los puntos base son idénticos entre modos — lo único que cam
 de reglas encima. Eso significa que agregar un modo nuevo no es reescribir el torneo, es
 escribir cartas.
 
-Direcciones abiertas:
+### Lo siguiente en la fila: **Modo Historia**
 
-- **Más modos.** Por equipos (academia vs. academia), rey de la colina, ligas por
-  temporada con reinicio de ranking, round-robin.
+Los topes son el multijugador. Falta la campaña.
+
+Un camino de un solo jugador que recorre el arte **posición por posición**: capítulos que
+se desbloquean al completar el anterior — La Guardia, El Pase, La Espalda — cada uno con
+sus objetivos cumplidos en el tatami, su bloque de clases en la videoteca y un **jefe al
+final**: un tope donde toca demostrar lo que se estudió.
+
+Es la respuesta al hueco que queda entre el loop semanal (colectivo, marcado por el
+calendario del gym) y los topes (eventos puntuales): algo que el alumno pueda perseguir a
+su propio ritmo sin depender de que sea martes.
+
+### Otras direcciones abiertas
+
+- **Más modos competitivos.** Por equipos (academia vs. academia), rey de la colina, ligas
+  por temporada con reinicio de ranking, round-robin.
 - **Más mazos.** Cartas de un solo torneo, mazos temáticos, mazos que el profesor arma a
   mano para trabajar una posición específica del mes.
 - **Multi-gym de verdad.** Las academias ya están en el modelo; falta que cada gym tenga
