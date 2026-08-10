@@ -34,33 +34,112 @@ export const POINT_EVENT_LABELS = {
   caos_finish: "Finalizaste en el CAOS",
 };
 
-// Rangos estilo cinturones de BJJ. El umbral es el XP acumulado necesario.
-// ~3x respecto a la primera versión (150 / 400 / 800 / 1500).
+// ----------------------------------------------------------------------------
+// CINTURONES Y GRADOS
+//
+// Como en el tatami: cada cinturón se recorre por grados (los "stripes")
+// antes de cambiar de color. `degrees` es el XP de entrada al cinturón y
+// después a cada grado, así que el camino completo son 24 rangos:
+//   Blanca → Blanca I..IV → Azul → Azul I..IV → ... → Negra I..III
+//
+// La escala es ~26x la anterior (la Negra estaba en 4.500 XP, hoy abre en
+// 52.000). A ritmo de dos clases por semana con voto y comentario — unos
+// 600 XP al mes — sale más o menos así:
+//   primer grado ~1 mes · Azul ~7 meses · Violeta ~1,5 años ·
+//   Marrón ~3,5 años · Negra ~7 años.
+// Subir de grado deja de ser trámite y el ranking respira.
+// ----------------------------------------------------------------------------
+
+// La tinta del texto sobre la chapa del cinturón: la blanca pide texto
+// oscuro, el resto texto claro.
+const DARK_INK = "#18181b";
+const LIGHT_INK = "#ffffff";
+
 export const BELTS = [
-  { name: "Cinturón Blanco", short: "Blanca", threshold: 0, color: "#f5f5f0" },
-  { name: "Cinturón Azul", short: "Azul", threshold: 450, color: "#3b82f6" },
-  { name: "Cinturón Violeta", short: "Violeta", threshold: 1200, color: "#a855f7" },
-  { name: "Cinturón Marrón", short: "Marrón", threshold: 2400, color: "#92400e" },
-  { name: "Cinturón Negro", short: "Negra", threshold: 4500, color: "#18181b" },
+  {
+    key: "white",
+    name: "Cinturón Blanco",
+    short: "Blanca",
+    color: "#f5f5f0",
+    ink: DARK_INK,
+    degrees: [0, 600, 1300, 2100, 3000],
+  },
+  {
+    key: "blue",
+    name: "Cinturón Azul",
+    short: "Azul",
+    color: "#3b82f6",
+    ink: LIGHT_INK,
+    degrees: [4000, 5600, 7200, 8800, 10400],
+  },
+  {
+    key: "purple",
+    name: "Cinturón Violeta",
+    short: "Violeta",
+    color: "#a855f7",
+    ink: LIGHT_INK,
+    degrees: [12000, 14800, 17600, 20400, 23200],
+  },
+  {
+    key: "brown",
+    name: "Cinturón Marrón",
+    short: "Marrón",
+    color: "#92400e",
+    ink: LIGHT_INK,
+    degrees: [26000, 31000, 36000, 41000, 46000],
+  },
+  {
+    // La negra no lleva grados de cinta: lleva danes.
+    key: "black",
+    name: "Cinturón Negro",
+    short: "Negra",
+    color: "#18181b",
+    ink: LIGHT_INK,
+    degrees: [52000, 70000, 92000, 120000],
+  },
 ];
+
+const DEGREE_NUMERALS = ["", "I", "II", "III", "IV"];
+
+/**
+ * El camino completo, plano y ordenado por XP: un elemento por grado.
+ * Cada rango arrastra los datos de su cinturón para pintarse solo.
+ */
+export const RANKS = BELTS.flatMap((belt) =>
+  belt.degrees.map((threshold, degree) => ({
+    key: `${belt.key}-${degree}`,
+    beltKey: belt.key,
+    // "Cinturón Blanco" — el color, sin el grado.
+    name: belt.name,
+    // "Blanca II" — lo que se lee en el ranking.
+    short: degree ? `${belt.short} ${DEGREE_NUMERALS[degree]}` : belt.short,
+    color: belt.color,
+    ink: belt.ink,
+    degree,
+    maxDegree: belt.degrees.length - 1,
+    threshold,
+  }))
+);
 
 /**
  * Devuelve el rango actual y el progreso hacia el siguiente:
  * { belt, nextBelt, progress (0-1), pointsIntoBelt, pointsToNext }
+ *
+ * `belt` es un rango del camino (cinturón + grado), no solo el color.
  */
 export function getRank(totalPoints) {
   const points = Math.max(0, totalPoints ?? 0);
 
-  let beltIndex = 0;
-  for (let i = BELTS.length - 1; i >= 0; i--) {
-    if (points >= BELTS[i].threshold) {
-      beltIndex = i;
+  let rankIndex = 0;
+  for (let i = RANKS.length - 1; i >= 0; i--) {
+    if (points >= RANKS[i].threshold) {
+      rankIndex = i;
       break;
     }
   }
 
-  const belt = BELTS[beltIndex];
-  const nextBelt = BELTS[beltIndex + 1] ?? null;
+  const belt = RANKS[rankIndex];
+  const nextBelt = RANKS[rankIndex + 1] ?? null;
 
   if (!nextBelt) {
     return { belt, nextBelt: null, progress: 1, pointsIntoBelt: points - belt.threshold, pointsToNext: 0 };
@@ -76,6 +155,11 @@ export function getRank(totalPoints) {
     pointsIntoBelt,
     pointsToNext: nextBelt.threshold - points,
   };
+}
+
+/** XP con separador de miles: 52000 → "52.000". */
+export function formatXp(points) {
+  return Number(points ?? 0).toLocaleString("es-VE");
 }
 
 /**

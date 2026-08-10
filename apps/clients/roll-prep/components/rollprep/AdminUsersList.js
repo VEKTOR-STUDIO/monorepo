@@ -3,8 +3,9 @@
 import { useMemo, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import AcademyBadge from "@/components/rollprep/AcademyBadge";
+import BeltBadge from "@/components/rollprep/BeltBadge";
 import { deleteUser, updateUser } from "@/app/dashboard/admin/actions";
-import { getRank } from "@/libs/gamification";
+import { formatXp, getRank } from "@/libs/gamification";
 
 function formatDate(value) {
   if (!value) return "Nunca";
@@ -242,17 +243,10 @@ export default function AdminUsersList({ users, academies, currentUserId }) {
 
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <AcademyBadge academy={user.academy} size="xs" showEmpty />
-                    <span
-                      className="tag-skew px-1.5 py-0.5 text-[0.55rem] text-base-100"
-                      style={{ backgroundColor: belt.color }}
-                    >
-                      <span className={belt.short === "Negra" ? "text-white" : ""}>
-                        {belt.short}
-                      </span>
-                    </span>
+                    <BeltBadge rank={belt} size="xs" />
                     <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
-                      {user.total_points} XP · {user.classes_completed} clases ·
-                      últ. sesión {formatDate(user.last_sign_in_at)}
+                      {formatXp(user.total_points)} XP · {user.classes_completed}{" "}
+                      clases · últ. sesión {formatDate(user.last_sign_in_at)}
                     </span>
                   </div>
                 </div>

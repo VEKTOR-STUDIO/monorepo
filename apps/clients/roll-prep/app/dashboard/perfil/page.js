@@ -7,6 +7,7 @@ import { getAcademies, getProfileWithAcademy } from "@/libs/academies";
 import {
   getStudentPoints,
   getRank,
+  formatXp,
   POINT_EVENT_LABELS,
   BELTS,
 } from "@/libs/gamification";
@@ -71,34 +72,58 @@ export default async function Perfil() {
           />
         </div>
 
-        {/* Camino de cinturones */}
+        {/* Camino de cinturones: cada color se recorre por grados */}
         <div className="rise rise-3 clip-cut border-2 border-base-300 bg-base-200 p-4">
-          <p className="mb-3 text-xs font-black uppercase tracking-[0.2em] opacity-60">
-            Camino del cinturón
-          </p>
-          <div className="flex items-center gap-1">
+          <div className="mb-3 flex items-baseline justify-between gap-2">
+            <p className="text-xs font-black uppercase tracking-[0.2em] opacity-60">
+              Camino del cinturón
+            </p>
+            <p className="text-[0.55rem] font-bold uppercase tracking-widest opacity-40">
+              Grado {belt.degree} de {belt.maxDegree}
+            </p>
+          </div>
+
+          <div className="space-y-3">
             {BELTS.map((b) => {
-              const reached = totalPoints >= b.threshold;
-              const isCurrent = b.name === belt.name;
+              const isCurrentBelt = b.key === belt.beltKey;
+
               return (
-                <div key={b.name} className="flex-1">
-                  <div
-                    className={`h-2 ${isCurrent ? "blink-soft" : ""}`}
-                    style={{
-                      backgroundColor: reached ? b.color : "transparent",
-                      border: reached ? "none" : "1px solid var(--color-base-300)",
-                    }}
-                  />
-                  <p
-                    className={`mt-1 text-center text-[0.55rem] font-bold uppercase tracking-wider ${
-                      reached ? "" : "opacity-35"
-                    }`}
-                  >
-                    {b.short}
-                  </p>
-                  <p className="text-center text-[0.5rem] opacity-40">
-                    {b.threshold}
-                  </p>
+                <div key={b.key}>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <p
+                      className={`text-[0.6rem] font-black uppercase tracking-widest ${
+                        totalPoints >= b.degrees[0] ? "" : "opacity-35"
+                      }`}
+                    >
+                      {b.short}
+                    </p>
+                    <p className="text-[0.5rem] font-bold uppercase tracking-widest opacity-40">
+                      desde {formatXp(b.degrees[0])} XP
+                    </p>
+                  </div>
+
+                  <div className="mt-1 flex gap-1">
+                    {b.degrees.map((threshold, degree) => {
+                      const reached = totalPoints >= threshold;
+                      const isCurrent = isCurrentBelt && degree === belt.degree;
+
+                      return (
+                        <div
+                          key={degree}
+                          title={`${
+                            degree ? `${b.short} · grado ${degree}` : b.short
+                          } — ${formatXp(threshold)} XP`}
+                          className={`h-2 flex-1 ${isCurrent ? "blink-soft" : ""}`}
+                          style={{
+                            backgroundColor: reached ? b.color : "transparent",
+                            border: reached
+                              ? "none"
+                              : "1px solid var(--color-base-300)",
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })}

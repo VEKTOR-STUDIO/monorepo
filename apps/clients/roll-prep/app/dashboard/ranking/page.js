@@ -1,8 +1,9 @@
 import Link from "next/link";
 import AcademyBadge from "@/components/rollprep/AcademyBadge";
+import BeltBadge from "@/components/rollprep/BeltBadge";
 import { createClient } from "@/libs/supabase/server";
 import { academyFromRow, isMissingAcademies } from "@/libs/academies";
-import { getRank } from "@/libs/gamification";
+import { formatXp, getRank } from "@/libs/gamification";
 
 export const dynamic = "force-dynamic";
 
@@ -177,14 +178,7 @@ export default async function Ranking({ searchParams }) {
                     {isMe && <span className="ml-2 text-sm text-primary">(tú)</span>}
                   </p>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
-                    <span
-                      className="tag-skew px-1.5 py-0.5 text-[0.55rem] text-base-100"
-                      style={{ backgroundColor: belt.color }}
-                    >
-                      <span className={belt.short === "Negra" ? "text-white" : ""}>
-                        {belt.short}
-                      </span>
-                    </span>
+                    <BeltBadge rank={belt} size="xs" />
                     <AcademyBadge academy={row.academy} size="xs" />
                     <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
                       {row.classes_completed} clases estudiadas
@@ -193,7 +187,7 @@ export default async function Ranking({ searchParams }) {
                 </div>
 
                 <span className="display shrink-0 text-2xl text-primary">
-                  {row.total_points}
+                  {formatXp(row.total_points)}
                   <span className="ml-1 text-xs opacity-70">XP</span>
                 </span>
               </div>

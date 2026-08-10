@@ -1,5 +1,6 @@
 import AcademyBadge from "@/components/rollprep/AcademyBadge";
-import { getRank } from "@/libs/gamification";
+import BeltBadge from "@/components/rollprep/BeltBadge";
+import { formatXp, getRank } from "@/libs/gamification";
 
 // HUD del jugador estilo videojuego: nombre, academia, cinturón (rango) y
 // barra de XP.
@@ -22,24 +23,17 @@ export default function PlayerHud({ fullName, totalPoints, academy }) {
           <div className="flex items-center justify-between gap-2">
             <p className="display truncate text-xl">{fullName || "Peleador anónimo"}</p>
             <p className="display shrink-0 text-xl text-primary">
-              {totalPoints}
+              {formatXp(totalPoints)}
               <span className="ml-1 text-xs opacity-70">XP</span>
             </p>
           </div>
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <span
-              className="tag-skew px-2 py-0.5 text-[0.6rem] text-base-100"
-              style={{ backgroundColor: belt.color }}
-            >
-              <span className={belt.short === "Negra" ? "text-white" : ""}>
-                {belt.name}
-              </span>
-            </span>
+            <BeltBadge rank={belt} showName />
             <AcademyBadge academy={academy} />
             {nextBelt && (
               <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
-                {pointsToNext} XP para {nextBelt.short}
+                {formatXp(pointsToNext)} XP para {nextBelt.short}
               </span>
             )}
           </div>

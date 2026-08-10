@@ -196,7 +196,7 @@ export default async function Dashboard() {
             index={7}
             kicker="Jugador"
             title="Mi perfil"
-            description={`${belt.name} · historial de XP y datos`}
+            description={`${belt.short} · historial de XP y datos`}
           />
         </div>
       </section>
