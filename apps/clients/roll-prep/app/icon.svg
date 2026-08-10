@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>RollPrep</title>
+  <!-- Bloque volt con la esquina rebanada, como los paneles .clip-cut. -->
+  <path d="M0 0h64v50L50 64H0Z" fill="#d4ff00" />
+  <!-- R de stencil: asta, panza con contra rectangular y pierna diagonal. -->
+  <g fill="#0f0f12">
+    <path d="M14 10h12v44H14z" />
+    <path d="M26 10h20v22H26v-8h10v-6H26z" />
+    <path d="M28 32h11l11 22H39z" />
+  </g>
+</svg>

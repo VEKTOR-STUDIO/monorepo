@@ -2,7 +2,7 @@
 
 import { Header as SharedHeader } from "@alessandrovaru/ui";
 import ButtonSignin from "./ButtonSignin";
-import logo from "@/app/icon.png";
+import logo from "@/public/logo.png";
 import config from "@/config";
 
 const links = [
