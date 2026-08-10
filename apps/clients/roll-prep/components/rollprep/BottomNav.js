@@ -89,8 +89,9 @@ export default function BottomNav({ isAdmin }) {
   ];
 
   return (
-    // `bottom-6` deja libre la franja del crédito (FooterFoot) de abajo.
-    <nav className="fixed inset-x-0 bottom-6 z-40 border-t border-base-300 bg-base-100/90 backdrop-blur">
+    // La clase `bottom-nav` la usa globals.css para darle aire al crédito del
+    // pie, que en estas páginas queda debajo de esta barra fija.
+    <nav className="bottom-nav fixed inset-x-0 bottom-0 z-40 border-t border-base-300 bg-base-100/90 backdrop-blur">
       <div className="mx-auto flex max-w-xl">
         {links.map(({ href, label, Icon }) => {
           const isActive =

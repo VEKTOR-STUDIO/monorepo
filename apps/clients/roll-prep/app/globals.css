@@ -67,8 +67,13 @@ body {
 
 body {
   font-family: var(--font-sans);
-  /* Deja libre la franja del crédito fijo de abajo (FooterFoot, h-6). */
-  padding-bottom: 1.5rem;
+}
+
+/* El crédito del pie va al final del documento, sin fijar. Pero en el
+   dashboard la navegación inferior SÍ es fija y tapa los últimos ~68px de
+   la ventana: ahí el crédito necesita aire de sobra debajo para asomar. */
+body:has(.bottom-nav) .footer-foot {
+  padding-bottom: 5.5rem;
 }
 
 progress::-webkit-progress-value {
