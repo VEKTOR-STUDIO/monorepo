@@ -24,7 +24,7 @@ export default async function LayoutPrivate({ children }) {
 
   return (
     <>
-      <div className="pb-28">{children}</div>
+      <div className="pb-24">{children}</div>
       <BottomNav isAdmin={profile?.role === "admin"} />
     </>
   );

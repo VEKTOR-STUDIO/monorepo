@@ -67,6 +67,8 @@ body {
 
 body {
   font-family: var(--font-sans);
+  /* Deja libre la franja del crédito fijo de abajo (FooterFoot, h-6). */
+  padding-bottom: 1.5rem;
 }
 
 progress::-webkit-progress-value {

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { getSEOTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
+import FooterFoot from "@/components/rollprep/FooterFoot";
 import config from "@/config";
 import "./globals.css";
 
@@ -47,6 +48,7 @@ export default function RootLayout({ children }) {
 			<body className="grain font-sans antialiased">
 				{/* ClientLayout contains all the client wrappers (Crisp chat support, toast messages, tooltips, etc.) */}
 				<ClientLayout>{children}</ClientLayout>
+				<FooterFoot />
 				<Analytics />
 			</body>
 		</html>

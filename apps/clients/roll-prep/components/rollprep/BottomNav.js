@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import FooterFoot from "@/components/rollprep/FooterFoot";
 
 const HomeIcon = ({ className }) => (
   <svg
@@ -90,8 +89,9 @@ export default function BottomNav({ isAdmin }) {
   ];
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-base-300 bg-base-100/90 backdrop-blur">
-      <nav className="mx-auto flex max-w-xl">
+    // `bottom-6` deja libre la franja del crédito (FooterFoot) de abajo.
+    <nav className="fixed inset-x-0 bottom-6 z-40 border-t border-base-300 bg-base-100/90 backdrop-blur">
+      <div className="mx-auto flex max-w-xl">
         {links.map(({ href, label, Icon }) => {
           const isActive =
             href === "/dashboard"
@@ -116,9 +116,7 @@ export default function BottomNav({ isAdmin }) {
             </Link>
           );
         })}
-      </nav>
-
-      <FooterFoot />
-    </div>
+      </div>
+    </nav>
   );
 }
