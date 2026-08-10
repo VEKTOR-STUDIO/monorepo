@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createClient } from "@/libs/supabase/client";
 import toast from "react-hot-toast";
+import { sanitizeNextPath } from "@/libs/redirect";
 import config from "@/config";
 
 // This a login/singup page for Supabase Auth.
@@ -14,15 +15,27 @@ export default function Login() {
   const [fullName, setFullName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
+  // A dónde iba el alumno antes de que le pidiéramos cuenta: llega en ?next=
+  // desde la landing y hay que pasárselo al callback para no perderlo.
+  const [next, setNext] = useState(null);
 
   // El callback del magic link devuelve aquí con ?error= cuando el enlace
   // venció o ya se usó (ver app/api/auth/callback/route.js).
   useEffect(() => {
-    const error = new URLSearchParams(window.location.search).get("error");
+    const params = new URLSearchParams(window.location.search);
+    const destination = sanitizeNextPath(params.get("next"));
+    setNext(destination);
+
+    const error = params.get("error");
     if (!error) return;
 
     toast.error(error);
-    window.history.replaceState({}, "", window.location.pathname);
+    // Limpiar el error de la URL sin tirar el destino con él: si se borra la
+    // query entera, el segundo intento de login termina en el menú.
+    const kept = destination
+      ? `?next=${encodeURIComponent(destination)}`
+      : "";
+    window.history.replaceState({}, "", window.location.pathname + kept);
   }, []);
 
   const handleSignup = async (e, options) => {
@@ -32,7 +45,12 @@ export default function Login() {
 
     try {
       const { type, provider } = options;
-      const redirectURL = window.location.origin + "/api/auth/callback";
+      const callbackUrl = new URL(
+        "/api/auth/callback",
+        window.location.origin
+      );
+      if (next) callbackUrl.searchParams.set("next", next);
+      const redirectURL = callbackUrl.toString();
 
       if (type === "oauth") {
         const { error } = await supabase.auth.signInWithOAuth({
@@ -115,6 +133,13 @@ export default function Login() {
           Entra a{" "}
           <span className="text-primary">{config.appName}</span>
         </h1>
+
+        {/* El que llegó con destino se queda más tranquilo si se lo decimos. */}
+        {next && (
+          <p className="rise rise-2 mt-4 text-sm font-semibold opacity-70">
+            En cuanto entres te llevamos directo a donde ibas.
+          </p>
+        )}
 
         <div className="rise rise-3 mt-10 space-y-6">
           <button

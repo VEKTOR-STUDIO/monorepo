@@ -1,8 +1,10 @@
 import Link from "next/link";
 import ButtonSignin from "@/components/ButtonSignin";
 import BeltBadge from "@/components/rollprep/BeltBadge";
+import JoinCta from "@/components/rollprep/JoinCta";
 import config from "@/config";
 import { createPublicClient } from "@/libs/supabase/public";
+import { resolveDashboardMode } from "@/libs/rollprep";
 import { BELTS, POINT_VALUES, formatXp } from "@/libs/gamification";
 import {
   CAOS_POINTS,
@@ -125,8 +127,27 @@ async function getGymPoints() {
   return data?.total_points ?? null;
 }
 
+/**
+ * Lo que el gym está estudiando ahora mismo (vista public.active_class, ver la
+ * migración 20260810130000_active_class.sql). La vista devuelve siempre una
+ * fila, con los campos en null cuando no hay nada activo; null aquí significa
+ * que la base no respondió o falta la migración, y en los dos casos la sección
+ * simplemente no se dibuja.
+ */
+async function getActiveClass() {
+  const supabase = createPublicClient();
+  if (!supabase) return null;
+
+  const { data } = await supabase.from("active_class").select("*").maybeSingle();
+
+  return data ?? null;
+}
+
 export default async function Page() {
-  const totalPoints = await getGymPoints();
+  const [totalPoints, activeClass] = await Promise.all([
+    getGymPoints(),
+    getActiveClass(),
+  ]);
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-base-100 text-base-content">
@@ -203,6 +224,9 @@ export default async function Page() {
             ))}
           </div>
         </div>
+
+        {/* ------------------------- CLASE ACTIVA ------------------------ */}
+        <ActiveClass data={activeClass} />
 
         {/* ----------------------------- LOOP ---------------------------- */}
         <section className="mx-auto max-w-6xl px-5 py-20">
@@ -619,6 +643,164 @@ export default async function Page() {
 }
 
 /* --------------------------- Piezas de la página -------------------------- */
+
+/**
+ * La sección "en vivo": lo que el gym está estudiando esta semana. Es el único
+ * bloque de la landing que habla del gym de hoy y no del producto, así que es
+ * el que convierte — de ahí que el CTA lleve directo a la clase y no al menú
+ * (JoinCta se encarga de que el registro no pierda el destino).
+ *
+ * Qué toca enseñar lo decide la misma función que gobierna el dashboard del
+ * alumno: la tarea si hay tarea, si no la votación abierta. Sin nada activo la
+ * sección no existe — una landing no gana nada anunciando que el gym descansa.
+ */
+function ActiveClass({ data }) {
+  if (!data) return null;
+
+  const mode = resolveDashboardMode({
+    assignment: data.assignment_title,
+    poll: data.poll_question,
+  });
+
+  if (mode === "empty") return null;
+
+  const isTask = mode === "task";
+
+  const live = isTask
+    ? {
+        word: "HOY",
+        tag: "Clase activa",
+        title: data.assignment_title,
+        xp: POINT_VALUES.assignment_completed,
+        xpLabel: "por estudiarla",
+        count: data.assignment_studied,
+        countLabel: "ya la estudiaron",
+        cta: "Estudiar esta clase",
+        next: "/dashboard/clase",
+      }
+    : {
+        word: "VOTO",
+        tag: "Votación abierta",
+        title: data.poll_question,
+        xp: POINT_VALUES.poll_voted,
+        xpLabel: "por votar",
+        count: data.poll_voters,
+        countLabel: "ya votaron",
+        cta: "Votar el próximo tema",
+        next: "/dashboard/votar",
+      };
+
+  // scheduled_for es un date (2026-08-11): a mediodía para que ningún huso lo
+  // corra un día, como en el resto de la app.
+  const classDate = data.assignment_date
+    ? new Date(`${data.assignment_date}T12:00:00`).toLocaleDateString("es-VE", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      })
+    : null;
+
+  return (
+    <section className="relative overflow-hidden border-b border-base-300 bg-base-200">
+      <div className="halftone absolute inset-0 opacity-40" aria-hidden="true" />
+      <span
+        aria-hidden="true"
+        className="display text-stroke pointer-events-none absolute -bottom-8 right-0 select-none text-[8rem] leading-none md:text-[14rem]"
+      >
+        {live.word}
+      </span>
+
+      <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-16 md:grid-cols-[1.2fr_1fr] md:items-center">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="tag-skew blink-soft bg-accent px-3 py-1 text-xs text-accent-content">
+              <span>{live.tag}</span>
+            </span>
+            {classDate && (
+              <span className="tag-skew bg-base-300 px-3 py-1 text-xs">
+                <span>{classDate}</span>
+              </span>
+            )}
+          </div>
+
+          <p className="mt-6 text-[0.6rem] font-black uppercase tracking-[0.3em] text-primary">
+            Lo que el equipo estudia ahora mismo
+          </p>
+          <h2 className="display mt-2 text-4xl md:text-5xl">{live.title}</h2>
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+            <p className="display text-3xl text-primary">
+              +{live.xp} XP
+              <span className="ml-2 text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
+                {live.xpLabel}
+              </span>
+            </p>
+            {live.count > 0 && (
+              <p className="text-xs font-bold uppercase tracking-widest opacity-60">
+                {live.count} {live.count === 1 ? "alumno" : "alumnos"}{" "}
+                {live.countLabel}
+              </p>
+            )}
+          </div>
+
+          <div className="mt-8">
+            <JoinCta next={live.next} extraStyle="btn-primary btn-lg px-10">
+              {live.cta}
+            </JoinCta>
+            <p className="mt-3 text-[0.65rem] font-bold uppercase tracking-widest opacity-50">
+              Entras con tu correo y caes directo aquí
+            </p>
+          </div>
+        </div>
+
+        {/* El contenido bajo llave: el video de la tarea no se enseña sin
+            cuenta, y las opciones de la encuesta sí — son el gancho. */}
+        {isTask ? (
+          <div className="clip-cut stripes relative overflow-hidden border-2 border-base-300 bg-base-100 p-8 text-center">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              className="mx-auto h-10 w-10 text-primary"
+              aria-hidden="true"
+            >
+              <rect x="4" y="10" width="16" height="10" rx="1" />
+              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+            </svg>
+            <p className="display mt-4 text-2xl">Video bloqueado</p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-widest opacity-60">
+              La técnica, las notas del profesor y el hilo de comentarios se
+              abren al entrar al equipo
+            </p>
+          </div>
+        ) : (
+          <div className="clip-cut border-2 border-base-300 bg-base-100 p-8">
+            <p className="text-[0.6rem] font-black uppercase tracking-[0.3em] text-primary">
+              Las opciones sobre la mesa
+            </p>
+            <ul className="mt-4 space-y-2">
+              {(data.poll_options ?? []).map((option, i) => (
+                <li
+                  key={option}
+                  className="flex items-baseline gap-3 border-b border-base-300 pb-2 text-sm font-semibold"
+                >
+                  <span className="display text-stroke text-2xl leading-none">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="opacity-80">{option}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-xs font-semibold uppercase tracking-widest opacity-60">
+              El currículo lo decide la clase, no una sola persona
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
 
 function SectionHeading({ kicker, title, lead }) {
   return (
