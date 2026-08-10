@@ -161,12 +161,9 @@ export default async function Page() {
             <span className="text-primary">Nadie lo había programado.</span>
           </h1>
 
-          <p className="rise rise-3 mt-8 max-w-2xl text-lg font-medium leading-relaxed opacity-70">
-            Cinturones, grados, torneos, academias, sumisiones: el jiu-jitsu
-            lleva un siglo con sistema de progresión, tabla de puntos y
-            condiciones de victoria. {config.appName} es la capa digital que lo
-            lee como lo que es — un LMS de artes marciales construido como
-            juego, no un curso con medallitas pegadas encima.
+          <p className="rise rise-3 mt-8 max-w-xl text-lg font-medium leading-relaxed opacity-70">
+            Cinturones, grados, topes, academias: el juego ya estaba ahí.{" "}
+            {config.appName} solo lo puso en pantalla.
           </p>
 
           <div className="rise rise-4 mt-10 flex flex-wrap items-center gap-4">
