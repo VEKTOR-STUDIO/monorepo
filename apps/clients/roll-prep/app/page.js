@@ -4,7 +4,7 @@ import BeltBadge from "@/components/rollprep/BeltBadge";
 import JoinCta from "@/components/rollprep/JoinCta";
 import config from "@/config";
 import { createPublicClient } from "@/libs/supabase/public";
-import { resolveDashboardMode } from "@/libs/rollprep";
+import { daysUntil } from "@/libs/rollprep";
 import { BELTS, POINT_VALUES, formatXp } from "@/libs/gamification";
 import {
   CAOS_POINTS,
@@ -226,7 +226,10 @@ export default async function Page() {
         </div>
 
         {/* ------------------------- CLASE ACTIVA ------------------------ */}
-        <ActiveClass data={activeClass} />
+        <ActiveClassSection data={activeClass} />
+
+        {/* -------------------------- VOTACIÓN --------------------------- */}
+        <ActivePollSection data={activeClass} />
 
         {/* ----------------------------- LOOP ---------------------------- */}
         <section className="mx-auto max-w-6xl px-5 py-20">
@@ -644,61 +647,40 @@ export default async function Page() {
 
 /* --------------------------- Piezas de la página -------------------------- */
 
+/** Cuándo cae la clase, en palabras. `days` viene de daysUntil(). */
+function whenLabel(days) {
+  if (days === null) return null;
+  if (days === 0) return "Es hoy";
+  if (days === 1) return "Es mañana";
+  if (days > 1) return `Faltan ${days} días`;
+  if (days === -1) return "Fue ayer";
+  return `Hace ${Math.abs(days)} días`;
+}
+
 /**
- * La sección "en vivo": lo que el gym está estudiando esta semana. Es el único
- * bloque de la landing que habla del gym de hoy y no del producto, así que es
- * el que convierte — de ahí que el CTA lleve directo a la clase y no al menú
- * (JoinCta se encarga de que el registro no pierda el destino).
+ * La clase activa: qué se estudia y cuándo es. Es el único bloque de la landing
+ * que habla del gym de hoy y no del producto, así que es el que convierte — de
+ * ahí que el CTA lleve directo a la clase y no al menú (JoinCta se encarga de
+ * que el registro no pierda el destino).
  *
- * Qué toca enseñar lo decide la misma función que gobierna el dashboard del
- * alumno: la tarea si hay tarea, si no la votación abierta. Sin nada activo la
- * sección no existe — una landing no gana nada anunciando que el gym descansa.
+ * Sin clase activa la sección no existe: una landing no gana nada anunciando
+ * que el gym está de descanso.
  */
-function ActiveClass({ data }) {
-  if (!data) return null;
+function ActiveClassSection({ data }) {
+  if (!data?.assignment_title) return null;
 
-  const mode = resolveDashboardMode({
-    assignment: data.assignment_title,
-    poll: data.poll_question,
-  });
-
-  if (mode === "empty") return null;
-
-  const isTask = mode === "task";
-
-  const live = isTask
-    ? {
-        word: "HOY",
-        tag: "Clase activa",
-        title: data.assignment_title,
-        xp: POINT_VALUES.assignment_completed,
-        xpLabel: "por estudiarla",
-        count: data.assignment_studied,
-        countLabel: "ya la estudiaron",
-        cta: "Estudiar esta clase",
-        next: "/dashboard/clase",
-      }
-    : {
-        word: "VOTO",
-        tag: "Votación abierta",
-        title: data.poll_question,
-        xp: POINT_VALUES.poll_voted,
-        xpLabel: "por votar",
-        count: data.poll_voters,
-        countLabel: "ya votaron",
-        cta: "Votar el próximo tema",
-        next: "/dashboard/votar",
-      };
-
-  // scheduled_for es un date (2026-08-11): a mediodía para que ningún huso lo
-  // corra un día, como en el resto de la app.
-  const classDate = data.assignment_date
+  // scheduled_for es un date (2026-08-11): se ancla a mediodía para que ningún
+  // huso lo corra un día, igual que en el resto de la app.
+  const date = data.assignment_date
     ? new Date(`${data.assignment_date}T12:00:00`).toLocaleDateString("es-VE", {
         weekday: "long",
         day: "numeric",
         month: "long",
       })
     : null;
+
+  const countdown = whenLabel(daysUntil(data.assignment_date));
+  const studied = data.assignment_studied ?? 0;
 
   return (
     <section className="relative overflow-hidden border-b border-base-300 bg-base-200">
@@ -707,96 +689,155 @@ function ActiveClass({ data }) {
         aria-hidden="true"
         className="display text-stroke pointer-events-none absolute -bottom-8 right-0 select-none text-[8rem] leading-none md:text-[14rem]"
       >
-        {live.word}
+        HOY
       </span>
 
       <div className="relative mx-auto grid max-w-6xl gap-8 px-5 py-16 md:grid-cols-[1.2fr_1fr] md:items-center">
         <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="tag-skew blink-soft bg-accent px-3 py-1 text-xs text-accent-content">
-              <span>{live.tag}</span>
-            </span>
-            {classDate && (
-              <span className="tag-skew bg-base-300 px-3 py-1 text-xs">
-                <span>{classDate}</span>
-              </span>
-            )}
-          </div>
+          <span className="tag-skew blink-soft bg-accent px-3 py-1 text-xs text-accent-content">
+            <span>Clase activa</span>
+          </span>
 
           <p className="mt-6 text-[0.6rem] font-black uppercase tracking-[0.3em] text-primary">
             Lo que el equipo estudia ahora mismo
           </p>
-          <h2 className="display mt-2 text-4xl md:text-5xl">{live.title}</h2>
+          <h2 className="display mt-2 text-4xl md:text-5xl">
+            {data.assignment_title}
+          </h2>
+
+          {/* Cuándo es: la mitad de lo que vino a preguntar el visitante. */}
+          {date && (
+            <div className="mt-6 flex flex-wrap items-baseline gap-3 border-t-2 border-base-300 pt-5">
+              <p className="display text-3xl md:text-4xl">{date}</p>
+              {countdown && (
+                <span className="tag-skew bg-primary px-3 py-1 text-xs text-primary-content">
+                  <span>{countdown}</span>
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
             <p className="display text-3xl text-primary">
-              +{live.xp} XP
+              +{POINT_VALUES.assignment_completed} XP
               <span className="ml-2 text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
-                {live.xpLabel}
+                por estudiarla
               </span>
             </p>
-            {live.count > 0 && (
+            {studied > 0 && (
               <p className="text-xs font-bold uppercase tracking-widest opacity-60">
-                {live.count} {live.count === 1 ? "alumno" : "alumnos"}{" "}
-                {live.countLabel}
+                {studied}{" "}
+                {studied === 1
+                  ? "alumno ya la estudió"
+                  : "alumnos ya la estudiaron"}
               </p>
             )}
           </div>
 
           <div className="mt-8">
-            <JoinCta next={live.next} extraStyle="btn-primary btn-lg px-10">
-              {live.cta}
+            <JoinCta next="/dashboard/clase" extraStyle="btn-primary btn-lg px-10">
+              Estudiar esta clase
             </JoinCta>
             <p className="mt-3 text-[0.65rem] font-bold uppercase tracking-widest opacity-50">
-              Entras con tu correo y caes directo aquí
+              Entras con tu correo y caes directo en la clase
             </p>
           </div>
         </div>
 
-        {/* El contenido bajo llave: el video de la tarea no se enseña sin
-            cuenta, y las opciones de la encuesta sí — son el gancho. */}
-        {isTask ? (
-          <div className="clip-cut stripes relative overflow-hidden border-2 border-base-300 bg-base-100 p-8 text-center">
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              className="mx-auto h-10 w-10 text-primary"
-              aria-hidden="true"
-            >
-              <rect x="4" y="10" width="16" height="10" rx="1" />
-              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-            </svg>
-            <p className="display mt-4 text-2xl">Video bloqueado</p>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-widest opacity-60">
-              La técnica, las notas del profesor y el hilo de comentarios se
-              abren al entrar al equipo
-            </p>
-          </div>
-        ) : (
-          <div className="clip-cut border-2 border-base-300 bg-base-100 p-8">
-            <p className="text-[0.6rem] font-black uppercase tracking-[0.3em] text-primary">
-              Las opciones sobre la mesa
-            </p>
-            <ul className="mt-4 space-y-2">
-              {(data.poll_options ?? []).map((option, i) => (
-                <li
-                  key={option}
-                  className="flex items-baseline gap-3 border-b border-base-300 pb-2 text-sm font-semibold"
+        {/* El video no se enseña sin cuenta: es justo lo que se viene a buscar. */}
+        <div className="clip-cut stripes relative overflow-hidden border-2 border-base-300 bg-base-100 p-8 text-center">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            className="mx-auto h-10 w-10 text-primary"
+            aria-hidden="true"
+          >
+            <rect x="4" y="10" width="16" height="10" rx="1" />
+            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+          </svg>
+          <p className="display mt-4 text-2xl">Video bloqueado</p>
+          <p className="mt-2 text-xs font-semibold uppercase tracking-widest opacity-60">
+            La técnica, las notas del profesor y el hilo de comentarios se abren
+            al entrar al equipo
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * La votación abierta, en banda invertida: fondo volt y tinta negra, al revés
+ * de toda la página. Va separada de la clase a propósito — son dos momentos
+ * distintos del ciclo semanal y en el gym pueden estar abiertos a la vez.
+ *
+ * La clase `ink-dark` voltea --color-base-content para que halftone y los
+ * contornos se dibujen en negro (ver globals.css).
+ */
+function ActivePollSection({ data }) {
+  if (!data?.poll_question) return null;
+
+  const options = data.poll_options ?? [];
+  const voters = data.poll_voters ?? 0;
+
+  return (
+    <section className="ink-dark relative overflow-hidden bg-primary text-primary-content">
+      <div className="halftone absolute inset-0 opacity-30" aria-hidden="true" />
+      <span
+        aria-hidden="true"
+        className="display text-stroke pointer-events-none absolute -bottom-8 -left-4 select-none text-[8rem] leading-none md:text-[14rem]"
+      >
+        VOTO
+      </span>
+
+      <div className="relative mx-auto max-w-6xl px-5 py-16">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="tag-skew blink-soft bg-primary-content px-3 py-1 text-xs text-primary">
+            <span>Votación abierta</span>
+          </span>
+          <span className="tag-skew border-2 border-primary-content px-3 py-1 text-xs">
+            <span>+{POINT_VALUES.poll_voted} XP por votar</span>
+          </span>
+        </div>
+
+        <p className="mt-6 text-[0.6rem] font-black uppercase tracking-[0.3em] opacity-70">
+          El currículo lo decide la clase, no una sola persona
+        </p>
+        <h2 className="display mt-2 max-w-3xl text-4xl md:text-5xl">
+          {data.poll_question}
+        </h2>
+
+        {options.length > 0 && (
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {options.map((option, i) => (
+              <div
+                key={option}
+                className="clip-cut relative overflow-hidden border-2 border-primary-content/30 bg-primary-content/5 p-5"
+              >
+                <span
+                  aria-hidden="true"
+                  className="display text-stroke pointer-events-none absolute -bottom-4 right-1 select-none text-7xl leading-none"
                 >
-                  <span className="display text-stroke text-2xl leading-none">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="opacity-80">{option}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-xs font-semibold uppercase tracking-widest opacity-60">
-              El currículo lo decide la clase, no una sola persona
-            </p>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <p className="display relative text-2xl">{option}</p>
+              </div>
+            ))}
           </div>
         )}
+
+        <div className="mt-10 flex flex-wrap items-center gap-6">
+          <JoinCta next="/dashboard/votar" extraStyle="btn-ink btn-lg px-10">
+            Votar el próximo tema
+          </JoinCta>
+          {voters > 0 && (
+            <p className="text-xs font-bold uppercase tracking-widest opacity-70">
+              {voters} {voters === 1 ? "alumno ya votó" : "alumnos ya votaron"}
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );

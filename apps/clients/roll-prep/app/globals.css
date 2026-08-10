@@ -595,3 +595,35 @@ progress::-webkit-progress-value {
 .blink-soft {
   animation: blink-soft 1.6s ease-in-out infinite;
 }
+
+/* ------------------------------------------------------------------ */
+/* Banda invertida: fondo volt, tinta negra (la votación en la landing).*/
+/* ------------------------------------------------------------------ */
+
+/* halftone, stripes y text-stroke se dibujan todos con --color-base-content,
+   que en el tema es casi blanco: sobre volt desaparecerían. Cambiando el token
+   aquí, esas utilidades se vuelven negras solas dentro de la banda. */
+.ink-dark {
+  --color-base-content: var(--color-primary-content);
+}
+
+/* Botón para la banda invertida: negro con la tinta volt, al revés del resto
+   de la página. Va sin @layer a propósito — así gana a .btn de daisyUI. */
+.btn-ink {
+  background-color: var(--color-primary-content);
+  border-color: var(--color-primary-content);
+  color: var(--color-primary);
+}
+
+.btn-ink:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--color-primary-content) 85%,
+    var(--color-primary)
+  );
+  border-color: color-mix(
+    in oklch,
+    var(--color-primary-content) 85%,
+    var(--color-primary)
+  );
+}

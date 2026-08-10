@@ -42,6 +42,38 @@ export function resolveDashboardMode({ assignment, poll, date = new Date() }) {
 }
 
 /**
+ * El día de hoy (YYYY-MM-DD) en la zona del gym, no en la del servidor: en
+ * Vercel son las 3am UTC cuando en Caracas todavía es ayer.
+ */
+export function todayInTimezone(date = new Date()) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: config.timezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+}
+
+/**
+ * Cuántos días faltan para una fecha de clase (`assignments.scheduled_for`,
+ * un date "2026-08-11"). 0 = hoy, negativo = ya pasó, null si la fecha no
+ * viene o no tiene forma de fecha.
+ *
+ * Las dos fechas se anclan a mediodía UTC antes de restar: así la cuenta es de
+ * días de calendario y ningún huso ni cambio de horario corre el resultado.
+ */
+export function daysUntil(dateString, now = new Date()) {
+  if (typeof dateString !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    return null;
+  }
+
+  const target = Date.parse(`${dateString}T12:00:00Z`);
+  const today = Date.parse(`${todayInTimezone(now)}T12:00:00Z`);
+
+  return Math.round((target - today) / 86_400_000);
+}
+
+/**
  * Devuelve la miniatura (splash art) de un video de YouTube, o null si la
  * URL no es de YouTube. Se usa para el arte de fondo de los tiles del menú.
  */
