@@ -2,6 +2,7 @@ import Link from "next/link";
 import ButtonSignin from "@/components/ButtonSignin";
 import BeltBadge from "@/components/rollprep/BeltBadge";
 import config from "@/config";
+import { createPublicClient } from "@/libs/supabase/public";
 import { BELTS, POINT_VALUES, formatXp } from "@/libs/gamification";
 import {
   CAOS_POINTS,
@@ -102,7 +103,31 @@ const sampleBounty = sampleDuel.tier * 2 * CAOS_POINTS.upsetPerWeight;
 const nogiDeck = deckFor("nogi");
 const giDeck = deckFor("gi");
 
-export default function Page() {
+// La landing se cachea y revalida cada 10 minutos: el XP del gym no cambia
+// tanto como para consultar la base en cada visita.
+export const revalidate = 600;
+
+/**
+ * XP acumulado por todos los alumnos (vista public.gym_stats, ver la
+ * migración 20260810120000_gym_stats.sql). Devuelve null si falta la
+ * migración o la base no responde: entonces la landing enseña un guion en
+ * vez de un número inventado.
+ */
+async function getGymPoints() {
+  const supabase = createPublicClient();
+  if (!supabase) return null;
+
+  const { data } = await supabase
+    .from("gym_stats")
+    .select("total_points")
+    .maybeSingle();
+
+  return data?.total_points ?? null;
+}
+
+export default async function Page() {
+  const totalPoints = await getGymPoints();
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-base-100 text-base-content">
       <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-5 py-5">
@@ -154,11 +179,13 @@ export default function Page() {
           </div>
 
           {/* Barra de credenciales: lo que ya existe, en números. */}
-          <div className="rise rise-5 mt-14 grid max-w-3xl grid-cols-2 gap-px border border-base-300 bg-base-300 md:grid-cols-4">
-            <Stat value="24" label="Rangos de cinturón" />
+          <div className="rise rise-5 mt-14 grid max-w-3xl grid-cols-1 gap-px border border-base-300 bg-base-300 sm:grid-cols-3">
+            <Stat
+              value={totalPoints === null ? "—" : formatXp(totalPoints)}
+              label="XP sudado por el equipo"
+            />
             <Stat value="2" label="Modos de juego" />
             <Stat value={TERRAINS.length + DUELS.length} label="Cartas del CAOS" />
-            <Stat value="0" label="Puntos regalados" />
           </div>
         </section>
 
