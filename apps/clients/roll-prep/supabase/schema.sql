@@ -3,17 +3,17 @@
 
 CREATE TABLE public.profiles (
   id uuid NOT NULL,
-  full_name text,
   role text NOT NULL DEFAULT 'student'::text CHECK (role = ANY (ARRAY['admin'::text, 'student'::text])),
+  full_name text,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT profiles_pkey PRIMARY KEY (id),
   CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
 );
 CREATE TABLE public.assignments (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
   title text NOT NULL,
   video_url text NOT NULL,
   notes text,
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
   is_active boolean NOT NULL DEFAULT true,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   scheduled_for date NOT NULL DEFAULT ((now() AT TIME ZONE 'America/Caracas'::text))::date,
@@ -35,10 +35,10 @@ CREATE TABLE public.polls (
   CONSTRAINT polls_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.poll_options (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
   poll_id uuid NOT NULL,
   title text NOT NULL,
   description text,
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
   CONSTRAINT poll_options_pkey PRIMARY KEY (id),
   CONSTRAINT poll_options_poll_id_fkey FOREIGN KEY (poll_id) REFERENCES public.polls(id)
 );
@@ -53,20 +53,20 @@ CREATE TABLE public.poll_votes (
   CONSTRAINT poll_votes_poll_id_fkey FOREIGN KEY (poll_id) REFERENCES public.polls(id)
 );
 CREATE TABLE public.point_events (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
   student_id uuid NOT NULL,
-  kind text NOT NULL CHECK (kind = ANY (ARRAY['signup'::text, 'profile_completed'::text, 'assignment_completed'::text, 'poll_voted'::text, 'comment_posted'::text, 'tournament_participation'::text, 'tournament_finalist'::text, 'tournament_champion'::text])),
+  kind text NOT NULL CHECK (kind = ANY (ARRAY['signup'::text, 'profile_completed'::text, 'assignment_completed'::text, 'poll_voted'::text, 'comment_posted'::text, 'tournament_participation'::text, 'tournament_finalist'::text, 'tournament_champion'::text, 'caos_upset'::text, 'caos_finish'::text])),
   points integer NOT NULL CHECK (points > 0),
   ref_id uuid,
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT point_events_pkey PRIMARY KEY (id),
   CONSTRAINT point_events_student_id_fkey FOREIGN KEY (student_id) REFERENCES public.profiles(id)
 );
 CREATE TABLE public.assignment_comments (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
   assignment_id uuid NOT NULL,
   student_id uuid NOT NULL,
   body text NOT NULL CHECK (char_length(btrim(body)) >= 1 AND char_length(btrim(body)) <= 1000),
-  id uuid NOT NULL DEFAULT gen_random_uuid(),
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT assignment_comments_pkey PRIMARY KEY (id),
   CONSTRAINT assignment_comments_assignment_id_fkey FOREIGN KEY (assignment_id) REFERENCES public.assignments(id),
@@ -79,6 +79,8 @@ CREATE TABLE public.tournaments (
   created_by uuid,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   completed_at timestamp with time zone,
+  mode text NOT NULL DEFAULT 'classic'::text CHECK (mode = ANY (ARRAY['classic'::text, 'caos'::text])),
+  outfit text NOT NULL DEFAULT 'nogi'::text CHECK (outfit = ANY (ARRAY['nogi'::text, 'gi'::text])),
   CONSTRAINT tournaments_pkey PRIMARY KEY (id),
   CONSTRAINT tournaments_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id)
 );
@@ -86,9 +88,10 @@ CREATE TABLE public.tournament_participants (
   tournament_id uuid NOT NULL,
   student_id uuid NOT NULL,
   seed integer NOT NULL CHECK (seed >= 1),
+  is_guest boolean NOT NULL DEFAULT false,
+  guest_name text,
   CONSTRAINT tournament_participants_pkey PRIMARY KEY (tournament_id, student_id),
-  CONSTRAINT tournament_participants_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(id),
-  CONSTRAINT tournament_participants_student_id_fkey FOREIGN KEY (student_id) REFERENCES public.profiles(id)
+  CONSTRAINT tournament_participants_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(id)
 );
 CREATE TABLE public.tournament_matches (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
@@ -101,9 +104,20 @@ CREATE TABLE public.tournament_matches (
   method text CHECK (method = ANY (ARRAY['submission'::text, 'points'::text, 'decision'::text, 'dq'::text, 'walkover'::text])),
   decided_at timestamp with time zone,
   CONSTRAINT tournament_matches_pkey PRIMARY KEY (id),
-  CONSTRAINT tournament_matches_tournament_round_slot_key UNIQUE (tournament_id, round, slot),
-  CONSTRAINT tournament_matches_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(id),
-  CONSTRAINT tournament_matches_student1_id_fkey FOREIGN KEY (student1_id) REFERENCES public.profiles(id),
-  CONSTRAINT tournament_matches_student2_id_fkey FOREIGN KEY (student2_id) REFERENCES public.profiles(id),
-  CONSTRAINT tournament_matches_winner_id_fkey FOREIGN KEY (winner_id) REFERENCES public.profiles(id)
+  CONSTRAINT tournament_matches_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(id)
+);
+CREATE TABLE public.tournament_match_rolls (
+  match_id uuid NOT NULL,
+  tournament_id uuid NOT NULL,
+  tier smallint NOT NULL CHECK (tier >= 0 AND tier <= 3),
+  terrain_key text NOT NULL CHECK (char_length(btrim(terrain_key)) >= 1 AND char_length(btrim(terrain_key)) <= 60),
+  duel_key text NOT NULL CHECK (char_length(btrim(duel_key)) >= 1 AND char_length(btrim(duel_key)) <= 60),
+  student1_weight smallint NOT NULL CHECK (student1_weight >= '-3'::integer AND student1_weight <= 3),
+  student2_weight smallint NOT NULL CHECK (student2_weight >= '-3'::integer AND student2_weight <= 3),
+  rolled_at timestamp with time zone NOT NULL DEFAULT now(),
+  rolled_by uuid,
+  CONSTRAINT tournament_match_rolls_pkey PRIMARY KEY (match_id),
+  CONSTRAINT tournament_match_rolls_match_id_fkey FOREIGN KEY (match_id) REFERENCES public.tournament_matches(id),
+  CONSTRAINT tournament_match_rolls_tournament_id_fkey FOREIGN KEY (tournament_id) REFERENCES public.tournaments(id),
+  CONSTRAINT tournament_match_rolls_rolled_by_fkey FOREIGN KEY (rolled_by) REFERENCES public.profiles(id)
 );
