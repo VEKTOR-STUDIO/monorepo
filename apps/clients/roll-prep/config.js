@@ -5,7 +5,7 @@ const config = {
   appDescription:
     "Gestión de alumnos de Jiu-Jitsu Brasileño: tareas de video preparatorias, votación del currículo y videoteca. Entrenamos martes y jueves; RollPrep mantiene el estudio fuera del tatami.",
   // REQUIRED (no https://, not trialing slash at the end, just the naked domain)
-  domainName: "rollprep.app",
+  domainName: "rollprep.alessandrovaru.com",
   // Zona horaria usada para decidir el modo del dashboard (tarea vs. votación)
   timezone: "America/Caracas",
   crisp: {
@@ -71,10 +71,11 @@ const config = {
     cdn: "https://cdn-id.cloudfront.net/",
   },
   resend: {
-    // REQUIRED — Email 'From' field to be used when sending magic login links
-    fromNoReply: `RollPrep <noreply@rollprep.app>`,
+    // REQUIRED — Email 'From' field to be used when sending magic login links.
+    // El dominio tiene que estar verificado en Resend para que salga el correo.
+    fromNoReply: `RollPrep <noreply@alessandrovaru.com>`,
     // REQUIRED — Email 'From' field to be used when sending other emails, like abandoned carts, updates etc..
-    fromAdmin: `RollPrep <hola@rollprep.app>`,
+    fromAdmin: `RollPrep <hola@alessandrovaru.com>`,
     // Email shown to customer if need support. Leave empty if not needed => if empty, set up Crisp above, otherwise you won't be able to offer customer support."
     supportEmail: "alessandrovaru@gmail.com",
   },

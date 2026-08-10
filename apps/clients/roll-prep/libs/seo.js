@@ -41,17 +41,16 @@ export const getSEOTags = ({
       //     height: 660,
       //   },
       // ],
-      locale: "en_US",
+      locale: "es_VE",
       type: "website",
     },
 
     twitter: {
       title: openGraph?.title || config.appName,
       description: openGraph?.description || config.appDescription,
-      // If you add an twitter-image.(jpg|jpeg|png|gif) image to the /app folder, you don't need the code below
-      // images: [openGraph?.image || defaults.og.image],
+      // Sin twitter-image, X y compañía caen en la imagen de OpenGraph
+      // (app/opengraph-image.js).
       card: "summary_large_image",
-      creator: "@marc_louvion",
     },
 
     // If a canonical URL is given, we add it. The metadataBase will turn the relative URL into a fully qualified URL
@@ -85,22 +84,15 @@ export const renderSchemaTags = () => {
           url: `https://${config.domainName}/`,
           author: {
             "@type": "Person",
-            name: "Marc Lou",
+            name: "Alessandrovaru",
+            url: "https://alessandrovaru.com",
           },
-          datePublished: "2023-08-01",
+          datePublished: "2026-07-08",
           applicationCategory: "EducationalApplication",
-          aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: "4.8",
-            ratingCount: "12",
-          },
-          offers: [
-            {
-              "@type": "Offer",
-              price: "9.00",
-              priceCurrency: "USD",
-            },
-          ],
+          inLanguage: "es",
+          // Sin aggregateRating ni offers: los que traía la plantilla eran
+          // inventados (4.8 de 12 reseñas, $9) y Google penaliza el marcado
+          // de reseñas que no existen.
         }),
       }}
     ></script>

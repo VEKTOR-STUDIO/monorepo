@@ -7,12 +7,13 @@ export async function middleware(request) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * Feel free to modify this pattern to include more paths.
+     * Todas las rutas menos las que no necesitan sesión:
+     * - _next/static, _next/image  → estáticos y optimización de imágenes
+     * - iconos y OpenGraph         → los pide cada crawler que ve el link
+     * - robots.txt y sitemaps      → los pide Google
+     * - cualquier archivo con extensión de imagen
+     * Refrescar la sesión de Supabase en esas rutas es trabajo tirado.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|favicon.ico|apple-icon|opengraph-image|twitter-image|robots\\.txt|sitemap.*\\.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

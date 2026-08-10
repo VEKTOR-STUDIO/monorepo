@@ -1,6 +1,6 @@
 module.exports = {
   // REQUIRED: add your own domain name here (e.g. https://shipfa.st),
-  siteUrl: process.env.SITE_URL || "https://rollprep.app",
+  siteUrl: process.env.SITE_URL || "https://rollprep.alessandrovaru.com",
   // El dashboard es privado — fuera del sitemap.
   generateRobotsTxt: true,
   // use this to exclude routes from the sitemap (i.e. a user dashboard). By default, NextJS app router metadata files are excluded (https://nextjs.org/docs/app/api-reference/file-conventions/metadata)

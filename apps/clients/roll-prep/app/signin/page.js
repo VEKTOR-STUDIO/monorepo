@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createClient } from "@/libs/supabase/client";
 import toast from "react-hot-toast";
 import config from "@/config";
@@ -15,6 +15,16 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 
+  // El callback del magic link devuelve aquí con ?error= cuando el enlace
+  // venció o ya se usó (ver app/api/auth/callback/route.js).
+  useEffect(() => {
+    const error = new URLSearchParams(window.location.search).get("error");
+    if (!error) return;
+
+    toast.error(error);
+    window.history.replaceState({}, "", window.location.pathname);
+  }, []);
+
   const handleSignup = async (e, options) => {
     e?.preventDefault();
 
@@ -25,14 +35,16 @@ export default function Login() {
       const redirectURL = window.location.origin + "/api/auth/callback";
 
       if (type === "oauth") {
-        await supabase.auth.signInWithOAuth({
+        const { error } = await supabase.auth.signInWithOAuth({
           provider,
           options: {
             redirectTo: redirectURL,
           },
         });
+
+        if (error) throw error;
       } else if (type === "magic_link") {
-        await supabase.auth.signInWithOtp({
+        const { error } = await supabase.auth.signInWithOtp({
           email,
           options: {
             emailRedirectTo: redirectURL,
@@ -42,12 +54,19 @@ export default function Login() {
           },
         });
 
+        if (error) throw error;
+
         toast.success("¡Revisa tu correo!");
 
         setIsDisabled(true);
       }
     } catch (error) {
-      console.log(error);
+      // Supabase NO lanza: devuelve el error en la respuesta. Sin esto, si el
+      // envío fallaba (límite de correos, dominio sin verificar) el alumno
+      // igual leía "revisa tu correo" y se quedaba esperando.
+      toast.error(
+        error?.message || "No se pudo enviar el enlace. Intenta de nuevo."
+      );
     } finally {
       setIsLoading(false);
     }
