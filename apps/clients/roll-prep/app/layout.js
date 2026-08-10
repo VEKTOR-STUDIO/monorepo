@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
 			data-theme={config.colors.theme}
 			className={`${anton.variable} ${barlow.variable} ${microgramma.variable}`}
 		>
-			<body className="grain font-sans antialiased">
+			<body className="glow grain font-sans antialiased">
 				{/* ClientLayout contains all the client wrappers (Crisp chat support, toast messages, tooltips, etc.) */}
 				<ClientLayout>{children}</ClientLayout>
 				<FooterFoot />

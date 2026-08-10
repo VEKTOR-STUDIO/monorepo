@@ -151,18 +151,57 @@ progress::-webkit-progress-value {
 .rise-5 { animation-delay: 0.45s; }
 
 /* ------------------------------------------------------------------ */
-/* TEXTURA DEL FONDO — solo grano, muy leve                            */
+/* ATMÓSFERA DEL FONDO — luz ambiental + grano                         */
 /*                                                                    */
-/* Una capa fija sobre TODA la web (va en el <body> del layout raíz),  */
-/* sin imágenes externas: ruido SVG en data URI. Fino y a baja         */
-/* opacidad, para que se sienta como grano de impresión y no como      */
-/* suciedad encima de la interfaz.                                     */
+/* Dos capas fijas sobre TODA la web (las clases van en el <body> del  */
+/* layout raíz), sin imágenes externas:                                */
+/*   .glow::before → dos focos de luz que respiran despacio            */
+/*   .grain::after → grano de impresión, que lo unifica todo           */
 /*                                                                    */
-/* Se regula con la variable de abajo (en 0 desaparece); para quitarlo */
-/* del todo, saca la clase `grain` del <body>.                         */
+/* Las dos van ENCIMA del contenido a propósito: los <main> llevan     */
+/* fondo opaco, así que una capa por debajo no se vería. La luz usa    */
+/* `screen`, que solo suma claridad — nunca ensucia ni tapa el texto.  */
+/*                                                                    */
+/* Se regulan con las variables de abajo (en 0 desaparecen); para      */
+/* quitarlas, saca la clase del <body>.                                */
 /* ------------------------------------------------------------------ */
 :root {
-  --texture-grain: 0.028;
+  --texture-glow: 0.6;
+  --texture-grain: 0.045;
+}
+
+.glow::before {
+  content: "";
+  position: fixed;
+  /* Más grande que la ventana: al moverse nunca asoma un borde. */
+  inset: -25%;
+  pointer-events: none;
+  z-index: 59;
+  opacity: var(--texture-glow);
+  mix-blend-mode: screen;
+  background-image:
+    radial-gradient(
+      40% 44% at 24% 26%,
+      color-mix(in oklch, var(--color-primary) 12%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      36% 40% at 78% 70%,
+      color-mix(in oklch, var(--color-accent) 10%, transparent) 0%,
+      transparent 72%
+    );
+  /* Solo transform: lo mueve el compositor, no repinta la página. */
+  animation: glow-drift 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes glow-drift {
+  from {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4%, 3%, 0) scale(1.14);
+  }
 }
 
 .grain::after {
@@ -175,8 +214,16 @@ progress::-webkit-progress-value {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
 }
 
-/* En papel el grano solo ensucia. */
+/* A quien le molesta el movimiento, la luz se le queda quieta. */
+@media (prefers-reduced-motion: reduce) {
+  .glow::before {
+    animation: none;
+  }
+}
+
+/* En papel esto solo ensucia. */
 @media print {
+  .glow::before,
   .grain::after {
     display: none;
   }
