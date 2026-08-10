@@ -1,3 +1,4 @@
+import Link from "next/link";
 import AdminAssignmentForm from "@/components/rollprep/AdminAssignmentForm";
 import AdminAssignmentsList from "@/components/rollprep/AdminAssignmentsList";
 import AdminPollForm from "@/components/rollprep/AdminPollForm";
@@ -83,6 +84,24 @@ export default async function AdminPanel() {
             equipo
           </p>
         </div>
+
+        {/* ------------------------------ USUARIOS ------------------------ */}
+        <Link
+          href="/dashboard/admin/usuarios"
+          className="rise rise-2 flex items-center justify-between gap-4 border border-base-300 bg-base-200 p-6 transition-colors hover:border-primary"
+        >
+          <div>
+            <h2 className="display text-xl">
+              Usuarios<span className="text-primary">.</span>
+            </h2>
+            <p className="mt-1 text-xs font-medium opacity-60">
+              Nombre, academia y rol de cada quien. También das de baja cuentas.
+            </p>
+          </div>
+          <span className="display shrink-0 text-4xl text-primary">
+            {studentCount ?? 0}
+          </span>
+        </Link>
 
         {/* ------------------------------ MÉTRICAS ------------------------ */}
         <div className="grid gap-6 md:grid-cols-2">

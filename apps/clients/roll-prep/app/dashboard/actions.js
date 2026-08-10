@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
+import { isAcademyId } from "@/libs/academies";
 import config from "@/config";
 
 async function getAuthedClient() {
@@ -152,25 +153,39 @@ export async function deleteComment(commentId, assignmentId) {
 }
 
 /**
- * Actualiza el nombre del perfil. Completarlo por primera vez otorga
- * puntos (trigger en DB).
+ * Actualiza la ficha del alumno: nombre y academia. Completar el nombre por
+ * primera vez otorga puntos (trigger en DB).
+ *
+ * El selector de academia solo llega en el form si la migración de academias
+ * está aplicada; si no, se guarda solo el nombre, como antes.
  */
-export async function updateProfileName(formData) {
+export async function updateProfile(formData) {
   const { supabase, user } = await getAuthedClient();
 
   const fullName = formData.get("full_name")?.trim();
   if (!fullName) return { error: "El nombre no puede estar vacío." };
   if (fullName.length > 80) return { error: "Máximo 80 caracteres." };
 
+  const changes = { full_name: fullName };
+
+  if (formData.has("academy_id")) {
+    const academyId = formData.get("academy_id")?.trim() || null;
+    if (academyId && !isAcademyId(academyId)) {
+      return { error: "Esa academia no existe." };
+    }
+    changes.academy_id = academyId;
+  }
+
   const { error } = await supabase
     .from("profiles")
-    .update({ full_name: fullName })
+    .update(changes)
     .eq("id", user.id);
 
-  if (error) return { error: "No se pudo guardar el nombre." };
+  if (error) return { error: "No se pudo guardar el perfil." };
 
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/perfil");
+  revalidatePath("/dashboard/ranking");
   return { success: true };
 }
 

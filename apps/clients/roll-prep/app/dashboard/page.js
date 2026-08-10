@@ -2,6 +2,7 @@ import ButtonAccount from "@/components/ButtonAccount";
 import PlayerHud from "@/components/rollprep/PlayerHud";
 import MenuTile from "@/components/rollprep/MenuTile";
 import { createClient } from "@/libs/supabase/server";
+import { getProfileWithAcademy } from "@/libs/academies";
 import { getVideoThumbnail } from "@/libs/rollprep";
 import { getStudentPoints, getRank } from "@/libs/gamification";
 import config from "@/config";
@@ -18,12 +19,12 @@ export default async function Dashboard() {
   } = await supabase.auth.getUser();
 
   const [
-    { data: profile },
+    profile,
     { data: assignment },
     { data: poll },
     { count: libraryCount },
   ] = await Promise.all([
-    supabase.from("profiles").select("full_name").eq("id", user.id).single(),
+    getProfileWithAcademy(supabase, user.id),
     supabase
       .from("assignments")
       .select("id, title, video_url, scheduled_for, created_at")
@@ -97,7 +98,11 @@ export default async function Dashboard() {
         </div>
 
         <div className="rise rise-2">
-          <PlayerHud fullName={profile?.full_name} totalPoints={totalPoints} />
+          <PlayerHud
+            fullName={profile?.full_name}
+            totalPoints={totalPoints}
+            academy={profile?.academy}
+          />
         </div>
 
         <div className="rise rise-3 grid grid-cols-1 gap-3 md:grid-cols-2">

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import ButtonAccount from "@/components/ButtonAccount";
 import PlayerHud from "@/components/rollprep/PlayerHud";
-import ProfileNameForm from "@/components/rollprep/ProfileNameForm";
+import ProfileForm from "@/components/rollprep/ProfileForm";
 import { createClient } from "@/libs/supabase/server";
+import { getAcademies, getProfileWithAcademy } from "@/libs/academies";
 import {
   getStudentPoints,
   getRank,
@@ -20,8 +21,9 @@ export default async function Perfil() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data: profile }, { totalPoints, events }] = await Promise.all([
-    supabase.from("profiles").select("full_name, created_at").eq("id", user.id).single(),
+  const [profile, academies, { totalPoints, events }] = await Promise.all([
+    getProfileWithAcademy(supabase, user.id),
+    getAcademies(supabase),
     getStudentPoints(supabase, user.id),
   ]);
 
@@ -54,11 +56,19 @@ export default async function Perfil() {
         </h1>
 
         <div className="rise rise-2">
-          <PlayerHud fullName={profile?.full_name} totalPoints={totalPoints} />
+          <PlayerHud
+            fullName={profile?.full_name}
+            totalPoints={totalPoints}
+            academy={profile?.academy}
+          />
         </div>
 
         <div className="rise rise-3">
-          <ProfileNameForm currentName={profile?.full_name} />
+          <ProfileForm
+            currentName={profile?.full_name}
+            currentAcademyId={profile?.academy_id}
+            academies={academies}
+          />
         </div>
 
         {/* Camino de cinturones */}

@@ -1,13 +1,23 @@
 -- WARNING: This schema is for context only and is not meant to be run.
 -- Table order and constraints may not be valid for execution.
 
+CREATE TABLE public.academies (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL UNIQUE CHECK (char_length(btrim(name)) >= 1 AND char_length(btrim(name)) <= 60),
+  slug text NOT NULL UNIQUE CHECK (slug ~ '^[a-z0-9-]+$'::text),
+  color text NOT NULL DEFAULT '#ef4444'::text,
+  created_at timestamp with time zone NOT NULL DEFAULT now(),
+  CONSTRAINT academies_pkey PRIMARY KEY (id)
+);
 CREATE TABLE public.profiles (
   id uuid NOT NULL,
   role text NOT NULL DEFAULT 'student'::text CHECK (role = ANY (ARRAY['admin'::text, 'student'::text])),
   full_name text,
+  academy_id uuid,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT profiles_pkey PRIMARY KEY (id),
-  CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
+  CONSTRAINT profiles_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE,
+  CONSTRAINT profiles_academy_id_fkey FOREIGN KEY (academy_id) REFERENCES public.academies(id) ON DELETE SET NULL
 );
 CREATE TABLE public.assignments (
   id uuid NOT NULL DEFAULT gen_random_uuid(),

@@ -1,25 +1,57 @@
 import Link from "next/link";
+import AcademyBadge from "@/components/rollprep/AcademyBadge";
 import { createClient } from "@/libs/supabase/server";
+import { academyFromRow, isMissingAcademies } from "@/libs/academies";
 import { getRank } from "@/libs/gamification";
 
 export const dynamic = "force-dynamic";
 
-// Ranking del gym: alumnos ordenados por XP total (vista `leaderboard`).
-export default async function Ranking() {
+const COLUMNS = "student_id, full_name, total_points, classes_completed";
+const COLUMNS_WITH_ACADEMY = `${COLUMNS}, academy_id, academy_name, academy_slug, academy_color`;
+
+// Ranking del gym: alumnos ordenados por XP total (vista `leaderboard`),
+// con su academia y un filtro para ver el ranking de cada una.
+export default async function Ranking({ searchParams }) {
+  const { academia } = (await searchParams) ?? {};
   const supabase = await createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data: rows } = await supabase
-    .from("leaderboard")
-    .select("student_id, full_name, total_points, classes_completed")
-    .order("total_points", { ascending: false })
-    .order("full_name", { ascending: true });
+  const leaderboard = (columns) =>
+    supabase
+      .from("leaderboard")
+      .select(columns)
+      .order("total_points", { ascending: false })
+      .order("full_name", { ascending: true });
 
-  const ranking = rows ?? [];
-  const myIndex = ranking.findIndex((r) => r.student_id === user.id);
+  let { data: rows, error } = await leaderboard(COLUMNS_WITH_ACADEMY);
+
+  // Falta la migración de academias: el ranking de siempre sigue en pie.
+  if (isMissingAcademies(error)) {
+    ({ data: rows } = await leaderboard(COLUMNS));
+  }
+
+  const ranking = (rows ?? []).map((row) => ({
+    ...row,
+    academy: academyFromRow(row),
+  }));
+
+  // Las academias que hoy tienen gente en el ranking (para los filtros).
+  const academies = [
+    ...new Map(
+      ranking
+        .filter((row) => row.academy)
+        .map((row) => [row.academy.slug, row.academy])
+    ).values(),
+  ].sort((a, b) => a.name.localeCompare(b.name, "es"));
+
+  const activeSlug = academies.some((a) => a.slug === academia) ? academia : null;
+  const visible = activeSlug
+    ? ranking.filter((row) => row.academy?.slug === activeSlug)
+    : ranking;
+  const myIndex = visible.findIndex((r) => r.student_id === user.id);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
@@ -61,21 +93,57 @@ export default async function Ranking() {
           </p>
           {myIndex >= 0 && (
             <p className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-primary">
-              Tu posición: #{myIndex + 1} de {ranking.length}
+              Tu posición: #{myIndex + 1} de {visible.length}
             </p>
           )}
         </div>
 
-        {!ranking.length && (
+        {academies.length > 0 && (
+          <div className="rise rise-2 flex flex-wrap gap-2">
+            <Link
+              href="/dashboard/ranking"
+              className={`tag-skew border-2 px-3 py-1 text-[0.6rem] ${
+                activeSlug
+                  ? "border-base-300 opacity-60 hover:opacity-100"
+                  : "border-primary bg-primary text-primary-content"
+              }`}
+            >
+              <span>Todo el gym</span>
+            </Link>
+            {academies.map((academy) => {
+              const isActive = academy.slug === activeSlug;
+
+              return (
+                <Link
+                  key={academy.slug}
+                  href={`/dashboard/ranking?academia=${academy.slug}`}
+                  className={`tag-skew border-2 px-3 py-1 text-[0.6rem] ${
+                    isActive ? "text-white" : "opacity-60 hover:opacity-100"
+                  }`}
+                  style={{
+                    borderColor: academy.color,
+                    backgroundColor: isActive ? academy.color : "transparent",
+                  }}
+                >
+                  <span>{academy.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+
+        {!visible.length && (
           <div className="rise rise-2 stripes border border-base-300 p-10 text-center">
             <p className="text-xs font-semibold uppercase tracking-widest opacity-60">
-              Todavía no hay puntos en el gym. Sé el primero en marcar.
+              {activeSlug
+                ? "Esta academia todavía no tiene alumnos con puntos."
+                : "Todavía no hay puntos en el gym. Sé el primero en marcar."}
             </p>
           </div>
         )}
 
         <div className="rise rise-2 space-y-2">
-          {ranking.map((row, index) => {
+          {visible.map((row, index) => {
             const isMe = row.student_id === user.id;
             const { belt } = getRank(row.total_points);
             const isPodium = index < 3;
@@ -108,7 +176,7 @@ export default async function Ranking() {
                     {row.full_name || "Alumno"}
                     {isMe && <span className="ml-2 text-sm text-primary">(tú)</span>}
                   </p>
-                  <div className="mt-1 flex items-center gap-2">
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
                     <span
                       className="tag-skew px-1.5 py-0.5 text-[0.55rem] text-base-100"
                       style={{ backgroundColor: belt.color }}
@@ -117,6 +185,7 @@ export default async function Ranking() {
                         {belt.short}
                       </span>
                     </span>
+                    <AcademyBadge academy={row.academy} size="xs" />
                     <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
                       {row.classes_completed} clases estudiadas
                     </span>
