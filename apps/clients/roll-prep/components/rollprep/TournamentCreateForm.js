@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { createTournament } from "@/app/dashboard/torneos/actions";
-import { CAOS_POINTS, OUTFITS, DEFAULT_OUTFIT, deckFor } from "@/libs/caos";
+import {
+  CAOS_POINTS,
+  OUTFITS,
+  DEFAULT_OUTFIT,
+  deckFor,
+  EVENT_TYPES,
+  DEFAULT_EVENT_TYPE,
+} from "@/libs/caos";
 import {
   randomGuestName,
   randomGuestNames,
@@ -25,6 +32,8 @@ export default function TournamentCreateForm({ students }) {
   const [selected, setSelected] = useState(() => new Set(students.map((s) => s.id)));
   const [mode, setMode] = useState("classic");
   const [outfit, setOutfit] = useState(DEFAULT_OUTFIT);
+  const [eventType, setEventType] = useState(DEFAULT_EVENT_TYPE);
+  const [ranked, setRanked] = useState(true);
   const [hasGuests, setHasGuests] = useState(null);
   const [guests, setGuests] = useState([]);
   const [isPending, startTransition] = useTransition();
@@ -95,6 +104,8 @@ export default function TournamentCreateForm({ students }) {
     <form action={handleSubmit} className="space-y-4">
       <input type="hidden" name="mode" value={mode} />
       <input type="hidden" name="outfit" value={outfit} />
+      <input type="hidden" name="event_type" value={eventType} />
+      <input type="hidden" name="ranked" value={ranked ? "on" : "off"} />
 
       <div>
         <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
@@ -170,6 +181,60 @@ export default function TournamentCreateForm({ students }) {
               Ver el manual completo
             </Link>
           </div>
+        )}
+      </div>
+
+      <div>
+        <span className="mb-1 block text-xs font-bold uppercase tracking-widest opacity-70">
+          Tipo de evento
+        </span>
+        <div className="grid grid-cols-2 gap-2">
+          {Object.entries(EVENT_TYPES).map(([key, meta]) => {
+            const active = eventType === key;
+
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setEventType(key)}
+                aria-pressed={active}
+                className={`clip-cut border-2 p-3 text-left transition-colors ${
+                  active
+                    ? "border-primary bg-primary/10"
+                    : "border-base-300 bg-base-200 hover:border-base-content/30"
+                }`}
+              >
+                <p
+                  className={`text-sm font-black uppercase tracking-[0.15em] ${
+                    active ? "text-primary" : "opacity-70"
+                  }`}
+                >
+                  {meta.label}
+                </p>
+                <p className="mt-1 text-[0.65rem] font-semibold leading-snug opacity-60">
+                  {meta.tagline}
+                </p>
+              </button>
+            );
+          })}
+        </div>
+
+        {mode === "caos" && (
+          <label className="mt-2 flex cursor-pointer items-start gap-2 border border-base-300 bg-base-200 p-3">
+            <input
+              type="checkbox"
+              checked={ranked}
+              onChange={(e) => setRanked(e.target.checked)}
+              className="checkbox-primary checkbox checkbox-sm mt-0.5"
+            />
+            <span className="text-[0.65rem] font-semibold leading-snug">
+              Cuenta para el <b>ranking CAOS</b>.{" "}
+              <span className="opacity-60">
+                Quítalo si es un bracket de prueba o un demo para explicar el
+                modo: se pelea igual, pero no suma puntos.
+              </span>
+            </span>
+          </label>
         )}
       </div>
 
@@ -249,7 +314,8 @@ export default function TournamentCreateForm({ students }) {
           </p>
           <p className="mt-1 text-[0.65rem] font-semibold opacity-60">
             Gente sin cuenta en la app. Pelean el bracket completo, pero no
-            cobran XP.
+            cobran XP ni entran al ranking CAOS: no hay dónde acumularlo. El
+            que quiera puntos, que se registre antes de sortear.
           </p>
           <div className="mt-2 flex gap-2">
             <button

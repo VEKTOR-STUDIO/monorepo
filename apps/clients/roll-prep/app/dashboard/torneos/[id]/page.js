@@ -3,7 +3,12 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import TournamentBracket from "@/components/rollprep/TournamentBracket";
 import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
-import { CAOS_POINTS, OUTFITS } from "@/libs/caos";
+import {
+  CAOS_POINTS,
+  OUTFITS,
+  EVENT_TYPES,
+  CAOS_RANKING_MIGRATION,
+} from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
 
@@ -51,14 +56,27 @@ export default async function TorneoDetalle({ params }) {
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
       .from("tournaments")
-      .select("id, title, status, mode, outfit, created_at, completed_at")
+      .select(
+        "id, title, status, mode, outfit, event_type, ranked, created_at, completed_at"
+      )
       .eq("id", id)
       .maybeSingle(),
   ]);
 
   // Falta una columna de la migración del CAOS: el torneo existe, pero el
   // query no corre. Mejor decirlo que devolver un 404 que no es verdad.
-  if (error?.code === "42703") return <MissingMigration message={error.message} />;
+  if (error?.code === "42703") {
+    return (
+      <MissingMigration
+        file={
+          /event_type|ranked/.test(error.message ?? "")
+            ? CAOS_RANKING_MIGRATION
+            : undefined
+        }
+        message={error.message}
+      />
+    );
+  }
   if (!tournament) notFound();
 
   const isCaos = tournament.mode === "caos";
@@ -177,6 +195,11 @@ export default async function TorneoDetalle({ params }) {
                   Modalidad CAOS · {OUTFITS[tournament.outfit]?.label ?? "No-Gi"}
                 </span>
               </span>
+              {tournament.event_type === "circuit" && (
+                <span className="tag-skew inline-block border border-base-content/40 px-2 py-0.5 text-[0.6rem]">
+                  <span>{EVENT_TYPES.circuit.label}</span>
+                </span>
+              )}
               <Link
                 href="/dashboard/torneos/manual"
                 className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60 hover:text-primary hover:opacity-100"
@@ -210,6 +233,24 @@ export default async function TorneoDetalle({ params }) {
             <p className="mt-1 text-[0.65rem] font-black uppercase tracking-[0.2em] text-accent">
               Remontar desde la carga +20 / +40 / +60 XP · Finalizar por
               sumisión +{CAOS_POINTS.finish} XP
+            </p>
+          )}
+          {isCaos && (
+            <p className="mt-2 text-[0.65rem] font-semibold opacity-60">
+              {tournament.ranked === false ? (
+                "Este bracket no puntúa: se pelea, pero no suma al ranking CAOS."
+              ) : (
+                <>
+                  Cada pelea suma al{" "}
+                  <Link
+                    href="/dashboard/ranking/caos"
+                    className="font-black text-accent hover:underline"
+                  >
+                    ranking CAOS
+                  </Link>
+                  .
+                </>
+              )}
             </p>
           )}
         </div>

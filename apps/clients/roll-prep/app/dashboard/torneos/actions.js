@@ -8,7 +8,15 @@ import {
   MAX_GUESTS,
   MAX_GUEST_NAME,
 } from "@/libs/tournaments";
-import { rollMatch, TOURNAMENT_MODES, OUTFITS, DEFAULT_OUTFIT } from "@/libs/caos";
+import {
+  rollMatch,
+  TOURNAMENT_MODES,
+  OUTFITS,
+  DEFAULT_OUTFIT,
+  EVENT_TYPES,
+  DEFAULT_EVENT_TYPE,
+  CAOS_RANKING_MIGRATION,
+} from "@/libs/caos";
 
 async function getAdminClient() {
   const supabase = await createClient();
@@ -36,6 +44,7 @@ function revalidateTournamentPaths(tournamentId) {
   revalidatePath("/dashboard/torneos");
   revalidatePath("/dashboard/perfil");
   revalidatePath("/dashboard/ranking");
+  revalidatePath("/dashboard/ranking/caos");
   if (tournamentId) revalidatePath(`/dashboard/torneos/${tournamentId}`);
 }
 
@@ -48,14 +57,18 @@ function shuffle(list) {
   return result;
 }
 
-// La base todavía no tiene las columnas de invitados.
-function isMissingGuestColumns(error) {
+// La base todavía no tiene alguna columna de una migración reciente
+// (invitados, tipo de evento...). El mensaje dice cuál falta según el caso.
+function isMissingColumn(error) {
   return error?.code === "42703" || error?.code === "PGRST204";
 }
 
 const MISSING_GUESTS_MIGRATION =
   "Falta correr supabase/migrations/20260806140000_tournament_guests.sql " +
   "en el SQL Editor de Supabase.";
+
+const MISSING_RANKING_MIGRATION =
+  `Falta correr ${CAOS_RANKING_MIGRATION} en el SQL Editor de Supabase.`;
 
 /**
  * Crea el tope: sortea a los peleadores seleccionados y genera el bracket
@@ -73,6 +86,14 @@ export async function createTournament(formData) {
 
   const outfit = formData.get("outfit") || DEFAULT_OUTFIT;
   if (!OUTFITS[outfit]) return { error: "Ruleset inválido." };
+
+  // De clase o del circuito. Los dos suman al ranking CAOS; el tipo es lo
+  // que después deja mirarlos por separado.
+  const eventType = formData.get("event_type") || DEFAULT_EVENT_TYPE;
+  if (!EVENT_TYPES[eventType]) return { error: "Tipo de evento inválido." };
+
+  // Un bracket de prueba no debería ensuciar el ranking.
+  const ranked = formData.get("ranked") !== "off";
 
   const fallbackTitle = mode === "caos" ? "Torneo CAOS" : "Tope interno";
   const title = formData.get("title")?.trim() || fallbackTitle;
@@ -111,11 +132,24 @@ export async function createTournament(formData) {
 
   const { data: tournament, error } = await supabase
     .from("tournaments")
-    .insert({ title, mode, outfit, created_by: user.id })
+    .insert({
+      title,
+      mode,
+      outfit,
+      event_type: eventType,
+      ranked,
+      created_by: user.id,
+    })
     .select("id")
     .single();
 
-  if (error) return { error: "No se pudo crear el torneo." };
+  if (error) {
+    return {
+      error: isMissingColumn(error)
+        ? MISSING_RANKING_MIGRATION
+        : "No se pudo crear el torneo.",
+    };
+  }
 
   const { error: participantsError } = await supabase
     .from("tournament_participants")
@@ -132,7 +166,7 @@ export async function createTournament(formData) {
   if (participantsError) {
     await supabase.from("tournaments").delete().eq("id", tournament.id);
     return {
-      error: isMissingGuestColumns(participantsError)
+      error: isMissingColumn(participantsError)
         ? MISSING_GUESTS_MIGRATION
         : "No se pudieron registrar los peleadores.",
     };
@@ -180,7 +214,7 @@ export async function rerollTournament(tournamentId) {
     .select("student_id, is_guest, guest_name")
     .eq("tournament_id", tournamentId);
 
-  if (isMissingGuestColumns(participantsError)) {
+  if (isMissingColumn(participantsError)) {
     return { error: MISSING_GUESTS_MIGRATION };
   }
 

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import AcademyBadge from "@/components/rollprep/AcademyBadge";
+import AcademyFilter from "@/components/rollprep/AcademyFilter";
 import BeltBadge from "@/components/rollprep/BeltBadge";
+import RankingTabs from "@/components/rollprep/RankingTabs";
 import { createClient } from "@/libs/supabase/server";
 import { academyFromRow, isMissingAcademies } from "@/libs/academies";
 import { formatXp, getRank } from "@/libs/gamification";
@@ -81,7 +83,7 @@ export default async function Ranking({ searchParams }) {
             Menú
           </Link>
           <span className="tag-skew bg-accent px-3 py-1 text-xs text-accent-content">
-            <span>Temporada actual</span>
+            <span>Ranking del gym</span>
           </span>
         </div>
 
@@ -91,6 +93,7 @@ export default async function Ranking({ searchParams }) {
           </h1>
           <p className="mt-1 text-sm font-medium opacity-70">
             XP por estudiar clases, votar, comentar y mantener el perfil al día.
+            Es el que sube el cinturón.
           </p>
           {myIndex >= 0 && (
             <p className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-primary">
@@ -99,39 +102,17 @@ export default async function Ranking({ searchParams }) {
           )}
         </div>
 
-        {academies.length > 0 && (
-          <div className="rise rise-2 flex flex-wrap gap-2">
-            <Link
-              href="/dashboard/ranking"
-              className={`tag-skew border-2 px-3 py-1 text-[0.6rem] ${
-                activeSlug
-                  ? "border-base-300 opacity-60 hover:opacity-100"
-                  : "border-primary bg-primary text-primary-content"
-              }`}
-            >
-              <span>Todo el gym</span>
-            </Link>
-            {academies.map((academy) => {
-              const isActive = academy.slug === activeSlug;
+        <div className="rise rise-2">
+          <RankingTabs active="gym" />
+        </div>
 
-              return (
-                <Link
-                  key={academy.slug}
-                  href={`/dashboard/ranking?academia=${academy.slug}`}
-                  className={`tag-skew border-2 px-3 py-1 text-[0.6rem] ${
-                    isActive ? "text-white" : "opacity-60 hover:opacity-100"
-                  }`}
-                  style={{
-                    borderColor: academy.color,
-                    backgroundColor: isActive ? academy.color : "transparent",
-                  }}
-                >
-                  <span>{academy.name}</span>
-                </Link>
-              );
-            })}
-          </div>
-        )}
+        <div className="rise rise-2">
+          <AcademyFilter
+            academies={academies}
+            activeSlug={activeSlug}
+            basePath="/dashboard/ranking"
+          />
+        </div>
 
         {!visible.length && (
           <div className="rise rise-2 stripes border border-base-300 p-10 text-center">

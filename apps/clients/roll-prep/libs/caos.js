@@ -58,6 +58,50 @@ export const OUTFITS = {
 
 export const DEFAULT_OUTFIT = "nogi";
 
+// ----------------------------------------------------------------------------
+// TIPO DE EVENTO
+//
+// El mismo bracket se juega en dos contextos distintos: el tope que sale
+// dentro de la clase y el evento oficial que se arma para pelearlo y grabarlo.
+// Los dos suman al ranking CAOS; lo que cambia es que se pueden mirar por
+// separado. Ver supabase/migrations/20260811120000_caos_ranking.sql.
+// ----------------------------------------------------------------------------
+export const EVENT_TYPES = {
+  class: {
+    label: "Tope de clase",
+    short: "Clase",
+    tagline: "El tope de siempre, dentro del entrenamiento.",
+  },
+  circuit: {
+    label: "Circuito",
+    short: "Circuito",
+    tagline: "Evento oficial. El que se arma para pelearlo y grabarlo.",
+  },
+};
+
+export const DEFAULT_EVENT_TYPE = "class";
+
+// ----------------------------------------------------------------------------
+// PUNTOS DE CAOS (PC) — la moneda del ranking competitivo.
+//
+// Nada que ver con el XP: el XP mide compromiso con el gym y mueve el
+// cinturón; los PC miden récord de peleas en modalidad CAOS. Un alumno puede
+// ser cinturón azul con cero PC, y un peleador nuevo puede liderar el CAOS.
+//
+// No se guardan en ninguna tabla: la vista caos_leaderboard los calcula a
+// partir de las peleas. Estos valores son solo para pintar la UI y DEBEN
+// coincidir con la vista de la migración.
+// ----------------------------------------------------------------------------
+export const CAOS_RANK_POINTS = {
+  fight: 20,
+  win: 100,
+  submission: 50,
+  // Por nivel de la carta que se remontó: 25 / 50 / 75.
+  upsetPerTier: 25,
+  champion: 200,
+  finalist: 100,
+};
+
 // XP extra que solo existe en la modalidad CAOS.
 // Debe coincidir con los triggers de la migración.
 export const CAOS_POINTS = {
@@ -584,3 +628,84 @@ export const CARD_TONE_LABELS = {
   omega: "Carga",
   neutro: "Igualdad",
 };
+
+// ----------------------------------------------------------------------------
+// RANKING CAOS
+// ----------------------------------------------------------------------------
+
+export const CAOS_RANKING_MIGRATION =
+  "supabase/migrations/20260811120000_caos_ranking.sql";
+
+/**
+ * La base todavía no tiene las vistas ni las columnas del ranking CAOS.
+ * Mismo criterio que isMissingAcademies en libs/academies.js.
+ */
+export function isMissingCaosRanking(error) {
+  return ["42703", "42P01", "PGRST200", "PGRST204", "PGRST205"].includes(
+    error?.code
+  );
+}
+
+// Los tres tableros del ranking CAOS. La clave es la que viaja en la URL
+// (?tipo=circuito) y el sufijo es el juego de columnas de caos_leaderboard
+// que hay que leer: la vista trae cada número tres veces.
+export const CAOS_BOARDS = {
+  todo: {
+    suffix: "",
+    label: "Todo",
+    tagline: "Cada pelea CAOS, venga de donde venga.",
+  },
+  circuito: {
+    suffix: "_circuit",
+    label: "Circuito",
+    tagline: "Solo los eventos oficiales.",
+  },
+  clase: {
+    suffix: "_class",
+    label: "Clase",
+    tagline: "Solo los topes que salen en el entrenamiento.",
+  },
+};
+
+export const DEFAULT_CAOS_BOARD = "todo";
+
+/**
+ * Lee una fila de caos_leaderboard con el juego de columnas del tablero
+ * pedido. Las derrotas no vienen de la base: son peleas menos victorias.
+ */
+export function readCaosRow(row, board = DEFAULT_CAOS_BOARD) {
+  const suffix = CAOS_BOARDS[board]?.suffix ?? "";
+  const stat = (key) => row[`${key}${suffix}`] ?? 0;
+
+  const fights = stat("fights");
+  const wins = stat("wins");
+
+  return {
+    pc: stat("pc"),
+    fights,
+    wins,
+    losses: fights - wins,
+    submissions: stat("submissions"),
+    upsets: stat("upsets"),
+    titles: stat("titles"),
+  };
+}
+
+/**
+ * El ranking listo para pintar: solo quien tiene actividad en ese tablero,
+ * ordenado por PC. Los empates son comunes (20 / 120 / 140), así que el
+ * desempate se define completo para que el orden no baile entre renders.
+ */
+export function rankCaosBoard(rows, board = DEFAULT_CAOS_BOARD) {
+  return (rows ?? [])
+    .map((row) => ({ ...row, ...readCaosRow(row, board) }))
+    // Toda pelea paga al menos 20 PC: cero significa no haber peleado aquí.
+    .filter((row) => row.pc > 0)
+    .sort(
+      (a, b) =>
+        b.pc - a.pc ||
+        b.wins - a.wins ||
+        a.fights - b.fights ||
+        (a.full_name || "").localeCompare(b.full_name || "", "es")
+    );
+}

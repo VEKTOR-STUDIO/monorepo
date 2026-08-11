@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/libs/supabase/server";
 import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
-import { OUTFITS } from "@/libs/caos";
+import { OUTFITS, EVENT_TYPES, CAOS_RANKING_MIGRATION } from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
 
@@ -19,17 +19,22 @@ export default async function Torneos() {
     supabase
       .from("tournaments")
       .select(
-        "id, title, status, mode, outfit, created_at, tournament_participants (count)"
+        "id, title, status, mode, outfit, event_type, ranked, created_at, tournament_participants (count)"
       )
       .order("created_at", { ascending: false }),
   ]);
 
   const isAdmin = profile?.role === "admin";
   const list = tournaments ?? [];
-  // Si falta una columna de la migración del CAOS, el query falla entero y
-  // la lista llega vacía. Sin esto, un torneo lleno se ve como "no hay
-  // torneos" y no hay forma de saber que lo que falta es correr el SQL.
+  // Si falta una columna de cualquier migración, el query falla entero y la
+  // lista llega vacía. Sin esto, un torneo lleno se ve como "no hay torneos"
+  // y no hay forma de saber que lo que falta es correr el SQL. El mensaje de
+  // Postgres trae el nombre de la columna, así que dice cuál archivo falta.
   const missingMigration = error?.code === "42703";
+  const missingFile =
+    missingMigration && /event_type|ranked/.test(error.message ?? "")
+      ? CAOS_RANKING_MIGRATION
+      : "supabase/migrations/20260806120000_caos.sql";
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
@@ -101,15 +106,12 @@ export default async function Torneos() {
             {missingMigration ? (
               <>
                 <p className="mt-2 text-sm font-semibold">
-                  Falta correr la migración del modo CAOS en Supabase. Tus
-                  topes están guardados: no se perdió nada, solo no se pueden
-                  listar hasta que la base tenga las columnas nuevas.
+                  Falta correr una migración en Supabase. Tus topes están
+                  guardados: no se perdió nada, solo no se pueden listar hasta
+                  que la base tenga las columnas nuevas.
                 </p>
                 <p className="mt-2 text-xs font-medium opacity-70">
-                  Corre{" "}
-                  <code className="bg-base-300 px-1">
-                    supabase/migrations/20260806120000_caos.sql
-                  </code>{" "}
+                  Corre <code className="bg-base-300 px-1">{missingFile}</code>{" "}
                   en el SQL Editor. Se puede correr varias veces sin problema.
                 </p>
               </>
@@ -150,6 +152,16 @@ export default async function Torneos() {
                         <span>
                           Caos {OUTFITS[tournament.outfit]?.short ?? ""}
                         </span>
+                      </span>
+                    )}
+                    {tournament.event_type === "circuit" && (
+                      <span className="tag-skew shrink-0 border border-base-content/40 px-1.5 py-0.5 text-[0.55rem]">
+                        <span>{EVENT_TYPES.circuit.short}</span>
+                      </span>
+                    )}
+                    {tournament.ranked === false && (
+                      <span className="tag-skew shrink-0 border border-base-content/20 px-1.5 py-0.5 text-[0.55rem] opacity-50">
+                        <span>No puntúa</span>
                       </span>
                     )}
                     <p className="display truncate text-xl group-hover:text-primary">

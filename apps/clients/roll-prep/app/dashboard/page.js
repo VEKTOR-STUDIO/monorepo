@@ -178,7 +178,7 @@ export default async function Dashboard() {
             index={5}
             kicker="Competencia"
             title="Ranking"
-            description="El tatami habla: top del gym por XP"
+            description="Dos tableros: el XP del gym y el récord del CAOS"
           />
 
           {/* 06 — Torneos */}
