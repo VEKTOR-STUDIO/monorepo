@@ -4,7 +4,13 @@ import CaosMark from "@/components/rollprep/CaosMark";
 import config from "@/config";
 import { getSEOTags } from "@/libs/seo";
 import { createPublicClient } from "@/libs/supabase/public";
-import { EVENT_TYPES, OUTFITS } from "@/libs/caos";
+import {
+  EVENT_TYPES,
+  OUTFITS,
+  TIER_LABELS,
+  CAOS_STEPS,
+  caosShowcase,
+} from "@/libs/caos";
 import { safeUrl } from "@/libs/invite-email";
 import {
   CAOS_PITCH,
@@ -106,6 +112,7 @@ export default async function EventoCaos({ params }) {
   const past = isPastInvite(invite.starts_at);
   const cta = safeUrl(invite.cta_url);
   const map = safeUrl(invite.map_url);
+  const show = caosShowcase(invite.slug, invite.outfit);
   const flyer = inviteImagePath(invite.slug, {
     format: "story",
     v: invite.updated_at,
@@ -191,19 +198,92 @@ export default async function EventoCaos({ params }) {
           </div>
         )}
 
-        {/* --------------------------- QUÉ ES CAOS ------------------------ */}
-        <div className="rise rise-3 border-2 border-base-300 bg-base-200 p-6">
-          <h2 className="display text-2xl">
-            Cómo se pelea<span className="text-primary">.</span>
-          </h2>
-          <ul className="mt-4 space-y-3">
-            {CAOS_PITCH.map((line) => (
-              <li key={line} className="flex gap-3 text-sm font-medium">
-                <span className="mt-1.5 h-2 w-2 shrink-0 rotate-45 bg-primary" />
-                <span>{line}</span>
+        {/* --------------------------- QUÉ ES CAOS -------------------------
+            El que llega del flyer viene picado por las cartas: aquí ve las
+            mismas dos de su evento, completas, más el tamaño del mazo y las
+            probabilidades de cada nivel. Es la misma muestra que usan el
+            flyer y el correo (caosShowcase, anclada al slug). */}
+        <div className="rise rise-3 space-y-5">
+          <div>
+            <h2 className="display text-3xl">
+              Cómo se pelea<span className="text-primary">.</span>
+            </h2>
+            <p className="mt-1 text-sm font-medium opacity-60">
+              {show.combos} combinaciones posibles: {show.terrainCount} terrenos
+              × {show.duelCount} duelos.
+            </p>
+          </div>
+
+          <ol className="space-y-3">
+            {CAOS_STEPS.map(([step, text]) => (
+              <li key={step} className="flex gap-4">
+                <span className="display shrink-0 text-2xl text-primary">
+                  {step}
+                </span>
+                <span className="text-sm font-medium leading-relaxed opacity-90">
+                  {text}
+                </span>
               </li>
             ))}
-          </ul>
+          </ol>
+
+          <div className="caos-card caos-card-alfa p-5">
+            <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-primary">
+              Terreno
+            </p>
+            <p className="display mt-1 text-2xl">{show.terrain.name}</p>
+            <p className="mt-2 text-sm leading-relaxed opacity-80">
+              {show.terrain.rule}
+            </p>
+          </div>
+
+          <div className="caos-card caos-card-omega p-5">
+            <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
+              Duelo · {TIER_LABELS[show.duel.tier]}
+            </p>
+            <p className="display mt-1 text-2xl">{show.duel.name}</p>
+            <p className="mt-1 text-xs italic opacity-60">{show.duel.start}</p>
+            <div className="mt-3 space-y-2 text-sm">
+              <p className="flex gap-3">
+                <span className="w-16 shrink-0 text-[0.6rem] font-black uppercase tracking-[0.2em] text-primary">
+                  Alfa
+                </span>
+                <span className="opacity-85">{show.duel.alfa.rule}</span>
+              </p>
+              <p className="flex gap-3">
+                <span className="w-16 shrink-0 text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
+                  Omega
+                </span>
+                <span className="opacity-85">{show.duel.omega.rule}</span>
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-4 gap-2">
+            {show.tiers.map(({ tier, label, odds }) => (
+              <div
+                key={tier}
+                className={`border p-3 text-center ${
+                  tier === 3
+                    ? "border-accent bg-accent/15"
+                    : "border-base-300 bg-base-200"
+                }`}
+              >
+                <p className="text-[0.55rem] font-black uppercase tracking-widest opacity-60">
+                  {label}
+                </p>
+                <p
+                  className={`display mt-1 text-lg ${tier === 3 ? "text-accent" : "text-primary"}`}
+                >
+                  {odds}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-sm font-bold">
+            {CAOS_PITCH[1]}
+          </p>
         </div>
 
         {/* ------------------------------- CTA ---------------------------- */}

@@ -12,9 +12,15 @@
 // ============================================================================
 
 import config from "@/config";
-import { OUTFITS, EVENT_TYPES, CAOS_RANK_POINTS } from "@/libs/caos";
 import {
-  CAOS_PITCH,
+  OUTFITS,
+  EVENT_TYPES,
+  CAOS_RANK_POINTS,
+  TIER_LABELS,
+  CAOS_STEPS,
+  caosShowcase,
+} from "@/libs/caos";
+import {
   inviteDateParts,
   inviteImageUrl,
   inviteUrl,
@@ -30,6 +36,9 @@ const MUTED = "#8a8a85";
 const LINE = "#2a2a30";
 // Volt apagado: la sombra dura de los botones, que les da relieve de tecla.
 const SHADOW = "#8aa800";
+// El rojo del lado OMEGA y el fondo de las cartas, como en la app.
+const ACCENT = "#ff5223";
+const CARD = "#16171a";
 
 const SANS = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 
@@ -93,6 +102,9 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
   const ctaLabel = invite.cta_label || DEFAULT_CTA_LABEL;
   const outfit = OUTFITS[invite.outfit]?.label ?? "No-Gi";
   const kind = EVENT_TYPES[invite.event_type]?.label ?? "Circuito";
+  // Las dos cartas de muestra y el tamaño del mazo: las mismas que salen en
+  // el flyer de este evento (van ancladas a su slug).
+  const show = caosShowcase(invite.slug, invite.outfit);
 
   // Los datos de la misión: cuándo, dónde y con qué reglas. Ni cupos ni
   // precio — esto es una convocatoria, no una entrada de cine. Lo demás está
@@ -224,6 +236,91 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
             </td>
           </tr>
 
+          <!-- CÓMO SE PELEA: los tres pasos del modo -->
+          <tr>
+            <td style="padding:26px 32px 0 32px;">
+              ${label("▸ Así se pelea")}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;">
+                ${CAOS_STEPS.map(
+                  ([n, text]) => `
+                <tr>
+                  <td width="44" style="vertical-align:top;padding:0 0 14px 0;font-family:${SANS};font-size:22px;font-weight:800;color:${VOLT};">${n}</td>
+                  <td style="padding:0 0 14px 0;font-family:${SANS};font-size:15px;line-height:1.5;color:${PAPER};">${esc(text)}</td>
+                </tr>`
+                ).join("")}
+              </table>
+            </td>
+          </tr>
+
+          <!-- LAS CARTAS: dos ejemplos reales del mazo que se va a jugar.
+               Es la parte que vende: nadie entiende "constraints-led" hasta
+               que lee que va a arrancar con la pierna atrapada. -->
+          <tr>
+            <td style="padding:6px 32px 0 32px;">
+              ${label(`▸ Dos cartas del mazo ${esc(outfit)}`)}
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;background:${CARD};">
+                <tr>
+                  <td width="6" bgcolor="${VOLT}" style="font-size:0;line-height:0;">&nbsp;</td>
+                  <td style="padding:14px 18px;">
+                    <span style="font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${VOLT};">Terreno</span>
+                    <div style="margin-top:4px;font-family:${SANS};font-size:19px;font-weight:800;text-transform:uppercase;color:${PAPER};">${esc(show.terrain.name)}</div>
+                    <div style="margin-top:6px;font-family:${SANS};font-size:14px;line-height:1.5;color:rgba(245,245,240,0.75);">${esc(show.terrain.rule)}</div>
+                  </td>
+                </tr>
+              </table>
+
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;background:${CARD};">
+                <tr>
+                  <td width="6" bgcolor="${ACCENT}" style="font-size:0;line-height:0;">&nbsp;</td>
+                  <td style="padding:14px 18px;">
+                    <span style="font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${ACCENT};">Duelo · ${esc(TIER_LABELS[show.duel.tier])}</span>
+                    <div style="margin-top:4px;font-family:${SANS};font-size:19px;font-weight:800;text-transform:uppercase;color:${PAPER};">${esc(show.duel.name)}</div>
+                    <div style="margin-top:4px;font-family:${SANS};font-size:13px;font-style:italic;color:${MUTED};">${esc(show.duel.start)}</div>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;">
+                      <tr>
+                        <td width="70" style="vertical-align:top;padding:0 0 8px 0;font-family:${SANS};font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:${VOLT};">Alfa</td>
+                        <td style="padding:0 0 8px 0;font-family:${SANS};font-size:14px;line-height:1.5;color:rgba(245,245,240,0.85);">${esc(show.duel.alfa.rule)}</td>
+                      </tr>
+                      <tr>
+                        <td width="70" style="vertical-align:top;font-family:${SANS};font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:${ACCENT};">Omega</td>
+                        <td style="font-family:${SANS};font-size:14px;line-height:1.5;color:rgba(245,245,240,0.85);">${esc(show.duel.omega.rule)}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:12px 0 0 0;font-family:${SANS};font-size:14px;line-height:1.5;font-weight:700;color:${PAPER};">
+                Y esas son dos de <span style="color:${VOLT};">${show.combos} combinaciones</span>
+                (${show.terrainCount} terrenos × ${show.duelCount} duelos). Nadie sabe qué le toca hasta el silbato.
+              </p>
+            </td>
+          </tr>
+
+          <!-- MEDIDOR DE LOCURA: cuánto sale cada nivel -->
+          <tr>
+            <td style="padding:22px 32px 0 32px;">
+              ${label("▸ Qué tan raro se pone")}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
+                <tr>
+                  ${show.tiers
+                    .map(
+                      ({ tier, label: name, odds }) => `
+                  <td width="25%" align="center" bgcolor="${tier === 3 ? ACCENT : CARD}" style="padding:12px 4px;border:1px solid ${tier === 3 ? ACCENT : LINE};">
+                    <div style="font-family:${SANS};font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:${tier === 3 ? "#ffffff" : MUTED};">${esc(name)}</div>
+                    <div style="margin-top:4px;font-family:${SANS};font-size:18px;font-weight:800;color:${tier === 3 ? "#ffffff" : VOLT};">${esc(odds)}</div>
+                  </td>`
+                    )
+                    .join("")}
+                </tr>
+              </table>
+              <p style="margin:10px 0 0 0;font-family:${SANS};font-size:12px;line-height:1.5;color:${MUTED};">
+                Una de cada siete peleas sale en nivel brutal. Esa es la que termina en el video.
+              </p>
+            </td>
+          </tr>
+
           <!-- EL BOTÍN: la tabla de puntos, como el loot de una partida -->
           <tr>
             <td style="padding:20px 32px 0 32px;">
@@ -247,22 +344,6 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
                 Los PC son del ranking CAOS: miden récord de peleas, no cinturón.
                 Se pueden ganar desde el primer torneo.
               </p>
-            </td>
-          </tr>
-
-          <!-- QUÉ ES CAOS -->
-          <tr>
-            <td style="padding:24px 32px 0 32px;">
-              ${label("▸ Cómo se pelea")}
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
-                ${CAOS_PITCH.map(
-                  (line) => `
-                <tr>
-                  <td width="20" style="vertical-align:top;padding:0 0 10px 0;font-family:${SANS};font-size:14px;color:${VOLT};">◆</td>
-                  <td style="padding:0 0 10px 0;font-family:${SANS};font-size:15px;line-height:1.5;color:${PAPER};">${esc(line)}</td>
-                </tr>`
-                ).join("")}
-              </table>
             </td>
           </tr>
 
@@ -306,6 +387,7 @@ export function inviteEmailText(invite, { greetingName } = {}) {
   const link = inviteUrl(invite.slug);
   const outfit = OUTFITS[invite.outfit]?.label ?? "No-Gi";
   const kind = EVENT_TYPES[invite.event_type]?.label ?? "Circuito";
+  const show = caosShowcase(invite.slug, invite.outfit);
 
   const lines = [
     `${greetingName ? `${greetingName},` : "Ey,"}`,
@@ -319,6 +401,15 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     "",
     ...paragraphs(invite.description),
     "",
+    "Así se pelea:",
+    ...CAOS_STEPS.map(([n, text]) => `${n}. ${text}`),
+    "",
+    `Dos cartas del mazo ${outfit} (de ${show.combos} combinaciones posibles):`,
+    `- TERRENO · ${show.terrain.name}: ${show.terrain.rule}`,
+    `- DUELO · ${TIER_LABELS[show.duel.tier]} · ${show.duel.name}: ${show.duel.start}`,
+    `    ALFA: ${show.duel.alfa.rule}`,
+    `    OMEGA: ${show.duel.omega.rule}`,
+    "",
     "Botín (puntos CAOS):",
     `- Pelear cada combate: +${CAOS_RANK_POINTS.fight} PC`,
     `- Ganar una pelea: +${CAOS_RANK_POINTS.win} PC`,
@@ -326,8 +417,6 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     `- Remontar desde la desventaja: +${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
     `- Llevarte el torneo: +${CAOS_RANK_POINTS.champion} PC`,
     "",
-    "Cómo se pelea:",
-    ...CAOS_PITCH.map((line) => `- ${line}`),
     "",
     `Anótate: ${safeUrl(invite.cta_url) ?? link}`,
     `Evento: ${link}`,

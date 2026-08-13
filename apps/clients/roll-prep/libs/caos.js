@@ -542,6 +542,67 @@ function pick(list) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
+// ----------------------------------------------------------------------------
+// ESCAPARATE — el mazo puesto a la venta.
+//
+// Explicar CAOS con adjetivos no vende: lo que engancha es enseñar UNA carta
+// de verdad y el tamaño del mazo. Esto arma esa muestra para las piezas de
+// convocatoria (el flyer, el correo y la página del evento), siempre con las
+// cartas que de verdad se pueden jugar en ese ruleset.
+//
+// La muestra se escoge con la semilla del evento, no al azar: el flyer se
+// genera muchas veces (preview, descarga, correo, redes) y en todas tiene que
+// salir la misma carta. Dos eventos distintos enseñan cartas distintas.
+// ----------------------------------------------------------------------------
+
+/** Hash estable de un texto a entero positivo. */
+function seedFrom(value) {
+  let hash = 0;
+  for (const char of String(value ?? "caos")) {
+    hash = (hash * 31 + char.codePointAt(0)) | 0;
+  }
+  return Math.abs(hash);
+}
+
+// Los tres pasos del modo, en el orden en que los vive el que llega. Es la
+// explicación corta de CAOS para quien nunca lo ha peleado: sale igual en el
+// correo y en la página del evento.
+export const CAOS_STEPS = [
+  ["01", "Se sortea el bracket. Nadie escoge rival."],
+  [
+    "02",
+    "Antes de cada pelea se rolea delante de todos: sale un terreno que aplica a los dos y una carta de duelo que reparte ventaja y desventaja.",
+  ],
+  [
+    "03",
+    "El que arranca abajo cobra más si remonta. El que arranca con la ventaja solo cobra extra si finaliza: guindarse de la ventaja no paga.",
+  ],
+];
+
+export function caosShowcase(seed, outfit = DEFAULT_OUTFIT) {
+  const deck = deckFor(OUTFITS[outfit] ? outfit : DEFAULT_OUTFIT);
+  const n = seedFrom(seed);
+
+  // El duelo de muestra sale de los niveles fuertes (2 y 3): son los que
+  // hacen decir "¿cómo que arranco montado y él con los brazos por dentro?".
+  const spicy = deck.duels.filter((duel) => duel.tier >= 2);
+  const duels = spicy.length ? spicy : deck.duels;
+
+  return {
+    terrain: deck.terrains[n % deck.terrains.length],
+    duel: duels[Math.floor(n / 7) % duels.length],
+    terrainCount: deck.terrains.length,
+    duelCount: deck.duels.length,
+    // Cuántas peleas distintas puede sacar el mazo. El número es el gancho.
+    combos: deck.terrains.length * deck.duels.length,
+    tiers: [0, 1, 2, 3].map((tier) => ({
+      tier,
+      label: TIER_LABELS[tier],
+      odds: TIER_ODDS_LABELS[tier],
+    })),
+  };
+}
+
 /**
  * Escoge el nivel de locura del duelo según TIER_ODDS.
  */
