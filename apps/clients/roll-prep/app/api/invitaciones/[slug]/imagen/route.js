@@ -76,11 +76,11 @@ export async function GET(request, { params }) {
     });
   }
 
-  const { fonts, logo } = await loadFlyerAssets();
+  const { fonts, logo, signature } = await loadFlyerAssets();
   const spec = INVITE_FORMATS[format];
 
   const image = new ImageResponse(
-    <Flyer invite={invite} format={format} logo={logo} />,
+    <Flyer invite={invite} format={format} logo={logo} signature={signature} />,
     { width: spec.width, height: spec.height, fonts }
   );
 

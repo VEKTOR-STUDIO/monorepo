@@ -12,12 +12,13 @@
 // ============================================================================
 
 import config from "@/config";
-import { OUTFITS, EVENT_TYPES } from "@/libs/caos";
+import { OUTFITS, EVENT_TYPES, CAOS_RANK_POINTS } from "@/libs/caos";
 import {
   CAOS_PITCH,
   inviteDateParts,
   inviteImageUrl,
   inviteUrl,
+  siteUrl,
   DEFAULT_CTA_LABEL,
 } from "@/libs/invites";
 
@@ -27,6 +28,8 @@ const VOLT = "#d4ff00";
 const PAPER = "#f5f5f0";
 const MUTED = "#8a8a85";
 const LINE = "#2a2a30";
+// Volt apagado: la sombra dura de los botones, que les da relieve de tecla.
+const SHADOW = "#8aa800";
 
 const SANS = "'Helvetica Neue', Helvetica, Arial, sans-serif";
 
@@ -82,21 +85,59 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
     format: "post",
     v: invite.updated_at,
   });
+  // La firma va en PNG, no en el .webp original: Outlook de escritorio no
+  // dibuja webp y dejaría el pie con el cuadro roto. El PNG se genera del
+  // mismo archivo y vive al lado en /public.
+  const signature = `${siteUrl()}/logoAlessandrovaruBlanco.png`;
   const cta = safeUrl(invite.cta_url) ?? link;
   const ctaLabel = invite.cta_label || DEFAULT_CTA_LABEL;
   const outfit = OUTFITS[invite.outfit]?.label ?? "No-Gi";
   const kind = EVENT_TYPES[invite.event_type]?.label ?? "Circuito";
 
+  // Los datos de la misión: cuándo, dónde y con qué reglas. Ni cupos ni
+  // precio — esto es una convocatoria, no una entrada de cine. Lo demás está
+  // en la página del evento, a un clic.
   const rows = [
     ["Cuándo", date ? `${date.weekday} ${date.day} de ${date.monthLong} · ${date.time}` : null],
     ["Dónde", invite.location],
-    ["Ruleset", `${outfit} · Torneo ${kind}`],
-    ["Cupos", invite.slots ? `${invite.slots} peleadores` : null],
-    ["Entrada", invite.price],
+    ["Reglas", `${outfit} · Torneo ${kind}`],
   ].filter(([, value]) => Boolean(value));
+
+  // El botín: lo que suma cada cosa al ranking CAOS. Es la parte de
+  // videojuego que sí es real — los números salen de la misma tabla que
+  // usa la app para repartir puntos (libs/caos.js).
+  const loot = [
+    ["Pelear cada combate", `+${CAOS_RANK_POINTS.fight} PC`],
+    ["Ganar una pelea", `+${CAOS_RANK_POINTS.win} PC`],
+    ["Finalizar por sumisión", `+${CAOS_RANK_POINTS.submission} PC`],
+    [
+      "Remontar desde la desventaja",
+      `+${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
+    ],
+    ["Llevarte el torneo", `+${CAOS_RANK_POINTS.champion} PC`],
+  ];
 
   const label = (text) =>
     `<span style="font-family:${SANS};font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${MUTED};">${esc(text)}</span>`;
+
+  /**
+   * Botón de arcade: el bloque volt con una barra oscura debajo que le da
+   * el relieve de tecla. Nada de box-shadow ni de transform —Outlook no los
+   * dibuja—: son dos celdas de tabla con color de fondo, que sí pasan.
+   */
+  const arcadeButton = (href, text, { primary = true } = {}) => `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td align="center" bgcolor="${primary ? VOLT : PANEL}" style="padding:0;${primary ? "" : `border:2px solid ${VOLT};border-bottom:0;`}">
+          <a href="${esc(href)}" style="display:block;padding:${primary ? "20px" : "16px"} 24px;font-family:${SANS};font-size:${primary ? "17" : "14"}px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${primary ? INK : VOLT};text-decoration:none;">
+            ${esc(text)}
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td height="7" bgcolor="${primary ? SHADOW : VOLT}" style="height:7px;line-height:7px;font-size:0;">&nbsp;</td>
+      </tr>
+    </table>`;
 
   return `<!doctype html>
 <html lang="es">
@@ -126,11 +167,21 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
             </td>
           </tr>
 
-          <!-- TÍTULO -->
+          <!-- CHIP + TÍTULO -->
           <tr>
             <td style="padding:32px 32px 0 32px;">
-              ${label(`Torneo ${kind} · ${outfit}`)}
-              <h1 style="margin:10px 0 0 0;font-family:${SANS};font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-0.5px;text-transform:uppercase;color:${PAPER};">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td bgcolor="${VOLT}" style="padding:6px 12px;font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${INK};">
+                    Torneo ${esc(kind)}
+                  </td>
+                  <td width="8" style="font-size:0;line-height:0;">&nbsp;</td>
+                  <td style="padding:6px 12px;border:2px solid ${VOLT};font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${VOLT};">
+                    ${esc(outfit)}
+                  </td>
+                </tr>
+              </table>
+              <h1 style="margin:16px 0 0 0;font-family:${SANS};font-size:32px;line-height:1.05;font-weight:800;letter-spacing:-0.5px;text-transform:uppercase;color:${PAPER};">
                 ${esc(invite.title)}
               </h1>
               ${
@@ -151,16 +202,21 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
             </td>
           </tr>
 
-          <!-- DATOS DEL EVENTO -->
+          <!-- LA MISIÓN: cuándo, dónde, con qué reglas -->
           <tr>
             <td style="padding:8px 32px 0 32px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${INK};border:1px solid ${LINE};">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${INK};border:2px solid ${LINE};">
+                <tr>
+                  <td colspan="2" bgcolor="${LINE}" style="padding:8px 18px;font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:${VOLT};">
+                    ▸ La misión
+                  </td>
+                </tr>
                 ${rows
                   .map(
-                    ([name, value]) => `
+                    ([name, value], i) => `
                 <tr>
-                  <td style="padding:14px 18px;border-bottom:1px solid ${LINE};width:110px;vertical-align:top;">${label(name)}</td>
-                  <td style="padding:14px 18px;border-bottom:1px solid ${LINE};font-family:${SANS};font-size:16px;font-weight:700;color:${PAPER};">${esc(value)}</td>
+                  <td style="padding:14px 18px;${i < rows.length - 1 ? `border-bottom:1px solid ${LINE};` : ""}width:96px;vertical-align:middle;">${label(name)}</td>
+                  <td style="padding:14px 18px;${i < rows.length - 1 ? `border-bottom:1px solid ${LINE};` : ""}font-family:${SANS};font-size:17px;font-weight:800;text-transform:uppercase;color:${PAPER};">${esc(value)}</td>
                 </tr>`
                   )
                   .join("")}
@@ -168,15 +224,41 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
             </td>
           </tr>
 
+          <!-- EL BOTÍN: la tabla de puntos, como el loot de una partida -->
+          <tr>
+            <td style="padding:20px 32px 0 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${INK};border:2px solid ${VOLT};">
+                <tr>
+                  <td colspan="2" bgcolor="${VOLT}" style="padding:8px 18px;font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:${INK};">
+                    ▸ Botín · puntos CAOS
+                  </td>
+                </tr>
+                ${loot
+                  .map(
+                    ([what, points], i) => `
+                <tr>
+                  <td style="padding:11px 18px;${i < loot.length - 1 ? `border-bottom:1px solid ${LINE};` : ""}font-family:${SANS};font-size:14px;color:${PAPER};">${esc(what)}</td>
+                  <td align="right" style="padding:11px 18px;${i < loot.length - 1 ? `border-bottom:1px solid ${LINE};` : ""}font-family:${SANS};font-size:16px;font-weight:800;white-space:nowrap;color:${VOLT};">${esc(points)}</td>
+                </tr>`
+                  )
+                  .join("")}
+              </table>
+              <p style="margin:10px 0 0 0;font-family:${SANS};font-size:12px;line-height:1.5;color:${MUTED};">
+                Los PC son del ranking CAOS: miden récord de peleas, no cinturón.
+                Se pueden ganar desde el primer torneo.
+              </p>
+            </td>
+          </tr>
+
           <!-- QUÉ ES CAOS -->
           <tr>
-            <td style="padding:28px 32px 0 32px;">
-              ${label("Cómo se pelea")}
+            <td style="padding:24px 32px 0 32px;">
+              ${label("▸ Cómo se pelea")}
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
                 ${CAOS_PITCH.map(
                   (line) => `
                 <tr>
-                  <td width="18" style="vertical-align:top;padding:0 0 10px 0;font-family:${SANS};font-size:16px;color:${VOLT};">■</td>
+                  <td width="20" style="vertical-align:top;padding:0 0 10px 0;font-family:${SANS};font-size:14px;color:${VOLT};">◆</td>
                   <td style="padding:0 0 10px 0;font-family:${SANS};font-size:15px;line-height:1.5;color:${PAPER};">${esc(line)}</td>
                 </tr>`
                 ).join("")}
@@ -184,31 +266,29 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
             </td>
           </tr>
 
-          <!-- CTA -->
+          <!-- BOTONES -->
           <tr>
-            <td style="padding:28px 32px 8px 32px;">
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
-                <tr>
-                  <td align="center" bgcolor="${VOLT}" style="padding:0;">
-                    <a href="${esc(cta)}" style="display:block;padding:18px 24px;font-family:${SANS};font-size:16px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:${INK};text-decoration:none;">
-                      ${esc(ctaLabel)}
-                    </a>
-                  </td>
-                </tr>
+            <td style="padding:26px 32px 8px 32px;">
+              ${arcadeButton(cta, `▶ ${ctaLabel}`)}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td height="12" style="height:12px;line-height:12px;font-size:0;">&nbsp;</td></tr>
               </table>
-              <p style="margin:14px 0 0 0;font-family:${SANS};font-size:13px;line-height:1.5;color:${MUTED};text-align:center;">
-                O comparte el evento: <a href="${esc(link)}" style="color:${VOLT};text-decoration:none;">${esc(link.replace(/^https?:\/\//, ""))}</a>
+              ${arcadeButton(link, "Ver el evento", { primary: false })}
+              <p style="margin:16px 0 0 0;font-family:${SANS};font-size:12px;line-height:1.5;color:${MUTED};text-align:center;">
+                Pásale el link a quien quieras traer:
+                <a href="${esc(link)}" style="color:${VOLT};text-decoration:none;">${esc(link.replace(/^https?:\/\//, ""))}</a>
               </p>
             </td>
           </tr>
 
-          <!-- PIE -->
+          <!-- PIE + FIRMA -->
           <tr>
             <td style="padding:28px 32px 32px 32px;border-top:1px solid ${LINE};">
-              <p style="margin:0;font-family:${SANS};font-size:12px;line-height:1.6;color:${MUTED};">
+              <p style="margin:0 0 20px 0;font-family:${SANS};font-size:12px;line-height:1.6;color:${MUTED};">
                 Te llega porque estás en ${esc(config.appName)}, el marcador del gym.
                 ¿Dudas del evento? Responde este correo.
               </p>
+              <img src="${esc(signature)}" width="150" height="28" alt="Alessandrovaru" style="display:block;width:150px;height:auto;border:0;opacity:0.85;" />
             </td>
           </tr>
 
@@ -235,11 +315,16 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     "",
     date ? `Cuándo: ${date.weekday} ${date.day} de ${date.monthLong} · ${date.time}` : null,
     invite.location ? `Dónde: ${invite.location}` : null,
-    `Ruleset: ${outfit} · Torneo ${kind}`,
-    invite.slots ? `Cupos: ${invite.slots} peleadores` : null,
-    invite.price ? `Entrada: ${invite.price}` : null,
+    `Reglas: ${outfit} · Torneo ${kind}`,
     "",
     ...paragraphs(invite.description),
+    "",
+    "Botín (puntos CAOS):",
+    `- Pelear cada combate: +${CAOS_RANK_POINTS.fight} PC`,
+    `- Ganar una pelea: +${CAOS_RANK_POINTS.win} PC`,
+    `- Finalizar por sumisión: +${CAOS_RANK_POINTS.submission} PC`,
+    `- Remontar desde la desventaja: +${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
+    `- Llevarte el torneo: +${CAOS_RANK_POINTS.champion} PC`,
     "",
     "Cómo se pelea:",
     ...CAOS_PITCH.map((line) => `- ${line}`),

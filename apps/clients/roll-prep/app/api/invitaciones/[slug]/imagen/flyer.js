@@ -23,7 +23,7 @@ const VOLT = "#d4ff00";
 const PAPER = "#f5f5f0";
 const MUTED = "#8a8a85";
 
-// Las fuentes y el logo se leen del disco una sola vez por instancia.
+// Las fuentes y los logos se leen del disco una sola vez por instancia.
 let assetsPromise;
 
 export function loadFlyerAssets() {
@@ -35,13 +35,17 @@ export function loadFlyerAssets() {
       asset("public/fonts/Barlow-Regular.ttf"),
       asset("public/fonts/Barlow-Bold.ttf"),
       asset("public/images/caosPrimary.png"),
-    ]).then(([anton, barlow, barlowBold, logo]) => ({
+      // La firma va en PNG y no en el .webp original: satori dibuja el
+      // <img> metiéndolo dentro de un SVG, y ahí el webp no entra.
+      asset("public/logoAlessandrovaruBlanco.png"),
+    ]).then(([anton, barlow, barlowBold, logo, signature]) => ({
       fonts: [
         { name: "Anton", data: anton, weight: 400, style: "normal" },
         { name: "Barlow", data: barlow, weight: 400, style: "normal" },
         { name: "Barlow", data: barlowBold, weight: 700, style: "normal" },
       ],
       logo: `data:image/png;base64,${logo.toString("base64")}`,
+      signature: `data:image/png;base64,${signature.toString("base64")}`,
     }));
   }
 
@@ -101,7 +105,7 @@ function Tag({ children, size, filled = true }) {
   );
 }
 
-export default function Flyer({ invite, format, logo }) {
+export default function Flyer({ invite, format, logo, signature }) {
   const spec = INVITE_FORMATS[format];
   const story = format === "story";
   const date = inviteDateParts(invite.starts_at);
@@ -357,34 +361,53 @@ export default function Flyer({ invite, format, logo }) {
             Cupos y entrada NO van aquí: esto es una invitación, la pieza que
             la gente enseña. La letra chica vive en la página del evento y en
             el correo, que es donde se entra a decidir. */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 * u }}>
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Barlow",
-              fontWeight: 700,
-              fontSize: 24 * u,
-              letterSpacing: 5 * u,
-              textTransform: "uppercase",
-              color: MUTED,
-            }}
-          >
-            Anótate en
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            gap: 24 * u,
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 * u }}>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "Barlow",
+                fontWeight: 700,
+                fontSize: 24 * u,
+                letterSpacing: 5 * u,
+                textTransform: "uppercase",
+                color: MUTED,
+              }}
+            >
+              Anótate en
+            </div>
+            {/* El dominio pelado. Sin ruta: en una story nadie teclea un slug,
+                y la dirección corta ya dice de quién es el evento. */}
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "Anton",
+                fontSize: 44 * u,
+                textTransform: "uppercase",
+                color: VOLT,
+              }}
+            >
+              {url}
+            </div>
           </div>
-          {/* El dominio pelado. Sin ruta: en una story nadie teclea un slug,
-              y la dirección corta ya dice de quién es el evento — por eso
-              tampoco va la firma "RollPrep" al lado, sería repetirse. */}
-          <div
-            style={{
-              display: "flex",
-              fontFamily: "Anton",
-              fontSize: 44 * u,
-              textTransform: "uppercase",
-              color: VOLT,
-            }}
-          >
-            {url}
-          </div>
+
+          {/* La firma de la casa, en blanco y discreta: es de quién es la
+              pieza, no un segundo titular. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={signature}
+            alt=""
+            width={Math.round(265 * u)}
+            height={Math.round(265 * u * (71 / 379))}
+            style={{ opacity: 0.9, marginBottom: 4 * u }}
+          />
         </div>
       </div>
     </div>

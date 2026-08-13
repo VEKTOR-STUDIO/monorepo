@@ -213,6 +213,11 @@ export default function AdminInviteForm({ invite = null }) {
         </Field>
       </div>
 
+      <p className="text-[0.65rem] font-medium opacity-50">
+        Cupos y entrada no salen en el flyer —esa pieza es la invitación, no la
+        letra chica—: aparecen en el correo y en la página del evento.
+      </p>
+
       <Field
         label="De qué va"
         hint="Sale completo en el correo y en la página; en el flyer manda el título."

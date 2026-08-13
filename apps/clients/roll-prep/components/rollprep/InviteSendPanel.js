@@ -148,6 +148,17 @@ export default function InviteSendPanel({ invite, resendReady, from }) {
         {audience === "test" ? "Mandarme la prueba" : "Enviar invitación"}
       </button>
 
+      {/* El preview abre el HTML exacto del correo. Es la única forma de
+          revisarlo mientras no se pueda mandar una prueba de verdad. */}
+      <a
+        href={`/dashboard/admin/invitaciones/${invite.id}/correo`}
+        target="_blank"
+        rel="noreferrer"
+        className="btn btn-outline btn-block btn-sm"
+      >
+        Ver cómo queda el correo
+      </a>
+
       <p className="text-[0.65rem] font-medium opacity-50">
         Sale desde <span className="font-bold">{from}</span>. El flyer viaja
         dentro del correo como imagen.
