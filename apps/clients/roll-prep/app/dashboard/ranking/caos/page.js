@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AcademyBadge from "@/components/rollprep/AcademyBadge";
 import AcademyFilter from "@/components/rollprep/AcademyFilter";
+import CaosMark from "@/components/rollprep/CaosMark";
 import RankingTabs from "@/components/rollprep/RankingTabs";
 import { createClient } from "@/libs/supabase/server";
 import { academyFromRow } from "@/libs/academies";
@@ -75,12 +76,10 @@ export default async function RankingCaos({ searchParams }) {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
-      <span
-        aria-hidden="true"
-        className="display text-stroke pointer-events-none fixed -right-8 top-32 select-none text-[10rem] leading-none md:text-[14rem]"
-      >
-        CAOS
-      </span>
+      <CaosMark
+        watermark
+        className="pointer-events-none fixed -right-16 top-20 w-[20rem] select-none opacity-[0.16] md:w-[30rem]"
+      />
 
       <section className="relative z-10 mx-auto max-w-xl space-y-6">
         <div className="rise rise-1 flex items-center justify-between">
@@ -104,19 +103,22 @@ export default async function RankingCaos({ searchParams }) {
           </span>
         </div>
 
-        <div className="rise rise-1">
-          <h1 className="display text-5xl">
-            Ranking CAOS<span className="text-accent">.</span>
-          </h1>
-          <p className="mt-1 text-sm font-medium opacity-70">
-            Puntos de CAOS: se ganan peleando el modo, no estudiando. El
-            cinturón va por otro lado.
-          </p>
-          {myIndex >= 0 && (
-            <p className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-accent">
-              Tu posición: #{myIndex + 1} de {visible.length}
+        <div className="rise rise-1 flex items-end gap-4">
+          <CaosMark className="h-16 w-auto shrink-0 md:h-20" />
+          <div>
+            <h1 className="display text-5xl">
+              Ranking CAOS<span className="text-accent">.</span>
+            </h1>
+            <p className="mt-1 text-sm font-medium opacity-70">
+              Puntos de CAOS: se ganan peleando el modo, no estudiando. El
+              cinturón va por otro lado.
             </p>
-          )}
+            {myIndex >= 0 && (
+              <p className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-accent">
+                Tu posición: #{myIndex + 1} de {visible.length}
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="rise rise-2">

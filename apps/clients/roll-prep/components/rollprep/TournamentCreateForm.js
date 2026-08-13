@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { createTournament } from "@/app/dashboard/torneos/actions";
+import CaosMark from "@/components/rollprep/CaosMark";
 import {
   CAOS_POINTS,
   OUTFITS,
@@ -123,6 +124,7 @@ export default function TournamentCreateForm({ students }) {
             onClick={() => setMode("caos")}
             title="CAOS"
             accent
+            mark
             description="Cada pelea se rolea: terreno y cartas de duelo."
           />
         </div>
@@ -424,13 +426,13 @@ export default function TournamentCreateForm({ students }) {
   );
 }
 
-function ModeCard({ active, onClick, title, description, accent }) {
+function ModeCard({ active, onClick, title, description, accent, mark }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`clip-cut border-2 p-3 text-left transition-colors ${
+      className={`clip-cut relative overflow-hidden border-2 p-3 text-left transition-colors ${
         active
           ? accent
             ? "border-accent bg-accent/10"
@@ -439,13 +441,14 @@ function ModeCard({ active, onClick, title, description, accent }) {
       }`}
     >
       <p
-        className={`display text-2xl ${
+        className={`display relative flex items-center gap-2 text-2xl ${
           active ? (accent ? "text-accent" : "text-primary") : "opacity-70"
         }`}
       >
+        {mark && <CaosMark className="h-8 w-auto" />}
         {title}
       </p>
-      <p className="mt-1 text-[0.65rem] font-semibold leading-snug opacity-60">
+      <p className="relative mt-1 text-[0.65rem] font-semibold leading-snug opacity-60">
         {description}
       </p>
     </button>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ButtonSignin from "@/components/ButtonSignin";
 import BeltBadge from "@/components/rollprep/BeltBadge";
+import CaosMark from "@/components/rollprep/CaosMark";
 import CaosRollDemo from "@/components/rollprep/CaosRollDemo";
 import JoinCta from "@/components/rollprep/JoinCta";
 import config from "@/config";
@@ -162,6 +163,14 @@ export default async function Page() {
           >
             BJJ
           </span>
+          <CaosMark
+            watermark
+            className="absolute -right-16 top-24 w-[18rem] opacity-[0.22] md:-right-8 md:top-8 md:w-[28rem] lg:w-[34rem]"
+          />
+          <CaosMark
+            watermark
+            className="absolute -left-24 bottom-0 w-[14rem] opacity-[0.08] [animation-delay:-8s] md:w-[20rem]"
+          />
 
           <div className="rise rise-1 flex flex-wrap items-center gap-2">
             <span className="tag-skew bg-primary px-3 py-1 text-xs text-primary-content">
@@ -186,7 +195,8 @@ export default async function Page() {
             <Link href="/signin" className="btn btn-primary btn-lg px-10">
               Empezar a entrenar
             </Link>
-            <Link href="#caos" className="btn btn-outline btn-lg">
+            <Link href="#caos" className="btn btn-outline btn-lg gap-2">
+              <CaosMark className="h-7 w-auto" />
               Ver el modo CAOS
             </Link>
           </div>
@@ -210,9 +220,13 @@ export default async function Page() {
                 {marqueeItems.concat(marqueeItems).map((item, i) => (
                   <span
                     key={i}
-                    className="display mx-6 whitespace-nowrap text-xl tracking-wide"
+                    className="display mx-6 inline-flex items-center whitespace-nowrap text-xl tracking-wide"
                   >
-                    {item} <span className="mx-2 opacity-40">/</span>
+                    {item}
+                    <CaosMark
+                      variant="ink"
+                      className="mx-3 h-7 w-auto opacity-80"
+                    />
                   </span>
                 ))}
               </div>
@@ -344,8 +358,22 @@ export default async function Page() {
         </section>
 
         {/* ------------------------ MODOS DE JUEGO ----------------------- */}
-        <section id="caos" className="mx-auto max-w-6xl px-5 py-20">
-          <SectionHeading
+        <section id="caos" className="relative overflow-hidden border-y border-base-300">
+          <div
+            className="halftone absolute inset-0 opacity-30"
+            aria-hidden="true"
+          />
+          <CaosMark
+            watermark
+            className="absolute -right-16 -top-10 w-[22rem] opacity-[0.18] md:w-[36rem] lg:w-[44rem]"
+          />
+          <CaosMark
+            watermark
+            className="absolute -left-20 bottom-10 w-[16rem] opacity-[0.08] [animation-delay:-8s] md:w-[24rem]"
+          />
+
+          <div className="relative mx-auto max-w-6xl px-5 py-20">
+            <SectionHeading
             kicker="Modos de juego"
             title="Un mismo tatami. Varias formas de jugarlo."
             lead="La idea es la de Riot: mismo juego, mapas y restricciones distintas. Aquí el bracket, los participantes y el XP base son idénticos entre modos — lo que cambia es la capa de reglas encima."
@@ -371,15 +399,16 @@ export default async function Page() {
                 className="caos-tier-bar absolute inset-x-0 top-0 text-primary"
                 aria-hidden="true"
               />
-              <span
-                aria-hidden="true"
-                className="display text-stroke pointer-events-none absolute -bottom-10 -right-2 select-none text-[9rem] leading-none"
-              >
-                CAOS
-              </span>
-              <span className="tag-skew blink-soft relative bg-accent px-3 py-1 text-xs text-accent-content">
-                <span>Modo CAOS</span>
-              </span>
+              <CaosMark
+                watermark
+                className="absolute -bottom-16 -right-8 w-48 opacity-50 md:w-64"
+              />
+              <div className="relative flex items-center gap-3">
+                <CaosMark className="h-12 w-auto" />
+                <span className="tag-skew blink-soft bg-accent px-3 py-1 text-xs text-accent-content">
+                  <span>Modo CAOS</span>
+                </span>
+              </div>
               <h3 className="display relative mt-6 text-4xl">
                 Cada pelea se <span className="text-primary">rolea</span>
               </h3>
@@ -435,6 +464,7 @@ export default async function Page() {
               Y el roleo no es un texto que aparece — es una ceremonia a pantalla
               completa, hecha para proyectarse y para grabarse.
             </p>
+          </div>
           </div>
         </section>
 

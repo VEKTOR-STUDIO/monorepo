@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { TERRAINS, DUELS, TIER_LABELS, CAOS_POINTS } from "@/libs/caos";
+import CaosMark from "./CaosMark";
 import D20 from "./D20";
 
 // Demo del roleo en la landing: el visitante le da al botón y ve la misma
@@ -74,8 +75,9 @@ export default function CaosRollDemo() {
           <p className="text-[0.6rem] font-black uppercase tracking-[0.3em] text-primary">
             Anatomía de un roleo
           </p>
-          <h3 className="display mt-2 text-3xl md:text-4xl">
-            Así se ve una pelea del CAOS
+          <h3 className="display mt-2 flex flex-wrap items-center gap-3 text-3xl md:text-4xl">
+            <CaosMark className="h-10 w-auto shrink-0 md:h-12" />
+            <span>Así se ve una pelea del CAOS</span>
           </h3>
         </div>
 
@@ -102,6 +104,10 @@ export default function CaosRollDemo() {
             <div
               className="halftone absolute inset-0 opacity-40"
               aria-hidden="true"
+            />
+            <CaosMark
+              watermark
+              className="absolute -right-10 -bottom-16 w-64 opacity-30"
             />
             <div className="caos-speed" aria-hidden="true" />
 

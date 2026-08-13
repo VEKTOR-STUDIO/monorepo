@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/libs/supabase/server";
+import CaosMark from "@/components/rollprep/CaosMark";
 import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
 import { OUTFITS, EVENT_TYPES, CAOS_RANKING_MIGRATION } from "@/libs/caos";
 
@@ -92,8 +93,9 @@ export default async function Torneos() {
           )}
           <Link
             href="/dashboard/torneos/manual"
-            className={`btn btn-outline ${isAdmin ? "" : "btn-block"}`}
+            className={`btn btn-outline gap-2 ${isAdmin ? "" : "btn-block"}`}
           >
+            <CaosMark className="h-5 w-auto" />
             Manual CAOS
           </Link>
         </div>
@@ -148,11 +150,14 @@ export default async function Torneos() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     {tournament.mode === "caos" && (
-                      <span className="tag-skew shrink-0 bg-accent px-1.5 py-0.5 text-[0.55rem] text-accent-content">
-                        <span>
-                          Caos {OUTFITS[tournament.outfit]?.short ?? ""}
+                      <>
+                        <CaosMark className="h-8 w-auto shrink-0" />
+                        <span className="tag-skew shrink-0 bg-accent px-1.5 py-0.5 text-[0.55rem] text-accent-content">
+                          <span>
+                            Caos {OUTFITS[tournament.outfit]?.short ?? ""}
+                          </span>
                         </span>
-                      </span>
+                      </>
                     )}
                     {tournament.event_type === "circuit" && (
                       <span className="tag-skew shrink-0 border border-base-content/40 px-1.5 py-0.5 text-[0.55rem]">

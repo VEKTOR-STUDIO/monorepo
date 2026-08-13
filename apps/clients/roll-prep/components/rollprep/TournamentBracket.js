@@ -11,6 +11,7 @@ import {
   rollMatchChaos,
 } from "@/app/dashboard/torneos/actions";
 import { MATCH_METHODS, roundName, isBye } from "@/libs/tournaments";
+import CaosMark from "@/components/rollprep/CaosMark";
 import CaosRollCeremony from "@/components/rollprep/CaosRollCeremony";
 import CaosMatchPanel from "@/components/rollprep/CaosMatchPanel";
 
@@ -310,7 +311,7 @@ export default function TournamentBracket({
                         <div className="border-t-2 border-base-300 px-2 pb-4 pt-2">
                           <button
                             type="button"
-                            className={`btn btn-xs btn-block uppercase ${
+                            className={`btn btn-xs btn-block gap-1.5 uppercase ${
                               roll ? "btn-ghost opacity-70" : "btn-accent"
                             }`}
                             onClick={() => handleRoll(match)}
@@ -318,8 +319,10 @@ export default function TournamentBracket({
                           >
                             {rollingMatchId === match.id ? (
                               <span className="loading loading-spinner loading-xs" />
-                            ) : null}
-                            {roll ? "Re-rolear" : "Rolear el CAOS 🎲"}
+                            ) : (
+                              !roll && <CaosMark className="h-4 w-auto" />
+                            )}
+                            {roll ? "Re-rolear" : "Rolear el CAOS"}
                           </button>
                         </div>
                       )}

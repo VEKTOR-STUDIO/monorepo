@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
+import CaosMark from "@/components/rollprep/CaosMark";
 import TournamentBracket from "@/components/rollprep/TournamentBracket";
 import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
 import {
@@ -152,12 +153,19 @@ export default async function TorneoDetalle({ params }) {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
-      <span
-        aria-hidden="true"
-        className="display text-stroke pointer-events-none fixed -right-8 top-28 select-none text-[10rem] leading-none md:text-[14rem]"
-      >
-        {isCaos ? "CAOS" : "VS"}
-      </span>
+      {isCaos ? (
+        <CaosMark
+          watermark
+          className="pointer-events-none fixed -right-16 top-20 w-[20rem] select-none opacity-[0.16] md:w-[30rem]"
+        />
+      ) : (
+        <span
+          aria-hidden="true"
+          className="display text-stroke pointer-events-none fixed -right-8 top-28 select-none text-[10rem] leading-none md:text-[14rem]"
+        >
+          VS
+        </span>
+      )}
 
       <section className="relative z-10 mx-auto max-w-3xl space-y-6">
         <div className="rise rise-1 flex items-center justify-between">
@@ -190,6 +198,7 @@ export default async function TorneoDetalle({ params }) {
         <div className="rise rise-1">
           {isCaos && (
             <div className="mb-2 flex items-center gap-2">
+              <CaosMark className="h-8 w-auto shrink-0" />
               <span className="tag-skew inline-block bg-accent px-2 py-0.5 text-[0.6rem] text-accent-content">
                 <span>
                   Modalidad CAOS · {OUTFITS[tournament.outfit]?.label ?? "No-Gi"}

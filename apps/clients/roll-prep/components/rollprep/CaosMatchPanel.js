@@ -1,6 +1,7 @@
 "use client";
 
 import { readRoll, cardTone } from "@/libs/caos";
+import CaosMark from "./CaosMark";
 
 // Resumen compacto del roll dentro de la celda del bracket: el terreno y la
 // mitad de carta que le tocó a cada peleador. La regla completa se lee en la
@@ -20,6 +21,7 @@ export default function CaosMatchPanel({ roll, student1Id, student2Id, names, on
     // pb-4 deja respirar el corte diagonal (clip-cut) de la celda del bracket.
     <div className="border-t-2 border-primary/40 bg-base-100/60 px-3 pb-4 pt-2">
       <div className="flex items-center gap-1.5">
+        <CaosMark className="h-5 w-auto shrink-0" />
         <span className="tag-skew bg-secondary px-1.5 py-0.5 text-[0.5rem] text-secondary-content">
           <span>{terrain.name}</span>
         </span>

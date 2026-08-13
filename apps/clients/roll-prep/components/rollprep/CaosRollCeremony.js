@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { readRoll, cardTone, TIER_LABELS, CAOS_POINTS, OUTFITS } from "@/libs/caos";
+import CaosMark from "./CaosMark";
 import D20 from "./D20";
 
 // Ceremonia de roleo del Torneo CAOS: pantalla completa, pensada para
@@ -78,12 +79,10 @@ export default function CaosRollCeremony({
         />
       )}
 
-      <span
-        aria-hidden="true"
-        className="display text-stroke pointer-events-none absolute -left-6 top-1/3 select-none text-[13rem] leading-none opacity-40 md:text-[20rem]"
-      >
-        CAOS
-      </span>
+      <CaosMark
+        watermark
+        className="absolute -left-10 top-1/4 w-[22rem] opacity-30 md:w-[36rem]"
+      />
 
       <div
         className={`relative z-10 w-full max-w-3xl ${isCharging ? "caos-shake" : ""}`}
@@ -109,8 +108,9 @@ export default function CaosRollCeremony({
           <div className="space-y-4 py-6">
             {/* ---------------- Encabezado ---------------- */}
             <div className="caos-slam flex items-center justify-between gap-3">
-              <span className="tag-skew bg-primary px-3 py-1 text-xs text-primary-content">
-                <span>
+              <span className="tag-skew inline-flex items-center gap-2 bg-primary px-3 py-1 text-xs text-primary-content">
+                <span className="inline-flex items-center gap-2">
+                  <CaosMark variant="ink" className="h-4 w-auto" />
                   Torneo CAOS
                   {OUTFITS[outfit] ? ` · ${OUTFITS[outfit].short}` : ""}
                 </span>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CaosMark from "@/components/rollprep/CaosMark";
 
 // Las dos monedas del juego, una al lado de la otra.
 //
@@ -44,11 +45,19 @@ export default function RankingTabs({ active }) {
             key={tab.key}
             href={tab.href}
             aria-current={isActive ? "page" : undefined}
-            className={`clip-cut flex items-baseline justify-between border-2 px-4 py-2.5 transition-colors ${
+            className={`clip-cut flex items-center justify-between border-2 px-4 py-2.5 transition-colors ${
               isActive ? filled : idle
             }`}
           >
-            <span className="display text-2xl leading-none">{tab.label}</span>
+            <span className="flex items-center gap-2">
+              {tab.key === "caos" && (
+                <CaosMark
+                  variant={isActive ? "ink" : "primary"}
+                  className="h-8 w-auto"
+                />
+              )}
+              <span className="display text-2xl leading-none">{tab.label}</span>
+            </span>
             <span className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-70">
               {tab.hint}
             </span>

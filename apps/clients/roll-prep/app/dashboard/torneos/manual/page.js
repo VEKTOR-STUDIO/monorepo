@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CaosMark from "@/components/rollprep/CaosMark";
 import CaosManual from "@/components/rollprep/CaosManual";
 
 export const metadata = {
@@ -11,12 +12,10 @@ export const metadata = {
 export default function ManualCaos() {
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
-      <span
-        aria-hidden="true"
-        className="display text-stroke pointer-events-none fixed -right-8 top-28 select-none text-[10rem] leading-none md:text-[14rem]"
-      >
-        CAOS
-      </span>
+      <CaosMark
+        watermark
+        className="pointer-events-none fixed -right-16 top-20 w-[20rem] select-none opacity-[0.16] md:w-[30rem]"
+      />
 
       <section className="relative z-10 mx-auto max-w-3xl space-y-6">
         <div className="rise rise-1 flex items-center justify-between">
@@ -40,14 +39,17 @@ export default function ManualCaos() {
           </span>
         </div>
 
-        <div className="rise rise-1">
-          <h1 className="display text-5xl">
-            Torneo CAOS<span className="text-primary">.</span>
-          </h1>
-          <p className="mt-1 text-sm font-medium opacity-70">
-            El bracket de siempre, pero cada pelea se rolea. Terreno aleatorio,
-            cartas de duelo y XP extra para el que remonta.
-          </p>
+        <div className="rise rise-1 flex items-end gap-4">
+          <CaosMark className="h-16 w-auto shrink-0 md:h-20" />
+          <div>
+            <h1 className="display text-5xl">
+              Torneo CAOS<span className="text-primary">.</span>
+            </h1>
+            <p className="mt-1 text-sm font-medium opacity-70">
+              El bracket de siempre, pero cada pelea se rolea. Terreno aleatorio,
+              cartas de duelo y XP extra para el que remonta.
+            </p>
+          </div>
         </div>
 
         <CaosManual />

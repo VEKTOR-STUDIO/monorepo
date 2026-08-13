@@ -511,6 +511,33 @@ progress::-webkit-progress-value {
   letter-spacing: -0.01em;
 }
 
+/* Marca CAOS como watermark de sección: el mismo truco que BJJ / HOY / VOTO,
+   pero con el corazón en vez de un text-stroke. Solo transform, compositor. */
+@keyframes caos-drift {
+  0%,
+  100% {
+    transform: rotate(-12deg) translate3d(0, 0, 0);
+  }
+  50% {
+    transform: rotate(-6deg) translate3d(0, -16px, 0);
+  }
+}
+
+.caos-watermark {
+  pointer-events: none;
+  user-select: none;
+  max-width: none;
+  height: auto;
+  animation: caos-drift 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caos-watermark {
+    animation: none;
+  }
+}
+
 /* Carta del CAOS: bloque cortado con borde grueso y aura según el lado. */
 .caos-card {
   position: relative;
