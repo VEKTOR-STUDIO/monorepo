@@ -165,11 +165,7 @@ export default async function Page() {
           </span>
           <CaosMark
             watermark
-            className="absolute -right-16 top-24 w-[18rem] opacity-[0.22] md:-right-8 md:top-8 md:w-[28rem] lg:w-[34rem]"
-          />
-          <CaosMark
-            watermark
-            className="absolute -left-24 bottom-0 w-[14rem] opacity-[0.08] [animation-delay:-8s] md:w-[20rem]"
+            className="absolute -bottom-8 -right-4 w-[14rem] opacity-[0.22] md:-bottom-6 md:-right-2 md:w-[18rem]"
           />
 
           <div className="rise rise-1 flex flex-wrap items-center gap-2">
@@ -365,11 +361,7 @@ export default async function Page() {
           />
           <CaosMark
             watermark
-            className="absolute -right-16 -top-10 w-[22rem] opacity-[0.18] md:w-[36rem] lg:w-[44rem]"
-          />
-          <CaosMark
-            watermark
-            className="absolute -left-20 bottom-10 w-[16rem] opacity-[0.08] [animation-delay:-8s] md:w-[24rem]"
+            className="absolute -left-20 bottom-10 w-[16rem] opacity-[0.14] md:w-[24rem]"
           />
 
           <div className="relative mx-auto max-w-6xl px-5 py-20">
@@ -556,6 +548,10 @@ export default async function Page() {
             >
               OSS
             </span>
+            <CaosMark
+              watermark
+              className="absolute -right-8 -top-6 w-[18rem] opacity-[0.18] md:w-[28rem]"
+            />
             <h2 className="display max-w-2xl text-4xl md:text-6xl">
               Entrena con la mente. <span className="text-primary">Gana</span> en
               el tatami.
