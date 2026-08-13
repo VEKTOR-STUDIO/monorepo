@@ -203,10 +203,37 @@ export default async function Dashboard() {
             )}
           </div>
 
-          {/* 02 — Votación */}
+          {/* 02 — Ranking */}
+          <MenuTile
+            href="/dashboard/ranking"
+            index={2}
+            kicker="Competencia"
+            title="Ranking"
+            description="Dos tableros: el XP del gym y el récord del CAOS"
+          />
+
+          {/* 03 — Torneos */}
+          <MenuTile
+            href="/dashboard/torneos"
+            index={3}
+            kicker="Tatami"
+            title="Torneos"
+            description="Topes internos: bracket clásico o modalidad CAOS"
+          />
+
+          {/* 04 — Calendario */}
+          <MenuTile
+            href="/dashboard/calendario"
+            index={4}
+            kicker="Agenda"
+            title="Calendario"
+            description="Las clases del mes, día por día"
+          />
+
+          {/* 05 — Votación */}
           <MenuTile
             href="/dashboard/votar"
-            index={2}
+            index={5}
             kicker="Votación"
             title="Votar"
             description={
@@ -218,40 +245,13 @@ export default async function Dashboard() {
             chipTone={hasVoted ? "done" : "accent"}
           />
 
-          {/* 03 — Calendario */}
-          <MenuTile
-            href="/dashboard/calendario"
-            index={3}
-            kicker="Agenda"
-            title="Calendario"
-            description="Las clases del mes, día por día"
-          />
-
-          {/* 04 — Videoteca */}
+          {/* 06 — Videoteca */}
           <MenuTile
             href="/dashboard/videoteca"
-            index={4}
+            index={6}
             kicker="Archivo"
             title="Videoteca"
             description={`${libraryCount ?? 0} clases en el archivo técnico`}
-          />
-
-          {/* 05 — Ranking */}
-          <MenuTile
-            href="/dashboard/ranking"
-            index={5}
-            kicker="Competencia"
-            title="Ranking"
-            description="Dos tableros: el XP del gym y el récord del CAOS"
-          />
-
-          {/* 06 — Torneos */}
-          <MenuTile
-            href="/dashboard/torneos"
-            index={6}
-            kicker="Tatami"
-            title="Torneos"
-            description="Topes internos: bracket clásico o modalidad CAOS"
           />
 
           {/* 07 — Perfil */}

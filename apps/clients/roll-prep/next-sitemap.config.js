@@ -14,4 +14,10 @@ module.exports = {
     "/dashboard",
     "/dashboard/*",
   ],
+  // La cartelera de torneos CAOS se renderiza bajo demanda, así que no está
+  // en el manifiesto de rutas estáticas que lee next-sitemap. Se agrega a
+  // mano: es la página pública que se comparte y la que debería indexarse.
+  additionalPaths: async (config) => [
+    await config.transform(config, "/caos"),
+  ],
 };

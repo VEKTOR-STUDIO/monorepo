@@ -76,3 +76,29 @@ La seguridad se aplica con **RLS** en todas las tablas (`profiles`, `assignments
 ## Zona horaria
 
 El modo del dashboard (tarea vs. votación) se calcula con la zona horaria configurada en `config.js` → `timezone` (por defecto `America/Caracas`).
+
+## Invitaciones CAOS
+
+Convocatoria de los torneos CAOS: un solo texto que sale en tres sitios.
+
+```
+app/dashboard/admin/invitaciones/      # Panel: crear, preview del flyer, envío
+app/api/invitaciones/[slug]/imagen/    # El flyer en PNG (story 9:16 y post 4:5)
+app/caos/                              # Cartelera pública + página de cada evento
+libs/invites.js                        # Fechas, slugs, formatos y URLs
+libs/invite-email.js                   # El correo (HTML + texto)
+```
+
+1. **Migración:** correr `supabase/migrations/20260813120000_caos_invites.sql` en el SQL
+   Editor. Sin ella el panel avisa cuál falta en vez de romperse.
+2. **El flyer** se dibuja con `next/og` (satori) usando las fuentes de `public/fonts`
+   (Anton y Barlow en `.ttf`, que satori necesita como archivo) y el logo
+   `public/images/caosPrimary.png`. Se descarga desde el panel y desde la página
+   pública; es la misma imagen que viaja en el correo y en el preview de los links.
+3. **El correo** necesita `RESEND_API_KEY` y el dominio de `config.resend.fromAdmin`
+   verificado en Resend (DKIM/SPF en el DNS). Mientras la llave no exista, el botón de
+   enviar sale apagado con el aviso; todo lo demás —flyer, página pública, links—
+   funciona igual. Al configurarla no hay que tocar código.
+
+El link público (`/caos/<slug>`) se genera al crear y no cambia al editar: lo que ya se
+repartió por story o WhatsApp sigue abriendo.

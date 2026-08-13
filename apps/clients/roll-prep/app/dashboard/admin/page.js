@@ -3,6 +3,7 @@ import AdminAssignmentForm from "@/components/rollprep/AdminAssignmentForm";
 import AdminAssignmentsList from "@/components/rollprep/AdminAssignmentsList";
 import AdminPollForm from "@/components/rollprep/AdminPollForm";
 import AdminLiveRefresh from "@/components/rollprep/AdminLiveRefresh";
+import CaosMark from "@/components/rollprep/CaosMark";
 import { createClient } from "@/libs/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -101,6 +102,23 @@ export default async function AdminPanel() {
           <span className="display shrink-0 text-4xl text-primary">
             {studentCount ?? 0}
           </span>
+        </Link>
+
+        {/* ------------------------------ INVITACIONES -------------------- */}
+        <Link
+          href="/dashboard/admin/invitaciones"
+          className="rise rise-2 flex items-center justify-between gap-4 border border-base-300 bg-base-200 p-6 transition-colors hover:border-primary"
+        >
+          <div>
+            <h2 className="display text-xl">
+              Invitaciones CAOS<span className="text-primary">.</span>
+            </h2>
+            <p className="mt-1 text-xs font-medium opacity-60">
+              Convoca un evento: flyer para las stories, página pública y
+              correo a todo el gym.
+            </p>
+          </div>
+          <CaosMark className="h-10 w-auto shrink-0" />
         </Link>
 
         {/* ------------------------------ MÉTRICAS ------------------------ */}

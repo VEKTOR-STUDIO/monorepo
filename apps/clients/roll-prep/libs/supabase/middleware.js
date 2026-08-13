@@ -4,7 +4,11 @@ import { NextResponse } from "next/server";
 export async function updateSession(request) {
   // Skip auth refresh for API routes that don't need authentication
   const { pathname } = request.nextUrl;
-  const skipAuthRoutes = ['/api/webhook', '/api/lead'];
+  // El flyer de las invitaciones (/api/invitaciones/<slug>/imagen) lo pide
+  // cualquiera: el que abre la story, WhatsApp al generar el preview, el
+  // cliente de correo. Refrescar sesión ahí es trabajo tirado y además le
+  // pega un Set-Cookie a una respuesta que queremos cacheada en el CDN.
+  const skipAuthRoutes = ['/api/webhook', '/api/lead', '/api/invitaciones'];
   
   if (skipAuthRoutes.some(route => pathname.startsWith(route))) {
     return NextResponse.next({
