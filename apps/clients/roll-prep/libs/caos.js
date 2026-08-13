@@ -564,29 +564,42 @@ function seedFrom(value) {
   return Math.abs(hash);
 }
 
-// Los tres pasos del modo, en el orden en que los vive el que llega. Es la
-// explicación corta de CAOS para quien nunca lo ha peleado: sale igual en el
-// correo y en la página del evento.
+// El modo contado como se vive, en segunda persona. `short` es para el
+// flyer, donde cada línea tiene que caber de un vistazo; `long` es para el
+// correo y la página, que sí tienen espacio para la escena completa.
+//
+// Nada de "alfa" y "omega" aquí: esos son los nombres internos de las cartas
+// (ver DUELS). Al que nunca ha peleado un CAOS se le habla de ventaja y de
+// carga, que es lo que va a sentir en el tatami.
 export const CAOS_STEPS = [
-  ["01", "Se sortea el bracket. Nadie escoge rival."],
-  [
-    "02",
-    "Antes de cada pelea se rolea delante de todos: sale un terreno que aplica a los dos y una carta de duelo que reparte ventaja y desventaja.",
-  ],
-  [
-    "03",
-    "El que arranca abajo cobra más si remonta. El que arranca con la ventaja solo cobra extra si finaliza: guindarse de la ventaja no paga.",
-  ],
+  {
+    n: "01",
+    short: "Llegas y se sortea. Nadie escoge rival.",
+    long: "Llegas, se sortea el bracket y ya. Nadie escoge rival ni sabe contra quién va hasta que sale el cuadro.",
+  },
+  {
+    n: "02",
+    short: "Antes de tu pelea se rolea: cambia la regla y cambia el arranque.",
+    long: "Antes de cada pelea se rolea delante de todos: sale una regla de arena que aplica a los dos y un arranque distinto para cada uno. Lo sabes ahí mismo, no antes.",
+  },
+  {
+    n: "03",
+    short: "A uno le toca la ventaja; al otro, el doble por remontarla.",
+    long: "A uno le toca la ventaja y al otro la carga. Remontar desde abajo paga el doble; guindarse de la ventaja sin finalizar no paga nada.",
+  },
 ];
 
 export function caosShowcase(seed, outfit = DEFAULT_OUTFIT) {
   const deck = deckFor(OUTFITS[outfit] ? outfit : DEFAULT_OUTFIT);
   const n = seedFrom(seed);
 
-  // El duelo de muestra sale de los niveles fuertes (2 y 3): son los que
-  // hacen decir "¿cómo que arranco montado y él con los brazos por dentro?".
-  const spicy = deck.duels.filter((duel) => duel.tier >= 2);
-  const duels = spicy.length ? spicy : deck.duels;
+  // La muestra sale del nivel LEVE a propósito. Los duelos brutales son los
+  // más divertidos de pelear, pero al que nunca ha competido lo asustan o
+  // directamente no los entiende: "arrancas con la espalda tomada, cinturón
+  // de seguridad y dos ganchos" no vende nada. Una media guardia sí se
+  // imagina cualquiera.
+  const readable = deck.duels.filter((duel) => duel.tier === 1);
+  const duels = readable.length ? readable : deck.duels;
 
   return {
     terrain: deck.terrains[n % deck.terrains.length],

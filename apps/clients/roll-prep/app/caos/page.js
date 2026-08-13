@@ -3,9 +3,8 @@ import CaosMark from "@/components/rollprep/CaosMark";
 import config from "@/config";
 import { getSEOTags } from "@/libs/seo";
 import { createPublicClient } from "@/libs/supabase/public";
-import { EVENT_TYPES, OUTFITS } from "@/libs/caos";
+import { EVENT_TYPES, OUTFITS, CAOS_STEPS } from "@/libs/caos";
 import {
-  CAOS_PITCH,
   inviteDateParts,
   invitePath,
   isPastInvite,
@@ -97,14 +96,14 @@ export default async function CarteleraCaos() {
         </div>
 
         <div className="rise rise-2 border-2 border-base-300 bg-base-200 p-6">
-          <ul className="space-y-3">
-            {CAOS_PITCH.map((line) => (
-              <li key={line} className="flex gap-3 text-sm font-medium">
-                <span className="mt-1.5 h-2 w-2 shrink-0 rotate-45 bg-primary" />
-                <span>{line}</span>
+          <ol className="space-y-3">
+            {CAOS_STEPS.map(({ n, short }) => (
+              <li key={n} className="flex gap-3 text-sm font-medium">
+                <span className="display shrink-0 text-lg text-primary">{n}</span>
+                <span>{short}</span>
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
 
         <div className="rise rise-3 space-y-3">

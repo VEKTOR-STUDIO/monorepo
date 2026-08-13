@@ -16,7 +16,6 @@ import {
   OUTFITS,
   EVENT_TYPES,
   CAOS_RANK_POINTS,
-  TIER_LABELS,
   CAOS_STEPS,
   caosShowcase,
 } from "@/libs/caos";
@@ -123,7 +122,7 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
     ["Ganar una pelea", `+${CAOS_RANK_POINTS.win} PC`],
     ["Finalizar por sumisión", `+${CAOS_RANK_POINTS.submission} PC`],
     [
-      "Remontar desde la desventaja",
+      "Remontar desde abajo",
       `+${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
     ],
     ["Llevarte el torneo", `+${CAOS_RANK_POINTS.champion} PC`],
@@ -242,59 +241,22 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
               ${label("▸ Así se pelea")}
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;">
                 ${CAOS_STEPS.map(
-                  ([n, text]) => `
+                  ({ n, long }) => `
                 <tr>
-                  <td width="44" style="vertical-align:top;padding:0 0 14px 0;font-family:${SANS};font-size:22px;font-weight:800;color:${VOLT};">${n}</td>
-                  <td style="padding:0 0 14px 0;font-family:${SANS};font-size:15px;line-height:1.5;color:${PAPER};">${esc(text)}</td>
+                  <td width="46" style="vertical-align:top;padding:0 0 16px 0;font-family:${SANS};font-size:24px;font-weight:800;color:${VOLT};">${n}</td>
+                  <td style="padding:0 0 16px 0;font-family:${SANS};font-size:15px;line-height:1.6;color:${PAPER};">${esc(long)}</td>
                 </tr>`
                 ).join("")}
               </table>
-            </td>
-          </tr>
-
-          <!-- LAS CARTAS: dos ejemplos reales del mazo que se va a jugar.
-               Es la parte que vende: nadie entiende "constraints-led" hasta
-               que lee que va a arrancar con la pierna atrapada. -->
-          <tr>
-            <td style="padding:6px 32px 0 32px;">
-              ${label(`▸ Dos cartas del mazo ${esc(outfit)}`)}
-
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;background:${CARD};">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:4px;background:${CARD};border-left:6px solid ${VOLT};">
                 <tr>
-                  <td width="6" bgcolor="${VOLT}" style="font-size:0;line-height:0;">&nbsp;</td>
-                  <td style="padding:14px 18px;">
-                    <span style="font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${VOLT};">Terreno</span>
-                    <div style="margin-top:4px;font-family:${SANS};font-size:19px;font-weight:800;text-transform:uppercase;color:${PAPER};">${esc(show.terrain.name)}</div>
-                    <div style="margin-top:6px;font-family:${SANS};font-size:14px;line-height:1.5;color:rgba(245,245,240,0.75);">${esc(show.terrain.rule)}</div>
+                  <td style="padding:14px 18px;font-family:${SANS};font-size:15px;line-height:1.5;color:${PAPER};">
+                    El mazo tiene <span style="font-weight:800;color:${VOLT};">${show.combos} combinaciones</span>
+                    (${show.terrainCount} terrenos × ${show.duelCount} arranques).
+                    Nadie sabe cuál le toca hasta que suena el silbato.
                   </td>
                 </tr>
               </table>
-
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;background:${CARD};">
-                <tr>
-                  <td width="6" bgcolor="${ACCENT}" style="font-size:0;line-height:0;">&nbsp;</td>
-                  <td style="padding:14px 18px;">
-                    <span style="font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${ACCENT};">Duelo · ${esc(TIER_LABELS[show.duel.tier])}</span>
-                    <div style="margin-top:4px;font-family:${SANS};font-size:19px;font-weight:800;text-transform:uppercase;color:${PAPER};">${esc(show.duel.name)}</div>
-                    <div style="margin-top:4px;font-family:${SANS};font-size:13px;font-style:italic;color:${MUTED};">${esc(show.duel.start)}</div>
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;">
-                      <tr>
-                        <td width="70" style="vertical-align:top;padding:0 0 8px 0;font-family:${SANS};font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:${VOLT};">Alfa</td>
-                        <td style="padding:0 0 8px 0;font-family:${SANS};font-size:14px;line-height:1.5;color:rgba(245,245,240,0.85);">${esc(show.duel.alfa.rule)}</td>
-                      </tr>
-                      <tr>
-                        <td width="70" style="vertical-align:top;font-family:${SANS};font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:${ACCENT};">Omega</td>
-                        <td style="font-family:${SANS};font-size:14px;line-height:1.5;color:rgba(245,245,240,0.85);">${esc(show.duel.omega.rule)}</td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-
-              <p style="margin:12px 0 0 0;font-family:${SANS};font-size:14px;line-height:1.5;font-weight:700;color:${PAPER};">
-                Y esas son dos de <span style="color:${VOLT};">${show.combos} combinaciones</span>
-                (${show.terrainCount} terrenos × ${show.duelCount} duelos). Nadie sabe qué le toca hasta el silbato.
-              </p>
             </td>
           </tr>
 
@@ -402,19 +364,15 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     ...paragraphs(invite.description),
     "",
     "Así se pelea:",
-    ...CAOS_STEPS.map(([n, text]) => `${n}. ${text}`),
+    ...CAOS_STEPS.map(({ n, long }) => `${n}. ${long}`),
     "",
-    `Dos cartas del mazo ${outfit} (de ${show.combos} combinaciones posibles):`,
-    `- TERRENO · ${show.terrain.name}: ${show.terrain.rule}`,
-    `- DUELO · ${TIER_LABELS[show.duel.tier]} · ${show.duel.name}: ${show.duel.start}`,
-    `    ALFA: ${show.duel.alfa.rule}`,
-    `    OMEGA: ${show.duel.omega.rule}`,
+    `El mazo ${outfit} tiene ${show.combos} combinaciones (${show.terrainCount} terrenos × ${show.duelCount} arranques). Nadie sabe cuál le toca hasta que suena el silbato.`,
     "",
     "Botín (puntos CAOS):",
     `- Pelear cada combate: +${CAOS_RANK_POINTS.fight} PC`,
     `- Ganar una pelea: +${CAOS_RANK_POINTS.win} PC`,
     `- Finalizar por sumisión: +${CAOS_RANK_POINTS.submission} PC`,
-    `- Remontar desde la desventaja: +${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
+    `- Remontar desde abajo: +${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
     `- Llevarte el torneo: +${CAOS_RANK_POINTS.champion} PC`,
     "",
     "",
@@ -424,5 +382,9 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     `Te llega porque estás en ${config.appName}.`,
   ];
 
-  return lines.filter((line) => line !== null).join("\n");
+  return lines
+    .filter((line) => line !== null)
+    // Dos vacías seguidas quedan cuando un bloque opcional no salió.
+    .filter((line, i, all) => line !== "" || all[i - 1] !== "")
+    .join("\n");
 }

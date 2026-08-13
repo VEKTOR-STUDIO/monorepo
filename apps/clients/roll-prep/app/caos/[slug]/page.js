@@ -8,12 +8,12 @@ import {
   EVENT_TYPES,
   OUTFITS,
   TIER_LABELS,
+  CARD_TONE_LABELS,
   CAOS_STEPS,
   caosShowcase,
 } from "@/libs/caos";
 import { safeUrl } from "@/libs/invite-email";
 import {
-  CAOS_PITCH,
   DEFAULT_CTA_LABEL,
   INVITE_FORMATS,
   inviteDateParts,
@@ -59,7 +59,9 @@ export async function generateMetadata({ params }) {
   const title = `${invite.title} · CAOS`;
   const description =
     invite.tagline ||
-    (date ? `Torneo CAOS · ${date.long}${invite.location ? ` · ${invite.location}` : ""}` : CAOS_PITCH[0]);
+    (date
+      ? `Torneo CAOS · ${date.long}${invite.location ? ` · ${invite.location}` : ""}`
+      : "Torneo CAOS: las reglas cambian en cada pelea.");
 
   return {
     ...getSEOTags({
@@ -215,13 +217,11 @@ export default async function EventoCaos({ params }) {
           </div>
 
           <ol className="space-y-3">
-            {CAOS_STEPS.map(([step, text]) => (
-              <li key={step} className="flex gap-4">
-                <span className="display shrink-0 text-2xl text-primary">
-                  {step}
-                </span>
+            {CAOS_STEPS.map(({ n, long }) => (
+              <li key={n} className="flex gap-4">
+                <span className="display shrink-0 text-2xl text-primary">{n}</span>
                 <span className="text-sm font-medium leading-relaxed opacity-90">
-                  {text}
+                  {long}
                 </span>
               </li>
             ))}
@@ -239,20 +239,20 @@ export default async function EventoCaos({ params }) {
 
           <div className="caos-card caos-card-omega p-5">
             <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
-              Duelo · {TIER_LABELS[show.duel.tier]}
+              Un arranque · {TIER_LABELS[show.duel.tier]}
             </p>
             <p className="display mt-1 text-2xl">{show.duel.name}</p>
             <p className="mt-1 text-xs italic opacity-60">{show.duel.start}</p>
             <div className="mt-3 space-y-2 text-sm">
               <p className="flex gap-3">
-                <span className="w-16 shrink-0 text-[0.6rem] font-black uppercase tracking-[0.2em] text-primary">
-                  Alfa
+                <span className="w-24 shrink-0 text-[0.6rem] font-black uppercase tracking-[0.2em] text-primary">
+                  {CARD_TONE_LABELS.alfa}
                 </span>
                 <span className="opacity-85">{show.duel.alfa.rule}</span>
               </p>
               <p className="flex gap-3">
-                <span className="w-16 shrink-0 text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
-                  Omega
+                <span className="w-24 shrink-0 text-[0.6rem] font-black uppercase tracking-[0.2em] text-accent">
+                  {CARD_TONE_LABELS.omega}
                 </span>
                 <span className="opacity-85">{show.duel.omega.rule}</span>
               </p>
@@ -282,7 +282,8 @@ export default async function EventoCaos({ params }) {
           </div>
 
           <p className="text-sm font-bold">
-            {CAOS_PITCH[1]}
+            La asimetría no se corrige, se paga: al que le toca la carga se le
+            paga el doble por remontarla.
           </p>
         </div>
 

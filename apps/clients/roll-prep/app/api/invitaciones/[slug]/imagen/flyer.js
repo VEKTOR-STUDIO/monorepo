@@ -17,7 +17,7 @@ import { join } from "node:path";
 import {
   OUTFITS,
   EVENT_TYPES,
-  TIER_LABELS,
+  CAOS_STEPS,
   caosShowcase,
 } from "@/libs/caos";
 import { INVITE_FORMATS, inviteDateParts, siteUrl } from "@/libs/invites";
@@ -25,10 +25,6 @@ import { INVITE_FORMATS, inviteDateParts, siteUrl } from "@/libs/invites";
 // Paleta del tema "rollprep" en hex: satori no resuelve oklch ni variables.
 const INK = "#0f0f12";
 const VOLT = "#d4ff00";
-// El rojo del lado OMEGA, el mismo `accent` del tema: en la app la carta del
-// que carga la desventaja siempre va de ese color.
-const ACCENT = "#ff5223";
-const PANEL = "#16171a";
 const PAPER = "#f5f5f0";
 const MUTED = "#8a8a85";
 
@@ -71,22 +67,6 @@ function clamp(text, max) {
   return `${cut.slice(0, lastSpace > max * 0.6 ? lastSpace : max).trim()}…`;
 }
 
-/**
- * Igual que `clamp`, pero para las reglas de las cartas: si hay un punto
- * antes del límite, corta ahí. Una regla que termina en frase completa se
- * entiende; una cortada con puntos suspensivos deja al lector a medias justo
- * en lo que se le estaba vendiendo.
- */
-function clampSentence(text, max) {
-  const clean = (text ?? "").replace(/\s+/g, " ").trim();
-  if (clean.length <= max) return clean;
-
-  const stop = clean.lastIndexOf(". ", max);
-  if (stop > max * 0.45) return clean.slice(0, stop + 1);
-
-  return clamp(clean, max);
-}
-
 /** El título manda en la composición: mientras más largo, más chico. */
 function titleSize(title, base) {
   const length = title.length;
@@ -125,101 +105,6 @@ function Tag({ children, size, filled = true }) {
         }}
       >
         {children}
-      </div>
-    </div>
-  );
-}
-
-/**
- * Una carta del mazo: cinta de color con la etiqueta, el nombre grande y una
- * o dos líneas de regla. `lines` va como [etiqueta, texto]; la etiqueta vacía
- * es para el terreno, que no tiene lados.
- */
-function Card({ label, accent, name, lines, u }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        background: PANEL,
-        borderLeft: `${8 * u}px solid ${accent}`,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          gap: 16 * u,
-          padding: `${14 * u}px ${20 * u}px ${6 * u}px ${20 * u}px`,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            fontFamily: "Barlow",
-            fontWeight: 700,
-            fontSize: 20 * u,
-            letterSpacing: 3 * u,
-            textTransform: "uppercase",
-            color: accent,
-          }}
-        >
-          {label}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            fontFamily: "Anton",
-            fontSize: 34 * u,
-            textTransform: "uppercase",
-            color: PAPER,
-          }}
-        >
-          {name}
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 6 * u,
-          padding: `0 ${20 * u}px ${16 * u}px ${20 * u}px`,
-        }}
-      >
-        {lines.map(([side, text]) => (
-          <div key={text} style={{ display: "flex", gap: 12 * u }}>
-            {side && (
-              <div
-                style={{
-                  display: "flex",
-                  width: 92 * u,
-                  flexShrink: 0,
-                  fontFamily: "Barlow",
-                  fontWeight: 700,
-                  fontSize: 22 * u,
-                  letterSpacing: 2 * u,
-                  textTransform: "uppercase",
-                  color: side === "Alfa" ? VOLT : ACCENT,
-                }}
-              >
-                {side}
-              </div>
-            )}
-            <div
-              style={{
-                display: "flex",
-                flexGrow: 1,
-                fontFamily: "Barlow",
-                fontSize: 24 * u,
-                lineHeight: 1.28,
-                color: "rgba(245,245,240,0.82)",
-              }}
-            >
-              {text}
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -448,12 +333,12 @@ export default function Flyer({ invite, format, logo, signature }) {
         </div>
 
         {/* --------------------------- QUÉ ES CAOS -------------------------
-            Aquí no se explica el modo con adjetivos: se enseñan DOS CARTAS
-            reales del mazo que se va a jugar. Es lo que hace que alguien que
-            nunca ha competido pregunte "¿cómo que arranco así?". Las cartas
-            salen de la semilla del evento, así que el flyer siempre enseña
-            las mismas dos (ver caosShowcase en libs/caos.js). */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 * u }}>
+            El modo contado como se vive, no como se documenta: tres golpes
+            en segunda persona y el tamaño del mazo. Aquí no van cartas de
+            ejemplo —en un póster, un nombre raro y una regla larga frenan
+            la lectura justo donde hay que enganchar— y tampoco los nombres
+            internos de las mitades: se habla de ventaja y de carga. */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 22 * u }}>
           <div
             style={{
               display: "flex",
@@ -487,38 +372,47 @@ export default function Flyer({ invite, format, logo, signature }) {
             </div>
           </div>
 
-          {/* TERRENO — la regla de arena, igual para los dos. */}
-          <Card
-            label="Terreno"
-            accent={VOLT}
-            name={show.terrain.name}
-            u={u}
-            lines={[["", clampSentence(show.terrain.rule, story ? 120 : 88)]]}
-          />
-
-          {/* DUELO — la carta doble: uno arranca arriba, el otro debajo. */}
-          <Card
-            label={`Duelo · ${TIER_LABELS[show.duel.tier]}`}
-            accent={ACCENT}
-            name={show.duel.name}
-            u={u}
-            lines={[
-              ["Alfa", clampSentence(show.duel.alfa.rule, story ? 92 : 76)],
-              ["Omega", clampSentence(show.duel.omega.rule, story ? 92 : 76)],
-            ]}
-          />
+          {CAOS_STEPS.map(({ n, short }) => (
+            <div key={n} style={{ display: "flex", alignItems: "flex-start", gap: 20 * u }}>
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: "Anton",
+                  fontSize: 34 * u,
+                  lineHeight: 1,
+                  color: VOLT,
+                }}
+              >
+                {n}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexGrow: 1,
+                  fontFamily: "Barlow",
+                  fontSize: 30 * u,
+                  lineHeight: 1.25,
+                  color: PAPER,
+                }}
+              >
+                {short}
+              </div>
+            </div>
+          ))}
 
           <div
             style={{
               display: "flex",
+              borderLeft: `${8 * u}px solid ${VOLT}`,
+              paddingLeft: 20 * u,
               fontFamily: "Barlow",
               fontWeight: 700,
-              fontSize: 26 * u,
+              fontSize: 28 * u,
               lineHeight: 1.25,
               color: PAPER,
             }}
           >
-            Al que le toca la carga se le paga más: remontar suma el doble.
+            Nadie sabe qué le toca hasta que suena el silbato.
           </div>
         </div>
 

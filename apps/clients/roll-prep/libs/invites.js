@@ -16,6 +16,7 @@
 // ============================================================================
 
 import config from "@/config";
+import { CAOS_STEPS } from "@/libs/caos";
 
 export const CAOS_INVITES_MIGRATION =
   "supabase/migrations/20260813120000_caos_invites.sql";
@@ -33,16 +34,6 @@ export const INVITE_LIMITS = {
 };
 
 export const DEFAULT_CTA_LABEL = "Quiero pelear";
-
-// Las tres líneas que explican CAOS a quien nunca lo ha peleado. Salen igual
-// en el flyer, en el correo y en la página del evento: el que ve la story y
-// el que abre el link tienen que leer lo mismo. Es la tesis del modo (ver
-// libs/caos.js) en el mínimo de palabras que cabe en una imagen.
-export const CAOS_PITCH = [
-  "Cada pelea se rolea: un terreno aleatorio y una carta de duelo.",
-  "Al que le toca la desventaja gana más si remonta. La asimetría se paga.",
-  "Todo suma al ranking CAOS: pelear, ganar, finalizar y dar el upset.",
-];
 
 // ----------------------------------------------------------------------------
 // FORMATOS DEL FLYER
@@ -272,8 +263,7 @@ export function inviteCaption(invite) {
     invite.slots ? `🎟️ ${invite.slots} cupos` : null,
     invite.price ? `💵 ${invite.price}` : null,
     "",
-    CAOS_PITCH[0],
-    CAOS_PITCH[1],
+    ...CAOS_STEPS.map(({ short }) => `▸ ${short}`),
     "",
     `Toda la info y anotarte 👉 ${inviteUrl(invite.slug)}`,
     "",
