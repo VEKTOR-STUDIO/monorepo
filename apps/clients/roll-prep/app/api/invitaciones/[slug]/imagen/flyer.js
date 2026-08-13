@@ -19,7 +19,6 @@ import { CAOS_PITCH, INVITE_FORMATS, inviteDateParts, siteUrl } from "@/libs/inv
 
 // Paleta del tema "rollprep" en hex: satori no resuelve oklch ni variables.
 const INK = "#0f0f12";
-const PANEL = "#17171b";
 const VOLT = "#d4ff00";
 const PAPER = "#f5f5f0";
 const MUTED = "#8a8a85";
@@ -97,37 +96,6 @@ function Tag({ children, size, filled = true }) {
         }}
       >
         {children}
-      </div>
-    </div>
-  );
-}
-
-function Meta({ label, value, size }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: size * 0.3 }}>
-      <div
-        style={{
-          display: "flex",
-          fontFamily: "Barlow",
-          fontWeight: 700,
-          fontSize: size * 0.82,
-          letterSpacing: size * 0.22,
-          textTransform: "uppercase",
-          color: MUTED,
-        }}
-      >
-        {label}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          fontFamily: "Anton",
-          fontSize: size * 1.6,
-          textTransform: "uppercase",
-          color: PAPER,
-        }}
-      >
-        {value}
       </div>
     </div>
   );
@@ -224,26 +192,16 @@ export default function Flyer({ invite, format, logo }) {
             </Tag>
           </div>
 
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 30 * u }}>
+          {/* Solo la marca: el logo YA dice CAOS. Ponerle la palabra al lado
+              era decirlo dos veces en la misma línea. */}
+          <div style={{ display: "flex" }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={logo}
               alt=""
-              width={Math.round(300 * u)}
-              height={Math.round(300 * u * (1027 / 1271))}
+              width={Math.round(420 * u)}
+              height={Math.round(420 * u * (1027 / 1271))}
             />
-            <div
-              style={{
-                display: "flex",
-                fontFamily: "Anton",
-                fontSize: 132 * u,
-                lineHeight: 0.8,
-                letterSpacing: -2,
-                color: VOLT,
-              }}
-            >
-              CAOS
-            </div>
           </div>
 
           <div style={{ display: "flex", height: 10 * u, background: VOLT }} />
@@ -395,82 +353,37 @@ export default function Flyer({ invite, format, logo }) {
           ))}
         </div>
 
-        {/* ---------------------------- PIE / CTA ------------------------- */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 26 * u }}>
-          {(invite.slots || invite.price) && (
-            <div style={{ display: "flex", gap: 18 * u }}>
-              {invite.slots ? (
-                <div
-                  style={{
-                    display: "flex",
-                    background: PANEL,
-                    border: `2px solid rgba(245,245,240,0.14)`,
-                    padding: `${18 * u}px ${26 * u}px`,
-                  }}
-                >
-                  <Meta label="Cupos" value={invite.slots} size={22 * u} />
-                </div>
-              ) : null}
-              {invite.price ? (
-                <div
-                  style={{
-                    display: "flex",
-                    background: PANEL,
-                    border: `2px solid rgba(245,245,240,0.14)`,
-                    padding: `${18 * u}px ${26 * u}px`,
-                  }}
-                >
-                  <Meta label="Entrada" value={clamp(invite.price, 18)} size={22 * u} />
-                </div>
-              ) : null}
-            </div>
-          )}
-
+        {/* ---------------------------- PIE / CTA -------------------------
+            Cupos y entrada NO van aquí: esto es una invitación, la pieza que
+            la gente enseña. La letra chica vive en la página del evento y en
+            el correo, que es donde se entra a decidir. */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 * u }}>
           <div
             style={{
               display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
+              fontFamily: "Barlow",
+              fontWeight: 700,
+              fontSize: 24 * u,
+              letterSpacing: 5 * u,
+              textTransform: "uppercase",
+              color: MUTED,
             }}
           >
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 * u }}>
-              <div
-                style={{
-                  display: "flex",
-                  fontFamily: "Barlow",
-                  fontWeight: 700,
-                  fontSize: 24 * u,
-                  letterSpacing: 5 * u,
-                  textTransform: "uppercase",
-                  color: MUTED,
-                }}
-              >
-                Anótate en
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  fontFamily: "Anton",
-                  fontSize: 42 * u,
-                  textTransform: "uppercase",
-                  color: VOLT,
-                }}
-              >
-                {url}/caos
-              </div>
-            </div>
-
-            <div
-              style={{
-                display: "flex",
-                fontFamily: "Anton",
-                fontSize: 34 * u,
-                textTransform: "uppercase",
-                color: "rgba(245,245,240,0.5)",
-              }}
-            >
-              RollPrep
-            </div>
+            Anótate en
+          </div>
+          {/* El dominio pelado. Sin ruta: en una story nadie teclea un slug,
+              y la dirección corta ya dice de quién es el evento — por eso
+              tampoco va la firma "RollPrep" al lado, sería repetirse. */}
+          <div
+            style={{
+              display: "flex",
+              fontFamily: "Anton",
+              fontSize: 44 * u,
+              textTransform: "uppercase",
+              color: VOLT,
+            }}
+          >
+            {url}
           </div>
         </div>
       </div>
