@@ -1,13 +1,24 @@
 import ButtonAccount from "@/components/ButtonAccount";
 import PlayerHud from "@/components/rollprep/PlayerHud";
+import DayStrip from "@/components/rollprep/DayStrip";
 import MenuTile from "@/components/rollprep/MenuTile";
 import { createClient } from "@/libs/supabase/server";
 import { getProfileWithAcademy } from "@/libs/academies";
-import { getVideoThumbnail } from "@/libs/rollprep";
+import {
+  addDays,
+  dateInTimezone,
+  getVideoThumbnail,
+  todayInTimezone,
+} from "@/libs/rollprep";
 import { getStudentPoints, getRank } from "@/libs/gamification";
 import config from "@/config";
 
 export const dynamic = "force-dynamic";
+
+// Ventana de la tira de días: una semana atrás (lo que acaba de pasar) y dos
+// hacia adelante (lo que viene). Tiene que coincidir con los props de DayStrip.
+const STRIP_BACK = 7;
+const STRIP_FORWARD = 14;
 
 // Menú principal del alumno, estilo pantalla de selección de un videojuego
 // de pelea: HUD del jugador arriba y tiles de modo abajo.
@@ -18,11 +29,17 @@ export default async function Dashboard() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const todayKey = todayInTimezone();
+  const stripFrom = addDays(todayKey, -STRIP_BACK);
+  const stripTo = addDays(todayKey, STRIP_FORWARD);
+
   const [
     profile,
     { data: assignment },
     { data: poll },
     { count: libraryCount },
+    { data: stripClasses },
+    { data: stripEvents },
   ] = await Promise.all([
     getProfileWithAcademy(supabase, user.id),
     supabase
@@ -40,6 +57,21 @@ export default async function Dashboard() {
       .limit(1)
       .maybeSingle(),
     supabase.from("assignments").select("id", { count: "exact", head: true }),
+    supabase
+      .from("assignments")
+      .select("id, title, scheduled_for, is_active")
+      .gte("scheduled_for", stripFrom)
+      .lte("scheduled_for", stripTo)
+      .order("scheduled_for", { ascending: true }),
+    // Los topes no tienen fecha propia: la del calendario es la de creación,
+    // que es el día que se pelearon. Se pide un día extra de margen a cada
+    // lado porque el corte por huso se hace después, ya en fecha del gym.
+    supabase
+      .from("tournaments")
+      .select("id, title, mode, status, created_at")
+      .gte("created_at", `${addDays(stripFrom, -1)}T00:00:00Z`)
+      .lte("created_at", `${addDays(stripTo, 1)}T00:00:00Z`)
+      .order("created_at", { ascending: true }),
   ]);
 
   const [{ totalPoints }, completionRes, voteRes] = await Promise.all([
@@ -66,6 +98,28 @@ export default async function Dashboard() {
   const hasVoted = Boolean(voteRes?.data);
   const splashUrl = assignment ? getVideoThumbnail(assignment.video_url) : null;
   const { belt } = getRank(totalPoints);
+
+  // Clases y topes en un solo formato para la tira de días.
+  const stripItems = [
+    ...(stripClasses ?? []).map((a) => ({
+      id: `class-${a.id}`,
+      date: a.scheduled_for,
+      kind: "class",
+      title: a.title,
+      label: "Clase",
+      href: `/dashboard/clase/${a.id}`,
+      live: a.is_active,
+    })),
+    ...(stripEvents ?? []).map((t) => ({
+      id: `event-${t.id}`,
+      date: dateInTimezone(t.created_at),
+      kind: "event",
+      title: t.title,
+      label: t.mode === "caos" ? "Tope CAOS" : "Tope",
+      href: `/dashboard/torneos/${t.id}`,
+      live: t.status === "active",
+    })),
+  ].filter((item) => item.date && item.date >= stripFrom && item.date <= stripTo);
 
   const today = new Intl.DateTimeFormat("es-VE", {
     weekday: "long",
@@ -105,7 +159,16 @@ export default async function Dashboard() {
           />
         </div>
 
-        <div className="rise rise-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className="rise rise-3">
+          <DayStrip
+            todayKey={todayKey}
+            items={stripItems}
+            back={STRIP_BACK}
+            forward={STRIP_FORWARD}
+          />
+        </div>
+
+        <div className="rise rise-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           {/* 01 — Clase de hoy (hero, ocupa las 2 columnas) */}
           <div className="md:col-span-2">
             {assignment ? (

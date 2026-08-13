@@ -358,6 +358,23 @@ progress::-webkit-progress-value {
   transform: translateX(6px);
 }
 
+/* Tira de días del dashboard: se arrastra con el dedo, sin barra a la vista
+   (el degradé de los bordes y los días cortados ya avisan que sigue). */
+.day-strip {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.day-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.day-strip > * {
+  scroll-snap-align: center;
+}
+
 /* Barra de XP con brillo animado. */
 .xp-bar {
   position: relative;

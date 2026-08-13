@@ -55,6 +55,31 @@ export function todayInTimezone(date = new Date()) {
 }
 
 /**
+ * La fecha (YYYY-MM-DD) de un instante cualquiera en la zona del gym. Sirve
+ * para los timestamps que la base guarda en UTC (`tournaments.created_at`):
+ * un tope creado a las 9pm de Caracas se guarda como el día siguiente en UTC
+ * y en el calendario tiene que caer en el día que se peleó.
+ */
+export function dateInTimezone(value) {
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? null : todayInTimezone(date);
+}
+
+/**
+ * Corre una fecha "YYYY-MM-DD" tantos días hacia adelante (o atrás, con
+ * números negativos). Igual que `daysUntil`, ancla a mediodía UTC para que
+ * ningún huso ni cambio de horario mueva el resultado un día.
+ */
+export function addDays(dateString, days) {
+  if (typeof dateString !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    return null;
+  }
+
+  const base = Date.parse(`${dateString}T12:00:00Z`);
+  return new Date(base + days * 86_400_000).toISOString().slice(0, 10);
+}
+
+/**
  * Cuántos días faltan para una fecha de clase (`assignments.scheduled_for`,
  * un date "2026-08-11"). 0 = hoy, negativo = ya pasó, null si la fecha no
  * viene o no tiene forma de fecha.
