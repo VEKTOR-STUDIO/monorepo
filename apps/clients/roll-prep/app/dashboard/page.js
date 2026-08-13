@@ -17,8 +17,8 @@ export const dynamic = "force-dynamic";
 
 // Ventana de la tira de días: una semana atrás (lo que acaba de pasar) y dos
 // hacia adelante (lo que viene). Tiene que coincidir con los props de DayStrip.
-const STRIP_BACK = 7;
-const STRIP_FORWARD = 14;
+const STRIP_BACK = 4;
+const STRIP_FORWARD = 10;
 
 // Menú principal del alumno, estilo pantalla de selección de un videojuego
 // de pelea: HUD del jugador arriba y tiles de modo abajo.
@@ -59,7 +59,7 @@ export default async function Dashboard() {
     supabase.from("assignments").select("id", { count: "exact", head: true }),
     supabase
       .from("assignments")
-      .select("id, title, scheduled_for, is_active")
+      .select("id, title, video_url, scheduled_for, is_active")
       .gte("scheduled_for", stripFrom)
       .lte("scheduled_for", stripTo)
       .order("scheduled_for", { ascending: true }),
@@ -99,25 +99,26 @@ export default async function Dashboard() {
   const splashUrl = assignment ? getVideoThumbnail(assignment.video_url) : null;
   const { belt } = getRank(totalPoints);
 
-  // Clases y topes en un solo formato para la tira de días.
+  // Clases y topes en un solo formato para la tira de días. Cada carta lleva
+  // su splash art: la miniatura del video en las clases, rayas en los topes.
   const stripItems = [
     ...(stripClasses ?? []).map((a) => ({
       id: `class-${a.id}`,
       date: a.scheduled_for,
       kind: "class",
       title: a.title,
-      label: "Clase",
       href: `/dashboard/clase/${a.id}`,
       live: a.is_active,
+      splashUrl: getVideoThumbnail(a.video_url),
     })),
     ...(stripEvents ?? []).map((t) => ({
       id: `event-${t.id}`,
       date: dateInTimezone(t.created_at),
       kind: "event",
       title: t.title,
-      label: t.mode === "caos" ? "Tope CAOS" : "Tope",
       href: `/dashboard/torneos/${t.id}`,
       live: t.status === "active",
+      splashUrl: null,
     })),
   ].filter((item) => item.date && item.date >= stripFrom && item.date <= stripTo);
 

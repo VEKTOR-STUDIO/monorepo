@@ -359,7 +359,7 @@ progress::-webkit-progress-value {
 }
 
 /* Tira de días del dashboard: se arrastra con el dedo, sin barra a la vista
-   (el degradé de los bordes y los días cortados ya avisan que sigue). */
+   (las cartas cortadas en el borde ya avisan que la fila sigue). */
 .day-strip {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -373,6 +373,55 @@ progress::-webkit-progress-value {
 
 .day-strip > * {
   scroll-snap-align: center;
+}
+
+/* La splash de una carta de 6rem tiene que pesar más que la de un tile
+   grande: si no, a ese tamaño la imagen no se lee. */
+.day-strip .tile-splash {
+  opacity: 0.4;
+}
+
+.day-strip .menu-tile:hover .tile-splash {
+  opacity: 0.75;
+}
+
+/* Título de la carta: no cabe en 6rem, así que se arrastra solo mientras el
+   cursor está encima, como el nombre del personaje en la pantalla de
+   selección. La pista lleva el texto dos veces y se corre justo la mitad:
+   el ciclo empalma sin salto. */
+.day-tick {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  -webkit-mask-image: linear-gradient(90deg, #000 78%, transparent);
+  mask-image: linear-gradient(90deg, #000 78%, transparent);
+}
+
+.day-tick-track {
+  display: inline-flex;
+  width: max-content;
+}
+
+.day-tick-track > * {
+  padding-right: 1.25rem;
+}
+
+.group:hover .day-tick-run,
+.group:focus-visible .day-tick-run {
+  animation: day-tick 5s linear infinite;
+}
+
+@keyframes day-tick {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .day-tick-run,
+  .group:focus-visible .day-tick-run {
+    animation: none;
+  }
 }
 
 /* Barra de XP con brillo animado. */

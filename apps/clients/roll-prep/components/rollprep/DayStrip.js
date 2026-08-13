@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 
 const WEEKDAY_INITIALS = ["D", "L", "M", "M", "J", "V", "S"];
-const WEEKDAYS = [
-  "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado",
-];
 const MONTHS = [
-  "enero", "febrero", "marzo", "abril", "mayo", "junio",
-  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+  "ene", "feb", "mar", "abr", "may", "jun",
+  "jul", "ago", "sep", "oct", "nov", "dic",
 ];
+
+// Un título corto se lee entero y quedarse quieto; uno largo no cabe en un
+// cuadro de 6rem, así que ese sí se arrastra solo al pasar el cursor.
+const TICKER_FROM = 13;
 
 // Los nombres de días y meses van a mano y las fechas se leen con los getters
 // UTC (cada día se ancla a mediodía UTC): así el servidor y el navegador
@@ -22,15 +23,15 @@ function shiftKey(key, days) {
 }
 
 /**
- * Tira de días arrastrable: el calendario del gym en horizontal, con las
- * clases y los topes de cada día. Al tocar un día se abre abajo el detalle
- * con links directos. Arranca centrada en hoy.
+ * Tira de días arrastrable: el calendario del gym en horizontal, como la fila
+ * de personajes de una pantalla de selección. Cada día con algo agendado es
+ * una carta cuadrada con su splash art y entra directo al contenido; los días
+ * vacíos se encogen a una lápida fina. Arranca centrada en hoy.
  *
  * `items` viene ya normalizado desde el servidor:
- * { id, date: "YYYY-MM-DD", kind: "class" | "event", title, label, href, live }
+ * { id, date: "YYYY-MM-DD", kind: "class" | "event", title, href, live, splashUrl }
  */
-export default function DayStrip({ todayKey, items = [], back = 7, forward = 14 }) {
-  const [selectedKey, setSelectedKey] = useState(todayKey);
+export default function DayStrip({ todayKey, items = [], back = 4, forward = 10 }) {
   const scrollerRef = useRef(null);
   const todayRef = useRef(null);
 
@@ -52,10 +53,16 @@ export default function DayStrip({ todayKey, items = [], back = 7, forward = 14 
       Array.from({ length: back + forward + 1 }, (_, i) => {
         const key = shiftKey(todayKey, i - back);
         const date = new Date(`${key}T12:00:00Z`);
+        const number = date.getUTCDate();
+
         return {
           key,
-          number: date.getUTCDate(),
-          weekday: WEEKDAY_INITIALS[date.getUTCDay()],
+          number,
+          // El día 1 anuncia el mes; el resto, la inicial del día.
+          label:
+            number === 1
+              ? MONTHS[date.getUTCMonth()]
+              : WEEKDAY_INITIALS[date.getUTCDay()],
           items: byDate[key] ?? [],
         };
       }),
@@ -73,118 +80,115 @@ export default function DayStrip({ todayKey, items = [], back = 7, forward = 14 
       tile.offsetLeft - scroller.clientWidth / 2 + tile.clientWidth / 2;
   }, []);
 
-  const selected = new Date(`${selectedKey}T12:00:00Z`);
-  const selectedItems = byDate[selectedKey] ?? [];
-  const upcoming = items.filter((item) => item.date >= todayKey).length;
-
+  // py-2: al hover las cartas se despegan 3px y tiran sombra 6px; sin ese
+  // aire, el scroll horizontal se las recorta.
   return (
-    <div className="clip-cut relative border-2 border-base-300 bg-base-200 p-3">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[0.6rem] font-black uppercase tracking-[0.25em] opacity-50">
-          Agenda · {upcoming} por delante
-        </span>
-        <Link
-          href="/dashboard/calendario"
-          className="tile-cta text-[0.6rem] font-black uppercase tracking-[0.2em] text-primary"
-        >
-          Ver mes
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            className="h-2.5 w-2.5"
-          >
-            <path d="M5 12h14M13 6l6 6-6 6" />
-          </svg>
-        </Link>
-      </div>
+    <div
+      ref={scrollerRef}
+      className="day-strip relative flex gap-1.5 overflow-x-auto px-0.5 py-2"
+    >
+      {days.map((day) => {
+        const isToday = day.key === todayKey;
+        const [item, ...rest] = day.items;
+        const topLabel = isToday ? "Hoy" : day.label;
 
-      <div
-        ref={scrollerRef}
-        className="day-strip relative mt-2 flex gap-1.5 overflow-x-auto pb-1"
-      >
-        {days.map((day) => {
-          const isToday = day.key === todayKey;
-          const isSelected = day.key === selectedKey;
-          const hasItems = day.items.length > 0;
-
+        // Día muerto: lápida fina, solo el número. Comprimir lo vacío deja que
+        // en pantalla entren más días con contenido.
+        if (!item) {
           return (
-            <button
+            <div
               key={day.key}
               ref={isToday ? todayRef : null}
-              onClick={() => setSelectedKey(day.key)}
-              aria-pressed={isSelected}
-              className={`flex w-12 shrink-0 flex-col items-center gap-0.5 border py-1.5 transition-colors ${
-                isSelected
-                  ? "border-primary bg-primary text-primary-content"
-                  : hasItems
-                    ? "border-primary/50 bg-primary/10 text-primary hover:bg-primary/25"
-                    : "border-base-300 opacity-45 hover:opacity-80"
-              } ${isToday && !isSelected ? "border-secondary opacity-100" : ""}`}
+              className={`flex h-24 w-11 shrink-0 flex-col justify-between border p-1.5 ${
+                isToday
+                  ? "border-secondary opacity-70"
+                  : "border-base-300 opacity-30"
+              }`}
             >
-              <span className="text-[0.5rem] font-black uppercase tracking-widest opacity-70">
-                {isToday ? "Hoy" : day.weekday}
+              <span className="text-[0.5rem] font-black uppercase tracking-widest">
+                {topLabel}
               </span>
-              <span className="display text-xl leading-none">{day.number}</span>
-
-              {/* Un punto por cosa agendada: volt = clase, rojo = tope. */}
-              <span className="flex h-1.5 items-center gap-0.5">
-                {day.items.slice(0, 3).map((item) => (
-                  <span
-                    key={item.id}
-                    className={`h-1 w-1 ${
-                      item.kind === "class"
-                        ? isSelected
-                          ? "bg-primary-content"
-                          : "bg-primary"
-                        : "bg-accent"
-                    }`}
-                  />
-                ))}
-              </span>
-            </button>
+              <span className="display text-2xl leading-none">{day.number}</span>
+            </div>
           );
-        })}
-      </div>
+        }
 
-      <div className="mt-2 border-t border-base-300 pt-2">
-        <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60">
-          {WEEKDAYS[selected.getUTCDay()]} {selected.getUTCDate()} de{" "}
-          {MONTHS[selected.getUTCMonth()]}
-        </p>
-
-        {!selectedItems.length && (
-          <p className="mt-1 text-[0.65rem] font-semibold uppercase tracking-widest opacity-40">
-            Nada agendado este día
-          </p>
-        )}
-
-        {selectedItems.map((item) => (
+        return (
           <Link
-            key={item.id}
+            key={day.key}
+            ref={isToday ? todayRef : null}
             href={item.href}
-            className="group mt-1.5 flex items-center gap-2"
+            className={`menu-tile clip-cut group h-24 w-24 shrink-0 ${
+              isToday ? "border-secondary" : ""
+            }`}
           >
+            {item.splashUrl ? (
+              <span
+                className="tile-splash"
+                style={{ backgroundImage: `url(${item.splashUrl})` }}
+                aria-hidden="true"
+              />
+            ) : (
+              <span className="stripes absolute inset-0 opacity-40" aria-hidden="true" />
+            )}
+
+            {/* Franja de tipo: volt = clase, rojo = tope. */}
             <span
-              className={`h-3 w-1 shrink-0 ${
+              aria-hidden="true"
+              className={`absolute inset-x-0 top-0 h-1 ${
                 item.kind === "class" ? "bg-primary" : "bg-accent"
               }`}
             />
-            <span className="min-w-0 flex-1 truncate text-sm font-bold group-hover:text-primary">
-              {item.title}
-            </span>
-            {item.live && (
-              <span className="tag-skew blink-soft shrink-0 bg-primary px-1.5 py-0.5 text-[0.5rem] text-primary-content">
-                <span>Activo</span>
+
+            <span className="relative z-10 flex h-full flex-col justify-between p-1.5 pt-2">
+              <span className="flex items-start justify-between gap-1">
+                <span className="text-[0.5rem] font-black uppercase tracking-widest opacity-60">
+                  {topLabel}
+                </span>
+                <span className="flex shrink-0 items-center gap-1">
+                  {rest.length > 0 && (
+                    <span className="text-[0.5rem] font-black opacity-60">
+                      +{rest.length}
+                    </span>
+                  )}
+                  {item.live && (
+                    <span className="blink-soft mt-0.5 h-1.5 w-1.5 bg-primary" />
+                  )}
+                </span>
               </span>
-            )}
-            <span className="shrink-0 text-[0.55rem] font-black uppercase tracking-widest opacity-50">
-              {item.label}
+
+              <span className="block">
+                <span className="display block text-3xl leading-none group-hover:text-primary">
+                  {day.number}
+                </span>
+                <span className="day-tick mt-0.5 text-[0.5rem] font-black uppercase tracking-widest opacity-70">
+                  <span
+                    className={`day-tick-track ${
+                      item.title.length > TICKER_FROM ? "day-tick-run" : ""
+                    }`}
+                  >
+                    <span>{item.title}</span>
+                    {item.title.length > TICKER_FROM && (
+                      <span aria-hidden="true">{item.title}</span>
+                    )}
+                  </span>
+                </span>
+              </span>
             </span>
           </Link>
-        ))}
-      </div>
+        );
+      })}
+
+      {/* Última carta: el mes completo, para el que quiere ver más lejos. */}
+      <Link
+        href="/dashboard/calendario"
+        className="menu-tile clip-cut group h-24 w-11 shrink-0"
+      >
+        <span className="stripes absolute inset-0 opacity-40" aria-hidden="true" />
+        <span className="display absolute bottom-1.5 left-1.5 z-10 text-lg leading-none group-hover:text-primary">
+          Mes
+        </span>
+      </Link>
     </div>
   );
 }
