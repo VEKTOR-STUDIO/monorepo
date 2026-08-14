@@ -272,7 +272,8 @@ export default async function TorneoDetalle({ params }) {
               ` · ${guestIds.length} invitado${guestIds.length === 1 ? "" : "s"}`}
           </p>
           <p className="mt-2 text-[0.65rem] font-black uppercase tracking-[0.2em] text-primary">
-            Pelear +{TOURNAMENT_POINTS.participation} XP · Finalista +
+            Pelear +{TOURNAMENT_POINTS.participation} XP · 3er puesto +
+            {TOURNAMENT_POINTS.third} XP · Finalista +
             {TOURNAMENT_POINTS.finalist} XP · Campeón +
             {TOURNAMENT_POINTS.champion} XP
           </p>

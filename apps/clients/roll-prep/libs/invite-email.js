@@ -129,6 +129,8 @@ export function inviteEmailHtml(invite, { greetingName, flyerSrc } = {}) {
       "Remontar desde abajo",
       `+${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
     ],
+    ["3er puesto", `+${CAOS_RANK_POINTS.third} PC`],
+    ["Ser finalista", `+${CAOS_RANK_POINTS.finalist} PC`],
     ["Llevarte el torneo", `+${CAOS_RANK_POINTS.champion} PC`],
   ];
 
@@ -417,6 +419,8 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     `- Ganar una pelea: +${CAOS_RANK_POINTS.win} PC`,
     `- Finalizar por sumisión: +${CAOS_RANK_POINTS.submission} PC`,
     `- Remontar desde abajo: +${CAOS_RANK_POINTS.upsetPerTier} a +${CAOS_RANK_POINTS.upsetPerTier * 3} PC`,
+    `- 3er puesto: +${CAOS_RANK_POINTS.third} PC`,
+    `- Ser finalista: +${CAOS_RANK_POINTS.finalist} PC`,
     `- Llevarte el torneo: +${CAOS_RANK_POINTS.champion} PC`,
     "",
     "",

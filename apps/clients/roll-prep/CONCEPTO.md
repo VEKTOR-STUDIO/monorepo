@@ -104,6 +104,7 @@ pueden inflar desde el navegador.
 | Votar el tema de la próxima clase | 10 |
 | Comentar en una clase | 5 |
 | Pelear en un tope | 15 |
+| 3er puesto del tope | 25 |
 | Llegar a la final | 50 |
 | Ganar el tope | 100 |
 | *(CAOS)* Ganar desde la desventaja | 20 / 40 / 60 |
@@ -173,8 +174,9 @@ cambia el mapa y cambian las restricciones. RollPrep hace lo mismo con el tope d
 mismo bracket, mismos puntos, mismo tatami — reglas distintas.
 
 Un **tope** en RollPrep es un bracket de eliminación simple con seeds estándar, byes
-repartidos automáticamente, resultados con método (sumisión, puntos, decisión, DQ, no
-presentado) y reparto de XP por triggers. Al tope puede entrar gente sin cuenta —
+repartidos automáticamente, pelea por el 3er puesto cuando hay semifinales de verdad,
+resultados con método (sumisión, puntos, decisión, DQ, no presentado) y reparto de XP
+por triggers. Al tope puede entrar gente sin cuenta —
 **invitados**, el amigo, el de otro gym, el que vino a probar — que caen al bracket con un
 nombre de guerra generado al azar ("Anaconda de Otro Gym", "Guillotina sin Kimono") para
 que el profesor no tenga que preguntarle el nombre a nadie antes de sortear.
