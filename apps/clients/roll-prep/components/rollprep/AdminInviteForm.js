@@ -243,7 +243,7 @@ export default function AdminInviteForm({ invite = null }) {
           />
         </Field>
 
-        <Field label="Link de inscripción" hint="WhatsApp, formulario... Vacío = la página del evento.">
+        <Field label="Link de confirmación" hint="WhatsApp, formulario... Vacío = la página del evento.">
           <input
             name="cta_url"
             type="url"

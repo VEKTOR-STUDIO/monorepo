@@ -33,7 +33,7 @@ export const INVITE_LIMITS = {
   url: 500,
 };
 
-export const DEFAULT_CTA_LABEL = "Quiero pelear";
+export const DEFAULT_CTA_LABEL = "Nos vemos ahí";
 
 // ----------------------------------------------------------------------------
 // FORMATOS DEL FLYER
@@ -260,12 +260,11 @@ export function inviteCaption(invite) {
     "",
     date ? `📅 ${date.weekday} ${date.day} de ${date.monthLong} · ${date.time}` : null,
     invite.location ? `📍 ${invite.location}` : null,
-    invite.slots ? `🎟️ ${invite.slots} cupos` : null,
     invite.price ? `💵 ${invite.price}` : null,
     "",
     ...CAOS_STEPS.map(({ short }) => `▸ ${short}`),
     "",
-    `Toda la info y anotarte 👉 ${inviteUrl(invite.slug)}`,
+    `Fuiste invitado. La convocatoria 👉 ${inviteUrl(invite.slug)}`,
     "",
     "#jiujitsu #bjj #caos #nogi #grappling",
   ]

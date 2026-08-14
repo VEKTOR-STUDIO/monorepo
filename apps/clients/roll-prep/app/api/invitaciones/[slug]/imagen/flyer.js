@@ -530,9 +530,9 @@ export default function Flyer({ invite, format, logo, signature }) {
         </div>
 
         {/* ---------------------------- PIE / CTA -------------------------
-            Cupos y entrada NO van aquí: esto es una invitación, la pieza que
-            la gente enseña. La letra chica vive en la página del evento y en
-            el correo, que es donde se entra a decidir. */}
+            Esto no es un afiche de inscripción: es la tarjeta que le llega
+            a alguien que YA está invitado. Fecha y sede ya están arriba;
+            aquí el cierre es el vocativo, no un “anótate / hay cupos”. */}
         <div
           style={{
             display: "flex",
@@ -553,10 +553,8 @@ export default function Flyer({ invite, format, logo, signature }) {
                 color: MUTED,
               }}
             >
-              Anótate en
+              Fuiste invitado
             </div>
-            {/* El dominio pelado. Sin ruta: en una story nadie teclea un slug,
-                y la dirección corta ya dice de quién es el evento. */}
             <div
               style={{
                 display: "flex",

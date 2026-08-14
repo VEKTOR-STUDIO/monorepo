@@ -357,9 +357,9 @@ export function inviteEmailHtml(invite, { greetingName, flyerSrc } = {}) {
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr><td height="12" style="height:12px;line-height:12px;font-size:0;">&nbsp;</td></tr>
               </table>
-              ${arcadeButton(link, "Ver el evento", { primary: false })}
+              ${arcadeButton(link, "Ver la convocatoria", { primary: false })}
               <p style="margin:16px 0 0 0;font-family:${SANS};font-size:12px;line-height:1.5;color:${MUTED};text-align:center;">
-                Pásale el link a quien quieras traer:
+                La invitación vive aquí:
                 <a href="${esc(link)}" style="color:${VOLT};text-decoration:none;">${esc(link.replace(/^https?:\/\//, ""))}</a>
               </p>
             </td>
@@ -420,8 +420,8 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     `- Llevarte el torneo: +${CAOS_RANK_POINTS.champion} PC`,
     "",
     "",
-    `Anótate: ${safeUrl(invite.cta_url) ?? link}`,
-    `Evento: ${link}`,
+    `Confirmar: ${safeUrl(invite.cta_url) ?? link}`,
+    `La convocatoria: ${link}`,
     "",
     `Te llega porque estás en ${config.appName}.`,
   ];

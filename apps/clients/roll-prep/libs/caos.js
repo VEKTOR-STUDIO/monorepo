@@ -553,6 +553,10 @@ function pick(list) {
 // La muestra se escoge con la semilla del evento, no al azar: el flyer se
 // genera muchas veces (preview, descarga, correo, redes) y en todas tiene que
 // salir la misma carta. Dos eventos distintos enseñan cartas distintas.
+//
+// No se usa el mazo entero: hay nombres que en un póster suenan a chiste
+// (Mano Muerta, Botón de Pánico). Aquí solo entran las que se leen como
+// pelea. El dueño invita a gente que ya eligió — no hay que suavizar.
 // ----------------------------------------------------------------------------
 
 /** Hash estable de un texto a entero positivo. */
@@ -564,49 +568,34 @@ function seedFrom(value) {
   return Math.abs(hash);
 }
 
-// El modo contado como se vive, en segunda persona. `short` es para el
-// flyer, donde cada línea tiene que caber de un vistazo; `long` es para el
-// correo y la página, que sí tienen espacio para la escena completa.
-//
-// Nada de "alfa" y "omega" aquí: esos son los nombres internos de las cartas
-// (ver DUELS). Al que nunca ha peleado un CAOS se le habla de ventaja y de
-// carga, que es lo que va a sentir en el tatami.
-export const CAOS_STEPS = [
-  {
-    n: "01",
-    short: "Llegas y se sortea. Nadie escoge rival.",
-    long: "Llegas, se sortea el bracket y ya. Nadie escoge rival ni sabe contra quién va hasta que sale el cuadro.",
-  },
-  {
-    n: "02",
-    short: "Antes de tu pelea se rolea: cambia la regla y cambia el arranque.",
-    long: "Antes de cada pelea se rolea delante de todos: sale una regla de arena que aplica a los dos y un arranque distinto para cada uno. Lo sabes ahí mismo, no antes.",
-  },
-  {
-    n: "03",
-    short: "A uno le toca la ventaja; al otro, el doble de puntos por remontarla.",
-    long: "A uno le toca la ventaja y al otro la carga. Remontar desde abajo paga el doble de puntos CAOS; guindarse de la ventaja sin finalizar no paga nada. Esos puntos van al ranking CAOS, no al cinturón.",
-  },
-];
+const SHOWCASE_DUEL_KEYS = new Set([
+  "n_pie_de_guerra",
+  "n_cazadores",
+  "n_espalda_con_espalda",
+  "t2_cazador_de_piernas",
+  "t2_pierna_enredada",
+  "t2_reloj_en_contra",
+  "t2_guardia_partida",
+  "t3_depredador",
+  "t3_rey_de_la_montada",
+  "t3_todo_o_nada",
+  "t3_solo_la_espalda",
+  "t2_lapel_libre",
+  "n_solapa_amarrada",
+  "t3_brazo_atado_gi",
+]);
 
 export function caosShowcase(seed, outfit = DEFAULT_OUTFIT) {
   const deck = deckFor(OUTFITS[outfit] ? outfit : DEFAULT_OUTFIT);
   const n = seedFrom(seed);
-
-  // La muestra sale del nivel LEVE a propósito. Los duelos brutales son los
-  // más divertidos de pelear, pero al que nunca ha competido lo asustan o
-  // directamente no los entiende: "arrancas con la espalda tomada, cinturón
-  // de seguridad y dos ganchos" no vende nada. Una media guardia sí se
-  // imagina cualquiera.
-  const readable = deck.duels.filter((duel) => duel.tier === 1);
-  const duels = readable.length ? readable : deck.duels;
+  const poster = deck.duels.filter((duel) => SHOWCASE_DUEL_KEYS.has(duel.key));
+  const duels = poster.length ? poster : deck.duels;
 
   return {
     terrain: deck.terrains[n % deck.terrains.length],
     duel: duels[Math.floor(n / 7) % duels.length],
     terrainCount: deck.terrains.length,
     duelCount: deck.duels.length,
-    // Cuántas peleas distintas puede sacar el mazo. El número es el gancho.
     combos: deck.terrains.length * deck.duels.length,
     tiers: [0, 1, 2, 3].map((tier) => ({
       tier,

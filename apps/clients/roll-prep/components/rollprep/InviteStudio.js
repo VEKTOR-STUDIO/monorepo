@@ -150,8 +150,8 @@ export default function InviteStudio({ invite }) {
       </div>
 
       <p className="text-[0.65rem] font-medium leading-relaxed opacity-50">
-        Baja el PNG, súbelo a la story y pega el caption. El link del flyer
-        lleva a la página del evento, que abre sin cuenta.
+        Baja el PNG y súbelo a la story: es la invitación, no un afiche de
+        cupos. El caption ya va en ese tono.
       </p>
     </div>
   );
