@@ -17,6 +17,8 @@ import {
   EVENT_TYPES,
   CAOS_RANK_POINTS,
   CAOS_STEPS,
+  TIER_LABELS,
+  CARD_TONE_LABELS,
   caosShowcase,
 } from "@/libs/caos";
 import {
@@ -86,13 +88,15 @@ export function inviteSubject(invite) {
  * El cuerpo del correo. `greetingName` es el nombre del destinatario cuando
  * lo tenemos (los del gym); los de fuera reciben el saludo genérico.
  */
-export function inviteEmailHtml(invite, { greetingName } = {}) {
+export function inviteEmailHtml(invite, { greetingName, flyerSrc } = {}) {
   const date = inviteDateParts(invite.starts_at);
   const link = inviteUrl(invite.slug);
-  const flyer = inviteImageUrl(invite.slug, {
-    format: "post",
-    v: invite.updated_at,
-  });
+  const flyer =
+    flyerSrc ??
+    inviteImageUrl(invite.slug, {
+      format: "post",
+      v: invite.updated_at,
+    });
   // La firma va en PNG, no en el .webp original: Outlook de escritorio no
   // dibuja webp y dejaría el pie con el cuadro roto. El PNG se genera del
   // mismo archivo y vive al lado en /public.
@@ -254,9 +258,46 @@ export function inviteEmailHtml(invite, { greetingName } = {}) {
                     El mazo tiene <span style="font-weight:800;color:${VOLT};">${show.combos} combinaciones</span>
                     (${show.terrainCount} terrenos × ${show.duelCount} arranques).
                     Nadie sabe cuál le toca hasta que suena el silbato.
+                    Los puntos van al ranking CAOS, no al cinturón.
                   </td>
                 </tr>
               </table>
+            </td>
+          </tr>
+
+          <!-- CARTAS DE MUESTRA: un terreno y un duelo de ESTE evento -->
+          <tr>
+            <td style="padding:22px 32px 0 32px;">
+              ${label("▸ Así se ve una pelea")}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;background:${CARD};border-left:6px solid ${VOLT};">
+                <tr>
+                  <td style="padding:16px 18px;">
+                    <div style="font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${VOLT};">Terreno</div>
+                    <div style="margin-top:6px;font-family:${SANS};font-size:20px;font-weight:800;text-transform:uppercase;color:${PAPER};">${esc(show.terrain.name)}</div>
+                    <p style="margin:8px 0 0 0;font-family:${SANS};font-size:14px;line-height:1.5;color:${PAPER};">${esc(show.terrain.rule)}</p>
+                  </td>
+                </tr>
+              </table>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:10px;background:${CARD};border-left:6px solid ${ACCENT};">
+                <tr>
+                  <td style="padding:16px 18px;">
+                    <div style="font-family:${SANS};font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:${ACCENT};">
+                      Un arranque · ${esc(TIER_LABELS[show.duel.tier])}
+                    </div>
+                    <div style="margin-top:6px;font-family:${SANS};font-size:20px;font-weight:800;text-transform:uppercase;color:${PAPER};">${esc(show.duel.name)}</div>
+                    <p style="margin:6px 0 0 0;font-family:${SANS};font-size:13px;font-style:italic;color:${MUTED};">${esc(show.duel.start)}</p>
+                    <p style="margin:12px 0 0 0;font-family:${SANS};font-size:14px;line-height:1.5;color:${PAPER};">
+                      <span style="font-weight:800;color:${VOLT};">${esc(CARD_TONE_LABELS.alfa)}:</span> ${esc(show.duel.alfa.rule)}
+                    </p>
+                    <p style="margin:8px 0 0 0;font-family:${SANS};font-size:14px;line-height:1.5;color:${PAPER};">
+                      <span style="font-weight:800;color:${ACCENT};">${esc(CARD_TONE_LABELS.omega)}:</span> ${esc(show.duel.omega.rule)}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:10px 0 0 0;font-family:${SANS};font-size:12px;line-height:1.5;color:${MUTED};">
+                Estas dos son de muestra. El día del evento cada pelea saca las suyas.
+              </p>
             </td>
           </tr>
 
@@ -366,7 +407,10 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     "Así se pelea:",
     ...CAOS_STEPS.map(({ n, long }) => `${n}. ${long}`),
     "",
-    `El mazo ${outfit} tiene ${show.combos} combinaciones (${show.terrainCount} terrenos × ${show.duelCount} arranques). Nadie sabe cuál le toca hasta que suena el silbato.`,
+    `El mazo ${outfit} tiene ${show.combos} combinaciones (${show.terrainCount} terrenos × ${show.duelCount} arranques). Nadie sabe cuál le toca hasta que suena el silbato. Los puntos van al ranking CAOS, no al cinturón.`,
+    "",
+    `Ejemplo de terreno: ${show.terrain.name} — ${show.terrain.rule}`,
+    `Ejemplo de arranque (${TIER_LABELS[show.duel.tier]}): ${show.duel.name}. ${CARD_TONE_LABELS.alfa}: ${show.duel.alfa.rule} ${CARD_TONE_LABELS.omega}: ${show.duel.omega.rule}`,
     "",
     "Botín (puntos CAOS):",
     `- Pelear cada combate: +${CAOS_RANK_POINTS.fight} PC`,

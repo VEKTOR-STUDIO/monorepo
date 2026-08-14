@@ -584,8 +584,8 @@ export const CAOS_STEPS = [
   },
   {
     n: "03",
-    short: "A uno le toca la ventaja; al otro, el doble por remontarla.",
-    long: "A uno le toca la ventaja y al otro la carga. Remontar desde abajo paga el doble; guindarse de la ventaja sin finalizar no paga nada.",
+    short: "A uno le toca la ventaja; al otro, el doble de puntos por remontarla.",
+    long: "A uno le toca la ventaja y al otro la carga. Remontar desde abajo paga el doble de puntos CAOS; guindarse de la ventaja sin finalizar no paga nada. Esos puntos van al ranking CAOS, no al cinturón.",
   },
 ];
 

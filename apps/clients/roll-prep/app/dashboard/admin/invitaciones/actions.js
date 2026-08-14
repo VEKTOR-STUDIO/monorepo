@@ -8,6 +8,7 @@ import {
   buildInviteSlug,
   CAOS_INVITES_MIGRATION,
   INVITE_LIMITS,
+  inviteImageFilename,
   isMissingInvites,
   localInputToISO,
 } from "@/libs/invites";
@@ -55,6 +56,7 @@ function revalidateInvitePaths(slug) {
   // La cartelera pública se prerenderiza: sin esto, el evento recién creado
   // no aparece hasta que le toque el revalidate por tiempo.
   revalidatePath("/caos");
+  revalidatePath("/");
   if (slug) {
     revalidatePath(`/dashboard/admin/invitaciones/${slug}`);
     revalidatePath(`/caos/${slug}`);
@@ -350,6 +352,28 @@ export async function sendInvite(formData) {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   const subject = inviteSubject(invite);
+
+  // El flyer viaja pegado al correo (cid:), no como URL remota. Así Gmail
+  // no tiene que ir a buscar /api/invitaciones/.../imagen — que en prod
+  // fallaba — y la imagen se ve aunque el cliente bloquee cargas externas.
+  const FLYER_CID = "caos-flyer";
+  let flyerSrc;
+  let flyerAttachment;
+  try {
+    const { renderFlyerPng } = await import(
+      "@/app/api/invitaciones/[slug]/imagen/flyer"
+    );
+    const png = await renderFlyerPng(invite, "post");
+    flyerSrc = `cid:${FLYER_CID}`;
+    flyerAttachment = {
+      filename: inviteImageFilename(invite.slug, "post"),
+      content: png,
+      contentId: FLYER_CID,
+    };
+  } catch (err) {
+    console.error("[caos flyer email]", err);
+  }
+
   const results = [];
 
   for (let i = 0; i < recipients.length; i += BATCH_SIZE) {
@@ -360,8 +384,12 @@ export async function sendInvite(formData) {
       to: person.email,
       replyTo: config.resend.supportEmail,
       subject,
-      html: inviteEmailHtml(invite, { greetingName: person.name }),
+      html: inviteEmailHtml(invite, {
+        greetingName: person.name,
+        flyerSrc,
+      }),
       text: inviteEmailText(invite, { greetingName: person.name }),
+      ...(flyerAttachment ? { attachments: [flyerAttachment] } : {}),
     }));
 
     let sent;

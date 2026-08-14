@@ -14,6 +14,7 @@
 
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { ImageResponse } from "next/og";
 import {
   OUTFITS,
   EVENT_TYPES,
@@ -27,34 +28,73 @@ const INK = "#0f0f12";
 const VOLT = "#d4ff00";
 const PAPER = "#f5f5f0";
 const MUTED = "#8a8a85";
+const ACCENT = "#ff5223";
+const CARD = "#16171a";
+
+// Cada path es un literal a propósito: NFT y webpack no siguen variables.
+// Un helper `asset(path)` es exactamente lo que rompía esto en Vercel.
+function readAsset(fromMeta, fromCwd) {
+  return readFile(fromMeta).catch(() => readFile(fromCwd));
+}
 
 // Las fuentes y los logos se leen del disco una sola vez por instancia.
 let assetsPromise;
 
 export function loadFlyerAssets() {
   if (!assetsPromise) {
-    const asset = (path) => readFile(join(process.cwd(), path));
-
     assetsPromise = Promise.all([
-      asset("public/fonts/Anton-Regular.ttf"),
-      asset("public/fonts/Barlow-Regular.ttf"),
-      asset("public/fonts/Barlow-Bold.ttf"),
-      asset("public/images/caosPrimary.png"),
+      readAsset(
+        new URL("../../../../../public/fonts/Anton-Regular.ttf", import.meta.url),
+        join(process.cwd(), "public/fonts/Anton-Regular.ttf")
+      ),
+      readAsset(
+        new URL("../../../../../public/fonts/Barlow-Regular.ttf", import.meta.url),
+        join(process.cwd(), "public/fonts/Barlow-Regular.ttf")
+      ),
+      readAsset(
+        new URL("../../../../../public/fonts/Barlow-Bold.ttf", import.meta.url),
+        join(process.cwd(), "public/fonts/Barlow-Bold.ttf")
+      ),
+      readAsset(
+        new URL("../../../../../public/images/caosPrimary.png", import.meta.url),
+        join(process.cwd(), "public/images/caosPrimary.png")
+      ),
       // La firma va en PNG y no en el .webp original: satori dibuja el
       // <img> metiéndolo dentro de un SVG, y ahí el webp no entra.
-      asset("public/logoAlessandrovaruBlanco.png"),
-    ]).then(([anton, barlow, barlowBold, logo, signature]) => ({
-      fonts: [
-        { name: "Anton", data: anton, weight: 400, style: "normal" },
-        { name: "Barlow", data: barlow, weight: 400, style: "normal" },
-        { name: "Barlow", data: barlowBold, weight: 700, style: "normal" },
-      ],
-      logo: `data:image/png;base64,${logo.toString("base64")}`,
-      signature: `data:image/png;base64,${signature.toString("base64")}`,
-    }));
+      readAsset(
+        new URL("../../../../../public/logoAlessandrovaruBlanco.png", import.meta.url),
+        join(process.cwd(), "public/logoAlessandrovaruBlanco.png")
+      ),
+    ])
+      .then(([anton, barlow, barlowBold, logo, signature]) => ({
+        fonts: [
+          { name: "Anton", data: anton, weight: 400, style: "normal" },
+          { name: "Barlow", data: barlow, weight: 400, style: "normal" },
+          { name: "Barlow", data: barlowBold, weight: 700, style: "normal" },
+        ],
+        logo: `data:image/png;base64,${logo.toString("base64")}`,
+        signature: `data:image/png;base64,${signature.toString("base64")}`,
+      }))
+      .catch((error) => {
+        // Si falla, no dejar el rechazo cacheado: el siguiente request
+        // (o un hot reload) tiene que poder reintentar.
+        assetsPromise = null;
+        throw error;
+      });
   }
 
   return assetsPromise;
+}
+
+/** Rasteriza el flyer a PNG. Lo usan la ruta HTTP y el envío del correo. */
+export async function renderFlyerPng(invite, format) {
+  const { fonts, logo, signature } = await loadFlyerAssets();
+  const spec = INVITE_FORMATS[format] ?? INVITE_FORMATS.story;
+  const image = new ImageResponse(
+    <Flyer invite={invite} format={format} logo={logo} signature={signature} />,
+    { width: spec.width, height: spec.height, fonts }
+  );
+  return Buffer.from(await image.arrayBuffer());
 }
 
 /** Corta sin partir palabras: en un póster una línea a medias se nota. */
@@ -118,6 +158,8 @@ export default function Flyer({ invite, format, logo, signature }) {
   // Un solo mando de escala: el post es el story apretado.
   const u = story ? 1 : 0.78;
   const pad = story ? 86 : 72;
+  // En el post (el del correo) el logo gigante se comía el pitch de CAOS.
+  const logoWidth = Math.round((story ? 300 : 188) * u);
   const title = clamp(invite.title, 46).toUpperCase();
   const outfit = OUTFITS[invite.outfit]?.short ?? "No-Gi";
   const kind = EVENT_TYPES[invite.event_type]?.label ?? "Circuito";
@@ -208,8 +250,8 @@ export default function Flyer({ invite, format, logo, signature }) {
             <img
               src={logo}
               alt=""
-              width={Math.round(360 * u)}
-              height={Math.round(360 * u * (1027 / 1271))}
+              width={logoWidth}
+              height={Math.round(logoWidth * (1027 / 1271))}
             />
           </div>
 
@@ -333,12 +375,10 @@ export default function Flyer({ invite, format, logo, signature }) {
         </div>
 
         {/* --------------------------- QUÉ ES CAOS -------------------------
-            El modo contado como se vive, no como se documenta: tres golpes
-            en segunda persona y el tamaño del mazo. Aquí no van cartas de
-            ejemplo —en un póster, un nombre raro y una regla larga frenan
-            la lectura justo donde hay que enganchar— y tampoco los nombres
-            internos de las mitades: se habla de ventaja y de carga. */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 22 * u }}>
+            El modo contado como se vive: tamaño del mazo, dos cartas de
+            muestra (solo el nombre — la regla larga vive en el correo y
+            en la página) y los tres golpes en segunda persona. */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 18 * u }}>
           <div
             style={{
               display: "flex",
@@ -351,7 +391,7 @@ export default function Flyer({ invite, format, logo, signature }) {
                 display: "flex",
                 fontFamily: "Barlow",
                 fontWeight: 700,
-                fontSize: 24 * u,
+                fontSize: 22 * u,
                 letterSpacing: 4 * u,
                 textTransform: "uppercase",
                 color: MUTED,
@@ -363,12 +403,85 @@ export default function Flyer({ invite, format, logo, signature }) {
               style={{
                 display: "flex",
                 fontFamily: "Anton",
-                fontSize: 30 * u,
+                fontSize: 28 * u,
                 textTransform: "uppercase",
                 color: VOLT,
               }}
             >
               {show.combos} combinaciones
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 14 * u }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                flexGrow: 1,
+                background: CARD,
+                borderLeft: `${8 * u}px solid ${VOLT}`,
+                padding: `${14 * u}px ${18 * u}px`,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: "Barlow",
+                  fontWeight: 700,
+                  fontSize: 16 * u,
+                  letterSpacing: 3 * u,
+                  textTransform: "uppercase",
+                  color: MUTED,
+                }}
+              >
+                Terreno
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: "Anton",
+                  fontSize: 28 * u,
+                  lineHeight: 1.1,
+                  color: PAPER,
+                }}
+              >
+                {clamp(show.terrain.name, 22)}
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                flexGrow: 1,
+                background: CARD,
+                borderLeft: `${8 * u}px solid ${ACCENT}`,
+                padding: `${14 * u}px ${18 * u}px`,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: "Barlow",
+                  fontWeight: 700,
+                  fontSize: 16 * u,
+                  letterSpacing: 3 * u,
+                  textTransform: "uppercase",
+                  color: MUTED,
+                }}
+              >
+                Arranque
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  fontFamily: "Anton",
+                  fontSize: 28 * u,
+                  lineHeight: 1.1,
+                  color: PAPER,
+                }}
+              >
+                {clamp(show.duel.name, 22)}
+              </div>
             </div>
           </div>
 
@@ -407,12 +520,12 @@ export default function Flyer({ invite, format, logo, signature }) {
               paddingLeft: 20 * u,
               fontFamily: "Barlow",
               fontWeight: 700,
-              fontSize: 28 * u,
+              fontSize: 26 * u,
               lineHeight: 1.25,
               color: PAPER,
             }}
           >
-            Nadie sabe qué le toca hasta que suena el silbato.
+            Los puntos van al ranking CAOS. Remontar paga el doble.
           </div>
         </div>
 

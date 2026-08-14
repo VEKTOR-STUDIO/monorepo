@@ -31,6 +31,7 @@ async function copy(text, message) {
 export default function InviteStudio({ invite }) {
   const [format, setFormat] = useState(DEFAULT_FORMAT);
   const [loading, setLoading] = useState(true);
+  const [failed, setFailed] = useState(false);
 
   const spec = INVITE_FORMATS[format];
   const src = inviteImagePath(invite.slug, { format, v: invite.updated_at });
@@ -47,6 +48,7 @@ export default function InviteStudio({ invite }) {
             onClick={() => {
               if (key === format) return;
               setLoading(true);
+              setFailed(false);
               setFormat(key);
             }}
             className={`flex-1 border-2 px-3 py-2 text-left transition-colors ${
@@ -77,6 +79,12 @@ export default function InviteStudio({ invite }) {
               <span className="loading loading-spinner text-primary" />
             </span>
           )}
+          {failed && !loading && (
+            <span className="absolute inset-0 flex items-center justify-center p-4 text-center text-xs font-semibold opacity-70">
+              No se pudo generar el flyer. Recarga o vuelve a guardar la
+              invitación.
+            </span>
+          )}
           {/* El PNG lo genera una ruta de API con parámetros: next/image no
               lo optimiza mejor, y aquí lo que importa es ver el archivo tal
               cual sale. */}
@@ -87,10 +95,16 @@ export default function InviteStudio({ invite }) {
             alt={`Flyer ${spec.label} de ${invite.title}`}
             width={spec.width}
             height={spec.height}
-            onLoad={() => setLoading(false)}
-            onError={() => setLoading(false)}
+            onLoad={() => {
+              setFailed(false);
+              setLoading(false);
+            }}
+            onError={() => {
+              setFailed(true);
+              setLoading(false);
+            }}
             className={`h-full w-full object-contain transition-opacity duration-300 ${
-              loading ? "opacity-0" : "opacity-100"
+              loading || failed ? "opacity-0" : "opacity-100"
             }`}
           />
         </div>

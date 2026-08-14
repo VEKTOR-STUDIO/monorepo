@@ -19,6 +19,7 @@ import {
   inviteDateParts,
   inviteImageFilename,
   inviteImagePath,
+  inviteImageUrl,
   inviteUrl,
   invitePath,
   isPastInvite,
@@ -63,6 +64,11 @@ export async function generateMetadata({ params }) {
       ? `Torneo CAOS · ${date.long}${invite.location ? ` · ${invite.location}` : ""}`
       : "Torneo CAOS: las reglas cambian en cada pelea.");
 
+  const imageUrl = inviteImageUrl(invite.slug, {
+    format: "post",
+    v: invite.updated_at,
+  });
+
   return {
     ...getSEOTags({
       title,
@@ -79,17 +85,19 @@ export async function generateMetadata({ params }) {
       type: "website",
       images: [
         {
-          url: inviteImagePath(invite.slug, {
-            format: "post",
-            v: invite.updated_at,
-          }),
+          url: imageUrl,
           width: INVITE_FORMATS.post.width,
           height: INVITE_FORMATS.post.height,
           alt: `${invite.title} — invitación CAOS`,
         },
       ],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
   };
 }
 

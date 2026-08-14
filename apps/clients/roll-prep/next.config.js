@@ -1,5 +1,25 @@
 const nextConfig = {
   reactStrictMode: true,
+  // El flyer CAOS lee fuentes y PNG del disco en runtime. Sin esto, NFT no
+  // los mete en el lambda de Vercel (los paths pasan por un helper) y la
+  // ruta /api/invitaciones/*/imagen revienta con 500 vacío.
+  outputFileTracingIncludes: {
+    "/api/invitaciones/*/imagen": [
+      "./public/fonts/**/*",
+      "./public/images/caosPrimary.png",
+      "./public/logoAlessandrovaruBlanco.png",
+    ],
+    "/dashboard/admin/invitaciones": [
+      "./public/fonts/**/*",
+      "./public/images/caosPrimary.png",
+      "./public/logoAlessandrovaruBlanco.png",
+    ],
+    "/dashboard/admin/invitaciones/*": [
+      "./public/fonts/**/*",
+      "./public/images/caosPrimary.png",
+      "./public/logoAlessandrovaruBlanco.png",
+    ],
+  },
   images: {
     remotePatterns: [
       {

@@ -92,6 +92,11 @@ export default async function CarteleraCaos() {
             <p className="mt-1 text-sm font-medium opacity-70">
               Torneos donde las reglas cambian en cada pelea.
             </p>
+            <p className="mt-3 max-w-lg text-sm font-medium leading-relaxed opacity-60">
+              Cada combate saca un terreno (la regla de arena) y un arranque
+              distinto para cada uno. Remontar desde abajo paga el doble.
+              El ranking CAOS mide récord de peleas, no cinturón.
+            </p>
           </div>
         </div>
 

@@ -14,11 +14,13 @@
 // como archivo. El diseño del póster está en ./flyer.js.
 // ============================================================================
 
-import { ImageResponse } from "next/og";
 import { createPublicClient } from "@/libs/supabase/public";
 import { createClient } from "@/libs/supabase/server";
 import { DEFAULT_FORMAT, INVITE_FORMATS, inviteImageFilename } from "@/libs/invites";
-import Flyer, { loadFlyerAssets } from "./flyer";
+import { renderFlyerPng } from "./flyer";
+
+export const runtime = "nodejs";
+export const maxDuration = 30;
 
 const FIELDS =
   "id, slug, title, tagline, description, starts_at, location, cta_url, cta_label, outfit, event_type, slots, price, updated_at";
@@ -76,15 +78,19 @@ export async function GET(request, { params }) {
     });
   }
 
-  const { fonts, logo, signature } = await loadFlyerAssets();
-  const spec = INVITE_FORMATS[format];
+  let png;
+  try {
+    png = await renderFlyerPng(invite, format);
+  } catch (error) {
+    console.error("[caos flyer]", error);
+    return new Response("No se pudo generar el flyer", {
+      status: 500,
+      headers: { "content-type": "text/plain; charset=utf-8" },
+    });
+  }
 
-  const image = new ImageResponse(
-    <Flyer invite={invite} format={format} logo={logo} signature={signature} />,
-    { width: spec.width, height: spec.height, fonts }
-  );
-
-  const headers = new Headers(image.headers);
+  const headers = new Headers();
+  headers.set("content-type", "image/png");
 
   // El flyer de una invitación con link público apagado solo lo ve quien tiene
   // sesión: no puede quedar guardado en el CDN, que sirve a cualquiera.
@@ -102,5 +108,5 @@ export async function GET(request, { params }) {
     );
   }
 
-  return new Response(image.body, { status: 200, headers });
+  return new Response(png, { status: 200, headers });
 }

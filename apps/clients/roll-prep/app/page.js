@@ -14,8 +14,10 @@ import {
   TERRAINS,
   TIER_LABELS,
   TIER_ODDS_LABELS,
+  EVENT_TYPES,
   deckFor,
 } from "@/libs/caos";
+import { inviteDateParts, invitePath, isPastInvite } from "@/libs/invites";
 
 // La landing se arma con los datos REALES del juego (los cinturones de
 // libs/gamification.js y el mazo de libs/caos.js). Si mañana cambia una carta
@@ -139,10 +141,28 @@ async function getActiveClass() {
   return data ?? null;
 }
 
+/**
+ * El próximo torneo CAOS público, si hay uno convocado. Va en la sección
+ * de modos: explicar el juego y no decir cuándo se pelea era dejar la
+ * conversión a medias.
+ */
+async function getUpcomingCaos() {
+  const supabase = createPublicClient();
+  if (!supabase) return null;
+
+  const { data } = await supabase
+    .from("caos_invites_public")
+    .select("slug, title, tagline, starts_at, location, outfit, event_type")
+    .order("starts_at", { ascending: true });
+
+  return (data ?? []).find((invite) => !isPastInvite(invite.starts_at)) ?? null;
+}
+
 export default async function Page() {
-  const [totalPoints, activeClass] = await Promise.all([
+  const [totalPoints, activeClass, upcomingCaos] = await Promise.all([
     getGymPoints(),
     getActiveClass(),
+    getUpcomingCaos(),
   ]);
 
   return (
@@ -408,7 +428,8 @@ export default async function Page() {
                 El profesor tira el dado antes de cada pelea. Una sola vez: lo
                 que salga, se pelea. Sale un <b>terreno</b> que aplica a los dos
                 y una <b>carta de duelo</b> que parte la pelea en ventaja y
-                carga.
+                carga. Remontar desde abajo paga el doble; guindarse de la
+                ventaja sin finalizar no paga nada.
               </p>
               <div className="relative mt-6 flex flex-wrap gap-2 text-[0.6rem] font-black uppercase tracking-widest">
                 <span className="border border-primary/40 px-2 py-1 text-primary">
@@ -420,6 +441,21 @@ export default async function Page() {
                   {giDeck.duels.length} duelos
                 </span>
               </div>
+              <Link
+                href="/caos"
+                className="relative mt-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
+              >
+                Ver la cartelera CAOS
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  className="h-3 w-3"
+                >
+                  <path d="M5 12h14M13 6l6 6-6 6" />
+                </svg>
+              </Link>
             </div>
           </div>
 
@@ -457,6 +493,8 @@ export default async function Page() {
               completa, hecha para proyectarse y para grabarse.
             </p>
           </div>
+
+          <UpcomingCaosEvent invite={upcomingCaos} />
           </div>
         </section>
 
@@ -580,6 +618,43 @@ export default async function Page() {
 }
 
 /* --------------------------- Piezas de la página -------------------------- */
+
+function UpcomingCaosEvent({ invite }) {
+  if (!invite) return null;
+
+  const date = inviteDateParts(invite.starts_at);
+
+  return (
+    <Link
+      href={invitePath(invite.slug)}
+      className="mt-12 flex flex-col gap-4 border-2 border-primary bg-base-100 p-6 transition-colors hover:bg-base-200 sm:flex-row sm:items-center"
+    >
+      <div className="flex w-16 shrink-0 flex-col items-center border-l-2 border-primary py-1 leading-none">
+        <span className="display text-4xl text-primary">{date?.day}</span>
+        <span className="text-[0.6rem] font-black uppercase tracking-widest opacity-60">
+          {date?.month}
+        </span>
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[0.6rem] font-black uppercase tracking-[0.25em] text-primary">
+          Próximo torneo CAOS · {EVENT_TYPES[invite.event_type]?.label} ·{" "}
+          {OUTFITS[invite.outfit]?.short}
+        </p>
+        <p className="display mt-1 text-3xl">{invite.title}</p>
+        <p className="mt-1 text-sm font-medium opacity-70">
+          {date?.long}
+          {invite.location ? ` · ${invite.location}` : ""}
+        </p>
+        {invite.tagline && (
+          <p className="mt-2 text-sm font-bold text-primary">{invite.tagline}</p>
+        )}
+      </div>
+      <span className="btn btn-primary shrink-0 self-start sm:self-center">
+        Ver el evento
+      </span>
+    </Link>
+  );
+}
 
 /** Cuándo cae la clase, en palabras. `days` viene de daysUntil(). */
 function whenLabel(days) {
