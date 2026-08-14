@@ -420,7 +420,7 @@ export function inviteEmailText(invite, { greetingName } = {}) {
     `- Llevarte el torneo: +${CAOS_RANK_POINTS.champion} PC`,
     "",
     "",
-    `Confirmar: ${safeUrl(invite.cta_url) ?? link}`,
+    safeUrl(invite.cta_url) ? `Confirmar: ${safeUrl(invite.cta_url)}` : null,
     `La convocatoria: ${link}`,
     "",
     `Te llega porque estás en ${config.appName}.`,

@@ -571,7 +571,6 @@ function seedFrom(value) {
 const SHOWCASE_DUEL_KEYS = new Set([
   "n_pie_de_guerra",
   "n_cazadores",
-  "n_espalda_con_espalda",
   "t2_cazador_de_piernas",
   "t2_pierna_enredada",
   "t2_reloj_en_contra",
@@ -584,6 +583,31 @@ const SHOWCASE_DUEL_KEYS = new Set([
   "n_solapa_amarrada",
   "t3_brazo_atado_gi",
 ]);
+
+// El modo contado como se vive, en segunda persona. `short` es para el
+// flyer, donde cada línea tiene que caber de un vistazo; `long` es para el
+// correo y la página, que sí tienen espacio para la escena completa.
+//
+// Nada de "alfa" y "omega" aquí: esos son los nombres internos de las cartas
+// (ver DUELS). Al que nunca ha peleado un CAOS se le habla de ventaja y de
+// carga, que es lo que va a sentir en el tatami.
+export const CAOS_STEPS = [
+  {
+    n: "01",
+    short: "Llegas y se sortea. Nadie escoge rival.",
+    long: "Llegas, se sortea el bracket y ya. Nadie escoge rival ni sabe contra quién va hasta que sale el cuadro.",
+  },
+  {
+    n: "02",
+    short: "Antes de tu pelea se rolea: cambia la regla y cambia el arranque.",
+    long: "Antes de cada pelea se rolea delante de todos: sale una regla de arena que aplica a los dos y un arranque distinto para cada uno. Lo sabes ahí mismo, no antes.",
+  },
+  {
+    n: "03",
+    short: "A uno le toca la ventaja; al otro, el doble de puntos por remontarla.",
+    long: "A uno le toca la ventaja y al otro la carga. Remontar desde abajo paga el doble de puntos CAOS; guindarse de la ventaja sin finalizar no paga nada. Esos puntos van al ranking CAOS, no al cinturón.",
+  },
+];
 
 export function caosShowcase(seed, outfit = DEFAULT_OUTFIT) {
   const deck = deckFor(OUTFITS[outfit] ? outfit : DEFAULT_OUTFIT);
