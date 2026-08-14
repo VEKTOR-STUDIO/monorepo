@@ -585,18 +585,14 @@ const SHOWCASE_DUEL_KEYS = new Set([
   "t3_brazo_atado_gi",
 ]);
 
-// El modo contado como se vive, en segunda persona. `short` es para el
-// flyer, donde cada línea tiene que caber de un vistazo; `long` es para el
-// correo y la página, que sí tienen espacio para la escena completa.
-//
-// Nada de "alfa" y "omega" aquí: esos son los nombres internos de las cartas
-// (ver DUELS). Al que nunca ha peleado un CAOS se le habla de ventaja y de
-// carga, que es lo que va a sentir en el tatami.
 // EL PAPEL — lo que el árbitro lee en voz alta antes de cada pelea.
 //
 // Cadencia de Battle at the Berrics: alcance, lista de NOs, el que decide
 // los grises, y el cierre. No es un tutorial (eso es CAOS_STEPS): es el
 // ritual. Vive plegado en la ceremonia de roleo y se despliega para leerlo.
+//
+// Los NOs son prohibiciones reales. Estancar no está vetado: no paga
+// (ver `pay`), y eso vive en el premio, no en la lista de NOs.
 export const CAOS_OATH = {
   label: "El papel",
   cue: "Léelo antes de pelear",
@@ -608,7 +604,7 @@ export const CAOS_OATH = {
     "No se cambia el roleo.",
     "No se cambia de lado.",
     "No se pide handicap.",
-    "No se guinda de la ventaja.",
+    "No se negocia el terreno.",
   ],
   pay: [
     "El terreno vale para los dos.",
@@ -621,6 +617,13 @@ export const CAOS_OATH = {
   mercy: "Que el tatami tenga piedad de sus almas.",
 };
 
+// El modo contado como se vive, en segunda persona. `short` es para el
+// flyer, donde cada línea tiene que caber de un vistazo; `long` es para el
+// correo y la página, que sí tienen espacio para la escena completa.
+//
+// Nada de "alfa" y "omega" aquí: esos son los nombres internos de las cartas
+// (ver DUELS). Al que nunca ha peleado un CAOS se le habla de ventaja y de
+// carga, que es lo que va a sentir en el tatami.
 export const CAOS_STEPS = [
   {
     n: "01",
