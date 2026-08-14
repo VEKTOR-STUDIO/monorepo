@@ -124,8 +124,8 @@ export default async function AdminUsuarios() {
           <div className="border-b border-base-300 px-6 py-4">
             <h2 className="display text-xl">Todos los usuarios</h2>
             <p className="mt-1 text-xs font-medium opacity-60">
-              Las academias se asignan aquí o las elige cada alumno desde su
-              perfil. Aparecen en el ranking y en su ficha.
+              Las academias se asignan aquí o las elige cada alumno desde el
+              roster. Aparecen en el ranking y en su ficha.
             </p>
           </div>
           <AdminUsersList

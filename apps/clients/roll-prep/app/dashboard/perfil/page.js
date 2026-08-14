@@ -3,7 +3,7 @@ import ButtonAccount from "@/components/ButtonAccount";
 import PlayerHud from "@/components/rollprep/PlayerHud";
 import ProfileForm from "@/components/rollprep/ProfileForm";
 import { createClient } from "@/libs/supabase/server";
-import { getAcademies, getProfileWithAcademy } from "@/libs/academies";
+import { getProfileWithAcademy } from "@/libs/academies";
 import {
   getStudentPoints,
   getRank,
@@ -22,9 +22,8 @@ export default async function Perfil() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [profile, academies, { totalPoints, events }] = await Promise.all([
+  const [profile, { totalPoints, events }] = await Promise.all([
     getProfileWithAcademy(supabase, user.id),
-    getAcademies(supabase),
     getStudentPoints(supabase, user.id),
   ]);
 
@@ -67,8 +66,7 @@ export default async function Perfil() {
         <div className="rise rise-3">
           <ProfileForm
             currentName={profile?.full_name}
-            currentAcademyId={profile?.academy_id}
-            academies={academies}
+            currentAcademy={profile?.academy}
           />
         </div>
 

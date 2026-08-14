@@ -720,3 +720,169 @@ progress::-webkit-progress-value {
     var(--color-primary)
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* ROSTER — selección de academia estilo FIFA (coverflow).             */
+/* ------------------------------------------------------------------ */
+
+.roster {
+  position: relative;
+  --team-color: var(--color-primary);
+}
+
+.roster-glow {
+  position: absolute;
+  inset: -12% -28% 28%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 70% 55% at 50% 48%,
+    color-mix(in oklch, var(--team-color) 42%, transparent) 0%,
+    transparent 68%
+  );
+  transition: background 0.45s ease;
+}
+
+.roster-stage {
+  position: relative;
+  z-index: 1;
+  height: 16.5rem;
+  margin-inline: -1rem;
+  overflow: hidden;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.roster-stage:active {
+  cursor: grabbing;
+}
+
+@media (min-width: 768px) {
+  .roster-stage {
+    height: 20rem;
+  }
+}
+
+.roster-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12.5rem;
+  height: 12.5rem;
+  margin-left: -6.25rem;
+  margin-top: -6.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transform: translateX(calc(var(--i) * 9.5rem)) scale(var(--s))
+    rotateY(calc(var(--i) * -30deg));
+  opacity: var(--o);
+  z-index: var(--z);
+  transition:
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.4s ease;
+}
+
+@media (min-width: 768px) {
+  .roster-card {
+    width: 16rem;
+    height: 16rem;
+    margin-left: -8rem;
+    margin-top: -8rem;
+    transform: translateX(calc(var(--i) * 12rem)) scale(var(--s))
+      rotateY(calc(var(--i) * -28deg));
+  }
+}
+
+.roster-card.is-center {
+  cursor: default;
+}
+
+.roster-plate {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #080808;
+  box-shadow:
+    0 0 0 2px color-mix(in oklch, var(--team-color) 50%, transparent),
+    0 22px 48px -16px var(--team-color);
+}
+
+.roster-card.is-center .roster-plate {
+  box-shadow:
+    0 0 0 3px var(--team-color),
+    0 0 42px -8px var(--team-color),
+    0 28px 56px -18px var(--team-color);
+  animation: roster-bob 3.4s ease-in-out infinite;
+}
+
+.roster-card.is-circle .roster-plate {
+  border-radius: 50%;
+}
+
+.roster-card.is-wide .roster-plate {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 18px),
+    calc(100% - 18px) 100%,
+    0 100%
+  );
+}
+
+@keyframes roster-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.roster-knockout {
+  mix-blend-mode: screen;
+}
+
+.roster-arrow {
+  display: flex;
+  height: 2.75rem;
+  width: 2.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-base-300);
+  background: var(--color-base-200);
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.roster-arrow:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.roster-arrow:disabled {
+  opacity: 0.3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roster-card,
+  .roster-glow {
+    transition: none;
+  }
+
+  .roster-card.is-center .roster-plate {
+    animation: none;
+  }
+}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import AcademyBadge from "@/components/rollprep/AcademyBadge";
 import BeltBadge from "@/components/rollprep/BeltBadge";
 import { formatXp, getRank } from "@/libs/gamification";
@@ -30,7 +31,9 @@ export default function PlayerHud({ fullName, totalPoints, academy }) {
 
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <BeltBadge rank={belt} showName />
-            <AcademyBadge academy={academy} />
+            <Link href="/dashboard/equipo" className="hover:opacity-80">
+              <AcademyBadge academy={academy} showEmpty />
+            </Link>
             {nextBelt && (
               <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
                 {formatXp(pointsToNext)} XP para {nextBelt.short}

@@ -153,11 +153,8 @@ export async function deleteComment(commentId, assignmentId) {
 }
 
 /**
- * Actualiza la ficha del alumno: nombre y academia. Completar el nombre por
- * primera vez otorga puntos (trigger en DB).
- *
- * El selector de academia solo llega en el form si la migración de academias
- * está aplicada; si no, se guarda solo el nombre, como antes.
+ * Actualiza el nombre de peleador. Completarlo por primera vez otorga
+ * puntos (trigger en DB). La academia se elige en /dashboard/equipo.
  */
 export async function updateProfile(formData) {
   const { supabase, user } = await getAuthedClient();
@@ -183,9 +180,37 @@ export async function updateProfile(formData) {
 
   if (error) return { error: "No se pudo guardar el perfil." };
 
+  revalidateAcademyPaths();
+  return { success: true };
+}
+
+function revalidateAcademyPaths() {
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/perfil");
+  revalidatePath("/dashboard/equipo");
   revalidatePath("/dashboard/ranking");
+}
+
+/**
+ * Elige (o suelta) la academia desde el roster. El nombre del peleador no
+ * se toca: eso sigue viviendo en el perfil.
+ */
+export async function updateAcademy(academyId) {
+  const { supabase, user } = await getAuthedClient();
+
+  const id = typeof academyId === "string" ? academyId.trim() || null : null;
+  if (id && !isAcademyId(id)) {
+    return { error: "Esa academia no existe." };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ academy_id: id })
+    .eq("id", user.id);
+
+  if (error) return { error: "No se pudo elegir la academia." };
+
+  revalidateAcademyPaths();
   return { success: true };
 }
 

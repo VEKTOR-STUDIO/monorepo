@@ -11,6 +11,38 @@ export const ACADEMY_FALLBACK_COLOR = "#71717a";
 export const ACADEMIES_MIGRATION =
   "supabase/migrations/20260809120000_academies.sql";
 
+/**
+ * Escudos del roster (/dashboard/equipo). La fila de la academia vive en
+ * la base; el arte es un archivo en public/images/teams. Para sumar una:
+ *   1. insert en academies (name, slug, color)
+ *   2. el logo en public/images/teams
+ *   3. una entrada aquí con ese slug
+ *
+ * shape "circle" recorta a sello; "wide" deja el wordmark horizontal.
+ * knockout: el PNG va sobre negro y se funde con screen (Élite).
+ */
+export const ACADEMY_CRESTS = {
+  "slam-mma": {
+    src: "/images/teams/slammma.jpg",
+    shape: "circle",
+  },
+  "elite-jiu-jitsu": {
+    src: "/images/teams/elite.png",
+    shape: "wide",
+    knockout: true,
+  },
+};
+
+export function crestFor(academy) {
+  if (!academy?.slug) return null;
+  return ACADEMY_CRESTS[academy.slug] ?? null;
+}
+
+function withCrest(academy) {
+  if (!academy) return null;
+  return { ...academy, crest: crestFor(academy) };
+}
+
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -31,8 +63,8 @@ export function isMissingAcademies(error) {
 }
 
 /**
- * Academias disponibles para los selects. Devuelve [] si falta la migración,
- * y entonces la UI simplemente no muestra el selector.
+ * Academias del circuito, con su escudo si hay arte. Devuelve [] si falta
+ * la migración, y entonces el roster no se monta.
  */
 export async function getAcademies(supabase) {
   const { data } = await supabase
@@ -40,7 +72,7 @@ export async function getAcademies(supabase) {
     .select("id, name, slug, color")
     .order("name", { ascending: true });
 
-  return data ?? [];
+  return (data ?? []).map(withCrest);
 }
 
 /**
@@ -57,7 +89,7 @@ export async function getProfileWithAcademy(supabase, userId) {
     .eq("id", userId)
     .single();
 
-  if (!error) return { ...data, academy: data.academy ?? null };
+  if (!error) return { ...data, academy: withCrest(data.academy) };
   if (!isMissingAcademies(error)) return null;
 
   const { data: basic } = await supabase
@@ -76,10 +108,10 @@ export async function getProfileWithAcademy(supabase, userId) {
 export function academyFromRow(row) {
   if (!row?.academy_id) return null;
 
-  return {
+  return withCrest({
     id: row.academy_id,
     name: row.academy_name,
     slug: row.academy_slug,
     color: row.academy_color,
-  };
+  });
 }

@@ -270,10 +270,23 @@ export default async function Dashboard() {
             description={`${libraryCount ?? 0} clases en el archivo técnico`}
           />
 
-          {/* 07 — Perfil */}
+          {/* 07 — Equipo */}
+          <MenuTile
+            href="/dashboard/equipo"
+            index={7}
+            kicker="Roster"
+            title="Equipo"
+            description={
+              profile?.academy
+                ? profile.academy.name
+                : "Elige tu academia del circuito"
+            }
+          />
+
+          {/* 08 — Perfil */}
           <MenuTile
             href="/dashboard/perfil"
-            index={7}
+            index={8}
             kicker="Jugador"
             title="Mi perfil"
             description={`${belt.short} · historial de XP y datos`}
