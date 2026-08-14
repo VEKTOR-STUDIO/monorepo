@@ -3,13 +3,19 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import CaosMark from "@/components/rollprep/CaosMark";
 import TournamentBracket from "@/components/rollprep/TournamentBracket";
-import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
+import TournamentCreateForm from "@/components/rollprep/TournamentCreateForm";
+import {
+  TOURNAMENT_POINTS,
+  TOURNAMENT_STATUS_LABELS,
+  TOURNAMENT_SCHEDULE_MIGRATION,
+} from "@/libs/tournaments";
 import {
   CAOS_POINTS,
   OUTFITS,
   EVENT_TYPES,
   CAOS_RANKING_MIGRATION,
 } from "@/libs/caos";
+import { todayInTimezone } from "@/libs/rollprep";
 
 export const dynamic = "force-dynamic";
 
@@ -53,16 +59,28 @@ export default async function TorneoDetalle({ params }) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data: profile }, { data: tournament, error }] = await Promise.all([
+  const [{ data: profile }, tournamentResult] = await Promise.all([
     supabase.from("profiles").select("role").eq("id", user.id).single(),
     supabase
+      .from("tournaments")
+      .select(
+        "id, title, status, mode, outfit, event_type, ranked, created_at, completed_at, scheduled_for"
+      )
+      .eq("id", id)
+      .maybeSingle(),
+  ]);
+
+  let { data: tournament, error } = tournamentResult;
+
+  if (error?.code === "42703" && /scheduled_for/.test(error.message ?? "")) {
+    ({ data: tournament, error } = await supabase
       .from("tournaments")
       .select(
         "id, title, status, mode, outfit, event_type, ranked, created_at, completed_at"
       )
       .eq("id", id)
-      .maybeSingle(),
-  ]);
+      .maybeSingle());
+  }
 
   // Falta una columna de la migración del CAOS: el torneo existe, pero el
   // query no corre. Mejor decirlo que devolver un 404 que no es verdad.
@@ -72,7 +90,9 @@ export default async function TorneoDetalle({ params }) {
         file={
           /event_type|ranked/.test(error.message ?? "")
             ? CAOS_RANKING_MIGRATION
-            : undefined
+            : /scheduled_for/.test(error.message ?? "")
+              ? TOURNAMENT_SCHEDULE_MIGRATION
+              : undefined
         }
         message={error.message}
       />
@@ -150,6 +170,20 @@ export default async function TorneoDetalle({ params }) {
 
   const isAdmin = profile?.role === "admin";
   const isActive = tournament.status === "active";
+  const isScheduled = tournament.status === "scheduled";
+
+  const { data: rosterStudents } =
+    isScheduled && isAdmin
+      ? await supabase
+          .from("profiles")
+          .select("id, full_name")
+          .eq("role", "student")
+          .order("full_name", { ascending: true })
+      : { data: [] };
+
+  const eventDate = tournament.scheduled_for
+    ? new Date(`${tournament.scheduled_for}T12:00:00`)
+    : new Date(tournament.created_at);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
@@ -186,9 +220,11 @@ export default async function TorneoDetalle({ params }) {
           </Link>
           <span
             className={`tag-skew px-3 py-1 text-xs ${
-              isActive
-                ? "blink-soft bg-primary text-primary-content"
-                : "bg-base-300 text-base-content"
+              isScheduled
+                ? "border border-accent/60 bg-accent/10 text-accent"
+                : isActive
+                  ? "blink-soft bg-primary text-primary-content"
+                  : "bg-base-300 text-base-content"
             }`}
           >
             <span>{TOURNAMENT_STATUS_LABELS[tournament.status]}</span>
@@ -222,15 +258,17 @@ export default async function TorneoDetalle({ params }) {
             <span className="text-primary">.</span>
           </h1>
           <p className="mt-1 text-[0.65rem] font-bold uppercase tracking-widest opacity-50">
-            {new Date(tournament.created_at).toLocaleDateString("es-VE", {
+            {eventDate.toLocaleDateString("es-VE", {
               weekday: "long",
               day: "numeric",
               month: "long",
               year: "numeric",
             })}
-            {" · "}
-            {(participants ?? []).length} peleadores
-            {guestIds.length > 0 &&
+            {isScheduled
+              ? " · Bracket pendiente"
+              : ` · ${(participants ?? []).length} peleadores`}
+            {!isScheduled &&
+              guestIds.length > 0 &&
               ` · ${guestIds.length} invitado${guestIds.length === 1 ? "" : "s"}`}
           </p>
           <p className="mt-2 text-[0.65rem] font-black uppercase tracking-[0.2em] text-primary">
@@ -264,14 +302,36 @@ export default async function TorneoDetalle({ params }) {
           )}
         </div>
 
-        <TournamentBracket
-          tournament={tournament}
-          matches={matches ?? []}
-          names={names}
-          guestIds={guestIds}
-          isAdmin={isAdmin}
-          rolls={rolls}
-        />
+        {isScheduled ? (
+          <div className="rise rise-2 space-y-4">
+            <div className="clip-cut border-2 border-accent/50 bg-accent/5 p-5">
+              <p className="text-[0.65rem] font-black uppercase tracking-[0.3em] text-accent">
+                Circuito programado
+              </p>
+              <p className="mt-2 text-sm font-semibold opacity-80">
+                {isAdmin
+                  ? "El día del evento marca quién pelea y sortea el bracket. Hasta entonces el evento vive en el calendario, vacío."
+                  : "El bracket se arma el día del evento. Vuelve ese día para ver el cuadro y las cartas."}
+              </p>
+            </div>
+            {isAdmin && (
+              <TournamentCreateForm
+                students={rosterStudents ?? []}
+                todayKey={todayInTimezone()}
+                seed={{ id: tournament.id }}
+              />
+            )}
+          </div>
+        ) : (
+          <TournamentBracket
+            tournament={tournament}
+            matches={matches ?? []}
+            names={names}
+            guestIds={guestIds}
+            isAdmin={isAdmin}
+            rolls={rolls}
+          />
+        )}
       </section>
     </main>
   );

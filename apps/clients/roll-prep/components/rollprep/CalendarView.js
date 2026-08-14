@@ -14,23 +14,25 @@ function toKey(year, month, day) {
   return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 }
 
-// Calendario mensual navegable: los días con clase se marcan en volt y al
-// tocarlos se despliegan las clases de ese día con link al detalle.
-export default function CalendarView({ assignments }) {
+// Calendario mensual navegable: clases en volt, topes/circuitos en accent.
+// Al tocar un día se despliegan los eventos con link al detalle.
+export default function CalendarView({ items = [] }) {
   const now = new Date();
   const [view, setView] = useState({ year: now.getFullYear(), month: now.getMonth() });
   const [selectedKey, setSelectedKey] = useState(null);
 
-  // Mapa "YYYY-MM-DD" → clases de ese día.
+  // Mapa "YYYY-MM-DD" → lo que pasa ese día (clases primero, luego topes).
   const byDate = useMemo(() => {
     const map = {};
-    for (const a of assignments) {
-      const key = a.scheduled_for ?? a.created_at?.slice(0, 10);
-      if (!key) continue;
-      (map[key] ??= []).push(a);
+    for (const item of items) {
+      if (!item?.date) continue;
+      (map[item.date] ??= []).push(item);
+    }
+    for (const list of Object.values(map)) {
+      list.sort((a, b) => (a.kind === b.kind ? 0 : a.kind === "class" ? -1 : 1));
     }
     return map;
-  }, [assignments]);
+  }, [items]);
 
   const { year, month } = view;
   const firstWeekday = (new Date(year, month, 1).getDay() + 6) % 7; // lunes = 0
@@ -55,14 +57,13 @@ export default function CalendarView({ assignments }) {
     setView({ year: now.getFullYear(), month: now.getMonth() });
   };
 
-  const selectedClasses = selectedKey ? byDate[selectedKey] ?? [] : [];
+  const selectedItems = selectedKey ? byDate[selectedKey] ?? [] : [];
   const monthCount = Object.keys(byDate).filter((key) =>
     key.startsWith(`${year}-${String(month + 1).padStart(2, "0")}`)
   ).length;
 
   return (
     <div className="space-y-4">
-      {/* Cabecera del mes con navegación */}
       <div className="flex items-end justify-between gap-3">
         <div>
           <h2 className="display text-5xl">
@@ -70,7 +71,8 @@ export default function CalendarView({ assignments }) {
             <span className="text-primary">.</span>
           </h2>
           <p className="text-xs font-bold uppercase tracking-[0.25em] opacity-50">
-            {year} · {monthCount} {monthCount === 1 ? "día con clase" : "días con clase"}
+            {year} · {monthCount}{" "}
+            {monthCount === 1 ? "día con agenda" : "días con agenda"}
           </p>
         </div>
 
@@ -99,7 +101,6 @@ export default function CalendarView({ assignments }) {
         </div>
       </div>
 
-      {/* Grid del mes */}
       <div className="clip-cut border-2 border-base-300 bg-base-200 p-3">
         <div className="grid grid-cols-7 gap-1">
           {WEEKDAYS.map((d, i) => (
@@ -115,32 +116,50 @@ export default function CalendarView({ assignments }) {
             if (!day) return <span key={`empty-${i}`} />;
 
             const key = toKey(year, month, day);
-            const classes = byDate[key];
+            const dayItems = byDate[key];
             const isToday = key === todayKey;
             const isSelected = key === selectedKey;
+            const hasClass = dayItems?.some((item) => item.kind === "class");
+            const hasEvent = dayItems?.some((item) => item.kind === "event");
+            const tone = hasClass ? "primary" : hasEvent ? "accent" : null;
 
             return (
               <button
                 key={key}
                 onClick={() => setSelectedKey(isSelected ? null : key)}
-                disabled={!classes}
+                disabled={!dayItems}
                 className={`relative flex aspect-square flex-col items-center justify-center border text-sm font-bold transition-all ${
                   isSelected
-                    ? "border-primary bg-primary text-primary-content"
-                    : classes
+                    ? tone === "accent"
+                      ? "border-accent bg-accent text-accent-content"
+                      : "border-primary bg-primary text-primary-content"
+                    : hasClass
                       ? "border-primary/60 bg-primary/10 text-primary hover:bg-primary/25"
-                      : "border-transparent opacity-45"
+                      : hasEvent
+                        ? "border-accent/60 bg-accent/10 text-accent hover:bg-accent/25"
+                        : "border-transparent opacity-45"
                 } ${isToday && !isSelected ? "border-secondary" : ""}`}
               >
                 <span className={isToday ? "underline underline-offset-2" : ""}>
                   {day}
                 </span>
-                {classes && (
-                  <span
-                    className={`absolute bottom-1 h-1 w-1 ${
-                      isSelected ? "bg-primary-content" : "bg-primary"
-                    }`}
-                  />
+                {dayItems && (
+                  <span className="absolute bottom-1 flex gap-0.5">
+                    {hasClass && (
+                      <span
+                        className={`h-1 w-1 ${
+                          isSelected ? "bg-primary-content" : "bg-primary"
+                        }`}
+                      />
+                    )}
+                    {hasEvent && (
+                      <span
+                        className={`h-1 w-1 ${
+                          isSelected ? "bg-current" : "bg-accent"
+                        }`}
+                      />
+                    )}
+                  </span>
                 )}
               </button>
             );
@@ -148,7 +167,6 @@ export default function CalendarView({ assignments }) {
         </div>
       </div>
 
-      {/* Clases del día seleccionado */}
       {selectedKey && (
         <div className="space-y-2">
           <p className="text-xs font-black uppercase tracking-[0.2em] opacity-60">
@@ -159,33 +177,46 @@ export default function CalendarView({ assignments }) {
             })}
           </p>
 
-          {!selectedClasses.length && (
+          {!selectedItems.length && (
             <p className="border border-base-300 p-4 text-xs font-semibold uppercase tracking-widest opacity-50">
-              Sin clase registrada este día
+              Nada agendado este día
             </p>
           )}
 
-          {selectedClasses.map((a) => (
-            <Link
-              key={a.id}
-              href={`/dashboard/clase/${a.id}`}
-              className="menu-tile clip-cut block p-4"
-            >
-              <span className="relative z-10 flex items-center justify-between gap-3">
-                <span>
-                  <span className="display block text-xl">{a.title}</span>
-                  <span className="text-[0.6rem] font-bold uppercase tracking-widest text-primary">
-                    Ver clase y comentarios
+          {selectedItems.map((item) => {
+            const isEvent = item.kind === "event";
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className="menu-tile clip-cut block p-4"
+              >
+                <span className="relative z-10 flex items-center justify-between gap-3">
+                  <span>
+                    <span className="display block text-xl">{item.title}</span>
+                    <span
+                      className={`text-[0.6rem] font-bold uppercase tracking-widest ${
+                        isEvent ? "text-accent" : "text-primary"
+                      }`}
+                    >
+                      {isEvent ? "Ver el tope" : "Ver clase y comentarios"}
+                    </span>
                   </span>
+                  {item.live && (
+                    <span
+                      className={`tag-skew blink-soft shrink-0 px-2 py-0.5 text-[0.6rem] ${
+                        isEvent
+                          ? "bg-accent text-accent-content"
+                          : "bg-primary text-primary-content"
+                      }`}
+                    >
+                      <span>{isEvent ? "Evento" : "Activa"}</span>
+                    </span>
+                  )}
                 </span>
-                {a.is_active && (
-                  <span className="tag-skew blink-soft shrink-0 bg-primary px-2 py-0.5 text-[0.6rem] text-primary-content">
-                    <span>Activa</span>
-                  </span>
-                )}
-              </span>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>

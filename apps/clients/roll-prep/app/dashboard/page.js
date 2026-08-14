@@ -39,7 +39,7 @@ export default async function Dashboard() {
     { data: poll },
     { count: libraryCount },
     { data: stripClasses },
-    { data: stripEvents },
+    eventsResult,
   ] = await Promise.all([
     getProfileWithAcademy(supabase, user.id),
     supabase
@@ -63,16 +63,27 @@ export default async function Dashboard() {
       .gte("scheduled_for", stripFrom)
       .lte("scheduled_for", stripTo)
       .order("scheduled_for", { ascending: true }),
-    // Los topes no tienen fecha propia: la del calendario es la de creación,
-    // que es el día que se pelearon. Se pide un día extra de margen a cada
-    // lado porque el corte por huso se hace después, ya en fecha del gym.
     supabase
+      .from("tournaments")
+      .select("id, title, mode, status, created_at, scheduled_for")
+      .gte("scheduled_for", stripFrom)
+      .lte("scheduled_for", stripTo)
+      .order("scheduled_for", { ascending: true }),
+  ]);
+
+  let stripEvents = eventsResult.data;
+  if (
+    eventsResult.error?.code === "42703" &&
+    /scheduled_for/.test(eventsResult.error.message ?? "")
+  ) {
+    const fallback = await supabase
       .from("tournaments")
       .select("id, title, mode, status, created_at")
       .gte("created_at", `${addDays(stripFrom, -1)}T00:00:00Z`)
       .lte("created_at", `${addDays(stripTo, 1)}T00:00:00Z`)
-      .order("created_at", { ascending: true }),
-  ]);
+      .order("created_at", { ascending: true });
+    stripEvents = fallback.data;
+  }
 
   const [{ totalPoints }, completionRes, voteRes] = await Promise.all([
     getStudentPoints(supabase, user.id),
@@ -111,15 +122,20 @@ export default async function Dashboard() {
       live: a.is_active,
       splashUrl: getVideoThumbnail(a.video_url),
     })),
-    ...(stripEvents ?? []).map((t) => ({
-      id: `event-${t.id}`,
-      date: dateInTimezone(t.created_at),
-      kind: "event",
-      title: t.title,
-      href: `/dashboard/torneos/${t.id}`,
-      live: t.status === "active",
-      splashUrl: null,
-    })),
+    ...(stripEvents ?? []).map((t) => {
+      const date = t.scheduled_for ?? dateInTimezone(t.created_at);
+      return {
+        id: `event-${t.id}`,
+        date,
+        kind: "event",
+        title: t.title,
+        href: `/dashboard/torneos/${t.id}`,
+        live:
+          t.status === "active" ||
+          (t.status === "scheduled" && date === todayKey),
+        splashUrl: null,
+      };
+    }),
   ].filter((item) => item.date && item.date >= stripFrom && item.date <= stripTo);
 
   const today = new Intl.DateTimeFormat("es-VE", {
@@ -218,7 +234,7 @@ export default async function Dashboard() {
             index={3}
             kicker="Tatami"
             title="Torneos"
-            description="Topes internos: bracket clásico o modalidad CAOS"
+            description="Topes de clase y circuitos CAOS"
           />
 
           {/* 04 — Calendario */}
@@ -227,7 +243,7 @@ export default async function Dashboard() {
             index={4}
             kicker="Agenda"
             title="Calendario"
-            description="Las clases del mes, día por día"
+            description="Clases y topes del mes, día por día"
           />
 
           {/* 05 — Votación */}

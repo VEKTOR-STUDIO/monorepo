@@ -24,9 +24,29 @@ export const MATCH_METHODS = {
 };
 
 export const TOURNAMENT_STATUS_LABELS = {
+  scheduled: "Programado",
   active: "En curso",
   completed: "Finalizado",
 };
+
+export const TOURNAMENT_SCHEDULE_MIGRATION =
+  "supabase/migrations/20260813140000_tournament_schedule.sql";
+
+/**
+ * La base todavía no tiene scheduled_for o el estado 'scheduled'.
+ * Mismo criterio que isMissingCaosRanking en libs/caos.js.
+ */
+export function isMissingSchedule(error) {
+  if (!error) return false;
+  if (error.code === "42703" || error.code === "PGRST204") {
+    return /scheduled_for/.test(error.message ?? "");
+  }
+  // El check de status todavía no admite 'scheduled'.
+  if (error.code === "23514") {
+    return /status/.test(error.message ?? "");
+  }
+  return false;
+}
 
 // ---------------------------------------------------------------------------
 // INVITADOS

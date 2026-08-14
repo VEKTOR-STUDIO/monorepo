@@ -85,12 +85,15 @@ CREATE TABLE public.assignment_comments (
 CREATE TABLE public.tournaments (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   title text NOT NULL DEFAULT 'Tope interno'::text CHECK (char_length(btrim(title)) >= 1 AND char_length(btrim(title)) <= 80),
-  status text NOT NULL DEFAULT 'active'::text CHECK (status = ANY (ARRAY['active'::text, 'completed'::text])),
+  status text NOT NULL DEFAULT 'active'::text CHECK (status = ANY (ARRAY['scheduled'::text, 'active'::text, 'completed'::text])),
   created_by uuid,
   created_at timestamp with time zone NOT NULL DEFAULT now(),
   completed_at timestamp with time zone,
+  scheduled_for date NOT NULL DEFAULT ((now() AT TIME ZONE 'America/Caracas'::text))::date,
   mode text NOT NULL DEFAULT 'classic'::text CHECK (mode = ANY (ARRAY['classic'::text, 'caos'::text])),
   outfit text NOT NULL DEFAULT 'nogi'::text CHECK (outfit = ANY (ARRAY['nogi'::text, 'gi'::text])),
+  event_type text NOT NULL DEFAULT 'class'::text CHECK (event_type = ANY (ARRAY['class'::text, 'circuit'::text])),
+  ranked boolean NOT NULL DEFAULT true,
   CONSTRAINT tournaments_pkey PRIMARY KEY (id),
   CONSTRAINT tournaments_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.profiles(id)
 );

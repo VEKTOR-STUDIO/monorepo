@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/libs/supabase/server";
 import TournamentCreateForm from "@/components/rollprep/TournamentCreateForm";
+import { todayInTimezone } from "@/libs/rollprep";
 
 export const dynamic = "force-dynamic";
 
@@ -59,14 +60,17 @@ export default async function NuevoTorneo() {
             Nuevo tope<span className="text-primary">.</span>
           </h1>
           <p className="mt-1 text-sm font-medium opacity-70">
-            Quita a los que faltaron hoy, suma los invitados que cayeron y
-            sortea el bracket. Después puedes re-sortear o borrarlo si era de
-            prueba.
+            Tope de clase: quita a los que faltaron, suma invitados y sortea.
+            Circuito CAOS: solo la fecha — los peleadores se eligen el día del
+            evento.
           </p>
         </div>
 
         <div className="rise rise-2">
-          <TournamentCreateForm students={students ?? []} />
+          <TournamentCreateForm
+            students={students ?? []}
+            todayKey={todayInTimezone()}
+          />
         </div>
       </section>
     </main>

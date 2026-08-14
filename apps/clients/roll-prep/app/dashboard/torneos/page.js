@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/libs/supabase/server";
 import CaosMark from "@/components/rollprep/CaosMark";
-import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS } from "@/libs/tournaments";
+import { TOURNAMENT_POINTS, TOURNAMENT_STATUS_LABELS, TOURNAMENT_SCHEDULE_MIGRATION } from "@/libs/tournaments";
 import { OUTFITS, EVENT_TYPES, CAOS_RANKING_MIGRATION } from "@/libs/caos";
 
 export const dynamic = "force-dynamic";
@@ -15,15 +15,29 @@ export default async function Torneos() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data: profile }, { data: tournaments, error }] = await Promise.all([
-    supabase.from("profiles").select("role").eq("id", user.id).single(),
-    supabase
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+  let { data: tournaments, error } = await supabase
+    .from("tournaments")
+    .select(
+      "id, title, status, mode, outfit, event_type, ranked, created_at, scheduled_for, tournament_participants (count)"
+    )
+    .order("scheduled_for", { ascending: false })
+    .order("created_at", { ascending: false });
+
+  // La fecha propia es nueva: sin la migración, la lista de siempre sigue.
+  if (error?.code === "42703" && /scheduled_for/.test(error.message ?? "")) {
+    ({ data: tournaments, error } = await supabase
       .from("tournaments")
       .select(
         "id, title, status, mode, outfit, event_type, ranked, created_at, tournament_participants (count)"
       )
-      .order("created_at", { ascending: false }),
-  ]);
+      .order("created_at", { ascending: false }));
+  }
 
   const isAdmin = profile?.role === "admin";
   const list = tournaments ?? [];
@@ -33,9 +47,11 @@ export default async function Torneos() {
   // Postgres trae el nombre de la columna, así que dice cuál archivo falta.
   const missingMigration = error?.code === "42703";
   const missingFile =
-    missingMigration && /event_type|ranked/.test(error.message ?? "")
-      ? CAOS_RANKING_MIGRATION
-      : "supabase/migrations/20260806120000_caos.sql";
+    missingMigration && /scheduled_for/.test(error.message ?? "")
+      ? TOURNAMENT_SCHEDULE_MIGRATION
+      : missingMigration && /event_type|ranked/.test(error.message ?? "")
+        ? CAOS_RANKING_MIGRATION
+        : "supabase/migrations/20260806120000_caos.sql";
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-base-100 p-4 text-base-content md:p-8">
@@ -73,7 +89,8 @@ export default async function Torneos() {
             Torneos<span className="text-primary">.</span>
           </h1>
           <p className="mt-1 text-sm font-medium opacity-70">
-            Brackets de los topes de clase. Los resultados quedan guardados.
+            Topes de clase y eventos del circuito. Los resultados quedan
+            guardados.
           </p>
           <p className="mt-2 text-[0.65rem] font-black uppercase tracking-[0.2em] text-primary">
             Pelear +{TOURNAMENT_POINTS.participation} XP · Finalista +
@@ -140,6 +157,10 @@ export default async function Torneos() {
           {list.map((tournament) => {
             const count = tournament.tournament_participants?.[0]?.count ?? 0;
             const isActive = tournament.status === "active";
+            const isScheduled = tournament.status === "scheduled";
+            const eventDate = tournament.scheduled_for
+              ? new Date(`${tournament.scheduled_for}T12:00:00`)
+              : new Date(tournament.created_at);
 
             return (
               <Link
@@ -174,21 +195,25 @@ export default async function Torneos() {
                     </p>
                   </div>
                   <p className="mt-1 text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
-                    {new Date(tournament.created_at).toLocaleDateString("es-VE", {
+                    {eventDate.toLocaleDateString("es-VE", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
                     })}
                     {" · "}
-                    {count} peleador{count === 1 ? "" : "es"}
+                    {isScheduled
+                      ? "Sin bracket todavía"
+                      : `${count} peleador${count === 1 ? "" : "es"}`}
                   </p>
                 </div>
 
                 <span
                   className={`tag-skew px-2 py-0.5 text-[0.6rem] ${
-                    isActive
-                      ? "blink-soft bg-primary text-primary-content"
-                      : "bg-base-300 text-base-content"
+                    isScheduled
+                      ? "border border-accent/50 bg-accent/10 text-accent"
+                      : isActive
+                        ? "blink-soft bg-primary text-primary-content"
+                        : "bg-base-300 text-base-content"
                   }`}
                 >
                   <span>{TOURNAMENT_STATUS_LABELS[tournament.status]}</span>

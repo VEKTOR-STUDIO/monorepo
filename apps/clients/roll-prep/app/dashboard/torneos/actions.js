@@ -7,6 +7,8 @@ import {
   MATCH_METHODS,
   MAX_GUESTS,
   MAX_GUEST_NAME,
+  TOURNAMENT_SCHEDULE_MIGRATION,
+  isMissingSchedule,
 } from "@/libs/tournaments";
 import {
   rollMatch,
@@ -17,6 +19,7 @@ import {
   DEFAULT_EVENT_TYPE,
   CAOS_RANKING_MIGRATION,
 } from "@/libs/caos";
+import { parseDateInput } from "@/libs/rollprep";
 
 async function getAdminClient() {
   const supabase = await createClient();
@@ -45,6 +48,7 @@ function revalidateTournamentPaths(tournamentId) {
   revalidatePath("/dashboard/perfil");
   revalidatePath("/dashboard/ranking");
   revalidatePath("/dashboard/ranking/caos");
+  revalidatePath("/dashboard/calendario");
   if (tournamentId) revalidatePath(`/dashboard/torneos/${tournamentId}`);
 }
 
@@ -70,35 +74,10 @@ const MISSING_GUESTS_MIGRATION =
 const MISSING_RANKING_MIGRATION =
   `Falta correr ${CAOS_RANKING_MIGRATION} en el SQL Editor de Supabase.`;
 
-/**
- * Crea el tope: sortea a los peleadores seleccionados y genera el bracket
- * completo (los byes de la ronda 1 quedan resueltos de una vez).
- *
- * Un invitado es alguien sin cuenta: se le inventa un uuid aquí mismo y su
- * nombre viaja en la fila de participante. Pelea el bracket completo, pero
- * el XP no lo cobra (lo filtra award_points en la base).
- */
-export async function createTournament(formData) {
-  const { supabase, user } = await getAdminClient();
+const MISSING_SCHEDULE_MIGRATION =
+  `Falta correr ${TOURNAMENT_SCHEDULE_MIGRATION} en el SQL Editor de Supabase.`;
 
-  const mode = formData.get("mode") || "classic";
-  if (!TOURNAMENT_MODES[mode]) return { error: "Modalidad inválida." };
-
-  const outfit = formData.get("outfit") || DEFAULT_OUTFIT;
-  if (!OUTFITS[outfit]) return { error: "Ruleset inválido." };
-
-  // De clase o del circuito. Los dos suman al ranking CAOS; el tipo es lo
-  // que después deja mirarlos por separado.
-  const eventType = formData.get("event_type") || DEFAULT_EVENT_TYPE;
-  if (!EVENT_TYPES[eventType]) return { error: "Tipo de evento inválido." };
-
-  // Un bracket de prueba no debería ensuciar el ranking.
-  const ranked = formData.get("ranked") !== "off";
-
-  const fallbackTitle = mode === "caos" ? "Torneo CAOS" : "Tope interno";
-  const title = formData.get("title")?.trim() || fallbackTitle;
-  if (title.length > 80) return { error: "El título es muy largo (máx. 80)." };
-
+function parseFighters(formData) {
   const studentIds = [...new Set(formData.getAll("student_ids"))].filter(Boolean);
 
   const guestNames = formData
@@ -113,8 +92,6 @@ export async function createTournament(formData) {
     return { error: `Un nombre de invitado es muy largo (máx. ${MAX_GUEST_NAME}).` };
   }
 
-  // Alumnos e invitados entran al sorteo en igualdad de condiciones: lo
-  // único que los distingue es de dónde sale el nombre.
   const fighters = [
     ...studentIds.map((id) => ({ id, isGuest: false, name: null })),
     ...guestNames.map((name) => ({
@@ -128,34 +105,17 @@ export async function createTournament(formData) {
     return { error: "Se necesitan al menos 2 peleadores." };
   }
 
+  return { fighters };
+}
+
+async function fillBracket(supabase, tournamentId, fighters) {
   const shuffled = shuffle(fighters);
-
-  const { data: tournament, error } = await supabase
-    .from("tournaments")
-    .insert({
-      title,
-      mode,
-      outfit,
-      event_type: eventType,
-      ranked,
-      created_by: user.id,
-    })
-    .select("id")
-    .single();
-
-  if (error) {
-    return {
-      error: isMissingColumn(error)
-        ? MISSING_RANKING_MIGRATION
-        : "No se pudo crear el torneo.",
-    };
-  }
 
   const { error: participantsError } = await supabase
     .from("tournament_participants")
     .insert(
       shuffled.map((fighter, i) => ({
-        tournament_id: tournament.id,
+        tournament_id: tournamentId,
         student_id: fighter.id,
         seed: i + 1,
         is_guest: fighter.isGuest,
@@ -164,7 +124,6 @@ export async function createTournament(formData) {
     );
 
   if (participantsError) {
-    await supabase.from("tournaments").delete().eq("id", tournament.id);
     return {
       error: isMissingColumn(participantsError)
         ? MISSING_GUESTS_MIGRATION
@@ -177,13 +136,186 @@ export async function createTournament(formData) {
     .insert(
       buildBracket(shuffled.map((fighter) => fighter.id)).map((match) => ({
         ...match,
-        tournament_id: tournament.id,
+        tournament_id: tournamentId,
       }))
     );
 
   if (matchesError) {
-    await supabase.from("tournaments").delete().eq("id", tournament.id);
+    await supabase
+      .from("tournament_participants")
+      .delete()
+      .eq("tournament_id", tournamentId);
     return { error: "No se pudo generar el bracket." };
+  }
+
+  return { success: true };
+}
+
+/**
+ * Crea el tope.
+ *
+ * Tope de clase (clásico o CAOS): sortea a los peleadores seleccionados y
+ * genera el bracket de una vez. La fecha es hoy en la zona del gym.
+ *
+ * Circuito CAOS: solo fecha (hoy si no se especifica) y el cascarón del
+ * evento. Sin peleadores. El día del evento el profesor entra y sortea.
+ * Siempre es modalidad CAOS: el circuito no se pelea con reglas clásicas.
+ *
+ * Un invitado es alguien sin cuenta: se le inventa un uuid aquí mismo y su
+ * nombre viaja en la fila de participante. Pelea el bracket completo, pero
+ * el XP no lo cobra (lo filtra award_points en la base).
+ */
+export async function createTournament(formData) {
+  const { supabase, user } = await getAdminClient();
+
+  let mode = formData.get("mode") || "classic";
+  if (!TOURNAMENT_MODES[mode]) return { error: "Modalidad inválida." };
+
+  const outfit = formData.get("outfit") || DEFAULT_OUTFIT;
+  if (!OUTFITS[outfit]) return { error: "Ruleset inválido." };
+
+  // De clase o del circuito. Los dos suman al ranking CAOS; el tipo es lo
+  // que después deja mirarlos por separado.
+  let eventType = formData.get("event_type") || DEFAULT_EVENT_TYPE;
+  if (!EVENT_TYPES[eventType]) return { error: "Tipo de evento inválido." };
+
+  // El circuito siempre es CAOS. Si alguien manda clásico + circuito,
+  // gana el circuito: no hay viernes "clásico oficial" todavía.
+  if (eventType === "circuit") mode = "caos";
+  if (mode !== "caos") eventType = "class";
+
+  // Un bracket de prueba no debería ensuciar el ranking.
+  const ranked = formData.get("ranked") !== "off";
+
+  const fallbackTitle =
+    eventType === "circuit"
+      ? "Circuito CAOS"
+      : mode === "caos"
+        ? "Torneo CAOS"
+        : "Tope interno";
+  const title = formData.get("title")?.trim() || fallbackTitle;
+  if (title.length > 80) return { error: "El título es muy largo (máx. 80)." };
+
+  const scheduledFor = parseDateInput(formData.get("scheduled_for"));
+  if (!scheduledFor) return { error: "Fecha inválida." };
+
+  const row = {
+    title,
+    mode,
+    outfit,
+    event_type: eventType,
+    ranked,
+    scheduled_for: scheduledFor,
+    created_by: user.id,
+  };
+
+  // Circuito: se anuncia con fecha y el bracket se arma el día de.
+  if (eventType === "circuit") {
+    const { data: tournament, error } = await supabase
+      .from("tournaments")
+      .insert({ ...row, status: "scheduled" })
+      .select("id")
+      .single();
+
+    if (error) {
+      return {
+        error: isMissingSchedule(error)
+          ? MISSING_SCHEDULE_MIGRATION
+          : isMissingColumn(error)
+            ? MISSING_RANKING_MIGRATION
+            : "No se pudo crear el evento.",
+      };
+    }
+
+    revalidateTournamentPaths(tournament.id);
+    return { success: true, id: tournament.id, scheduled: true };
+  }
+
+  const parsed = parseFighters(formData);
+  if (parsed.error) return parsed;
+
+  const { data: tournament, error } = await insertClassTournament(supabase, row);
+
+  if (error) {
+    return {
+      error: isMissingColumn(error)
+        ? MISSING_RANKING_MIGRATION
+        : "No se pudo crear el torneo.",
+    };
+  }
+
+  const filled = await fillBracket(supabase, tournament.id, parsed.fighters);
+  if (filled.error) {
+    await supabase.from("tournaments").delete().eq("id", tournament.id);
+    return filled;
+  }
+
+  revalidateTournamentPaths(tournament.id);
+  return { success: true, id: tournament.id };
+}
+
+// El tope de clase tiene que seguir funcionando aunque aún no se haya
+// corrido la migración de la fecha: se reintenta sin scheduled_for.
+async function insertClassTournament(supabase, row) {
+  const first = await supabase.from("tournaments").insert(row).select("id").single();
+  if (!isMissingSchedule(first.error)) return first;
+
+  const { scheduled_for: _scheduledFor, ...rest } = row;
+  return supabase.from("tournaments").insert(rest).select("id").single();
+}
+
+/**
+ * El día del circuito: marca quién pelea y sortea el bracket. Solo sobre
+ * un evento que todavía está programado (sin peleadores).
+ */
+export async function seedTournament(formData) {
+  const { supabase } = await getAdminClient();
+
+  const tournamentId = formData.get("tournament_id");
+  if (!tournamentId) return { error: "Falta el id del torneo." };
+
+  const { data: tournament, error } = await supabase
+    .from("tournaments")
+    .select("id, status, mode, event_type")
+    .eq("id", tournamentId)
+    .maybeSingle();
+
+  if (error) {
+    return {
+      error: isMissingSchedule(error)
+        ? MISSING_SCHEDULE_MIGRATION
+        : "No se pudo leer el evento.",
+    };
+  }
+  if (!tournament) return { error: "Evento no encontrado." };
+  if (tournament.event_type !== "circuit" || tournament.mode !== "caos") {
+    return { error: "Solo se sortea así un evento del circuito CAOS." };
+  }
+  if (tournament.status !== "scheduled") {
+    return { error: "Este evento ya tiene bracket." };
+  }
+
+  const parsed = parseFighters(formData);
+  if (parsed.error) return parsed;
+
+  const filled = await fillBracket(supabase, tournament.id, parsed.fighters);
+  if (filled.error) return filled;
+
+  const { error: statusError } = await supabase
+    .from("tournaments")
+    .update({ status: "active" })
+    .eq("id", tournament.id);
+
+  if (statusError) {
+    await supabase
+      .from("tournament_participants")
+      .delete()
+      .eq("tournament_id", tournament.id);
+    await supabase
+      .from("tournament_matches")
+      .delete()
+      .eq("tournament_id", tournament.id);
+    return { error: "No se pudo abrir el bracket." };
   }
 
   revalidateTournamentPaths(tournament.id);

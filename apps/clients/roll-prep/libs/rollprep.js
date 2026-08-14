@@ -55,6 +55,17 @@ export function todayInTimezone(date = new Date()) {
 }
 
 /**
+ * Lee un `<input type="date">`. Vacío → hoy en la zona del gym. Si el valor
+ * no tiene forma de fecha, null (el caller decide el error).
+ */
+export function parseDateInput(value) {
+  const raw = typeof value === "string" ? value.trim() : "";
+  if (!raw) return todayInTimezone();
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
+  return raw;
+}
+
+/**
  * La fecha (YYYY-MM-DD) de un instante cualquiera en la zona del gym. Sirve
  * para los timestamps que la base guarda en UTC (`tournaments.created_at`):
  * un tope creado a las 9pm de Caracas se guarda como el día siguiente en UTC
