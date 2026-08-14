@@ -152,5 +152,12 @@ escena solo hay un destello de dos frames.
   ```bash
   sudo apt-get install -y libnss3 libnspr4 libasound2t64
   ```
+- **`NODE_OPTIONS=--max-http-header-size=65536` en los scripts del estudio.** Las
+  cookies del navegador no distinguen puerto: las de Supabase que dejan los
+  clientes Next en `localhost` se mandan también al estudio y se pasan del tope
+  de 16 KB de cabeceras que trae Node, que responde `431 Request Header Fields
+  Too Large` y deja la página en blanco. Es la misma bandera que ya lleva
+  `apps/clients/roll-prep` en su `dev`. Alternativa manual: borrar las cookies
+  de `localhost`.
 - `pnpm run build` hace `remotion bundle` a `dist/`; `pnpm run lint` es
   `tsc --noEmit`.

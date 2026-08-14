@@ -4,8 +4,8 @@
   "private": true,
   "description": "Estudio de video del monorepo (Remotion). Un proyecto por cliente, cada uno con sus composiciones.",
   "scripts": {
-    "dev": "remotion studio",
-    "studio": "remotion studio",
+    "dev": "NODE_OPTIONS=--max-http-header-size=65536 remotion studio",
+    "studio": "NODE_OPTIONS=--max-http-header-size=65536 remotion studio",
     "build": "remotion bundle --out-dir=dist",
     "lint": "tsc --noEmit",
     "render": "remotion render",
