@@ -121,6 +121,23 @@ export default async function AdminPanel() {
           <CaosMark className="h-10 w-auto shrink-0" />
         </Link>
 
+        {/* ------------------------------ GUIÓN --------------------------- */}
+        <Link
+          href="/dashboard/admin/guion"
+          className="rise rise-2 flex items-center justify-between gap-4 border border-base-300 bg-base-200 p-6 transition-colors hover:border-primary"
+        >
+          <div>
+            <h2 className="display text-xl">
+              Guion CAOS<span className="text-primary">.</span>
+            </h2>
+            <p className="mt-1 text-xs font-medium opacity-60">
+              El papel, las líneas y el reloj de un torneo de cuatro. Para
+              leerlo del teléfono en el octágono.
+            </p>
+          </div>
+          <span className="display shrink-0 text-4xl text-primary">4</span>
+        </Link>
+
         {/* ------------------------------ MÉTRICAS ------------------------ */}
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rise rise-2 border border-base-300 bg-base-200">
