@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import AdminInviteForm from "@/components/rollprep/AdminInviteForm";
 import InviteSendPanel from "@/components/rollprep/InviteSendPanel";
 import InviteStudio from "@/components/rollprep/InviteStudio";
+import LineupStudio from "@/components/rollprep/LineupStudio";
 import config from "@/config";
 import { createClient } from "@/libs/supabase/server";
+import { getAcademies } from "@/libs/academies";
 import { EVENT_TYPES, OUTFITS } from "@/libs/caos";
 import {
   inviteDateParts,
@@ -46,6 +48,9 @@ export default async function InvitacionDetalle({ params }) {
     .select("email, status, error, sent_at")
     .eq("invite_id", invite.id)
     .order("sent_at", { ascending: false });
+
+  const academies = await getAcademies(supabase);
+  const academyNames = academies.map((academy) => academy.name);
 
   const log = sends ?? [];
   const failed = log.filter((row) => row.status === "failed").length;
@@ -195,6 +200,20 @@ export default async function InvitacionDetalle({ params }) {
                 </ul>
               </div>
             )}
+          </div>
+        </div>
+
+        {/* ----------------------- STORY DE PELEADORES -------------------- */}
+        <div className="rise rise-3 border border-base-300 bg-base-200">
+          <div className="border-b border-base-300 px-6 py-4">
+            <h2 className="display text-xl">Story de peleadores</h2>
+            <p className="mt-1 text-xs font-medium opacity-60">
+              Cuatro nombres y su academia, a mano. Se genera al momento con
+              los datos de este evento y se baja para las stories.
+            </p>
+          </div>
+          <div className="p-6">
+            <LineupStudio invite={invite} academies={academyNames} />
           </div>
         </div>
 

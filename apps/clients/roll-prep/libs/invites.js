@@ -246,6 +246,74 @@ export function inviteImageFilename(slug, format = DEFAULT_FORMAT) {
   return `caos-${slug}-${format}.png`;
 }
 
+export const LINEUP_SIZE = 4;
+export const LINEUP_LIMITS = {
+  name: 32,
+  academy: 28,
+};
+
+/**
+ * Lee los 4 peleadores que van en la story de lineup. El profesor los
+ * escribe a mano: no salen del bracket (ese se arma el día del evento).
+ */
+export function parseLineup(raw) {
+  if (!Array.isArray(raw) || raw.length !== LINEUP_SIZE) {
+    return { error: `Van exactamente ${LINEUP_SIZE} peleadores.` };
+  }
+
+  const fighters = raw.map((row, index) => {
+    const name = String(row?.name ?? "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, LINEUP_LIMITS.name);
+    const academy = String(row?.academy ?? "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, LINEUP_LIMITS.academy);
+
+    return { slot: index + 1, name, academy };
+  });
+
+  if (fighters.some((fighter) => !fighter.name)) {
+    return { error: "Cada peleador necesita un nombre." };
+  }
+
+  return { fighters };
+}
+
+export function lineupImageFilename(slug) {
+  return `caos-${slug}-lineup.png`;
+}
+
+/**
+ * Caption corto para pegar junto a la story de los 4 peleadores.
+ */
+export function lineupCaption(invite, fighters) {
+  const date = inviteDateParts(invite.starts_at);
+  const names = (fighters ?? [])
+    .filter((fighter) => fighter.name)
+    .map((fighter) =>
+      fighter.academy
+        ? `${fighter.name} (${fighter.academy})`
+        : fighter.name
+    );
+
+  return [
+    `🥋 ${invite.title.toUpperCase()}`,
+    date ? `📅 ${date.weekday} ${date.day} de ${date.monthLong} · ${date.time}` : null,
+    invite.location ? `📍 ${invite.location}` : null,
+    "",
+    "El lineup:",
+    ...names.map((name, i) => `${String(i + 1).padStart(2, "0")}  ${name}`),
+    "",
+    `La convocatoria 👉 ${inviteUrl(invite.slug)}`,
+    "",
+    "#jiujitsu #bjj #caos #grappling",
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+}
+
 /**
  * El texto que acompaña al flyer cuando se publica: caption de Instagram,
  * mensaje de WhatsApp, lo que sea. Se copia de un botón para que subir la

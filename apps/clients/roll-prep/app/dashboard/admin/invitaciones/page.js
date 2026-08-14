@@ -61,7 +61,8 @@ export default async function AdminInvitaciones() {
             </h1>
             <p className="mt-1 text-sm font-medium opacity-70">
               Convoca un torneo CAOS: se arma el flyer para las stories, la
-              página del evento y el correo. Todo con el mismo texto.
+              página del evento y el correo. En la ficha de cada una también
+              puedes generar la story de 4 peleadores.
             </p>
           </div>
         </div>
@@ -157,8 +158,8 @@ export default async function AdminInvitaciones() {
           <div className="border-b border-base-300 px-6 py-4">
             <h2 className="display text-xl">Nueva invitación</h2>
             <p className="mt-1 text-xs font-medium opacity-60">
-              Al crearla vas directo a su ficha: ahí está el flyer para bajar y
-              el envío por correo.
+              Al crearla vas directo a su ficha: ahí está el flyer, la story
+              de 4 peleadores y el envío por correo.
             </p>
           </div>
           <div className="p-6">
