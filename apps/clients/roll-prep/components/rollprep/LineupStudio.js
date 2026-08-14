@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
+import { BELTS, RANKS } from "@/libs/gamification";
 import {
   INVITE_FORMATS,
   LINEUP_LIMITS,
@@ -13,6 +14,7 @@ import {
 const EMPTY = Array.from({ length: LINEUP_SIZE }, () => ({
   name: "",
   academy: "",
+  rank: "",
 }));
 
 async function copy(text, message) {
@@ -112,7 +114,7 @@ export default function LineupStudio({ invite, academies = [] }) {
             >
               {String(index + 1).padStart(2, "0")}
             </span>
-            <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2">
               <label className="block">
                 <span className="mb-1 block text-[0.6rem] font-black uppercase tracking-widest opacity-60">
                   Peleador
@@ -125,19 +127,44 @@ export default function LineupStudio({ invite, academies = [] }) {
                   className="input input-bordered input-sm w-full"
                 />
               </label>
-              <label className="block">
-                <span className="mb-1 block text-[0.6rem] font-black uppercase tracking-widest opacity-60">
-                  Academia
-                </span>
-                <input
-                  value={fighter.academy}
-                  maxLength={LINEUP_LIMITS.academy}
-                  onChange={(e) => update(index, "academy", e.target.value)}
-                  placeholder="A mano"
-                  list="lineup-academies"
-                  className="input input-bordered input-sm w-full"
-                />
-              </label>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <label className="block">
+                  <span className="mb-1 block text-[0.6rem] font-black uppercase tracking-widest opacity-60">
+                    Academia
+                  </span>
+                  <input
+                    value={fighter.academy}
+                    maxLength={LINEUP_LIMITS.academy}
+                    onChange={(e) => update(index, "academy", e.target.value)}
+                    placeholder="A mano"
+                    list="lineup-academies"
+                    className="input input-bordered input-sm w-full"
+                  />
+                </label>
+                <label className="block">
+                  <span className="mb-1 block text-[0.6rem] font-black uppercase tracking-widest opacity-60">
+                    Cinturón
+                  </span>
+                  <select
+                    value={fighter.rank}
+                    onChange={(e) => update(index, "rank", e.target.value)}
+                    className="select select-bordered select-sm w-full"
+                  >
+                    <option value="">Sin grado</option>
+                    {BELTS.map((belt) => (
+                      <optgroup key={belt.key} label={belt.name}>
+                        {RANKS.filter((rank) => rank.beltKey === belt.key).map(
+                          (rank) => (
+                            <option key={rank.key} value={rank.key}>
+                              {rank.short}
+                            </option>
+                          )
+                        )}
+                      </optgroup>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </div>
           </div>
         ))}
@@ -193,7 +220,7 @@ export default function LineupStudio({ invite, academies = [] }) {
 
       {stale && previewUrl && (
         <p className="text-center text-[0.65rem] font-semibold uppercase tracking-widest text-accent">
-          Cambiaste un nombre. Vuelve a generar para actualizar la imagen.
+          Cambiaste un dato. Vuelve a generar para actualizar la imagen.
         </p>
       )}
 

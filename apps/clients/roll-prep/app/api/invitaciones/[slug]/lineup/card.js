@@ -307,21 +307,55 @@ function LineupCard({ invite, fighters, logo, signature }) {
                   >
                     {name}
                   </div>
-                  {fighter.academy ? (
+                  {(fighter.rank || fighter.academy) && (
                     <div
                       style={{
                         display: "flex",
-                        fontFamily: "Barlow",
-                        fontWeight: 700,
-                        fontSize: 22,
-                        letterSpacing: 3,
-                        textTransform: "uppercase",
-                        color: stripe,
+                        alignItems: "center",
+                        gap: 12,
                       }}
                     >
-                      {clamp(fighter.academy, 32)}
+                      {fighter.rank ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            background: fighter.rank.color,
+                            padding: "4px 10px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              fontFamily: "Barlow",
+                              fontWeight: 700,
+                              fontSize: 18,
+                              letterSpacing: 2,
+                              textTransform: "uppercase",
+                              color: fighter.rank.ink,
+                            }}
+                          >
+                            {fighter.rank.short}
+                          </div>
+                        </div>
+                      ) : null}
+                      {fighter.academy ? (
+                        <div
+                          style={{
+                            display: "flex",
+                            fontFamily: "Barlow",
+                            fontWeight: 700,
+                            fontSize: 22,
+                            letterSpacing: 3,
+                            textTransform: "uppercase",
+                            color: stripe,
+                          }}
+                        >
+                          {clamp(fighter.academy, 28)}
+                        </div>
+                      ) : null}
                     </div>
-                  ) : null}
+                  )}
                 </div>
               </div>
             );

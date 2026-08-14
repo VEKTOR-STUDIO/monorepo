@@ -2,7 +2,7 @@
 // STORY DE LINEUP — PNG 1080×1920 con 4 peleadores escritos a mano.
 //
 // POST /api/invitaciones/<slug>/lineup
-//   body: { fighters: [{ name, academy }, { ... }, { ... }, { ... }] }
+//   body: { fighters: [{ name, academy, rank }, { ... }, { ... }, { ... }] }
 //
 // Solo el profesor: los nombres no viven en la base, se dibujan y se bajan.
 // ============================================================================

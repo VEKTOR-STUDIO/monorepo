@@ -208,8 +208,8 @@ export default async function InvitacionDetalle({ params }) {
           <div className="border-b border-base-300 px-6 py-4">
             <h2 className="display text-xl">Story de peleadores</h2>
             <p className="mt-1 text-xs font-medium opacity-60">
-              Cuatro nombres y su academia, a mano. Se genera al momento con
-              los datos de este evento y se baja para las stories.
+              Cuatro nombres, academia y cinturón, a mano. Se genera al momento
+              con los datos de este evento y se baja para las stories.
             </p>
           </div>
           <div className="p-6">

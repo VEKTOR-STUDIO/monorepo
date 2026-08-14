@@ -17,6 +17,7 @@
 
 import config from "@/config";
 import { CAOS_STEPS } from "@/libs/caos";
+import { RANKS } from "@/libs/gamification";
 
 export const CAOS_INVITES_MIGRATION =
   "supabase/migrations/20260813120000_caos_invites.sql";
@@ -252,6 +253,17 @@ export const LINEUP_LIMITS = {
   academy: 28,
 };
 
+export function lineupRankOf(key) {
+  const rank = RANKS.find((row) => row.key === key);
+  if (!rank) return null;
+  return {
+    key: rank.key,
+    short: rank.short,
+    color: rank.color,
+    ink: rank.ink,
+  };
+}
+
 /**
  * Lee los 4 peleadores que van en la story de lineup. El profesor los
  * escribe a mano: no salen del bracket (ese se arma el día del evento).
@@ -270,8 +282,9 @@ export function parseLineup(raw) {
       .replace(/\s+/g, " ")
       .trim()
       .slice(0, LINEUP_LIMITS.academy);
+    const rank = lineupRankOf(row?.rank);
 
-    return { slot: index + 1, name, academy };
+    return { slot: index + 1, name, academy, rank };
   });
 
   if (fighters.some((fighter) => !fighter.name)) {
@@ -292,11 +305,12 @@ export function lineupCaption(invite, fighters) {
   const date = inviteDateParts(invite.starts_at);
   const names = (fighters ?? [])
     .filter((fighter) => fighter.name)
-    .map((fighter) =>
-      fighter.academy
-        ? `${fighter.name} (${fighter.academy})`
-        : fighter.name
-    );
+    .map((fighter) => {
+      const rank =
+        fighter.rank?.short ?? lineupRankOf(fighter.rank)?.short ?? null;
+      const bits = [rank, fighter.academy].filter(Boolean);
+      return bits.length ? `${fighter.name} · ${bits.join(" · ")}` : fighter.name;
+    });
 
   return [
     `🥋 ${invite.title.toUpperCase()}`,
