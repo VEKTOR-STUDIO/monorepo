@@ -95,10 +95,10 @@ libs/invite-email.js                   # El correo (HTML + texto)
    (Anton y Barlow en `.ttf`, que satori necesita como archivo) y el logo
    `public/images/caosPrimary.png`. Se descarga desde el panel y desde la página
    pública; es la misma imagen que viaja en el correo y en el preview de los links.
-3. **El correo** necesita `RESEND_API_KEY` y el dominio de `config.resend.fromAdmin`
-   verificado en Resend (DKIM/SPF en el DNS). Mientras la llave no exista, el botón de
-   enviar sale apagado con el aviso; todo lo demás —flyer, página pública, links—
-   funciona igual. Al configurarla no hay que tocar código.
+3. **El correo** necesita `RESEND_API_KEY` y el From de `config.resend.fromAdmin`
+   en el mismo dominio verificado en Resend (`resend.alessandrovaru.com`). Mientras
+   la llave no exista, el botón de enviar sale apagado con el aviso; todo lo demás
+   —flyer, página pública, links— funciona igual.
 
 El link público (`/caos/<slug>`) se genera al crear y no cambia al editar: lo que ya se
 repartió por story o WhatsApp sigue abriendo.

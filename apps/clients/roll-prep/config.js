@@ -71,12 +71,11 @@ const config = {
     cdn: "https://cdn-id.cloudfront.net/",
   },
   resend: {
-    // REQUIRED — Email 'From' field to be used when sending magic login links.
-    // El dominio tiene que estar verificado en Resend para que salga el correo.
-    fromNoReply: `RollPrep <noreply@alessandrovaru.com>`,
-    // REQUIRED — Email 'From' field to be used when sending other emails, like abandoned carts, updates etc..
-    fromAdmin: `RollPrep <hola@alessandrovaru.com>`,
-    // Email shown to customer if need support. Leave empty if not needed => if empty, set up Crisp above, otherwise you won't be able to offer customer support."
+    // El From tiene que coincidir con el dominio verificado en Resend.
+    // Aquí es el subdominio resend.alessandrovaru.com (DKIM/SPF en Namecheap).
+    fromNoReply: `RollPrep <noreply@resend.alessandrovaru.com>`,
+    fromAdmin: `RollPrep <hola@resend.alessandrovaru.com>`,
+    // A dónde van las respuestas. Puede ser Gmail: no hace falta verificarlo.
     supportEmail: "alessandrovaru@gmail.com",
   },
   colors: {
