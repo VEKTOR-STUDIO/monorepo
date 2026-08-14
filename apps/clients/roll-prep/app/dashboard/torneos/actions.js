@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
 import {
   buildBracket,
+  bronzeMatchOf,
+  isSemifinal,
   MATCH_METHODS,
   MAX_GUESTS,
   MAX_GUEST_NAME,
@@ -413,9 +415,11 @@ export async function deleteTournament(tournamentId) {
 }
 
 /**
- * Carga el resultado de una pelea y avanza al ganador a la siguiente ronda.
- * Si era la final, marca el torneo como completado (el trigger de la DB
- * reparte los puntos: participación, finalista y campeón).
+ * Carga el resultado de una pelea y mueve a los dos peleadores a donde les
+ * toca: el ganador sube a la siguiente ronda y, si esto era una semifinal, el
+ * perdedor cae a la pelea por el 3er puesto. El torneo se cierra cuando ya no
+ * queda ninguna pelea sin resultado (el trigger de la DB reparte los puntos:
+ * participación, 3er puesto, finalista y campeón).
  */
 export async function reportResult(matchId, winnerId, method) {
   const { supabase } = await getAdminClient();
@@ -440,9 +444,13 @@ export async function reportResult(matchId, winnerId, method) {
   // En el CAOS no se pelea sin cartas: primero se rolea.
   const { data: tournamentMode } = await supabase
     .from("tournaments")
-    .select("mode")
+    .select("mode, status")
     .eq("id", match.tournament_id)
     .maybeSingle();
+
+  if (tournamentMode?.status === "completed") {
+    return { error: "El tope ya está cerrado." };
+  }
 
   if (tournamentMode?.mode === "caos") {
     const { data: roll } = await supabase
@@ -453,6 +461,15 @@ export async function reportResult(matchId, winnerId, method) {
 
     if (!roll) return { error: "Primero hay que rolear el CAOS de esta pelea." };
   }
+
+  // El cuadro entero de una vez: con esto se resuelve a dónde sube el ganador,
+  // si hay bronce donde tirar al perdedor y si ya no queda nada por pelear.
+  const { data: bracket } = await supabase
+    .from("tournament_matches")
+    .select("id, round, slot, winner_id")
+    .eq("tournament_id", match.tournament_id);
+
+  if (!bracket?.length) return { error: "Bracket no encontrado." };
 
   const { error } = await supabase
     .from("tournament_matches")
@@ -465,13 +482,9 @@ export async function reportResult(matchId, winnerId, method) {
 
   if (error) return { error: "No se pudo guardar el resultado." };
 
-  const { data: next } = await supabase
-    .from("tournament_matches")
-    .select("id")
-    .eq("tournament_id", match.tournament_id)
-    .eq("round", match.round + 1)
-    .eq("slot", Math.floor(match.slot / 2))
-    .maybeSingle();
+  const next = bracket.find(
+    (m) => m.round === match.round + 1 && m.slot === Math.floor(match.slot / 2)
+  );
 
   if (next) {
     await supabase
@@ -482,8 +495,32 @@ export async function reportResult(matchId, winnerId, method) {
           : { student2_id: winnerId }
       )
       .eq("id", next.id);
-  } else {
-    // Era la final: el torneo queda completado y la DB reparte los puntos.
+  }
+
+  // Perder la semifinal ya no es irse a casa: el perdedor cae al bronce con
+  // la misma paridad de slot con la que su ganador sube a la final.
+  const bronze = isSemifinal(match, bracket) ? bronzeMatchOf(bracket) : null;
+
+  if (bronze) {
+    const loserId =
+      winnerId === match.student1_id ? match.student2_id : match.student1_id;
+
+    await supabase
+      .from("tournament_matches")
+      .update(
+        match.slot % 2 === 0
+          ? { student1_id: loserId }
+          : { student2_id: loserId }
+      )
+      .eq("id", bronze.id);
+  }
+
+  // El tope se cierra cuando el cuadro completo tiene resultado. Ganar la
+  // final ya no basta: si falta el 3er puesto, el torneo sigue en curso (y
+  // por eso el CAOS de esa pelea todavía se puede rolear).
+  const stillPending = bracket.some((m) => m.id !== matchId && !m.winner_id);
+
+  if (!stillPending) {
     await supabase
       .from("tournaments")
       .update({ status: "completed", completed_at: new Date().toISOString() })
@@ -495,9 +532,10 @@ export async function reportResult(matchId, winnerId, method) {
 }
 
 /**
- * Corrige (borra) el resultado de una pelea. Solo si la pelea de la
- * siguiente ronda no se decidió todavía. Si era la final, el torneo se
- * reabre y la DB retira los puntos repartidos.
+ * Corrige (borra) el resultado de una pelea. Solo si lo que colgaba de ella
+ * sigue sin decidirse: la pelea de la siguiente ronda y —si era semifinal—
+ * también la del 3er puesto, porque el perdedor de aquí es peleador de allá.
+ * Si el tope estaba cerrado se reabre y la DB retira los puntos repartidos.
  */
 export async function undoResult(matchId) {
   const { supabase } = await getAdminClient();
@@ -514,26 +552,48 @@ export async function undoResult(matchId) {
     return { error: "Un pase directo no se puede corregir." };
   }
 
-  const { data: next } = await supabase
+  const { data: bracket } = await supabase
     .from("tournament_matches")
-    .select("id, winner_id")
-    .eq("tournament_id", match.tournament_id)
-    .eq("round", match.round + 1)
-    .eq("slot", Math.floor(match.slot / 2))
-    .maybeSingle();
+    .select("id, round, slot, winner_id")
+    .eq("tournament_id", match.tournament_id);
 
-  if (next) {
-    if (next.winner_id) {
-      return { error: "Primero corrige la pelea de la siguiente ronda." };
-    }
+  if (!bracket?.length) return { error: "Bracket no encontrado." };
+
+  const next = bracket.find(
+    (m) => m.round === match.round + 1 && m.slot === Math.floor(match.slot / 2)
+  );
+  const bronze = isSemifinal(match, bracket) ? bronzeMatchOf(bracket) : null;
+
+  if (next?.winner_id) {
+    return { error: "Primero corrige la pelea de la siguiente ronda." };
+  }
+  if (bronze?.winner_id) {
+    return { error: "Primero corrige la pelea por el 3er puesto." };
+  }
+
+  // Sacar al peleador de las casillas que colgaban de este resultado. Cada
+  // UPDATE dispara el trigger que borra el roll CAOS de la pelea desarmada.
+  const clearSlot = match.slot % 2 === 0
+    ? { student1_id: null }
+    : { student2_id: null };
+
+  for (const downstream of [next, bronze]) {
+    if (!downstream) continue;
     await supabase
       .from("tournament_matches")
-      .update(
-        match.slot % 2 === 0 ? { student1_id: null } : { student2_id: null }
-      )
-      .eq("id", next.id);
-  } else {
-    // Era la final: reabrir el torneo retira los puntos (trigger en la DB).
+      .update(clearSlot)
+      .eq("id", downstream.id);
+  }
+
+  // Si el cuadro estaba completo, el tope estaba cerrado: reabrirlo retira
+  // participación, 3er puesto, finalista y campeón (trigger en la DB).
+  const { data: tournament } = await supabase
+    .from("tournaments")
+    .select("status")
+    .eq("id", match.tournament_id)
+    .maybeSingle();
+
+  if (tournament?.status === "completed") {
     await supabase
       .from("tournaments")
       .update({ status: "active", completed_at: null })

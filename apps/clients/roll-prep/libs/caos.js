@@ -100,6 +100,7 @@ export const CAOS_RANK_POINTS = {
   upsetPerTier: 25,
   champion: 200,
   finalist: 100,
+  third: 50,
 };
 
 // XP extra que solo existe en la modalidad CAOS.

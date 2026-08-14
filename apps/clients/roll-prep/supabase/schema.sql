@@ -65,7 +65,7 @@ CREATE TABLE public.poll_votes (
 CREATE TABLE public.point_events (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   student_id uuid NOT NULL,
-  kind text NOT NULL CHECK (kind = ANY (ARRAY['signup'::text, 'profile_completed'::text, 'assignment_completed'::text, 'poll_voted'::text, 'comment_posted'::text, 'tournament_participation'::text, 'tournament_finalist'::text, 'tournament_champion'::text, 'caos_upset'::text, 'caos_finish'::text])),
+  kind text NOT NULL CHECK (kind = ANY (ARRAY['signup'::text, 'profile_completed'::text, 'assignment_completed'::text, 'poll_voted'::text, 'comment_posted'::text, 'tournament_participation'::text, 'tournament_third'::text, 'tournament_finalist'::text, 'tournament_champion'::text, 'caos_upset'::text, 'caos_finish'::text])),
   points integer NOT NULL CHECK (points > 0),
   ref_id uuid,
   created_at timestamp with time zone NOT NULL DEFAULT now(),

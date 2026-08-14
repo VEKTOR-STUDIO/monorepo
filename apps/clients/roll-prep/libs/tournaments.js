@@ -5,6 +5,10 @@
 //
 // Modelo del bracket: el ganador de (round r, slot s) avanza a
 // (round r+1, slot floor(s/2)) — como student1 si s es par, student2 si impar.
+//
+// La ronda más alta tiene dos casillas: el slot 0 es la FINAL y el slot 1 es
+// la pelea por el 3er puesto. Ahí caen los dos perdedores de semifinales con
+// la misma regla de paridad (semi slot 0 → student1, semi slot 1 → student2).
 // ============================================================================
 
 // Debe coincidir con los valores de los triggers en la migración.
@@ -12,7 +16,13 @@ export const TOURNAMENT_POINTS = {
   participation: 15,
   finalist: 50,
   champion: 100,
+  third: 25,
 };
+
+// Slot de la pelea por el 3er puesto dentro de la ronda final. La final es el
+// slot 0, así que "la última pelea del bracket" sigue siendo la primera de la
+// ronda más alta (round desc, slot asc) — la regla que usan los triggers.
+export const BRONZE_SLOT = 1;
 
 // Cómo terminó la pelea: lo típico de BJJ.
 export const MATCH_METHODS = {
@@ -138,10 +148,23 @@ export function seedOrder(size) {
 }
 
 /**
+ * ¿Este cuadro lleva pelea por el 3er puesto? Solo si las dos semifinales se
+ * pelean de verdad: hacen falta DOS perdedores para cruzar. En un cuadro de 4
+ * las semifinales son la ronda 1, así que un bye deja a uno sin rival y no hay
+ * bronce; de 8 en adelante las semifinales siempre llegan llenas.
+ */
+function hasBronzeMatch(n, size) {
+  if (size < 4) return false;
+  return size > 4 || n === 4;
+}
+
+/**
  * Genera todas las peleas del bracket a partir de la lista YA barajada de
  * ids (el orden del array es el seed). Devuelve filas listas para insertar:
  * { round, slot, student1_id, student2_id, winner_id, method }.
  * Los byes de la ronda 1 quedan resueltos y su peleador avanzado a la 2.
+ * La ronda final lleva la final (slot 0) y, si hay semifinales de verdad, la
+ * pelea por el 3er puesto (slot 1), que nace vacía como cualquier otra.
  */
 export function buildBracket(shuffledIds) {
   const n = shuffledIds.length;
@@ -180,6 +203,20 @@ export function buildBracket(shuffledIds) {
     }
   }
 
+  // El loser bracket del sistema: una sola pelea, la de los dos que perdieron
+  // en semifinales. Va pegada a la final (misma ronda, slot 1) para que la
+  // regla "la final es round desc + slot asc" siga apuntando a la final.
+  if (hasBronzeMatch(n, size)) {
+    matches.push({
+      round: totalRounds,
+      slot: BRONZE_SLOT,
+      student1_id: null,
+      student2_id: null,
+      winner_id: null,
+      method: null,
+    });
+  }
+
   // Resolver los byes de la ronda 1 y avanzar al peleador solitario.
   for (const match of matches) {
     if (match.round !== 1) continue;
@@ -213,4 +250,37 @@ export function isBye(match) {
     ((match.student1_id && !match.student2_id) ||
       (!match.student1_id && match.student2_id))
   );
+}
+
+/**
+ * La ronda más alta del cuadro. Ahí viven la final y el 3er puesto.
+ */
+export function lastRoundOf(matches) {
+  return matches.length ? Math.max(...matches.map((m) => m.round)) : 0;
+}
+
+/**
+ * La final: ronda más alta, slot 0.
+ */
+export function finalMatchOf(matches) {
+  const last = lastRoundOf(matches);
+  return matches.find((m) => m.round === last && m.slot === 0) ?? null;
+}
+
+/**
+ * La pelea por el 3er puesto: ronda más alta, slot 1. Devuelve null en los
+ * cuadros que no la tienen (los de 2, y los de 4 con un bye en semifinales)
+ * y en los torneos sorteados antes de que el 3er puesto existiera.
+ */
+export function bronzeMatchOf(matches) {
+  const last = lastRoundOf(matches);
+  return matches.find((m) => m.round === last && m.slot === BRONZE_SLOT) ?? null;
+}
+
+/**
+ * Una semifinal es la pelea cuyo ganador pasa a la ronda final. Su perdedor
+ * es el que cae a la pelea por el 3er puesto.
+ */
+export function isSemifinal(match, matches) {
+  return match.round + 1 === lastRoundOf(matches);
 }

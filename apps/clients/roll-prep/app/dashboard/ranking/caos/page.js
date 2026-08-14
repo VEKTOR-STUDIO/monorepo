@@ -249,7 +249,12 @@ export default async function RankingCaos({ searchParams }) {
             </li>
             <li>
               · Campeón: +{CAOS_RANK_POINTS.champion} · Finalista: +
-              {CAOS_RANK_POINTS.finalist}.
+              {CAOS_RANK_POINTS.finalist} · 3er puesto: +
+              {CAOS_RANK_POINTS.third}.
+            </li>
+            <li>
+              · Los dos que pierden en semifinales se cruzan por el 3er
+              puesto: hay una pelea más y un podio más que cobrar.
             </li>
           </ul>
           <p className="mt-3 border-t border-base-300 pt-3 text-[0.65rem] font-semibold opacity-60">

@@ -109,8 +109,10 @@ export default function CaosManual() {
                 </td>
               </tr>
               <tr className="opacity-60">
-                <td>Pelear el tope · ser finalista · ser campeón</td>
-                <td className="text-right font-black">+15 / +50 / +100</td>
+                <td>
+                  Pelear el tope · 3er puesto · ser finalista · ser campeón
+                </td>
+                <td className="text-right font-black">+15 / +25 / +50 / +100</td>
               </tr>
             </tbody>
           </table>

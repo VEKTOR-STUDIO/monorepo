@@ -13,6 +13,7 @@ export const POINT_VALUES = {
   poll_voted: 10,
   comment_posted: 5,
   tournament_participation: 15,
+  tournament_third: 25,
   tournament_finalist: 50,
   tournament_champion: 100,
   // caos_upset es variable (20 / 40 / 60 según la carta): lo calcula el
@@ -28,6 +29,7 @@ export const POINT_EVENT_LABELS = {
   poll_voted: "Voto emitido",
   comment_posted: "Comentario en clase",
   tournament_participation: "Peleaste en un tope",
+  tournament_third: "3er puesto del tope",
   tournament_finalist: "Finalista del tope",
   tournament_champion: "Campeón del tope",
   caos_upset: "Remontaste desde la desventaja",

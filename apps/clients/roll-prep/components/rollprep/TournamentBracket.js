@@ -10,7 +10,13 @@ import {
   deleteTournament,
   rollMatchChaos,
 } from "@/app/dashboard/torneos/actions";
-import { MATCH_METHODS, roundName, isBye } from "@/libs/tournaments";
+import {
+  MATCH_METHODS,
+  roundName,
+  isBye,
+  finalMatchOf,
+  bronzeMatchOf,
+} from "@/libs/tournaments";
 import CaosMark from "@/components/rollprep/CaosMark";
 import CaosRollCeremony from "@/components/rollprep/CaosRollCeremony";
 import CaosMatchPanel from "@/components/rollprep/CaosMatchPanel";
@@ -45,22 +51,43 @@ export default function TournamentBracket({
   const isActive = tournament.status === "active";
   const hasResults = matches.some((m) => m.method !== null);
 
-  const rounds = [...new Set(matches.map((m) => m.round))]
+  // El 3er puesto comparte ronda con la final, pero no es una ronda más: se
+  // saca del agrupado para que roundName siga contando peleas de verdad (si
+  // no, la última columna tendría 2 peleas y se llamaría "Semifinales").
+  const bronzeMatch = bronzeMatchOf(matches);
+  const bracketMatches = bronzeMatch
+    ? matches.filter((m) => m.id !== bronzeMatch.id)
+    : matches;
+
+  const rounds = [...new Set(bracketMatches.map((m) => m.round))]
     .sort((a, b) => a - b)
     .map((round) => ({
       round,
-      matches: matches
+      matches: bracketMatches
         .filter((m) => m.round === round)
         .sort((a, b) => a.slot - b.slot),
     }));
 
-  const finalMatch = rounds.length
-    ? rounds[rounds.length - 1].matches[0]
-    : null;
+  // Cada columna es una ronda. La última lleva dos bloques con su propio
+  // título: la final arriba y, si el cuadro la tiene, la pelea por el bronce.
+  const columns = rounds.map(({ round, matches: roundMatches }, i) => {
+    const header = { label: roundName(roundMatches.length), matches: roundMatches };
+    const isLast = i === rounds.length - 1;
+    return {
+      round,
+      groups:
+        isLast && bronzeMatch
+          ? [header, { label: "3er puesto", matches: [bronzeMatch] }]
+          : [header],
+    };
+  });
+
+  const finalMatch = finalMatchOf(matches);
+  const isClosed = tournament.status === "completed";
   const championName =
-    tournament.status === "completed" && finalMatch?.winner_id
-      ? names[finalMatch.winner_id]
-      : null;
+    isClosed && finalMatch?.winner_id ? names[finalMatch.winner_id] : null;
+  const thirdName =
+    isClosed && bronzeMatch?.winner_id ? names[bronzeMatch.winner_id] : null;
 
   const run = (action, successMessage, onDone) => {
     startTransition(async () => {
@@ -160,6 +187,11 @@ export default function TournamentBracket({
             Campeón del tope
           </p>
           <p className="display mt-1 text-4xl">{championName}</p>
+          {thirdName && (
+            <p className="mt-2 border-t border-primary/30 pt-2 text-[0.65rem] font-black uppercase tracking-[0.2em] opacity-60">
+              3er puesto · {thirdName}
+            </p>
+          )}
         </div>
       )}
 
@@ -200,188 +232,192 @@ export default function TournamentBracket({
 
       <div className="rise rise-3 overflow-x-auto pb-2">
         <div className="flex min-w-max gap-4">
-          {rounds.map(({ round, matches: roundMatches }) => (
-            <div key={round} className="flex w-60 flex-col">
-              <p className="mb-3 text-center text-[0.65rem] font-black uppercase tracking-[0.25em] opacity-60">
-                {roundName(roundMatches.length)}
-              </p>
+          {columns.map(({ round, groups }) => (
+            <div key={round} className="flex w-60 flex-col gap-5">
+              {groups.map(({ label, matches: groupMatches }) => (
+                <div key={label} className="flex flex-1 flex-col">
+                  <p className="mb-3 text-center text-[0.65rem] font-black uppercase tracking-[0.25em] opacity-60">
+                    {label}
+                  </p>
 
-              <div className="flex flex-1 flex-col justify-around gap-3">
-                {roundMatches.map((match) => {
-                  const bye = isBye(match);
-                  const decided = Boolean(match.winner_id);
-                  const ready =
-                    Boolean(match.student1_id) && Boolean(match.student2_id);
-                  const isOpen = openMatchId === match.id;
-                  const roll = isCaos ? rolls[match.id] : null;
-                  // En el CAOS no se carga resultado sin haber roleado.
-                  const canReport = !isCaos || Boolean(roll);
+                  <div className="flex flex-1 flex-col justify-around gap-3">
+                    {groupMatches.map((match) => {
+                      const bye = isBye(match);
+                      const decided = Boolean(match.winner_id);
+                      const ready =
+                        Boolean(match.student1_id) && Boolean(match.student2_id);
+                      const isOpen = openMatchId === match.id;
+                      const roll = isCaos ? rolls[match.id] : null;
+                      // En el CAOS no se carga resultado sin haber roleado.
+                      const canReport = !isCaos || Boolean(roll);
 
-                  return (
-                    <div
-                      key={match.id}
-                      className={`clip-cut border-2 bg-base-200 ${
-                        decided && !bye
-                          ? "border-base-300"
-                          : ready
-                            ? "border-primary/50"
-                            : "border-base-300 opacity-80"
-                      }`}
-                    >
-                      <PlayerRow
-                        name={match.student1_id ? names[match.student1_id] : null}
-                        isGuest={guests.has(match.student1_id)}
-                        isWinner={decided && match.winner_id === match.student1_id}
-                        isLoser={decided && !bye && match.winner_id !== match.student1_id}
-                      />
-                      <div className="border-t border-base-300" />
-                      <PlayerRow
-                        name={match.student2_id ? names[match.student2_id] : null}
-                        isGuest={guests.has(match.student2_id)}
-                        isWinner={decided && match.winner_id === match.student2_id}
-                        isLoser={decided && !bye && match.winner_id !== match.student2_id}
-                        placeholder={bye ? "Pase directo" : "Por definir"}
-                      />
+                      return (
+                        <div
+                          key={match.id}
+                          className={`clip-cut border-2 bg-base-200 ${
+                            decided && !bye
+                              ? "border-base-300"
+                              : ready
+                                ? "border-primary/50"
+                                : "border-base-300 opacity-80"
+                          }`}
+                        >
+                          <PlayerRow
+                            name={match.student1_id ? names[match.student1_id] : null}
+                            isGuest={guests.has(match.student1_id)}
+                            isWinner={decided && match.winner_id === match.student1_id}
+                            isLoser={decided && !bye && match.winner_id !== match.student1_id}
+                          />
+                          <div className="border-t border-base-300" />
+                          <PlayerRow
+                            name={match.student2_id ? names[match.student2_id] : null}
+                            isGuest={guests.has(match.student2_id)}
+                            isWinner={decided && match.winner_id === match.student2_id}
+                            isLoser={decided && !bye && match.winner_id !== match.student2_id}
+                            placeholder={bye ? "Pase directo" : "Por definir"}
+                          />
 
-                      {(match.method || bye || ready) && (
-                        <div className="flex items-center gap-2 border-t border-base-300 px-3 py-1.5">
-                          {bye ? (
-                            <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
-                              Sin pelea
-                            </span>
-                          ) : match.method ? (
-                            <span className="tag-skew bg-secondary px-1.5 py-0.5 text-[0.55rem] text-secondary-content">
-                              <span>{MATCH_METHODS[match.method]}</span>
-                            </span>
-                          ) : (
-                            <span
-                              className={`blink-soft text-[0.6rem] font-bold uppercase tracking-widest ${
-                                canReport ? "text-primary" : "text-accent"
-                              }`}
-                            >
-                              {canReport ? "Lista para pelear" : "Falta rolear"}
-                            </span>
-                          )}
-
-                          {isAdmin && !bye && ready && (
-                            <span className="ml-auto">
-                              {decided ? (
-                                <button
-                                  type="button"
-                                  className="btn btn-ghost btn-xs uppercase opacity-60 hover:opacity-100"
-                                  onClick={() => handleUndo(match)}
-                                  disabled={isPending}
-                                >
-                                  Corregir
-                                </button>
+                          {(match.method || bye || ready) && (
+                            <div className="flex items-center gap-2 border-t border-base-300 px-3 py-1.5">
+                              {bye ? (
+                                <span className="text-[0.6rem] font-bold uppercase tracking-widest opacity-50">
+                                  Sin pelea
+                                </span>
+                              ) : match.method ? (
+                                <span className="tag-skew bg-secondary px-1.5 py-0.5 text-[0.55rem] text-secondary-content">
+                                  <span>{MATCH_METHODS[match.method]}</span>
+                                </span>
                               ) : (
-                                isActive &&
-                                canReport && (
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary btn-xs uppercase"
-                                    onClick={() =>
-                                      isOpen
-                                        ? setOpenMatchId(null)
-                                        : openResultPanel(match)
-                                    }
-                                    disabled={isPending}
-                                  >
-                                    {isOpen ? "Cerrar" : "Resultado"}
-                                  </button>
-                                )
+                                <span
+                                  className={`blink-soft text-[0.6rem] font-bold uppercase tracking-widest ${
+                                    canReport ? "text-primary" : "text-accent"
+                                  }`}
+                                >
+                                  {canReport ? "Lista para pelear" : "Falta rolear"}
+                                </span>
                               )}
-                            </span>
+
+                              {isAdmin && !bye && ready && (
+                                <span className="ml-auto">
+                                  {decided ? (
+                                    <button
+                                      type="button"
+                                      className="btn btn-ghost btn-xs uppercase opacity-60 hover:opacity-100"
+                                      onClick={() => handleUndo(match)}
+                                      disabled={isPending}
+                                    >
+                                      Corregir
+                                    </button>
+                                  ) : (
+                                    isActive &&
+                                    canReport && (
+                                      <button
+                                        type="button"
+                                        className="btn btn-primary btn-xs uppercase"
+                                        onClick={() =>
+                                          isOpen
+                                            ? setOpenMatchId(null)
+                                            : openResultPanel(match)
+                                        }
+                                        disabled={isPending}
+                                      >
+                                        {isOpen ? "Cerrar" : "Resultado"}
+                                      </button>
+                                    )
+                                  )}
+                                </span>
+                              )}
+                            </div>
+                          )}
+
+                          {/* CAOS: el roleo de la pelea y sus cartas */}
+                          {roll && (
+                            <CaosMatchPanel
+                              roll={roll}
+                              student1Id={match.student1_id}
+                              student2Id={match.student2_id}
+                              names={names}
+                              onOpen={() => openCeremony(match)}
+                            />
+                          )}
+
+                          {isCaos && isAdmin && isActive && ready && !bye && !decided && (
+                            <div className="border-t-2 border-base-300 px-2 pb-4 pt-2">
+                              <button
+                                type="button"
+                                className={`btn btn-xs btn-block gap-1.5 uppercase ${
+                                  roll ? "btn-ghost opacity-70" : "btn-accent"
+                                }`}
+                                onClick={() => handleRoll(match)}
+                                disabled={isPending}
+                              >
+                                {rollingMatchId === match.id ? (
+                                  <span className="loading loading-spinner loading-xs" />
+                                ) : (
+                                  !roll && <CaosMark className="h-4 w-auto" />
+                                )}
+                                {roll ? "Re-rolear" : "Rolear el CAOS"}
+                              </button>
+                            </div>
+                          )}
+
+                          {isAdmin && isOpen && !decided && ready && (
+                            <div className="space-y-3 border-t-2 border-primary bg-base-100 p-3">
+                              <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60">
+                                ¿Quién ganó?
+                              </p>
+                              <div className="grid grid-cols-2 gap-2">
+                                {[match.student1_id, match.student2_id].map((id) => (
+                                  <button
+                                    key={id}
+                                    type="button"
+                                    onClick={() => setWinnerId(id)}
+                                    className={`btn btn-xs justify-start truncate normal-case ${
+                                      winnerId === id ? "btn-primary" : "btn-outline"
+                                    }`}
+                                  >
+                                    {names[id]}
+                                  </button>
+                                ))}
+                              </div>
+
+                              <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60">
+                                ¿Cómo terminó?
+                              </p>
+                              <div className="flex flex-wrap gap-1.5">
+                                {Object.entries(MATCH_METHODS).map(([key, label]) => (
+                                  <button
+                                    key={key}
+                                    type="button"
+                                    onClick={() => setMethod(key)}
+                                    className={`btn btn-xs normal-case ${
+                                      method === key ? "btn-secondary" : "btn-outline"
+                                    }`}
+                                  >
+                                    {label}
+                                  </button>
+                                ))}
+                              </div>
+
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm btn-block uppercase"
+                                onClick={() => saveResult(match)}
+                                disabled={isPending || !winnerId || !method}
+                              >
+                                {isPending && (
+                                  <span className="loading loading-spinner loading-xs" />
+                                )}
+                                Guardar resultado
+                              </button>
+                            </div>
                           )}
                         </div>
-                      )}
-
-                      {/* CAOS: el roleo de la pelea y sus cartas */}
-                      {roll && (
-                        <CaosMatchPanel
-                          roll={roll}
-                          student1Id={match.student1_id}
-                          student2Id={match.student2_id}
-                          names={names}
-                          onOpen={() => openCeremony(match)}
-                        />
-                      )}
-
-                      {isCaos && isAdmin && isActive && ready && !bye && !decided && (
-                        <div className="border-t-2 border-base-300 px-2 pb-4 pt-2">
-                          <button
-                            type="button"
-                            className={`btn btn-xs btn-block gap-1.5 uppercase ${
-                              roll ? "btn-ghost opacity-70" : "btn-accent"
-                            }`}
-                            onClick={() => handleRoll(match)}
-                            disabled={isPending}
-                          >
-                            {rollingMatchId === match.id ? (
-                              <span className="loading loading-spinner loading-xs" />
-                            ) : (
-                              !roll && <CaosMark className="h-4 w-auto" />
-                            )}
-                            {roll ? "Re-rolear" : "Rolear el CAOS"}
-                          </button>
-                        </div>
-                      )}
-
-                      {isAdmin && isOpen && !decided && ready && (
-                        <div className="space-y-3 border-t-2 border-primary bg-base-100 p-3">
-                          <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60">
-                            ¿Quién ganó?
-                          </p>
-                          <div className="grid grid-cols-2 gap-2">
-                            {[match.student1_id, match.student2_id].map((id) => (
-                              <button
-                                key={id}
-                                type="button"
-                                onClick={() => setWinnerId(id)}
-                                className={`btn btn-xs justify-start truncate normal-case ${
-                                  winnerId === id ? "btn-primary" : "btn-outline"
-                                }`}
-                              >
-                                {names[id]}
-                              </button>
-                            ))}
-                          </div>
-
-                          <p className="text-[0.6rem] font-black uppercase tracking-[0.2em] opacity-60">
-                            ¿Cómo terminó?
-                          </p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {Object.entries(MATCH_METHODS).map(([key, label]) => (
-                              <button
-                                key={key}
-                                type="button"
-                                onClick={() => setMethod(key)}
-                                className={`btn btn-xs normal-case ${
-                                  method === key ? "btn-secondary" : "btn-outline"
-                                }`}
-                              >
-                                {label}
-                              </button>
-                            ))}
-                          </div>
-
-                          <button
-                            type="button"
-                            className="btn btn-primary btn-sm btn-block uppercase"
-                            onClick={() => saveResult(match)}
-                            disabled={isPending || !winnerId || !method}
-                          >
-                            {isPending && (
-                              <span className="loading loading-spinner loading-xs" />
-                            )}
-                            Guardar resultado
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
         </div>
