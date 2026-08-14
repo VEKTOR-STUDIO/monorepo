@@ -591,6 +591,35 @@ const SHOWCASE_DUEL_KEYS = new Set([
 // Nada de "alfa" y "omega" aquí: esos son los nombres internos de las cartas
 // (ver DUELS). Al que nunca ha peleado un CAOS se le habla de ventaja y de
 // carga, que es lo que va a sentir en el tatami.
+// EL PAPEL — lo que el árbitro lee en voz alta antes de cada pelea.
+//
+// Cadencia de Battle at the Berrics: alcance, lista de NOs, el que decide
+// los grises, y el cierre. No es un tutorial (eso es CAOS_STEPS): es el
+// ritual. Vive plegado en la ceremonia de roleo y se despliega para leerlo.
+export const CAOS_OATH = {
+  label: "El papel",
+  cue: "Léelo antes de pelear",
+  lead: [
+    "Esto es el CAOS. Se rolea una vez. Lo que salga, se pelea.",
+    "Pero eso no quiere decir que todo valga.",
+  ],
+  nos: [
+    "No se cambia el roleo.",
+    "No se cambia de lado.",
+    "No se pide handicap.",
+    "No se guinda de la ventaja.",
+  ],
+  pay: [
+    "El terreno vale para los dos.",
+    "Remontar paga. Finalizar paga.",
+    "Estancar no paga.",
+  ],
+  ref: "Lo que no esté en la carta, lo decide el árbitro.",
+  clean: "Que quede limpio. Que quede corto.",
+  winner: "Esto es el Torneo CAOS y solo va a haber un ganador.",
+  mercy: "Que el tatami tenga piedad de sus almas.",
+};
+
 export const CAOS_STEPS = [
   {
     n: "01",

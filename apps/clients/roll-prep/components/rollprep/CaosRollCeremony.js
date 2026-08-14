@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { readRoll, cardTone, TIER_LABELS, CAOS_POINTS, OUTFITS } from "@/libs/caos";
 import CaosMark from "./CaosMark";
+import CaosOath from "./CaosOath";
 import D20 from "./D20";
 
 // Ceremonia de roleo del Torneo CAOS: pantalla completa, pensada para
@@ -257,6 +258,11 @@ export default function CaosRollCeremony({
                   Finalizar por sumisión paga +{CAOS_POINTS.finish} XP extra a
                   quien gane
                 </p>
+
+                {/* Plegado: el veredicto se lee primero. Un toque y sale el
+                    papel para leerlo en voz alta antes de pelear. key={run}
+                    lo vuelve a doblar si se repite la toma. */}
+                <CaosOath key={run} />
 
                 <div className="flex gap-2">
                   <button

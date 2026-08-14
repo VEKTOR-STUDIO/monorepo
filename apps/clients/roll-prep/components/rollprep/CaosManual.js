@@ -9,6 +9,7 @@ import {
   TIER_ODDS_LABELS,
   CAOS_POINTS,
 } from "@/libs/caos";
+import CaosOath from "./CaosOath";
 
 // Manual del modo CAOS: el códice completo del juego. Cambia entre el mazo
 // de no-gi y el de gi, porque no comparten todas las cartas.
@@ -18,6 +19,16 @@ export default function CaosManual() {
 
   return (
     <div className="space-y-8">
+      {/* ---------------- El papel ---------------- */}
+      <section className="rise rise-2 space-y-3">
+        <SectionTitle index="00" title="El papel" />
+        <p className="text-sm font-medium opacity-70">
+          Lo que el árbitro lee en voz alta antes de cada pelea. En el roleo
+          llega plegado: se abre, se lee, se pelea.
+        </p>
+        <CaosOath defaultOpen />
+      </section>
+
       {/* ---------------- Cómo se juega ---------------- */}
       <section className="rise rise-2 space-y-3">
         <SectionTitle index="01" title="Cómo se juega" />

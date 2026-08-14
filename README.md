@@ -9,6 +9,7 @@ alessandrovaru-monorepo/
 ├── apps/
 │   ├── vanilla-template/            ← Shipfast base. Clone this for new client projects.
 │   ├── vanilla-template-supabase/   ← Variant with Supabase auth.
+│   ├── video/                       ← Remotion studio (@alessandrovaru/video). One project per client.
 │   └── clients/                     ← Live client projects (one folder per client).
 ├── packages/
 │   ├── ui/                          ← Shared React components (@alessandrovaru/ui).
@@ -57,6 +58,22 @@ pnpm dev
 # Lint everything:
 pnpm lint
 ```
+
+## Video
+
+Client videos live in `apps/video/`, a single [Remotion](https://remotion.dev) studio
+that hosts one project folder per client — brand tokens, assets and compositions stay
+inside each client's folder, and anything shared moves up to `src/lib/`.
+
+```bash
+# Open the studio (every client's videos in one sidebar):
+pnpm run dev --filter @alessandrovaru/video
+
+# Render a composition to MP4:
+pnpm --filter @alessandrovaru/video run render:caos
+```
+
+See [`apps/video/README.md`](./apps/video/README.md) for how to add a new video project.
 
 ## Adding a new client
 

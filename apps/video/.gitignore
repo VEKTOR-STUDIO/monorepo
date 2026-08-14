@@ -1,0 +1,7 @@
+node_modules
+dist
+out
+.turbo
+
+# tsc --noEmit deja este archivo de caché incremental.
+tsconfig.tsbuildinfo
