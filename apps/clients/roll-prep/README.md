@@ -23,6 +23,7 @@ app/
     page.js                   # Dashboard del Alumno (lógica condicional tarea/votación)
     actions.js                # Server Actions (marcar tarea, votar, crear tarea/encuesta)
     videoteca/page.js         # Archivo histórico
+    juegos/                   # Sección Juegos (arcade). No escribe en la base
     admin/
       layout.js               # Guard de rol admin
       page.js                 # Panel del Profesor (formularios + métricas en vivo)
@@ -76,6 +77,32 @@ La seguridad se aplica con **RLS** en todas las tablas (`profiles`, `assignments
 ## Zona horaria
 
 El modo del dashboard (tarea vs. votación) se calcula con la zona horaria configurada en `config.js` → `timezone` (por defecto `America/Caracas`).
+
+## Camino Negro (sección Juegos)
+
+Roguelike de decisiones de jiu-jitsu. Vive entero en el cliente: se guarda en
+`localStorage` y **no toca Supabase ni la gamificación** — no da XP ni puntos de ranking.
+
+```
+libs/camino-negro.js                    # Reglas: posiciones, movelist, rivales,
+                                        # eventos, mapa y motor de pelea (sin React)
+components/rollprep/CaminoNegro.js      # Máquina de estados y pantallas
+components/rollprep/CaminoNegroPelea.js # El tope por turnos
+components/rollprep/CaminoNegroHud.js   # Gas, atributos, marcas y ficha
+app/dashboard/juegos/                   # Hub del arcade + la página del juego
+```
+
+Las reglas no dependen de React ni del navegador y el azar entra por un `rng`
+inyectable, así que se pueden simular corridas enteras desde Node para calibrar la
+dificultad:
+
+```js
+import { nuevaCorrida, nuevaPelea, resolverAsalto, crearAzar } from "./libs/camino-negro.js";
+```
+
+Para cambiar el balance: `MOVIMIENTOS` (base y costo de gas), `RIVALES` (defensa,
+ataque y gas) y las constantes de lectura del triángulo arriba del archivo. Si cambian
+las reglas, sube `JUEGO.version` y las corridas guardadas se descartan solas.
 
 ## Invitaciones CAOS
 

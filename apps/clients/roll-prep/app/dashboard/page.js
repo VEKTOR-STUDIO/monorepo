@@ -283,10 +283,19 @@ export default async function Dashboard() {
             }
           />
 
-          {/* 08 — Perfil */}
+          {/* 08 — Juegos */}
+          <MenuTile
+            href="/dashboard/juegos"
+            index={8}
+            kicker="Arcade"
+            title="Juegos"
+            description="Jiu-jitsu para los días sin tatami. No dan XP"
+          />
+
+          {/* 09 — Perfil */}
           <MenuTile
             href="/dashboard/perfil"
-            index={8}
+            index={9}
             kicker="Jugador"
             title="Mi perfil"
             description={`${belt.short} · historial de XP y datos`}

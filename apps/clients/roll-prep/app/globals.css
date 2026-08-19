@@ -886,3 +886,137 @@ progress::-webkit-progress-value {
     animation: none;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* CAMINO NEGRO — el roguelike de la sección Juegos.                  */
+/* Mismo lenguaje del resto: bloques cortados, volt, nada de curvas.  */
+/* ------------------------------------------------------------------ */
+
+/* Barra de gas / vida. Recta (la del XP va inclinada) para que se lea
+   junto a la del rival sin marear. */
+.cn-bar {
+  position: relative;
+  height: 0.7rem;
+  overflow: hidden;
+  background: var(--color-base-300);
+}
+
+.cn-bar-fill {
+  height: 100%;
+  background: var(--color-primary);
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cn-bar-rival .cn-bar-fill {
+  background: var(--color-accent);
+}
+
+/* Bajo mínimos: la barra late. */
+.cn-bar-bajo .cn-bar-fill {
+  animation: cn-pulso 0.9s ease-in-out infinite;
+}
+
+@keyframes cn-pulso {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* La escalera de posiciones: once escalones de espalda a espalda. */
+.cn-escalera {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 2px;
+}
+
+.cn-escalon {
+  height: 0.85rem;
+  background: color-mix(in oklch, var(--color-base-content) 10%, transparent);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.cn-escalon-arriba { background: color-mix(in oklch, var(--color-primary) 28%, transparent); }
+.cn-escalon-abajo { background: color-mix(in oklch, var(--color-accent) 28%, transparent); }
+
+.cn-escalon-aqui {
+  background: var(--color-primary);
+  transform: scaleY(1.7);
+}
+
+.cn-escalon-aqui.cn-escalon-abajo {
+  background: var(--color-accent);
+}
+
+/* Botón de movimiento: bloque con borde que se enciende según la lectura. */
+.cn-mov {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid var(--color-base-300);
+  background: var(--color-base-200);
+  text-align: left;
+  transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+}
+
+.cn-mov:hover:not(:disabled),
+.cn-mov:focus-visible {
+  transform: translate(-2px, -2px);
+  border-color: var(--color-primary);
+  box-shadow: 4px 4px 0 0 var(--color-primary);
+}
+
+.cn-mov:active:not(:disabled) {
+  transform: translate(0, 0);
+  box-shadow: 2px 2px 0 0 var(--color-primary);
+}
+
+.cn-mov:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* La lectura del triángulo se ve antes de tocar el botón. */
+.cn-mov-gana { border-left: 6px solid var(--color-success); }
+.cn-mov-pierde { border-left: 6px solid var(--color-error); }
+.cn-mov-aguanta { border-left: 6px solid var(--color-info); }
+
+/* La intención del rival entra de golpe cada asalto. */
+@keyframes cn-canta {
+  0% { transform: translateX(14px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.cn-canta {
+  animation: cn-canta 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Golpe de cámara cuando se resuelve un asalto. */
+@keyframes cn-golpe {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-3px, 2px, 0); }
+  50% { transform: translate3d(4px, -2px, 0); }
+  75% { transform: translate3d(-2px, -1px, 0); }
+}
+
+.cn-golpe {
+  animation: cn-golpe 0.24s linear;
+}
+
+/* Bitácora del tope: la línea nueva entra desde arriba. */
+@keyframes cn-linea {
+  from { transform: translateY(-6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.cn-linea {
+  animation: cn-linea 0.25s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-bar-bajo .cn-bar-fill,
+  .cn-golpe,
+  .cn-canta,
+  .cn-linea {
+    animation: none;
+  }
+}

@@ -328,9 +328,32 @@ arriba, tiles numerados abajo, con el arte del video de la clase asomándose de 
 | 05 | **Ranking** | El top del gym por XP, filtrable por academia |
 | 06 | **Torneos** | Brackets clásicos y CAOS, con el manual del modo |
 | 07 | **Mi perfil** | Cinturón, historial de XP evento por evento, datos y academia |
+| 08 | **Juegos** | El arcade. Hoy: *Camino Negro* |
 
 Más el panel del profesor: `/dashboard/admin`, con formularios, métricas en vivo por
 Supabase Realtime y gestión de usuarios.
+
+### Juegos — la sala de máquinas
+
+Una sección aparte, con una regla propia: **lo que pasa ahí no toca el XP ni el ranking**.
+El pilar 2 dice que los puntos se ganan afuera de la app, en el tatami; un juego que
+diera XP rompería justo eso. Los Juegos existen para los días en que no hay clase.
+
+El primero es **CAMINO NEGRO**, un roguelike de decisiones. Llegas de blanco a un gym
+desconocido y tienes que aguantar tres bloques hasta el examen. Cada noche eliges un
+camino —un tope, un dilema del gym, una clase técnica o un descanso— y lo que no elegiste
+no vuelve. El gas es la vida y no se rellena solo entre peleas.
+
+Las peleas van por turnos sobre la escalera de posiciones real, de espalda tomada a
+espalda entregada. El rival canta lo que va a hacer y tú respondes con el tipo que le
+gana: **movimiento** vence a **presión**, **presión** vence a **ataque**, **ataque**
+vence a **movimiento** —moverse antes de que asiente el peso, el peso que mata la
+sumisión, la sumisión que caza al que se suelta—. Si nadie finaliza, deciden los puntos
+de verdad: derribo 2, barrida 2, pase 3, montada 4, espalda 4.
+
+Se pierde la corrida cayendo contra un jefe o perdiendo tres topes. Todo corre en el
+navegador y se guarda ahí mismo: cero filas en la base de datos. Las reglas completas
+están en [`libs/camino-negro.js`](./libs/camino-negro.js).
 
 ---
 
