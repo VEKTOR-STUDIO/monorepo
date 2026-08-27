@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CaosMark from "@/components/rollprep/CaosMark";
+import JoinCta from "@/components/rollprep/JoinCta";
 import config from "@/config";
 import { getSEOTags } from "@/libs/seo";
 import { createPublicClient } from "@/libs/supabase/public";
@@ -109,6 +110,24 @@ export default async function CarteleraCaos() {
               </li>
             ))}
           </ol>
+
+          {/* Los pasos son el resumen; el manual es el reglamento completo y
+              abre sin cuenta, que es lo que pide el que todavía no se anota. */}
+          <Link
+            href="/caos/manual"
+            className="mt-5 inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
+          >
+            Leer el manual completo
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              className="h-3 w-3"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </Link>
         </div>
 
         <div className="rise rise-3 space-y-3">
@@ -147,6 +166,18 @@ export default async function CarteleraCaos() {
           >
             {config.appName}
           </Link>
+          {/* Esta cartelera la comparte el gym por WhatsApp, así que la abre
+              tanto el de afuera como el alumno: al que ya tiene sesión este
+              botón lo devuelve a sus torneos sin pasar por el login. */}
+          <div className="mt-4">
+            <JoinCta
+              next="/dashboard/torneos"
+              signedInChildren="Ir a mis torneos"
+              extraStyle="btn-primary"
+            >
+              Entrar a {config.appName}
+            </JoinCta>
+          </div>
         </div>
       </section>
     </main>

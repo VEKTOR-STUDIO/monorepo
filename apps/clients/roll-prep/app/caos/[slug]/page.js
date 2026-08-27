@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import CaosMark from "@/components/rollprep/CaosMark";
+import JoinCta from "@/components/rollprep/JoinCta";
 import config from "@/config";
 import { getSEOTags } from "@/libs/seo";
 import { createPublicClient } from "@/libs/supabase/public";
@@ -297,13 +298,25 @@ export default async function EventoCaos({ params }) {
 
         {/* ------------------------------- CTA ---------------------------- */}
         <div className="rise rise-4 space-y-3">
-          <a
-            href={cta ?? "/signin"}
-            {...(cta ? { target: "_blank", rel: "noreferrer" } : {})}
-            className="btn btn-primary btn-lg btn-block"
-          >
-            {invite.cta_label || DEFAULT_CTA_LABEL}
-          </a>
+          {/* Sin link externo, anotarse es entrar a la app: al que ya tiene
+              sesión el botón lo lleva derecho a sus torneos y no al login. */}
+          {cta ? (
+            <a
+              href={cta}
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-primary btn-lg btn-block"
+            >
+              {invite.cta_label || DEFAULT_CTA_LABEL}
+            </a>
+          ) : (
+            <JoinCta
+              next="/dashboard/torneos"
+              extraStyle="btn-primary btn-lg btn-block"
+            >
+              {invite.cta_label || DEFAULT_CTA_LABEL}
+            </JoinCta>
+          )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             {map && (
@@ -328,6 +341,22 @@ export default async function EventoCaos({ params }) {
               Descargar el flyer
             </a>
           </div>
+
+          <Link
+            href="/caos/manual"
+            className="mt-1 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
+          >
+            Leer el manual del CAOS
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="3"
+              className="h-3 w-3"
+            >
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </Link>
         </div>
 
         {/* ------------------------------ FLYER --------------------------- */}

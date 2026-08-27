@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { createClient } from "@/libs/supabase/client";
 import toast from "react-hot-toast";
@@ -11,6 +12,7 @@ import config from "@/config";
 // Successfull login redirects to /api/auth/callback where the Code Exchange is processed (see app/api/auth/callback/route.js).
 export default function Login() {
   const supabase = createClient();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +28,15 @@ export default function Login() {
     const destination = sanitizeNextPath(params.get("next"));
     setNext(destination);
 
+    // El que ya tiene sesión no tiene nada que pedir aquí: llegó por el
+    // historial, un link viejo o un marcador. Pedirle otra vez el correo es
+    // mandarlo a revisar el buzón para entrar a donde ya podía entrar.
+    supabase.auth.getUser().then(({ data }) => {
+      if (data?.user) {
+        router.replace(destination ?? config.auth.callbackUrl);
+      }
+    });
+
     const error = params.get("error");
     if (!error) return;
 
@@ -36,6 +47,9 @@ export default function Login() {
       ? `?next=${encodeURIComponent(destination)}`
       : "";
     window.history.replaceState({}, "", window.location.pathname + kept);
+    // Se lee la URL y la sesión una sola vez, al montar: volver a correrlo
+    // pisaría el error que acabamos de limpiar de la barra de direcciones.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSignup = async (e, options) => {

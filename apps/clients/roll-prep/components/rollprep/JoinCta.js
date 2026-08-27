@@ -15,8 +15,17 @@ import config from "@/config";
  * Mientras se resuelve la sesión apunta al login, que es lo correcto para el
  * visitante nuevo — el caso normal en una landing — y el que ya entró igual
  * termina en su destino después del rebote.
+ *
+ * `signedInChildren` es la etiqueta para el que ya entró: al alumno que vuelve
+ * a la landing no se le pide "empezar a entrenar", se le abre la puerta de su
+ * dashboard. Si no se pasa, el botón dice lo mismo en ambos casos.
  */
-export default function JoinCta({ next, children, extraStyle = "" }) {
+export default function JoinCta({
+  next,
+  children,
+  signedInChildren,
+  extraStyle = "",
+}) {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const destination = sanitizeNextPath(next) ?? config.auth.callbackUrl;
 
@@ -34,7 +43,7 @@ export default function JoinCta({ next, children, extraStyle = "" }) {
 
   return (
     <Link href={href} className={`btn ${extraStyle}`}>
-      {children}
+      {isSignedIn ? signedInChildren ?? children : children}
     </Link>
   );
 }

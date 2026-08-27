@@ -1,5 +1,4 @@
 import Link from "next/link";
-import ButtonSignin from "@/components/ButtonSignin";
 import BeltBadge from "@/components/rollprep/BeltBadge";
 import CaosMark from "@/components/rollprep/CaosMark";
 import CaosRollDemo from "@/components/rollprep/CaosRollDemo";
@@ -171,7 +170,16 @@ export default async function Page() {
         <span className="display text-2xl">
           Roll<span className="text-primary">Prep</span>
         </span>
-        <ButtonSignin text="Entrar" extraStyle="btn-primary btn-sm md:btn-md" />
+        {/* El alumno que ya entró vuelve seguido a la landing (es la raíz del
+            dominio y lo que abre el link compartido): el botón de arriba es su
+            puerta al dashboard, no una invitación a registrarse otra vez. */}
+        <JoinCta
+          next="/dashboard"
+          signedInChildren="Mi dashboard"
+          extraStyle="btn-primary btn-sm md:btn-md"
+        >
+          Entrar
+        </JoinCta>
       </header>
 
       <main className="relative z-10">
@@ -208,9 +216,13 @@ export default async function Page() {
           </p>
 
           <div className="rise rise-4 mt-10 flex flex-wrap items-center gap-4">
-            <Link href="/signin" className="btn btn-primary btn-lg px-10">
+            <JoinCta
+              next="/dashboard"
+              signedInChildren="Volver al dashboard"
+              extraStyle="btn-primary btn-lg px-10"
+            >
               Empezar a entrenar
-            </Link>
+            </JoinCta>
             <Link href="#caos" className="btn btn-outline btn-lg gap-2">
               <CaosMark className="h-7 w-auto" />
               Ver el modo CAOS
@@ -441,21 +453,40 @@ export default async function Page() {
                   {giDeck.duels.length} duelos
                 </span>
               </div>
-              <Link
-                href="/caos"
-                className="relative mt-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
-              >
-                Ver la cartelera CAOS
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  className="h-3 w-3"
+              <div className="relative mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+                <Link
+                  href="/caos"
+                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
                 >
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </Link>
+                  Ver la cartelera CAOS
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    className="h-3 w-3"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </Link>
+                {/* Las reglas completas se leen sin cuenta: el que pregunta
+                    "¿y eso cómo funciona?" no debería toparse con un login. */}
+                <Link
+                  href="/caos/manual"
+                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline"
+                >
+                  Leer el manual
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    className="h-3 w-3"
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -598,9 +629,13 @@ export default async function Page() {
               Hecho para una clase de martes y jueves que se toma en serio lo que
               estudia. Si eso suena a tu gym, entra.
             </p>
-            <Link href="/signin" className="btn btn-primary btn-lg mt-8 px-10">
+            <JoinCta
+              next="/dashboard"
+              signedInChildren="Volver al dashboard"
+              extraStyle="btn-primary btn-lg mt-8 px-10"
+            >
               Unirme al equipo
-            </Link>
+            </JoinCta>
           </div>
         </section>
       </main>
