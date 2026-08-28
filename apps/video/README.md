@@ -36,11 +36,16 @@ apps/video/
             ├── assets/fonts/   ← los TTF de la marca
             ├── components/     ← primitivas de marca (Backdrop, CaosCard, Dice…)
             └── videos/
-                └── modo-caos/
-                    ├── ModoCaos.tsx   ← el montaje
-                    ├── timeline.ts    ← duración de cada escena
-                    ├── content.ts     ← todo el copy y las cifras
-                    └── scenes/        ← una escena por archivo
+                ├── modo-caos/
+                │   ├── ModoCaos.tsx   ← el montaje
+                │   ├── timeline.ts    ← duración de cada escena
+                │   ├── content.ts     ← todo el copy y las cifras
+                │   └── scenes/        ← una escena por archivo
+                └── competidores/      ← la cartelera, un episodio por vez
+                    ├── Competidores.tsx
+                    ├── timeline.ts
+                    ├── content.ts     ← LOS NOMBRES DEL EPISODIO
+                    └── scenes/
 ```
 
 `src/lib/` es de la casa; `src/projects/<cliente>/` es del cliente. Nada de un
@@ -115,6 +120,35 @@ pnpm --filter @alessandrovaru/video exec remotion still caos-vertical out/frame.
 están copiadas de `apps/clients/roll-prep/libs/caos.js` y `CONCEPTO.md` a
 `videos/modo-caos/content.ts`. Si el mazo cambia en la app, ese archivo es el
 único que hay que actualizar.
+
+### RollPrep · Competidores (Episodio 02)
+
+La cartelera del episodio: portada con el número, un competidor por escena y
+los cuatro juntos al final. Es la versión en movimiento de la story de lineup
+que la app genera en `app/api/invitaciones/[slug]/lineup/card.js` — misma
+chapa, misma alternancia volt/rojo por puesto, misma chapa de cinturón. 28 s.
+
+| Composición | Formato | Para qué |
+| --- | --- | --- |
+| `competidores-ep02-vertical` | 1080×1920 | Stories, reels |
+| `competidores-ep02-wide` | 1920×1080 | Pantalla del gym, YouTube |
+
+```bash
+pnpm --filter @alessandrovaru/video run render:ep02        # vertical
+pnpm --filter @alessandrovaru/video run render:ep02-wide   # horizontal
+```
+
+**Para el episodio siguiente** basta con duplicar `videos/competidores/` (o
+cambiar su `content.ts` si el anterior ya se publicó) y registrar el par de
+composiciones en `index.tsx`. Todo lo que cambia de un episodio a otro vive en
+`content.ts`: el número, la fecha y los peleadores. Ni el montaje ni las
+escenas saben cuántos son — `timeline.ts` construye las escenas de
+presentación a partir de `FIGHTERS`, así que quitar o añadir un nombre
+recoloca el video entero solo.
+
+Los cinturones salen de `theme.ts` (`belts`), con los mismos hex que
+`libs/gamification.js`. Ojo con el nombre: la app lista el morado como
+*Violeta*; en pantalla se lee **Morado**, que es como se dice en el gym.
 
 ---
 

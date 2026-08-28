@@ -1,6 +1,11 @@
 import React from "react";
 import { Composition } from "remotion";
 import { defineProject } from "../../lib/project";
+import { Competidores } from "./videos/competidores/Competidores";
+import {
+  FPS as COMPETIDORES_FPS,
+  TOTAL as COMPETIDORES_TOTAL,
+} from "./videos/competidores/timeline";
 import { ModoCaos } from "./videos/modo-caos/ModoCaos";
 import { FPS, TOTAL } from "./videos/modo-caos/timeline";
 
@@ -32,6 +37,24 @@ const Compositions: React.FC = () => (
       component={ModoCaos}
       durationInFrames={TOTAL}
       fps={FPS}
+      width={1920}
+      height={1080}
+    />
+
+    <Composition
+      id="competidores-ep02-vertical"
+      component={Competidores}
+      durationInFrames={COMPETIDORES_TOTAL}
+      fps={COMPETIDORES_FPS}
+      width={1080}
+      height={1920}
+    />
+
+    <Composition
+      id="competidores-ep02-wide"
+      component={Competidores}
+      durationInFrames={COMPETIDORES_TOTAL}
+      fps={COMPETIDORES_FPS}
       width={1920}
       height={1080}
     />

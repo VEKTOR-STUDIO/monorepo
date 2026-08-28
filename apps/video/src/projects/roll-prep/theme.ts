@@ -54,6 +54,25 @@ export const assets = {
   caosInk: "roll-prep/images/caosBlack.png",
 } as const;
 
+/**
+ * Los cinturones, con los mismos hex que `libs/gamification.js` de la app
+ * (`BELTS`: color de la chapa e ink del texto encima).
+ *
+ * La etiqueta NO siempre calca a la app: allí el morado se lista como
+ * "Violeta" (`short`), pero en el gym —y en `libs/camino-negro.js`— se dice
+ * *morado*, y eso es lo que se lee en pantalla. Si algún día se unifica el
+ * término, este es el único sitio del video que hay que tocar.
+ */
+export const belts = {
+  white: { label: "Blanca", color: "#F5F5F0", ink: "#18181B" },
+  blue: { label: "Azul", color: "#3B82F6", ink: "#FFFFFF" },
+  purple: { label: "Morado", color: "#A855F7", ink: "#FFFFFF" },
+  brown: { label: "Marrón", color: "#92400E", ink: "#FFFFFF" },
+  black: { label: "Negra", color: "#18181B", ink: "#FFFFFF" },
+} as const;
+
+export type BeltKey = keyof typeof belts;
+
 /** Colores de chapa por lado del duelo, tal como los pinta la app. */
 export const sideColor = {
   alfa: colors.primary,
