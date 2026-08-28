@@ -39,10 +39,10 @@ export const EPISODE = {
 
 /** Los cuatro que se suben al tatami, en orden de cartelera. */
 export const FIGHTERS: Fighter[] = [
-  { slot: 1, name: "Kleider Sandoval", belt: "purple" },
-  { slot: 2, name: "Kevin Medina", belt: "purple" },
-  { slot: 3, name: "Anderson Peña", belt: "purple" },
-  { slot: 4, name: "Felipe Chang", belt: "purple" },
+  { slot: 1, name: "Kleider Sandoval", belt: "purple", academy: "Elite Jiujitsu" },
+  { slot: 2, name: "Kevin Medina", belt: "purple", academy: "Elite Jiujitsu" },
+  { slot: 3, name: "Anderson Peña", belt: "purple", academy: "Elite Jiujitsu" },
+  { slot: 4, name: "Felipe Chang", belt: "purple", academy: "Elite Jiujitsu" },
 ];
 
 /** Fecha corta para las chapas: "VIE 28 AGO". */

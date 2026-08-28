@@ -27,12 +27,24 @@ export const Cartelera: React.FC = () => {
   // El grupo se dimensiona por cuántos son: cuatro caben grandes, seis no.
   const size = vertical ? 4.6 : 4;
 
-  // Cuando toda la cartelera comparte cinturón —como en este episodio, cuatro
-  // morados— eso es titular. Si algún episodio mezcla rangos, el pie lo dice
-  // sin mentir en vez de inventarse un cinturón común.
-  const sharedBelt = FIGHTERS.every((fighter) => fighter.belt === FIGHTERS[0].belt)
-    ? belts[FIGHTERS[0].belt]
-    : null;
+  // Lo que comparten los cuatro es el titular del pie: en este episodio, mismo
+  // cinturón y misma academia. Si algún episodio mezcla rangos o gyms, el dato
+  // que dejó de ser común desaparece del pie en vez de convertirse en mentira.
+  const shared = <T,>(pick: (fighter: (typeof FIGHTERS)[number]) => T): T | null => {
+    const first = pick(FIGHTERS[0]);
+    return FIGHTERS.every((fighter) => pick(fighter) === first) ? first : null;
+  };
+
+  const sharedBelt = shared((fighter) => fighter.belt);
+  const sharedAcademy = shared((fighter) => fighter.academy);
+
+  const footer = [
+    sharedBelt || sharedAcademy ? `Los ${FIGHTERS.length}` : `${FIGHTERS.length} en el tatami`,
+    sharedBelt ? `Cinturón ${belts[sharedBelt].label}` : null,
+    sharedAcademy,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <SceneShell
@@ -84,10 +96,8 @@ export const Cartelera: React.FC = () => {
       </div>
 
       <div style={{ ...riseIn(frame, { delay: 16 + FIGHTERS.length * STAGGER + 10, duration: 16 }) }}>
-        <Chip color={sharedBelt ? sharedBelt.color : colors.primary} size={2}>
-          {sharedBelt
-            ? `Los ${FIGHTERS.length} · Cinturón ${sharedBelt.label}`
-            : `${FIGHTERS.length} en el tatami`}
+        <Chip color={sharedBelt ? belts[sharedBelt].color : colors.primary} size={2}>
+          {footer}
         </Chip>
       </div>
     </SceneShell>
