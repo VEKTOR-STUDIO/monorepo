@@ -39,7 +39,7 @@ export const EPISODE = {
 
 /** Los cuatro que se suben al tatami, en orden de cartelera. */
 export const FIGHTERS: Fighter[] = [
-  { slot: 1, name: "Kleider Sandoval", belt: "purple", academy: "Elite Jiujitsu" },
+  { slot: 1, name: "Kleider Sandoval", belt: "brown", academy: "Elite Jiujitsu" },
   { slot: 2, name: "Kevin Medina", belt: "purple", academy: "Elite Jiujitsu" },
   { slot: 3, name: "Anderson Peña", belt: "purple", academy: "Elite Jiujitsu" },
   { slot: 4, name: "Felipe Chang", belt: "purple", academy: "Elite Jiujitsu" },

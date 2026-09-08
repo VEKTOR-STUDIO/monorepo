@@ -18,6 +18,12 @@ export type CaosCardProps = {
   footer?: React.ReactNode;
   /** El tier 3 respira: aura que late (`.caos-brutal`). */
   brutal?: boolean;
+  /**
+   * Tamaño del nombre en unidades de escenario. Se baja cuando el nombre es
+   * largo —un peleador con dos apellidos, por ejemplo— igual que hace la app
+   * en la story de lineup con su helper `nameSize()`.
+   */
+  nameSize?: number;
   width?: number | string;
   style?: React.CSSProperties;
 };
@@ -34,6 +40,7 @@ export const CaosCard: React.FC<CaosCardProps> = ({
   rule,
   footer,
   brutal = false,
+  nameSize = 6.4,
   width = "100%",
   style,
 }) => {
@@ -78,7 +85,7 @@ export const CaosCard: React.FC<CaosCardProps> = ({
             marginTop: u * 1.1,
             fontFamily: fonts.display,
             textTransform: "uppercase",
-            fontSize: u * 6.4,
+            fontSize: u * nameSize,
             lineHeight: 0.9,
             letterSpacing: "-0.01em",
             color: colors.baseContent,

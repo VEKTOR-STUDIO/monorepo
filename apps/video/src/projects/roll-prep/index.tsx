@@ -8,6 +8,8 @@ import {
 } from "./videos/competidores/timeline";
 import { ModoCaos } from "./videos/modo-caos/ModoCaos";
 import { FPS, TOTAL } from "./videos/modo-caos/timeline";
+import { Recap } from "./videos/recap/Recap";
+import { FPS as RECAP_FPS, TOTAL as RECAP_TOTAL } from "./videos/recap/timeline";
 
 // Carga las tipografías de marca en cuanto se monta el proyecto.
 import "./fonts";
@@ -55,6 +57,24 @@ const Compositions: React.FC = () => (
       component={Competidores}
       durationInFrames={COMPETIDORES_TOTAL}
       fps={COMPETIDORES_FPS}
+      width={1920}
+      height={1080}
+    />
+
+    <Composition
+      id="recap-ep01-vertical"
+      component={Recap}
+      durationInFrames={RECAP_TOTAL}
+      fps={RECAP_FPS}
+      width={1080}
+      height={1920}
+    />
+
+    <Composition
+      id="recap-ep01-wide"
+      component={Recap}
+      durationInFrames={RECAP_TOTAL}
+      fps={RECAP_FPS}
       width={1920}
       height={1080}
     />

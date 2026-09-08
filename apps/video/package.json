@@ -13,6 +13,8 @@
     "render:caos-wide": "remotion render caos-wide out/roll-prep-modo-caos-wide.mp4",
     "render:ep02": "remotion render competidores-ep02-vertical out/roll-prep-competidores-ep02-vertical.mp4",
     "render:ep02-wide": "remotion render competidores-ep02-wide out/roll-prep-competidores-ep02-wide.mp4",
+    "render:recap": "remotion render recap-ep01-vertical out/roll-prep-recap-ep01-vertical.mp4",
+    "render:recap-wide": "remotion render recap-ep01-wide out/roll-prep-recap-ep01-wide.mp4",
     "clean": "rm -rf dist out node_modules"
   },
   "dependencies": {

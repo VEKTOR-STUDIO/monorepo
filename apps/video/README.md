@@ -41,10 +41,15 @@ apps/video/
                 │   ├── timeline.ts    ← duración de cada escena
                 │   ├── content.ts     ← todo el copy y las cifras
                 │   └── scenes/        ← una escena por archivo
-                └── competidores/      ← la cartelera, un episodio por vez
-                    ├── Competidores.tsx
+                ├── competidores/      ← la cartelera, un episodio por vez
+                │   ├── Competidores.tsx
+                │   ├── timeline.ts
+                │   ├── content.ts     ← LOS NOMBRES DEL EPISODIO
+                │   └── scenes/
+                └── recap/             ← cómo terminó el torneo anterior
+                    ├── Recap.tsx
                     ├── timeline.ts
-                    ├── content.ts     ← LOS NOMBRES DEL EPISODIO
+                    ├── content.ts     ← CARTAS, RESULTADOS Y RANKING
                     └── scenes/
 ```
 
@@ -149,6 +154,37 @@ recoloca el video entero solo.
 Los cinturones salen de `theme.ts` (`belts`), con los mismos hex que
 `libs/gamification.js`. Ojo con el nombre: la app lista el morado como
 *Violeta*; en pantalla se lee **Morado**, que es como se dice en el gym.
+
+### RollPrep · Recap (Episodio 01)
+
+Cómo terminó el torneo anterior: una escena por pelea —terreno, la carta
+partida en sus dos mitades y el resultado— y el tablero final en Puntos de
+CAOS. 42 s.
+
+| Composición | Formato | Para qué |
+| --- | --- | --- |
+| `recap-ep01-vertical` | 1080×1920 | Stories, reels |
+| `recap-ep01-wide` | 1920×1080 | Pantalla del gym, YouTube |
+
+```bash
+pnpm --filter @alessandrovaru/video run render:recap        # vertical
+pnpm --filter @alessandrovaru/video run render:recap-wide   # horizontal
+```
+
+**El copy de las cartas no se inventa.** Terrenos, duelos, mitades, arranques y
+niveles están copiados literalmente de `apps/clients/roll-prep/libs/caos.js`
+(`TERRAINS`, el mazo de duelos y `TIER_LABELS`). Lo único que aporta
+`content.ts` es qué salió en cada pelea, quién ganó y cómo quedó el ranking —
+ese último con las mismas cifras que `caos_leaderboard` pinta en
+`app/dashboard/ranking/caos`.
+
+**El resultado se canta al final, nunca antes.** Primero el terreno, después
+las dos mitades, y solo entonces el ganador: contar el resultado antes que las
+cartas sería contar el partido por el marcador. La carta que pierde se apaga
+en vez de desaparecer, para que se siga leyendo de qué lado le tocó a cada uno.
+
+Una escena por pelea sale de `MATCHES`: un torneo de ocho combates se recorta
+solo desde `content.ts` sin tocar el montaje.
 
 ---
 
