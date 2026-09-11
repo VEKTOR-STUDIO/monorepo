@@ -5,7 +5,7 @@ import config from "@/config";
 export const dynamic = "force-dynamic";
 
 // -----------------------------------------------------------------------------
-// Vuelta del login (Google, confirmación de correo, recuperar contraseña).
+// Vuelta del login (Google y enlace mágico por correo).
 // Canjea el código por una sesión y manda a cada quien a su sitio:
 //   entrenador -> /admin      alumno -> /dashboard (o la página que pedía)
 // -----------------------------------------------------------------------------
