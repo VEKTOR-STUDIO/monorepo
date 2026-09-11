@@ -70,6 +70,7 @@ const DEMO_WORKOUTS = {
         {
           id: "demo-e1",
           name: "Sentadilla goblet",
+          animation_slug: "goblet-squat",
           description: "Pecho arriba, rodillas siguen la punta del pie, baja controlado.",
           sets: 3,
           reps: "10-12",
@@ -80,6 +81,7 @@ const DEMO_WORKOUTS = {
         {
           id: "demo-e2",
           name: "Flexiones",
+          animation_slug: "push-up",
           description: "Cuerpo en línea, codos a ~45°.",
           sets: 3,
           reps: "8-12",
@@ -90,6 +92,7 @@ const DEMO_WORKOUTS = {
         {
           id: "demo-e3",
           name: "Remo con banda",
+          animation_slug: "banded-row",
           description: "Escápulas atrás y abajo, sin balanceo.",
           sets: 3,
           reps: "12-15",
@@ -100,6 +103,7 @@ const DEMO_WORKOUTS = {
         {
           id: "demo-e4",
           name: "Plancha",
+          animation_slug: "plank",
           description: "Glúteos y abdomen activos, cadera neutra.",
           sets: 3,
           reps: "30-45 s",
@@ -212,7 +216,7 @@ export async function getProgramBySlug(slug) {
     const { data: workouts } = await supabase
       .from("workouts")
       .select(
-        "id, title, description, week_number, day_number, focus, duration_minutes, sort_order, exercises(id, name, description, sets, reps, rest_seconds, tempo, video_url, sort_order)"
+        "id, title, description, week_number, day_number, focus, duration_minutes, sort_order, exercises(id, name, description, sets, reps, rest_seconds, tempo, video_url, animation_slug, sort_order)"
       )
       .eq("program_id", program.id)
       .eq("is_published", true)

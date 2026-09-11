@@ -49,11 +49,13 @@ const Header = () => {
     }
   }, [isOpen]);
 
+  // El CTA lleva al área privada. Si no hay sesión, el middleware manda a
+  // /signin y luego devuelve al alumno aquí mismo.
   const cta = (
     <Link
-      href="/entrenamientos"
+      href="/dashboard"
       className="btn btn-primary btn-sm md:btn-md"
-      title="Ver entrenamientos"
+      title="Entrar al área de atletas"
     >
       Área atletas
     </Link>

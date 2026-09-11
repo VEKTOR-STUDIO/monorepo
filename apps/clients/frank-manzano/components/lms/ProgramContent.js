@@ -2,13 +2,18 @@
 
 import { useMemo, useState } from "react";
 import VideoPlayer from "@/components/lms/VideoPlayer";
+import ExerciseFigure from "@/components/training/ExerciseFigure";
 
+// Muestra el video del ejercicio si lo tiene y, si no, su animación: así
+// ningún ejercicio se queda sin una demostración visual.
 const ProgramContent = ({ workouts = [] }) => {
-  // Primer ejercicio con video, para arrancar el reproductor.
+  // Primer ejercicio que se pueda enseñar (video o animación).
   const firstPlayable = useMemo(() => {
     for (const w of workouts) {
-      const ex = (w.exercises || []).find((e) => e.video_url);
-      if (ex) return { url: ex.video_url, title: ex.name };
+      const ex = (w.exercises || []).find((e) => e.video_url || e.animation_slug);
+      if (ex) {
+        return { url: ex.video_url, slug: ex.animation_slug, title: ex.name };
+      }
     }
     return null;
   }, [workouts]);
@@ -31,14 +36,20 @@ const ProgramContent = ({ workouts = [] }) => {
         <div className="lg:sticky lg:top-24">
           {active ? (
             <>
-              <VideoPlayer url={active.url} title={active.title} />
+              {active.url ? (
+                <VideoPlayer url={active.url} title={active.title} />
+              ) : (
+                <div className="mx-auto max-w-sm rounded-md border border-base-300 bg-base-200">
+                  <ExerciseFigure slug={active.slug} name={active.title} speed={600} />
+                </div>
+              )}
               <p className="mt-3 text-sm font-medium text-base-content">
                 {active.title}
               </p>
             </>
           ) : (
             <div className="flex aspect-video w-full items-center justify-center rounded-md border border-base-300 bg-base-200 text-sm text-base-content/40">
-              Selecciona un ejercicio para ver su video
+              Selecciona un ejercicio para verlo
             </div>
           )}
         </div>
@@ -95,43 +106,55 @@ const ProgramContent = ({ workouts = [] }) => {
                   ) : (
                     <ul className="divide-y divide-base-200">
                       {w.exercises.map((ex) => {
-                        const isActive =
-                          active?.url === ex.video_url && active?.title === ex.name;
+                        const playable = Boolean(ex.video_url || ex.animation_slug);
+                        const isActive = active?.title === ex.name;
                         return (
                           <li key={ex.id}>
                             <button
                               type="button"
-                              disabled={!ex.video_url}
+                              disabled={!playable}
                               onClick={() =>
-                                ex.video_url &&
-                                setActive({ url: ex.video_url, title: ex.name })
+                                playable &&
+                                setActive({
+                                  url: ex.video_url,
+                                  slug: ex.animation_slug,
+                                  title: ex.name,
+                                })
                               }
                               className={`flex w-full items-start gap-3 p-4 text-left transition-colors ${
-                                ex.video_url
-                                  ? "hover:bg-base-200/60"
-                                  : "cursor-default"
+                                playable ? "hover:bg-base-200/60" : "cursor-default"
                               } ${isActive ? "bg-primary/5" : ""}`}
                             >
-                              <span
-                                className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border text-xs ${
-                                  ex.video_url
-                                    ? "border-primary/40 text-primary"
-                                    : "border-base-300 text-base-content/30"
-                                }`}
-                              >
-                                {ex.video_url ? (
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-4 w-4"
-                                    viewBox="0 0 24 24"
-                                    fill="currentColor"
-                                  >
-                                    <path d="M8 5v14l11-7z" />
-                                  </svg>
-                                ) : (
-                                  "—"
-                                )}
-                              </span>
+                              {ex.animation_slug ? (
+                                <span className="mt-0.5 h-9 w-9 shrink-0 overflow-hidden rounded-md border border-base-300">
+                                  <ExerciseFigure
+                                    slug={ex.animation_slug}
+                                    name={ex.name}
+                                    playing={isActive}
+                                  />
+                                </span>
+                              ) : (
+                                <span
+                                  className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md border text-xs ${
+                                    ex.video_url
+                                      ? "border-primary/40 text-primary"
+                                      : "border-base-300 text-base-content/30"
+                                  }`}
+                                >
+                                  {ex.video_url ? (
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-4 w-4"
+                                      viewBox="0 0 24 24"
+                                      fill="currentColor"
+                                    >
+                                      <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                  ) : (
+                                    "—"
+                                  )}
+                                </span>
+                              )}
                               <span className="flex-1">
                                 <span className="block text-sm font-medium text-base-content">
                                   {ex.name}

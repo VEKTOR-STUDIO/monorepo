@@ -34,7 +34,7 @@ Un solo eje de permisos en `public.profiles.role`:
   del admin automáticamente.
 
 > Todo esto ya queda creado por la migración
-> `supabase/migrations/20260715110000_create_base_auth_and_disciplines.sql`.
+> `supabase/migrations/20260911100000_esquema_completo.sql`.
 
 ---
 
@@ -53,13 +53,14 @@ Ya existe la infraestructura de Supabase Auth:
    y añadir la Redirect URL `https://<tu-dominio>/api/auth/callback`.
 2. Variables en `.env.local`: `NEXT_PUBLIC_SUPABASE_URL`,
    `NEXT_PUBLIC_SUPABASE_ANON_KEY` (o publishable key).
-3. Cambiar el correo del admin en la migración (`ADMIN EMAIL`) antes de aplicarla.
+3. Cambiar el correo del admin en la migración (busca
+   `>>> CAMBIA ESTE CORREO POR EL DE FRANK <<<`) antes de aplicarla.
 
 ---
 
 ## 4. Modelo de contenido (lo que administra el admin)
 
-Ya está definido en `20260715120000_create_lms_training_tables.sql`:
+Ya está definido en `20260911100000_esquema_completo.sql`:
 
 ```
 programs ─< workouts ─< exercises        videos (biblioteca suelta)
@@ -67,7 +68,9 @@ disciplines (líneas de entrenamiento, landing)
 ```
 
 - **RLS de escritura** ya restringida a `is_admin()` en todas estas tablas.
-- **RLS de lectura**: hoy pública (`anon`) para permitir la demo sin login.
+- **RLS de lectura**: pública (`anon`) solo para los planes con `is_public = true`;
+  el resto, únicamente los alumnos a quienes se les asignó. Ver
+  [SISTEMA_ENTRENAMIENTO.md](./SISTEMA_ENTRENAMIENTO.md).
   Para cerrarla: cambiar `to anon, authenticated` → `to authenticated`
   (bloque 7 comentado de esa misma migración).
 

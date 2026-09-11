@@ -2,7 +2,17 @@
 
 Área de contenido para el entrenador (videos, rutinas y entrenamientos), construida sobre la base ShipFast + Supabase del proyecto.
 
-> **Fase actual: SIN login.** Todo el contenido publicado es visible sin iniciar sesión, pensado para la demo. El sistema ya está preparado para moverlo detrás de login cuando quieras (ver la sección final).
+> ⚠️ **Documento parcialmente superado.** Describe el catálogo público
+> (`/entrenamientos`), que sigue funcionando igual. El sistema de entrenamiento
+> real —planes por alumno, registro de sesiones, gamificación y panel del
+> entrenador— está documentado en **[SISTEMA_ENTRENAMIENTO.md](./SISTEMA_ENTRENAMIENTO.md)**.
+>
+> **Lo que cambió respecto a lo que dice más abajo:**
+> - Los planes ahora nacen **privados**. Solo salen en el catálogo público los
+>   que tienen `is_public = true` (los 3 de ejemplo lo tienen).
+> - El área de atletas (`/dashboard`) y el panel del entrenador (`/admin`) exigen
+>   sesión iniciada.
+> - Los ejercicios tienen `animation_slug`: se ven animados sin necesidad de video.
 
 ---
 
@@ -26,7 +36,7 @@ components/lms/VideoPlayer.js            # Reproductor YouTube/Vimeo/mp4 (client
 components/lms/VideoLibrary.js           # Biblioteca de video (client)
 libs/lms.js                              # Capa de datos (lee Supabase, con fallback demo)
 libs/lms-utils.js                        # Helpers puros (embed de video, formato, labels)
-supabase/migrations/20260715120000_create_lms_training_tables.sql
+supabase/migrations/20260911100000_esquema_completo.sql
 ```
 
 **Importante:** si Supabase no tiene datos aún (o la migración no se ha aplicado), las páginas muestran **contenido demo** automáticamente, así la prueba funciona igual.
@@ -63,7 +73,7 @@ supabase db push
 ```
 
 **Opción B — SQL Editor del dashboard:**
-Copia el contenido de `supabase/migrations/20260715120000_create_lms_training_tables.sql` y ejecútalo en el SQL Editor del proyecto.
+Copia el contenido de `supabase/migrations/20260911100000_esquema_completo.sql` y ejecútalo en el SQL Editor del proyecto.
 
 La migración:
 - Crea las 4 tablas, índices y triggers `updated_at`.

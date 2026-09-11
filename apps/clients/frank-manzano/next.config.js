@@ -22,6 +22,16 @@ const nextConfig = {
         protocol: "https",
         hostname: "placehold.co",
       },
+      {
+        // Avatares por defecto (iniciales) de los alumnos.
+        protocol: "https",
+        hostname: "api.dicebear.com",
+      },
+      {
+        // Animaciones de ejercicios de @bryllim/workout-guide.
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
+      },
     ],
   },
   turbopack: {

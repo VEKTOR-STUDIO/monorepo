@@ -8,7 +8,12 @@ export async function updateSession(request) {
 
   // Landing only: no Supabase; redirect signin/dashboard to /
   if (LANDING_ONLY) {
-    if (pathname.startsWith("/signin") || pathname.startsWith("/signup") || pathname.startsWith("/dashboard")) {
+    if (
+      pathname.startsWith("/signin") ||
+      pathname.startsWith("/signup") ||
+      pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/admin")
+    ) {
       return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next({ request });
@@ -51,8 +56,11 @@ export async function updateSession(request) {
   // refreshing the auth token
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Rutas protegidas que requieren autenticación
-  const protectedRoutes = ['/dashboard'];
+  // Rutas protegidas que requieren autenticación.
+  // El área de atletas y el panel del entrenador viven detrás del login.
+  // Que /admin sea SOLO para el entrenador se comprueba en app/admin/layout.js,
+  // donde ya podemos leer el rol sin pagar una consulta en cada petición.
+  const protectedRoutes = ['/dashboard', '/admin'];
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
   // Rutas de autenticación (login/signup)

@@ -4,17 +4,57 @@ import config from "@/config";
 
 export const dynamic = "force-dynamic";
 
-// This route is called after a successful login. It exchanges the code for a session and redirects to the callback URL (see config.js).
+// -----------------------------------------------------------------------------
+// Vuelta del login (Google, confirmación de correo, recuperar contraseña).
+// Canjea el código por una sesión y manda a cada quien a su sitio:
+//   entrenador -> /admin      alumno -> /dashboard (o la página que pedía)
+// -----------------------------------------------------------------------------
 export async function GET(req) {
   const requestUrl = new URL(req.url);
+  const origin = requestUrl.origin;
   const code = requestUrl.searchParams.get("code");
+  const next = requestUrl.searchParams.get("next");
+  const authError = requestUrl.searchParams.get("error_description");
 
-  if (code) {
-    const supabase = await createClient();
-    await supabase.auth.exchangeCodeForSession(code);
+  if (authError) {
+    return NextResponse.redirect(
+      `${origin}/signin?error=${encodeURIComponent(authError)}`
+    );
   }
 
-  // URL to redirect to after sign in process completes
-  // Use site URL from config (respects development vs production)
-  return NextResponse.redirect(config.siteUrl + config.auth.callbackUrl);
+  if (!code) {
+    return NextResponse.redirect(`${origin}${config.auth.loginUrl}`);
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+  if (error) {
+    return NextResponse.redirect(
+      `${origin}/signin?error=${encodeURIComponent(error.message)}`
+    );
+  }
+
+  // Si el alumno pidió una página concreta antes de entrar, respetarla.
+  if (next && next.startsWith("/")) {
+    return NextResponse.redirect(`${origin}${next}`);
+  }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profile?.role === "admin") {
+      return NextResponse.redirect(`${origin}/admin`);
+    }
+  }
+
+  return NextResponse.redirect(`${origin}${config.auth.callbackUrl}`);
 }
