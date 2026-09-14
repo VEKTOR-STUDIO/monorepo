@@ -173,3 +173,58 @@ progress::-webkit-progress-value {
   -webkit-text-stroke: 1.5px color-mix(in oklch, var(--color-base-content) 22%, transparent);
   color: transparent;
 }
+
+/* ------------------ Fondo del hero (póster, sin video) ------------- */
+
+/* Rayas diagonales finas: la textura la pone el CSS, no un mp4. */
+.hero-stripes {
+  background-image: repeating-linear-gradient(
+    115deg,
+    color-mix(in oklch, var(--color-base-content) 7%, transparent) 0 1px,
+    transparent 1px 18px
+  );
+}
+
+/* Rejilla editorial: cuatro columnas marcadas, como una portada impresa. */
+.hero-grid {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in oklch, var(--color-base-content) 8%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 25% 100%;
+}
+
+/* Resplandor de marca arriba a la derecha. */
+.hero-glow {
+  background: radial-gradient(
+    55% 50% at 78% 12%,
+    color-mix(in oklch, var(--color-primary) 40%, transparent),
+    transparent 70%
+  );
+}
+
+/* Cuña diagonal roja, como la franja de un dorsal. */
+.hero-wedge {
+  clip-path: polygon(70% 0, 100% 0, 100% 100%, 38% 100%);
+}
+
+/* Bloque inclinado para resaltar una palabra del titular. */
+.slash-block {
+  display: inline-block;
+  background: var(--color-primary);
+  color: var(--color-primary-content);
+  transform: skewX(-8deg);
+  padding: 0.04em 0.3em 0.12em;
+  line-height: 1;
+}
+
+.slash-block > * {
+  display: inline-block;
+  transform: skewX(8deg);
+}
+
+/* Etiqueta girada en el borde, tipo lateral de camiseta. */
+.vertical-label {
+  writing-mode: vertical-rl;
+}
