@@ -135,6 +135,10 @@ export const TIER_ODDS_LABELS = Object.fromEntries(
 
 // ----------------------------------------------------------------------------
 // TERRENOS — regla de arena, igual para los dos. Nunca define el arranque.
+//
+// `rule` es lo que el árbitro lee en voz alta (ceremonia, flyer, correo).
+// `explain` es el códice del manual: qué cuenta, qué no, y qué pasa si se
+// rompe. No se imprime en el roleo.
 // ----------------------------------------------------------------------------
 export const TERRAINS = [
   // ---- Sirven con o sin kimono --------------------------------------------
