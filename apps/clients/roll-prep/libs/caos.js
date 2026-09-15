@@ -143,60 +143,80 @@ export const TERRAINS = [
     outfit: "both",
     name: "Muerte Súbita",
     rule: "No hay puntos. Solo la sumisión decide. Si nadie finaliza, gana quien haya tenido la última posición dominante.",
+    explain:
+      "El marcador no existe. Barrer, pasar y montar no suman. La pelea se gana finalizando; si suena el tiempo sin tap, gana quien haya tenido la última posición dominante — montada, espalda, cien kilos, rodilla en la barriga: lo que el árbitro reconozca como control. Un scramble o una ventaja no alcanzan. Si nadie dominó, lo decide el árbitro.",
   },
   {
     key: "esquina_caliente",
     outfit: "both",
     name: "Esquina Caliente",
     rule: "El área se reduce a la mitad del tatami. Salirse = reinicio de pie y una ventaja para el rival.",
+    explain:
+      "Pelean en la mitad del tatami. Pie, rodilla o espalda fuera para la pelea: reinicio de pie y una ventaja para el rival. Empujar al otro hacia afuera también cuenta — te sales tú, pagas tú. El duelo dice cómo arrancan la primera vez; cada salida los vuelve a poner de pie, sin borrar el marcador. Quien empuje al borde a vivir, va a pagar el borde.",
   },
   {
     key: "reloj_roto",
     outfit: "both",
     name: "Reloj Roto",
     rule: "Tres minutos, sin prórroga. Si terminan empatados, gana el que arrancó en la posición peor.",
+    explain:
+      "El reloj es corto y no se estira. Tres minutos y se acabó: sin overlay, sin minuto extra. Si hay tap o un ganador claro por puntos, ese gana. Si empatan, gana quien arrancó peor — el lado de la carga, o los dos igual si el duelo era neutro. Quien tiene la ventaja tiene que usarla ya; quien carga, tiene tres minutos para remontar o para que el empate le dé la pelea.",
   },
   {
     key: "tierra_de_piernas",
     outfit: "both",
     name: "Tierra de Piernas",
     rule: "Las sumisiones a las piernas valen doble. Las estrangulaciones no terminan la pelea, solo dan ventaja.",
+    explain:
+      "Hay que cazar piernas. Un heel hook, un kneebar, un toe hold o un calf slicer, si finalizan, ganan la pelea y esa sumisión vale doble. Un triángulo, un D'arce, un mata león o cualquier estrangulación no termina: el árbitro marca ventaja y sigue. Un armlock sigue valiendo normal. Enganchar la pierna no basta — hay que finalizar de verdad. No es Zona de Talones: aquí sí se busca el tap, no el enganche.",
   },
   {
     key: "suelo_de_lava",
     outfit: "both",
     name: "Suelo de Lava",
     rule: "Nadie puede quedarse de espaldas más de cinco segundos. Al sexto, ventaja para el rival.",
+    explain:
+      "Quedarse plano de espaldas quema. Cinco segundos es el tope; al sexto, ventaja para el rival y hay que salir de ahí — a la cadera, a la tortuga, a recomponer. El conteo es del árbitro. Estar de espaldas mientras te montan o te pasan también cuenta: el suelo está caliente para los dos. No termina la pelea; solo paga ventajas si te quedas. Guardia cerrada de espaldas no es refugio.",
   },
   {
     key: "aire_viciado",
     outfit: "both",
     name: "Aire Viciado",
     rule: "Cada sesenta segundos suena el silbato: los dos se sueltan y reinician de pie desde cero.",
+    explain:
+      "El control no se guarda. Cada minuto el silbato los para, se sueltan y vuelven de pie, agarres en cero. Da igual si ibas montado o con la espalda tomada: se pierde. Los puntos y las ventajas que ya se marcaron se quedan. El que estaba a un segundo del tap se quedó sin él. Hay que ganar en ráfagas, no sentándose arriba a esperar. El duelo solo manda el primer arranque; cada silbato vuelve a cero de pie.",
   },
   {
     key: "sin_retirada",
     outfit: "both",
     name: "Sin Retirada",
     rule: "Prohibido reiniciar de pie. Lo que empieza en el suelo se resuelve en el suelo.",
+    explain:
+      "Nadie se para para escapar y el árbitro no los pone de pie por estancar. Si el duelo arranca en el suelo, ahí se queda. Si arranca de pie, pueden derribar; en cuanto tocan el suelo, se resuelve abajo. Pararse para pedir espacio o para reiniciar es falta: el árbitro los baja otra vez. Un scramble que termina de pie lo lee el árbitro — si era escape, vuelven abajo. No hay salida vertical.",
   },
   {
     key: "mundo_al_reves",
     outfit: "both",
     name: "Mundo al Revés",
     rule: "Barrer vale 4, montar vale 2, pasar la guardia vale 1. Todo lo demás igual.",
+    explain:
+      "Los puntos se invierten. Un sweep vale 4, la montada vale 2, pasar la guardia vale 1. Derribo, espalda, rodilla en la barriga y las ventajas siguen como siempre. Abajo deja de ser el infierno: barrer paga más que montar. El de arriba no puede vivir de pasar y quedarse. El tap sigue terminando la pelea. Si el duelo ya te regaló puntos de montada, esos ya están; lo que viene se cuenta al revés.",
   },
   {
     key: "presion_total",
     outfit: "both",
     name: "Presión Total",
     rule: "Cada diez segundos seguidos en posición dominante suman un punto extra. Se acumula.",
+    explain:
+      "Quedarse arriba paga. Cada diez segundos seguidos en control dominante — montada, cien kilos, espalda, rodilla en la barriga — suman un punto extra, y se sigue sumando mientras no se rompa. Guardia no es dominante para nadie. Si el de abajo escapa, el conteo se corta; volver a entrar empieza de cero. Un hold de treinta segundos son tres puntos de presión, encima de lo que ya valía la posición. Estancar, aquí, es el plan.",
   },
   {
     key: "sin_manos",
     outfit: "both",
     name: "Manos de Piedra",
     rule: "Prohibido entrelazar los dedos y prohibido el gable grip. Todo control es con antebrazo, palma abierta y presión.",
+    explain:
+      "No hay candado de manos. Ni dedos cruzados, ni gable grip, ni el cierre de palma contra palma para hacer palanca. Se controla con antebrazo, palma abierta, muñeca y presión. Un collar tie, un underhook o un body lock sin cerrar las manos, sí. Si cierras, sueltas; la sanción la decide el árbitro. No es Cuerpo a Cuerpo: aquí sí puedes agarrar tela. Lo que no puedes es cerrar.",
   },
 
   // ---- Solo GI -------------------------------------------------------------
@@ -205,18 +225,24 @@ export const TERRAINS = [
     outfit: "gi",
     name: "Tatami Resbaloso",
     rule: "Prohibido agarrar solapa, manga y cinturón. Se pelea como si fuera no-gi, aunque estén de kimono.",
+    explain:
+      "Van de gi, pero el kimono no se usa. Solapa, manga y cinturón están vetados para los dos. Se pelea a cuerpo: underhooks, cabeza, cadera, piernas. El pantalón no está en la lista; si alguien se cuelga de él, lo decide el árbitro. La intención de la carta es clara — pelear como no-gi, aunque vistan kimono. Quien se cuelgue de la solapa, suelta.",
   },
   {
     key: "guerra_de_solapas",
     outfit: "gi",
     name: "Guerra de Solapas",
     rule: "Solo valen agarres de solapa y cinturón. Manga y pantalón prohibidos, para los dos.",
+    explain:
+      "Al revés del Tatami Resbaloso. La pelea vive en la solapa y el cinturón. Manga y pantalón no se tocan. Collar choke, belt grip, guardia de solapa: lo que salga de tela alta. Spider, sleeve guard o agarrar el pantalón para pasar, no. Si agarras manga o pantalón, sueltas. Es una guerra de cuello y cadera, no de extremidades. Lo que no esté en la carta, lo decide el árbitro.",
   },
   {
     key: "cuello_abierto",
     outfit: "gi",
     name: "Cuello Abierto",
     rule: "Las estrangulaciones con solapa valen doble. Todo lo demás puntúa normal.",
+    explain:
+      "El cuello con tela paga más. Un collar choke, un loop choke, un bow and arrow — cualquier estrangulación que use la solapa — vale doble. Un mata león sin tela, una guillotina, un armlock o un sweep puntúan como siempre. La solapa tiene que estar haciendo el trabajo, no de adorno. Si el tap llega, llega; el doble es para que cazar el cuello con kimono sea el camino que más paga.",
   },
 
   // ---- Solo NO-GI ----------------------------------------------------------
@@ -225,18 +251,24 @@ export const TERRAINS = [
     outfit: "nogi",
     name: "Piel de Anguila",
     rule: "Nadie puede mantener la misma posición de control más de quince segundos. Al dieciséis, reinicio neutro de pie.",
+    explain:
+      "El control se caduca. Quince segundos en la misma montada, el mismo cien kilos o la misma espalda, y al dieciséis el árbitro los para y los pone de pie, neutros. Cambiar de montada a espalda reinicia el conteo: es otra posición. Un hold que no avanza se rompe. Los puntos ya marcados se quedan. No puedes ganar sentándote arriba a esperar el reloj. Hay que avanzar o soltar.",
   },
   {
     key: "zona_de_talones",
     outfit: "nogi",
     name: "Zona de Talones",
     rule: "Se abren todos los leglocks. Se para al enganchar limpio: nadie rota, y el enganche cuenta como sumisión.",
+    explain:
+      "Todos los leglocks están legales, incluso los que el gym normalmente cierra. En cuanto hay un enganche limpio — ashi cerrado, talón expuesto, la pierna atrapada sin escape claro — el árbitro para. Nadie rota para salir: rotar aquí es cómo se rompe la rodilla. El enganche ya cuenta como tap. No hay que romper. Un scramble de piernas que no cierra no basta. No es Tierra de Piernas: aquí no se busca el crank, se busca el enganche.",
   },
   {
     key: "cuerpo_a_cuerpo",
     outfit: "nogi",
     name: "Cuerpo a Cuerpo",
     rule: "Prohibido agarrar el short y la rashguard. Todo el control sale de cabeza, cadera y presión.",
+    explain:
+      "En no-gi normal sí puedes tomar el short o la rashguard. Aquí no. La tela no existe. El control sale de cabeza, cadera y presión: underhook, body lock, collar tie, hombro en la cara. Agarrar piel, muñeca, nuca o la pierna — la persona, no el short — sí vale. Un triángulo o un nudo de piernas es cuerpo, no ropa. Si ya tienes el short o la rashguard en la mano, sueltas. Eso no es punto: es falta. La sanción la decide el árbitro.",
   },
 ];
 

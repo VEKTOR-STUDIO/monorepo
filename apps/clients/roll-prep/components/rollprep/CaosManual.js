@@ -171,26 +171,32 @@ export default function CaosManual() {
         <SectionTitle index="04" title="Terrenos" />
         <p className="text-sm font-medium opacity-70">
           Aplican a los dos peleadores por igual. Nunca cambian la posición de
-          arranque — de eso se encarga el duelo.
+          arranque — de eso se encarga el duelo. La primera línea es lo que el
+          árbitro lee; debajo, cómo se pelea.
         </p>
 
-        <div className="grid gap-2 md:grid-cols-2">
+        <div className="grid gap-3">
           {deck.terrains.map((terrain) => (
             <div
               key={terrain.key}
               className="caos-card caos-card-neutro h-full"
             >
               <div className="caos-tier-bar text-secondary" />
-              <div className="stripes p-3">
+              <div className="stripes p-4">
                 <div className="flex items-start justify-between gap-2">
                   <p className="caos-title text-xl">{terrain.name}</p>
                   {terrain.outfit !== "both" && (
                     <ExclusiveTag outfit={terrain.outfit} />
                   )}
                 </div>
-                <p className="mt-1.5 text-xs font-medium opacity-80">
+                <p className="mt-2 text-sm font-semibold leading-snug opacity-90">
                   {terrain.rule}
                 </p>
+                {terrain.explain && (
+                  <p className="mt-2 text-sm font-medium leading-relaxed opacity-70">
+                    {terrain.explain}
+                  </p>
+                )}
               </div>
             </div>
           ))}
