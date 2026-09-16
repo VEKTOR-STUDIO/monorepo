@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tema "frank" — inspirado en Nike / deporte de combate:            */
+/* negro profundo + rojo eléctrico + blanco.                          */
+/* Para cambiar el color de marca, ajusta --color-primary aquí y      */
+/* config.colors.main en config.js.                                   */
+/* ------------------------------------------------------------------ */
+@plugin "daisyui/theme" {
+  name: "frank";
+  default: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(14% 0.006 25);
+  --color-base-200: oklch(18% 0.008 25);
+  --color-base-300: oklch(26% 0.01 25);
+  --color-base-content: oklch(96% 0.004 90);
+
+  --color-primary: oklch(60% 0.238 25);
+  --color-primary-content: oklch(98% 0 0);
+
+  --color-secondary: oklch(98% 0 0);
+  --color-secondary-content: oklch(14% 0.006 25);
+
+  --color-accent: oklch(78% 0.17 60);
+  --color-accent-content: oklch(14% 0.006 25);
+
+  --color-neutral: oklch(22% 0.008 25);
+  --color-neutral-content: oklch(96% 0.004 90);
+
+  --color-info: oklch(74% 0.16 232);
+  --color-info-content: oklch(13% 0.004 270);
+  --color-success: oklch(84% 0.21 145);
+  --color-success-content: oklch(13% 0.004 270);
+  --color-warning: oklch(85% 0.17 85);
+  --color-warning-content: oklch(13% 0.004 270);
+  --color-error: oklch(63% 0.24 27);
+  --color-error-content: oklch(98% 0 0);
+
+  --radius-selector: 0.125rem;
+  --radius-field: 0.125rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-display: var(--font-anton), "Impact", "Haettenschweiler", sans-serif;
+  --font-sans: var(--font-barlow), "Helvetica Neue", Arial, sans-serif;
+  --color-ink: oklch(14% 0.006 25);
+
+  --animate-shimmer: shimmer 3s ease-out infinite alternate;
+
+  @keyframes shimmer {
+    0% {
+      background-position: 0 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+}
+
+progress::-webkit-progress-value {
+  transition: 0.6s width ease-out;
+}
+
+/* --------------------------- Utilidades Nike ---------------------- */
+
+/* Titulares tipo póster: condensados, mayúsculas, apretados. */
+.display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
+  font-weight: 400;
+}
+
+/* Etiqueta inclinada estilo dorsal / swoosh. */
+.tag-skew {
+  display: inline-block;
+  transform: skewX(-12deg);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.tag-skew > * {
+  display: inline-block;
+  transform: skewX(12deg);
+}
+
+/* Botones: mayúsculas, sin curvas suaves, con pegada. */
+.btn {
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em;
+  font-weight: 800;
+}
+
+/* Cinta en movimiento (marquee) para la landing. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 22s linear infinite;
+}
+
+/* Entradas con revelado escalonado. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.rise-1 { animation-delay: 0.05s; }
+.rise-2 { animation-delay: 0.15s; }
+.rise-3 { animation-delay: 0.25s; }
+.rise-4 { animation-delay: 0.35s; }
+.rise-5 { animation-delay: 0.45s; }
+
+/* Textura sutil de ruido para dar atmósfera al fondo. */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* Texto contorneado (outline) para números / palabras gigantes de fondo. */
+.text-stroke {
+  -webkit-text-stroke: 1.5px color-mix(in oklch, var(--color-base-content) 22%, transparent);
+  color: transparent;
+}
+
+/* ------------------ Fondo del hero (póster, sin video) ------------- */
+
+/* Rayas diagonales finas: la textura la pone el CSS, no un mp4. */
+.hero-stripes {
+  background-image: repeating-linear-gradient(
+    115deg,
+    color-mix(in oklch, var(--color-base-content) 7%, transparent) 0 1px,
+    transparent 1px 18px
+  );
+}
+
+/* Rejilla editorial: cuatro columnas marcadas, como una portada impresa. */
+.hero-grid {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in oklch, var(--color-base-content) 8%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 25% 100%;
+}
+
+/* Resplandor de marca arriba a la derecha. */
+.hero-glow {
+  background: radial-gradient(
+    55% 50% at 78% 12%,
+    color-mix(in oklch, var(--color-primary) 40%, transparent),
+    transparent 70%
+  );
+}
+
+/* Cuña diagonal roja, como la franja de un dorsal. */
+.hero-wedge {
+  clip-path: polygon(70% 0, 100% 0, 100% 100%, 38% 100%);
+}
+
+/* Bloque inclinado para resaltar una palabra del titular. */
+.slash-block {
+  display: inline-block;
+  background: var(--color-primary);
+  color: var(--color-primary-content);
+  transform: skewX(-8deg);
+  padding: 0.04em 0.3em 0.12em;
+  line-height: 1;
+}
+
+.slash-block > * {
+  display: inline-block;
+  transform: skewX(8deg);
+}
+
+/* Etiqueta girada en el borde, tipo lateral de camiseta. */
+.vertical-label {
+  writing-mode: vertical-rl;
+}
