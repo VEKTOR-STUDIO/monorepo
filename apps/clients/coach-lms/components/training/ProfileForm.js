@@ -4,7 +4,7 @@ import { useActionState } from "react";
 import { updateMyProfileAction } from "@/app/dashboard/actions";
 
 // Datos que el alumno puede cambiar. Su nivel y las notas del entrenador son
-// solo de Frank: la base de datos los protege aunque alguien toque el formulario.
+// solo del coach: la base de datos los protege aunque alguien toque el formulario.
 const ProfileForm = ({ profile, email }) => {
   const [state, formAction, pending] = useActionState(updateMyProfileAction, null);
 
@@ -40,10 +40,90 @@ const ProfileForm = ({ profile, email }) => {
           type="tel"
           name="phone"
           defaultValue={profile?.phone || ""}
-          placeholder="Para que Frank te escriba"
+          placeholder="Para que el coach te escriba"
           className="input input-bordered w-full"
         />
       </label>
+
+      <fieldset className="space-y-4 border border-base-300 p-4">
+        <legend className="px-2 text-xs font-bold uppercase tracking-[0.18em] text-primary">
+          Ficha de peleador
+        </legend>
+        <p className="text-sm text-base-content/55">
+          Con estos datos el coach arma tu plan: sin peso y categoría no hay bloque.
+        </p>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Estilo</span>
+            <input
+              type="text"
+              name="discipline"
+              defaultValue={profile?.discipline || ""}
+              placeholder="Striker, grappler, MMA…"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Récord</span>
+            <input
+              type="text"
+              name="fight_record"
+              defaultValue={profile?.fight_record || ""}
+              placeholder="5-0 Pro"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Peso actual (kg)</span>
+            <input
+              type="number"
+              name="weight_kg"
+              min="30"
+              max="200"
+              step="0.1"
+              inputMode="decimal"
+              defaultValue={profile?.weight_kg ?? ""}
+              placeholder="80"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Categoría en la que peleas</span>
+            <input
+              type="text"
+              name="weight_class"
+              defaultValue={profile?.weight_class || ""}
+              placeholder="155 lb (70,3 kg)"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Altura (cm)</span>
+            <input
+              type="number"
+              name="height_cm"
+              min="120"
+              max="230"
+              inputMode="numeric"
+              defaultValue={profile?.height_cm ?? ""}
+              placeholder="180"
+              className="input input-bordered w-full"
+            />
+          </label>
+        </div>
+
+        {profile?.fight_strategy && (
+          <p className="border-l-2 border-accent pl-3 text-sm text-base-content/70">
+            <span className="font-bold uppercase tracking-wide text-accent">Estrategia del coach: </span>
+            {profile.fight_strategy}
+          </p>
+        )}
+      </fieldset>
 
       <label className="block">
         <span className="mb-1 block text-sm font-semibold">¿Qué quieres conseguir?</span>
@@ -51,7 +131,7 @@ const ProfileForm = ({ profile, email }) => {
           name="goal"
           rows={3}
           defaultValue={profile?.goal || ""}
-          placeholder="Bajar de peso, ganar fuerza, volver a correr…"
+          placeholder="Controlar el centro, llegar mejor al peso, aguantar el tercer round…"
           className="textarea textarea-bordered w-full"
         />
       </label>

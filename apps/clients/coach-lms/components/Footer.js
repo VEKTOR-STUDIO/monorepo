@@ -17,7 +17,7 @@ const Footer = () => {
           <div className="flex flex-col gap-4">
             <Link href="/" aria-current="page" className="group">
               <span className="display text-2xl leading-none">
-                Frank<span className="text-primary">Manzano</span>
+                Camargo<span className="text-primary">Coach</span>
               </span>
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-base-content/50">

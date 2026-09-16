@@ -106,7 +106,7 @@ export default async function AthleteHome() {
               Terminaste todas las sesiones de tu plan
             </p>
             <p className="mt-2 text-sm text-base-content/60">
-              Habla con Frank para el siguiente bloque, o repite una sesión desde tu plan.
+              Habla con el coach para el siguiente bloque, o repite una sesión desde tu plan.
             </p>
             <Link href="/dashboard/plan" className="btn btn-ghost mt-4 border border-base-300">
               Ver mi plan
@@ -118,7 +118,7 @@ export default async function AthleteHome() {
               Todavía no tienes un plan asignado
             </p>
             <p className="mx-auto mt-2 max-w-md text-sm text-base-content/60">
-              Frank te asignará tu plan de entrenamiento. Mientras tanto, puedes mirar el
+              El coach te asignará tu plan de entrenamiento. Mientras tanto, puedes mirar el
               libro de ejercicios y ver cómo se hace cada movimiento.
             </p>
             <Link href="/dashboard/biblioteca" className="btn btn-primary mt-5">

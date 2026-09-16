@@ -296,6 +296,9 @@ export async function updateExercise({ id, programId, ...fields }) {
         tempo: fields.tempo?.trim() || null,
         video_url: fields.videoUrl?.trim() || null,
         superset_group: fields.supersetGroup?.trim() || null,
+        block_name: fields.blockName?.trim() || null,
+        intensity: fields.intensity?.trim() || null,
+        per_side: Boolean(fields.perSide),
       })
       .eq("id", id);
 
@@ -365,6 +368,13 @@ export async function updateAthlete(previousState, formData) {
         level: text(formData, "level"),
         coach_notes: text(formData, "coach_notes"),
         is_active: formData.get("is_active") === "on",
+        // Ficha de peleador
+        weight_kg: number(formData, "weight_kg"),
+        height_cm: number(formData, "height_cm"),
+        weight_class: text(formData, "weight_class"),
+        discipline: text(formData, "discipline"),
+        fight_record: text(formData, "fight_record"),
+        fight_strategy: text(formData, "fight_strategy"),
       })
       .eq("id", id);
 

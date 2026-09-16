@@ -59,7 +59,7 @@ const CrispChat = () => {
   return null;
 };
 
-// Tema único oscuro estilo Nike ("frank"). Se fuerza en el cliente por si algún
+// Tema único oscuro ("camargo"). Se fuerza en el cliente por si algún
 // valor antiguo quedó guardado en localStorage.
 const useThemeSync = () => {
   useEffect(() => {

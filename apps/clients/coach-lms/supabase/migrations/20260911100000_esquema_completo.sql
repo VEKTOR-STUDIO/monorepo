@@ -1,9 +1,10 @@
 -- =============================================================================
--- FRANK MANZANO — ESQUEMA COMPLETO
+-- CAMARGO COACH — ESQUEMA COMPLETO
+-- High Performance System for Combat Sports · "La ciencia detrás del rendimiento"
 --
 -- Este ÚNICO archivo crea toda la base de datos de la web, desde cero:
 --
---   CUENTAS            profiles (con rol), alta automática al registrarse
+--   CUENTAS            profiles (con rol y ficha de peleador), alta automática al registrarse
 --   LANDING            disciplines, leads, elite_leads, manifesto_posts
 --   CITAS              services, appointments
 --   CONTENIDO          programs, workouts, exercises, videos
@@ -20,7 +21,9 @@
 --
 -- ES IDEMPOTENTE: puedes volver a ejecutarlo sin romper nada ni perder datos.
 --
--- ¡IMPORTANTE! Cambia el correo del admin en el punto 2 por el de Frank.
+-- ¡IMPORTANTE! Cambia el correo del admin en el punto 2 por el del coach.
+-- Este esquema es para el proyecto de Supabase PROPIO de Camargo Coach: no lo
+-- ejecutes en el de otro cliente.
 -- =============================================================================
 
 create extension if not exists "pgcrypto";
@@ -68,6 +71,17 @@ create table if not exists public.profiles (
   updated_at      timestamptz not null default now()
 );
 
+-- Ficha de peleador: lo que el coach necesita ANTES de armar un plan
+-- (récord, peso actual contra categoría, altura, estilo y estrategia).
+-- Van con "add column" para que la migración siga siendo idempotente.
+alter table public.profiles
+  add column if not exists weight_kg      numeric(5, 1),   -- peso actual, en kg
+  add column if not exists height_cm      integer,         -- altura, en cm
+  add column if not exists weight_class   text,            -- categoría: "155 lb (70,3 kg)"
+  add column if not exists discipline     text,            -- striker, grappler, MMA…
+  add column if not exists fight_record   text,            -- "5-0 Pro"
+  add column if not exists fight_strategy text;            -- la escribe el coach: "presión, control del centro…"
+
 -- ¿El usuario actual es el entrenador?
 -- SECURITY DEFINER para que no se muerda la cola con las RLS de profiles.
 create or replace function public.is_admin()
@@ -99,8 +113,8 @@ begin
     coalesce(new.raw_user_meta_data ->> 'full_name', new.raw_user_meta_data ->> 'name', new.email),
     new.raw_user_meta_data ->> 'avatar_url',
     case
-      -- >>> CAMBIA ESTE CORREO POR EL DE FRANK <<<
-      when lower(new.email) = 'admin@frankmanzano.com' then 'admin'
+      -- >>> CAMBIA ESTE CORREO POR EL DEL COACH <<<
+      when lower(new.email) = 'admin@camargocoach.com' then 'admin'
       else 'user'
     end
   )
@@ -150,6 +164,7 @@ begin
     new.level       := old.level;
     new.is_active   := old.is_active;
     new.has_access  := old.has_access;
+    new.fight_strategy := old.fight_strategy;
   end if;
   return new;
 end;
@@ -187,7 +202,7 @@ create policy "profiles_update_own_or_admin" on public.profiles
 -- 3. LANDING — disciplines, leads, elite_leads, manifesto_posts
 -- =============================================================================
 
--- Líneas de entrenamiento que se muestran en la portada (app/page.js).
+-- Los siete bloques de una sesión del sistema; se muestran en la portada (app/page.js).
 create table if not exists public.disciplines (
   id             uuid primary key default gen_random_uuid(),
   name           text not null,
@@ -217,9 +232,13 @@ create policy "disciplines_admin_write" on public.disciplines
 insert into public.disciplines (name, description, required_level, sort_order)
 select v.name, v.description, v.required_level, v.sort_order
 from (values
-  ('Fuerza & potencia', 'Cargas, velocidad de ejecución y progresiones para ganar explosividad sin descuidar la técnica.', 'todos', 1),
-  ('Condición & capacidad aeróbica', 'Trabajo metabólico y series estructuradas para mejorar resistencia según tu disciplina.', 'todos', 2),
-  ('Movilidad / prevención', 'Patrones de movimiento, activación y enfriamiento para sostener semanas de carga altas.', 'todos', 3)
+  ('Warm up', 'Assault bike o cuerda, serie dinámica de cadera, columna torácica y hombros, activación de glúteo y escápula.', 'todos', 1),
+  ('Plyometrics', 'Depth jumps, saltos laterales y reactivos: el primer paso explosivo y los cambios de ángulo.', 'todos', 2),
+  ('Contrast set', 'Fuerza pesada seguida de un gesto explosivo: box squat con medball slam, peso muerto con lanzamientos y golpeo.', 'todos', 3),
+  ('Push + Pull', 'Push press y dominadas balísticas en clusters: potencia de empuje y tracción sin acumular fatiga.', 'todos', 4),
+  ('Midsection', 'Rotaciones con landmine y banda terminadas en golpe: transferencia directa a la potencia de puño.', 'todos', 5),
+  ('Conditioning', 'Sprints en assault bike y rounds híbridos que simulan intercambios, flurries y derribos.', 'todos', 6),
+  ('Breathing', 'Respiración diafragmática 4·6·4·6 para bajar pulsaciones y recuperar entre rounds.', 'todos', 7)
 ) as v(name, description, required_level, sort_order)
 where not exists (select 1 from public.disciplines d where d.name = v.name);
 
@@ -496,6 +515,14 @@ create table if not exists public.exercises (
   sort_order       integer not null default 0,
   created_at       timestamptz not null default now()
 );
+
+-- Cómo prescribe el coach: bloques con nombre (Warm up, Contrast set…),
+-- intensidad relativa ("60% 1RM", "RPE 8", "130 BPM") y trabajo por lado.
+-- superset_group sigue siendo la letra (A, B, C…) que agrupa la ronda.
+alter table public.exercises
+  add column if not exists block_name text,
+  add column if not exists intensity  text,
+  add column if not exists per_side   boolean not null default false;
 
 create index if not exists idx_exercises_workout on public.exercises (workout_id, sort_order);
 create index if not exists idx_exercises_library on public.exercises (library_id);
@@ -1196,67 +1223,154 @@ create policy "bookings_own_or_admin" on public.class_bookings
   with check (athlete_id = auth.uid() or public.is_admin());
 
 -- =============================================================================
--- 12. CONTENIDO DE EJEMPLO
---     Tres planes visibles en el catálogo público de /entrenamientos.
---     Bórralos cuando Frank tenga los suyos.
+-- 12. CONTENIDO DE EJEMPLO — "Camp 8 semanas · Striker"
+--     Un bloque completo del sistema, tal como el coach lo entrega en PDF:
+--     semanas 1-4 (base de potencia → pico neural), 5-6 (específico) y
+--     7-8 (sistema híbrido de rounds). 3 sesiones por semana = 24 sesiones.
+--     Sale en el catálogo público (/entrenamientos). Bórralo o despublícalo
+--     cuando el coach cargue los planes reales de cada atleta.
 -- =============================================================================
 insert into public.programs (slug, title, subtitle, description, level, category, duration_weeks, sessions_count, sort_order, is_public)
 values
-  ('funcional-base-8-semanas',
-   'Funcional Base · 8 semanas',
-   'Construye una base sólida de fuerza y movimiento',
-   'Programa de entrada al entrenamiento funcional. Patrones básicos (sentadilla, bisagra, empuje, tracción, core) con progresión semanal y video en cada sesión.',
-   'principiante', 'fuerza', 8, 24, 1, true),
-  ('acondicionamiento-hiit',
-   'Acondicionamiento & HIIT',
-   'Capacidad aeróbica y potencia metabólica',
-   'Circuitos de alta intensidad e intervalos para mejorar tu condición física, quemar grasa y ganar resistencia.',
-   'intermedio', 'hiit', 6, 18, 2, true),
-  ('movilidad-y-prevencion',
-   'Movilidad & Prevención',
-   'Muévete mejor, entrena sin dolor',
-   'Rutinas de movilidad articular, activación y trabajo correctivo para sostener cargas altas y prevenir lesiones.',
-   'todos', 'movilidad', 4, 12, 3, true)
+  ('camp-8-semanas-striker',
+   'Camp 8 semanas · Striker',
+   'Potencia de piernas, velocidad de golpeo y capacidad anaeróbica repetida',
+   'Bloque de ejemplo del sistema para un striker que quiere controlar el centro del octágono: presión, velocidad de entrada, potencia corta y capacidad de repetir esfuerzos. Semanas 1-4: base de potencia, velocidad rotacional y pico neural. Semanas 5-6: fase específica con contrast sets y sprints cortos. Semanas 7-8: sistema híbrido de rounds que simula un campeonato. 3 sesiones por semana (lunes, martes y jueves) de 55 a 65 minutos.',
+   'avanzado', 'combate', 8, 24, 1, true)
 on conflict (slug) do nothing;
 
+-- Una plantilla por semana (o par de semanas), repetida los tres días.
 insert into public.workouts (program_id, title, description, week_number, day_number, focus, duration_minutes, sort_order)
-select p.id, v.title, v.description, v.week_number, v.day_number, v.focus, v.duration_minutes, v.sort_order
+select p.id,
+       format('Semana %s · Día %s — %s', t.week_number, d.day_number, t.focus),
+       t.description,
+       t.week_number,
+       d.day_number,
+       t.focus,
+       t.duration_minutes,
+       t.week_number * 10 + d.day_number
 from public.programs p
 cross join (values
-  ('Semana 1 · Día 1 — Full Body', 'Introducción a los patrones básicos con carga ligera.', 1, 1, 'full body', 45, 1),
-  ('Semana 1 · Día 2 — Tren inferior', 'Sentadilla y bisagra de cadera, foco en técnica.', 1, 2, 'tren inferior', 50, 2),
-  ('Semana 1 · Día 3 — Tren superior + core', 'Empuje, tracción y estabilidad de core.', 1, 3, 'tren superior', 50, 3)
-) as v(title, description, week_number, day_number, focus, duration_minutes, sort_order)
-where p.slug = 'funcional-base-8-semanas'
-  and not exists (select 1 from public.workouts w where w.program_id = p.id and w.title = v.title);
+  (1, 'Base de potencia',        'Objetivo: reactividad, fuerza rápida y base anaeróbica. Cada repetición explosiva; si baja la velocidad, se termina la serie.', 60),
+  (2, 'Velocidad rotacional',    'Objetivo: aumentar velocidad y potencia rotacional. Sube la carga del box squat y entra el medball rotacional.', 60),
+  (3, 'Pico de potencia neural', 'Objetivo: pico de potencia neural. Menos repeticiones, más series, cargas al 80-85 %. Controla la intensidad del sparring esta semana.', 60),
+  (4, 'Pico de potencia neural', 'Objetivo: pico de potencia neural con más volumen. Última semana del bloque de fuerza: calidad neuromuscular por encima de cantidad de trabajo.', 65),
+  (5, 'Específico',              'Objetivo: específico. Contrast set con golpeo y sprints cortos con descanso incompleto. Dormir 8-9 h y evitar conditioning fuera del plan.', 60),
+  (6, 'Específico',              'Objetivo: específico. Misma sesión que la semana 5: busca más velocidad en cada golpe y menos caída de potencia entre sprints.', 60),
+  (7, 'Sistema híbrido',         'Simula fatiga extrema: sprint en assault bike alternado con drills de combate durante 5 rounds de 5 minutos. Objetivo: simular campeonato.', 55),
+  (8, 'Sistema híbrido',         'Última semana. Mismo sistema híbrido: el peso ya debe estar en 74-75 kg para que en fight week solo quede el water cut.', 55)
+) as t(week_number, focus, description, duration_minutes)
+cross join (values (1), (2), (3)) as d(day_number)
+where p.slug = 'camp-8-semanas-striker'
+  and not exists (
+    select 1 from public.workouts w
+    where w.program_id = p.id and w.week_number = t.week_number and w.day_number = d.day_number
+  );
 
--- Ojo: animation_slug es lo que hace que se vea el monigote animado.
-insert into public.exercises (workout_id, name, description, sets, reps, rest_seconds, video_url, animation_slug, sort_order)
-select w.id, e.name, e.description, e.sets, e.reps, e.rest_seconds, e.video_url, e.animation_slug, e.sort_order
+-- Ejercicios de cada plantilla. tpl = 'w1'…'w4' para las semanas 1-4,
+-- 'w56' para las semanas 5-6 y 'w78' para las 7-8.
+-- El descanso va en el ÚLTIMO ejercicio de cada ronda (A, B, C…): así el
+-- cronómetro del alumno arranca al cerrar la ronda, como prescribe el coach.
+insert into public.exercises (workout_id, name, description, block_name, superset_group, sets, reps, intensity, per_side, rest_seconds, animation_slug, sort_order)
+select w.id, e.name, e.description, e.block_name, e.superset_group, e.sets, e.reps, e.intensity, e.per_side, e.rest_seconds, e.animation_slug, e.sort_order
 from public.workouts w
 join public.programs p on p.id = w.program_id
 cross join (values
-  ('Sentadilla goblet', 'Pecho arriba, rodillas siguen la punta del pie, baja controlado.', 3, '10-12', 90, 'https://www.youtube.com/watch?v=MeIiIdhvXT4', 'goblet-squat', 1),
-  ('Flexiones', 'Cuerpo en línea, codos a ~45°.', 3, '8-12', 90, 'https://www.youtube.com/watch?v=IODxDxX7oi4', 'push-up', 2),
-  ('Remo con banda', 'Escápulas atrás y abajo, sin balanceo.', 3, '12-15', 60, 'https://www.youtube.com/watch?v=xQNrFHEMhI4', 'banded-row', 3),
-  ('Plancha', 'Glúteos y abdomen activos, cadera neutra.', 3, '30-45 s', 60, 'https://www.youtube.com/watch?v=ASdvN_XEl_c', 'plank', 4)
-) as e(name, description, sets, reps, rest_seconds, video_url, animation_slug, sort_order)
-where p.slug = 'funcional-base-8-semanas'
-  and w.title = 'Semana 1 · Día 1 — Full Body'
+  -- ---------------------------------------------------------- semana 1 ---
+  ('w1', 'Assault bike o cuerda', 'Ritmo suave, solo para subir pulsaciones.', 'Warm up', null, 1, '3 min', null, false, 0, 'assault-bike', 1),
+  ('w1', 'Serie dinámica: cadera, T-spine y hombros', 'Termina con activación de glúteo y escápula.', 'Warm up', null, 1, '6-8 min', null, false, 0, null, 2),
+  ('w1', 'A1. Depth jump + triple tuck jump', 'Contacto mínimo con el suelo y salida explosiva.', 'Plyometrics', 'A', 3, '2', null, false, 0, null, 3),
+  ('w1', 'A2. Lateral bound', 'Controla el espacio: aterriza estable y sal al otro lado. Descanso 60-90 s al cerrar la ronda.', 'Plyometrics', 'A', 3, '4', null, true, 75, null, 4),
+  ('w1', 'B1. Speed back box squat', 'Velocidad máxima en la subida. Si baja la velocidad, se termina la serie.', 'Contrast set', 'B', 4, '3', '75 % 1RM', false, 0, 'squat', 5),
+  ('w1', 'B2. Overhead medball slam', 'Cada lanzamiento con máxima intención.', 'Contrast set', 'B', 4, '5', null, false, 0, null, 6),
+  ('w1', 'B3. Band assisted vertical jump', 'Descanso 2-3 min al cerrar la ronda.', 'Contrast set', 'B', 4, '6', null, false, 150, 'jump-squat', 7),
+  ('w1', 'C1. Push press (cluster)', 'Haz 2 repeticiones, pausa 20 s dentro de la serie y sigue hasta completar 6. Igual en las 3 series.', 'Push + Pull', 'C', 3, '2 + 2 + 2', null, false, 0, 'push-press', 8),
+  ('w1', 'C2. Ballistic chin ups', 'Explosivo hacia arriba. Descanso 2 min al cerrar la ronda.', 'Push + Pull', 'C', 3, '6', null, false, 120, 'chin-up', 9),
+  ('w1', 'D1. Landmine twists', 'Rotación desde la cadera, brazos largos.', 'Midsection', 'D', 3, '8', null, true, 0, null, 10),
+  ('w1', 'D2. Rotaciones explosivas con banda', 'Banda a la altura del pecho; remata como un golpe.', 'Midsection', 'D', 3, '8', null, true, 60, 'banded-woodchop', 11),
+  ('w1', 'Assault bike: base + sprints', 'Primero 3 min a 130 BPM. Después 7 sprints de 8 s a tope con 2 min de descanso completo. Si la potencia cae demasiado, para.', 'Conditioning', null, 7, '8 s sprint', 'Máximo', false, 120, 'assault-bike', 12),
+  ('w1', 'Respiración diafragmática 4·6·4·6', 'Inhala 4, mantén 6, exhala 4, mantén 6. Manos en las costillas: siente que se expanden de adentro hacia afuera.', 'Breathing', null, 1, '3-5 min', null, false, 0, null, 13),
+  -- ---------------------------------------------------------- semana 2 ---
+  ('w2', 'Assault bike o cuerda', 'Ritmo suave, solo para subir pulsaciones.', 'Warm up', null, 1, '3 min', null, false, 0, 'assault-bike', 1),
+  ('w2', 'Serie dinámica: cadera, T-spine y hombros', 'Termina con activación de glúteo y escápula.', 'Warm up', null, 1, '6-8 min', null, false, 0, null, 2),
+  ('w2', 'A1. Depth jump + knee drive jump', 'Contacto mínimo y rodilla arriba con intención.', 'Plyometrics', 'A', 3, '3', null, false, 0, null, 3),
+  ('w2', 'A2. Lateral bound distance', 'Busca distancia sin perder el aterrizaje. Descanso 60-90 s al cerrar la ronda.', 'Plyometrics', 'A', 3, '4', null, true, 75, null, 4),
+  ('w2', 'B1. Speed box squat', 'Velocidad máxima en la subida. Si baja la velocidad, se termina la serie.', 'Contrast set', 'B', 5, '2', '80 % 1RM', false, 0, 'squat', 5),
+  ('w2', 'B2. Rotational medball slam', 'Rota desde la cadera y descarga como un gancho.', 'Contrast set', 'B', 5, '4', null, true, 0, null, 6),
+  ('w2', 'B3. Band vertical jump', 'Descanso 2-3 min al cerrar la ronda.', 'Contrast set', 'B', 5, '6', null, false, 150, 'jump-squat', 7),
+  ('w2', 'C1. Push press (cluster)', 'Haz 2 repeticiones, pausa 20 s y otras 2. Igual en las 4 series.', 'Push + Pull', 'C', 4, '2 + 2', null, false, 0, 'push-press', 8),
+  ('w2', 'C2. Explosive chin ups', 'Explosivo hacia arriba. Descanso 2 min al cerrar la ronda.', 'Push + Pull', 'C', 4, '5', null, false, 120, 'chin-up', 9),
+  ('w2', 'D1. Landmine rotational punch', 'Termina la rotación en un golpe con la barra.', 'Midsection', 'D', 3, '6', null, true, 0, null, 10),
+  ('w2', 'D2. Band rotational punch', 'Golpe recto contra la banda, cadera primero.', 'Midsection', 'D', 3, '8', null, true, 60, 'banded-woodchop', 11),
+  ('w2', 'Assault bike: base + sprints', 'Primero 3 min a 130 BPM. Después 6-7 sprints de 10 s a tope con 2 min de descanso completo.', 'Conditioning', null, 7, '10 s sprint', 'Máximo', false, 120, 'assault-bike', 12),
+  ('w2', 'Respiración diafragmática 4·6·4·6', 'Inhala 4, mantén 6, exhala 4, mantén 6. Manos en las costillas: siente que se expanden de adentro hacia afuera.', 'Breathing', null, 1, '3-5 min', null, false, 0, null, 13),
+  -- ---------------------------------------------------------- semana 3 ---
+  ('w3', 'Assault bike o cuerda', 'Ritmo suave, solo para subir pulsaciones.', 'Warm up', null, 1, '3 min', null, false, 0, 'assault-bike', 1),
+  ('w3', 'Serie dinámica: cadera, T-spine y hombros', 'Termina con activación de glúteo y escápula.', 'Warm up', null, 1, '6-8 min', null, false, 0, null, 2),
+  ('w3', 'A1. Depth jump reactivo', 'Lo más corto posible en el suelo.', 'Plyometrics', 'A', 4, '2', null, false, 0, null, 3),
+  ('w3', 'A2. Lateral bound explosivo', 'Descanso 60-90 s al cerrar la ronda.', 'Plyometrics', 'A', 4, '3', null, true, 75, null, 4),
+  ('w3', 'B1. Speed box squat', 'Velocidad máxima en la subida. Si baja la velocidad, se termina la serie.', 'Contrast set', 'B', 6, '2', '80-85 % 1RM', false, 0, 'squat', 5),
+  ('w3', 'B2. Overhead medball slam', 'Cada lanzamiento con máxima intención.', 'Contrast set', 'B', 6, '4', null, false, 0, null, 6),
+  ('w3', 'B3. Band assisted jumps', 'Descanso 2-3 min al cerrar la ronda.', 'Contrast set', 'B', 6, '5', null, false, 150, 'jump-squat', 7),
+  ('w3', 'C1. Push press (cluster)', 'Haz 2 repeticiones, pausa 20 s y otras 2. Igual en las 4 series.', 'Push + Pull', 'C', 4, '2 + 2', null, false, 0, 'push-press', 8),
+  ('w3', 'C2. Ballistic chin ups', 'Explosivo hacia arriba. Descanso 2 min al cerrar la ronda.', 'Push + Pull', 'C', 4, '4', null, false, 120, 'chin-up', 9),
+  ('w3', 'D1. Landmine twists', 'Rotación desde la cadera, brazos largos.', 'Midsection', 'D', 3, '6', null, true, 0, null, 10),
+  ('w3', 'D2. Band explosive rotation', 'Banda a la altura del pecho; remata como un golpe.', 'Midsection', 'D', 3, '6', null, true, 60, 'banded-woodchop', 11),
+  ('w3', 'Assault bike: base + sprints', 'Primero 3 min a 130 BPM. Después 5-6 sprints de 10 s a tope con 2 min de descanso completo.', 'Conditioning', null, 6, '10 s sprint', 'Máximo', false, 120, 'assault-bike', 12),
+  ('w3', 'Respiración diafragmática 4·6·4·6', 'Inhala 4, mantén 6, exhala 4, mantén 6. Manos en las costillas: siente que se expanden de adentro hacia afuera.', 'Breathing', null, 1, '3-5 min', null, false, 0, null, 13),
+  -- ---------------------------------------------------------- semana 4 ---
+  ('w4', 'Assault bike o cuerda', 'Ritmo suave, solo para subir pulsaciones.', 'Warm up', null, 1, '3 min', null, false, 0, 'assault-bike', 1),
+  ('w4', 'Serie dinámica: cadera, T-spine y hombros', 'Termina con activación de glúteo y escápula.', 'Warm up', null, 1, '6-8 min', null, false, 0, null, 2),
+  ('w4', 'A1. Depth jump reactivo', 'Lo más corto posible en el suelo.', 'Plyometrics', 'A', 4, '5', null, false, 0, null, 3),
+  ('w4', 'A2. Lateral bound explosivo', 'Descanso 60-90 s al cerrar la ronda.', 'Plyometrics', 'A', 4, '5', null, true, 75, null, 4),
+  ('w4', 'B1. Speed box squat', 'Velocidad máxima en la subida. Si baja la velocidad, se termina la serie.', 'Contrast set', 'B', 6, '4', '80-85 % 1RM', false, 0, 'squat', 5),
+  ('w4', 'B2. Overhead medball slam', 'Cada lanzamiento con máxima intención.', 'Contrast set', 'B', 6, '6', null, false, 0, null, 6),
+  ('w4', 'B3. Band assisted jumps', 'Descanso 2-3 min al cerrar la ronda.', 'Contrast set', 'B', 6, '7', null, false, 150, 'jump-squat', 7),
+  ('w4', 'C1. Push press (cluster)', 'Haz 2 repeticiones, pausa 20 s y otras 2. Igual en las 5 series.', 'Push + Pull', 'C', 5, '2 + 2', null, false, 0, 'push-press', 8),
+  ('w4', 'C2. Ballistic chin ups', 'Explosivo hacia arriba. Descanso 2 min al cerrar la ronda.', 'Push + Pull', 'C', 5, '4', null, false, 120, 'chin-up', 9),
+  ('w4', 'D1. Landmine twists', 'Rotación desde la cadera, brazos largos.', 'Midsection', 'D', 3, '8', null, true, 0, null, 10),
+  ('w4', 'D2. Band explosive rotation', 'Banda a la altura del pecho; remata como un golpe.', 'Midsection', 'D', 3, '8', null, true, 60, 'banded-woodchop', 11),
+  ('w4', 'Assault bike: base + sprints', 'Primero 3 min a 130 BPM. Después 8 sprints de 10 s a tope con 2 min de descanso completo.', 'Conditioning', null, 8, '10 s sprint', 'Máximo', false, 120, 'assault-bike', 12),
+  ('w4', 'Respiración diafragmática 4·6·4·6', 'Inhala 4, mantén 6, exhala 4, mantén 6. Manos en las costillas: siente que se expanden de adentro hacia afuera.', 'Breathing', null, 1, '3-5 min', null, false, 0, null, 13),
+  -- ------------------------------------------------------- semanas 5-6 ---
+  ('w56', 'Assault bike o cuerda', 'Ritmo suave, solo para subir pulsaciones.', 'Warm up', null, 1, '3 min', null, false, 0, 'assault-bike', 1),
+  ('w56', 'Serie dinámica: cadera, T-spine y hombros', 'Termina con activación de glúteo y escápula.', 'Warm up', null, 1, '6-8 min', null, false, 0, null, 2),
+  ('w56', 'A1. Peso muerto', '15 s y pasa al siguiente ejercicio de la ronda.', 'Contrast set', 'A', 3, '3', '60 % 1RM', false, 15, 'deadlift', 3),
+  ('w56', 'A2. Landmine row', '15 s y pasa al siguiente.', 'Contrast set', 'A', 3, '8', null, true, 15, 't-bar-row', 4),
+  ('w56', 'A3. Medball throws + golpeo', 'Lanza y remata con golpe. 15 s y pasa al siguiente.', 'Contrast set', 'A', 3, '5', null, true, 15, null, 5),
+  ('w56', 'A4. Push up con banda elástica al pecho', 'Al terminar: 60-90 s de descanso activo y vuelve a A1.', 'Contrast set', 'A', 3, '12', null, false, 75, 'push-up', 6),
+  ('w56', 'B1. Landmine twists', 'Rotación desde la cadera, brazos largos.', 'Midsection', 'B', 3, '6', null, true, 0, null, 7),
+  ('w56', 'B2. Band explosive rotation con golpeo', 'Cada rotación termina en golpe.', 'Midsection', 'B', 3, '12', null, true, 0, 'banded-woodchop', 8),
+  ('w56', 'B3. Salto de vallas o cajones + golpeo', '3 estaciones. Termina con golpeo rápido e intenso, sobre todo los últimos golpes. La salida, desde las rodillas.', 'Midsection', 'B', 3, '4', null, false, 60, null, 9),
+  ('w56', 'Assault bike: base + sprints cortos', 'Primero 3 min a 130 BPM. Después 8 sprints de 10 s con solo 50 s de descanso.', 'Conditioning', null, 8, '10 s sprint', 'Máximo', false, 50, 'assault-bike', 10),
+  ('w56', 'Pelotas de tenis: rebote con la palma', 'Dos pelotas de tenis. Golpea al suelo con la palma y que reboten una y otra vez. 20 s de descanso entre series.', 'Conditioning', null, 3, '1 min', null, false, 20, null, 11),
+  ('w56', 'Respiración diafragmática 4·6·4·6', 'Inhala 4, mantén 6, exhala 4, mantén 6. Manos en las costillas: siente que se expanden de adentro hacia afuera.', 'Breathing', null, 1, '3-5 min', null, false, 0, null, 12),
+  -- ------------------------------------------------------- semanas 7-8 ---
+  ('w78', 'Assault bike o cuerda', 'Ritmo suave, solo para subir pulsaciones.', 'Warm up', null, 1, '3 min', null, false, 0, 'assault-bike', 1),
+  ('w78', 'Serie dinámica: cadera, T-spine y hombros', 'Termina con activación de glúteo y escápula.', 'Warm up', null, 1, '6-8 min', null, false, 0, null, 2),
+  ('w78', 'Round híbrido: 45 s sprint + 45 s drill', 'Alterna 45 s de sprint en assault bike con 45 s de drill fuerte hasta completar 5 min. Drills: ground and pound al saco, clinch wall drill, medball slam, sprawls, combinaciones de 2, trabajo con dos compañeros de sparring con objetivos distintos. 1 min de descanso entre rounds: toma las pelotas de tenis. Objetivo: simular campeonato. Total 25 min.', 'Conditioning', null, 5, '5 min', 'Fatiga extrema', false, 60, 'assault-bike', 3),
+  ('w78', 'Pelota de tenis: rectos sin que caiga', 'Lanza rectos con la pelota de tenis sin que toque el suelo. 20 s de descanso entre series.', 'Conditioning', null, 3, '1 min', null, false, 20, null, 4),
+  ('w78', 'Respiración diafragmática 4·6·4·6', 'Inhala 4, mantén 6, exhala 4, mantén 6. Manos en las costillas: siente que se expanden de adentro hacia afuera.', 'Breathing', null, 1, '3-5 min', null, false, 0, null, 5)
+) as e(tpl, name, description, block_name, superset_group, sets, reps, intensity, per_side, rest_seconds, animation_slug, sort_order)
+where p.slug = 'camp-8-semanas-striker'
+  and e.tpl = case
+                when w.week_number <= 4 then 'w' || w.week_number
+                when w.week_number in (5, 6) then 'w56'
+                else 'w78'
+              end
   and not exists (select 1 from public.exercises ex where ex.workout_id = w.id and ex.name = e.name);
 
 insert into public.videos (title, description, category, level, video_url, duration_seconds, is_free_preview, sort_order)
 select v.title, v.description, v.category, v.level, v.video_url, v.duration_seconds, v.is_free_preview, v.sort_order
 from (values
-  ('Cómo respirar durante el esfuerzo', 'Bracing y respiración para levantar con seguridad.', 'técnica', 'todos', 'https://www.youtube.com/watch?v=2pLT-olgUJs', 480, true, 1),
-  ('Calentamiento articular de 8 min', 'Rutina de movilidad para empezar cualquier sesión.', 'movilidad', 'todos', 'https://www.youtube.com/watch?v=3sTf3JCTGKw', 510, true, 2),
-  ('Técnica de sentadilla', 'Errores comunes y cómo corregirlos.', 'técnica', 'principiante', 'https://www.youtube.com/watch?v=MeIiIdhvXT4', 600, false, 3)
+  ('Cómo respirar durante el esfuerzo', 'Bracing y respiración para levantar con seguridad y recuperar entre rounds.', 'respiración', 'todos', 'https://www.youtube.com/watch?v=2pLT-olgUJs', 480, true, 1),
+  ('Calentamiento articular de 8 min', 'Serie dinámica de cadera, columna torácica y hombros para empezar cualquier sesión.', 'movilidad', 'todos', 'https://www.youtube.com/watch?v=3sTf3JCTGKw', 510, true, 2)
 ) as v(title, description, category, level, video_url, duration_seconds, is_free_preview, sort_order)
 where not exists (select 1 from public.videos existing where existing.title = v.title);
 
 -- =============================================================================
 -- FIN. Ahora ejecuta seeds/exercise_library_seed.sql (los 302 ejercicios).
 --
--- Y si Frank ya se había registrado con otro correo, hazlo admin:
+-- Y si el coach ya se había registrado con otro correo, hazlo admin:
 --   update public.profiles set role = 'admin' where email = 'su-correo@ejemplo.com';
 -- =============================================================================

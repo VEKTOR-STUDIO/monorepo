@@ -1,4 +1,16 @@
-# Daniel Tamayo
+# Camargo Coach — High Performance System for Combat Sports
 
-Sitio web de Daniel Tamayo — Fisioterapeuta y atleta de Brazilian Jiu Jitsu en Caracas. Terapia a domicilio y consultorio en Total Elite Training.
+Plataforma de entrenamiento online para atletas de combate. El coach arma
+planes por bloques (warm up, plyometrics, contrast set, push + pull, midsection,
+conditioning, breathing), se los asigna a sus peleadores y ellos registran cada
+sesión desde el móvil.
 
+Lema: *"La ciencia detrás del rendimiento"*.
+
+- Cómo funciona el sistema de entrenamiento: `docs/SISTEMA_ENTRENAMIENTO.md`
+- Base de datos (SQL para pegar en Supabase): `supabase/README.md`
+
+> **Importante:** este proyecto necesita **su propio proyecto de Supabase**.
+> El `.env.local` heredado apunta al de otro cliente; crea uno nuevo y cambia
+> `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` antes de aplicar
+> la migración.

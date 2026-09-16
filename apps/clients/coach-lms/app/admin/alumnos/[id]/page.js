@@ -33,6 +33,18 @@ export default async function AthleteDetailPage({ params }) {
           {" · alta el "}
           {new Date(profile.created_at).toLocaleDateString("es")}
         </p>
+        {(profile.discipline || profile.fight_record || profile.weight_kg || profile.weight_class) && (
+          <p className="mt-1 text-sm font-semibold text-base-content/70">
+            {[
+              profile.discipline,
+              profile.fight_record,
+              profile.weight_kg ? `${profile.weight_kg} kg` : null,
+              profile.weight_class ? `pelea en ${profile.weight_class}` : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        )}
       </div>
 
       {/* ---------------------------------------------------------- cifras --- */}

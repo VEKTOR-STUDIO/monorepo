@@ -119,6 +119,11 @@ export async function logWorkout(payload = {}) {
   }
 }
 
+const toNumber = (value) => {
+  const parsed = Number(value?.toString().replace(",", ".").trim());
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+};
+
 /** Datos que el propio alumno puede cambiar de su perfil. */
 export async function updateMyProfile(formData) {
   try {
@@ -131,6 +136,12 @@ export async function updateMyProfile(formData) {
         phone: formData.get("phone")?.toString().trim() || null,
         goal: formData.get("goal")?.toString().trim() || null,
         show_in_ranking: formData.get("show_in_ranking") === "on",
+        // Ficha de peleador (la estrategia la escribe el coach; la base la protege)
+        weight_kg: toNumber(formData.get("weight_kg")),
+        height_cm: toNumber(formData.get("height_cm")),
+        weight_class: formData.get("weight_class")?.toString().trim() || null,
+        discipline: formData.get("discipline")?.toString().trim() || null,
+        fight_record: formData.get("fight_record")?.toString().trim() || null,
       })
       .eq("id", user.id);
 

@@ -8,13 +8,13 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Tema "frank" — inspirado en Nike / deporte de combate:            */
+/* Tema "camargo" — deporte de combate, estética de póster:          */
 /* negro profundo + rojo eléctrico + blanco.                          */
 /* Para cambiar el color de marca, ajusta --color-primary aquí y      */
 /* config.colors.main en config.js.                                   */
 /* ------------------------------------------------------------------ */
 @plugin "daisyui/theme" {
-  name: "frank";
+  name: "camargo";
   default: true;
   color-scheme: dark;
 

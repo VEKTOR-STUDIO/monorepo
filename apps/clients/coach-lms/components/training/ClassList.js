@@ -21,7 +21,7 @@ const ClassList = ({ classes }) => {
   if (classes.length === 0) {
     return (
       <p className="border border-dashed border-base-300 p-10 text-center text-base-content/60">
-        No hay clases programadas por ahora. Cuando Frank publique alguna, aparecerá aquí.
+        No hay clases programadas por ahora. Cuando el coach publique alguna, aparecerá aquí.
       </p>
     );
   }

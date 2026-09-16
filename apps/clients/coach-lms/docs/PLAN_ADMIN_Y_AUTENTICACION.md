@@ -1,4 +1,4 @@
-# Plan — Admin, autenticación y gestión de contenido (Frank Manzano)
+# Plan — Admin, autenticación y gestión de contenido (Camargo Coach)
 
 Documento de planificación. Define cómo tendrá el sistema un **panel de administración**
 para gestionar el contenido y cómo los **usuarios** inician sesión para verlo.
@@ -8,7 +8,7 @@ El modelo se basa en el patrón ya probado en `roll-prep` (mismo monorepo).
 
 ## 1. Objetivo
 
-- **Admin** (Frank / staff): entra con su cuenta y administra el contenido
+- **Admin** (el coach / staff): entra con su cuenta y administra el contenido
   (programas, sesiones, ejercicios, videos y disciplinas) desde un panel privado.
 - **Usuarios / atletas**: se registran, inician sesión y consumen el contenido
   publicado (área de entrenamientos, videoteca, su progreso).
@@ -54,7 +54,7 @@ Ya existe la infraestructura de Supabase Auth:
 2. Variables en `.env.local`: `NEXT_PUBLIC_SUPABASE_URL`,
    `NEXT_PUBLIC_SUPABASE_ANON_KEY` (o publishable key).
 3. Cambiar el correo del admin en la migración (busca
-   `>>> CAMBIA ESTE CORREO POR EL DE FRANK <<<`) antes de aplicarla.
+   `>>> CAMBIA ESTE CORREO POR EL DEL COACH <<<`) antes de aplicarla.
 
 ---
 

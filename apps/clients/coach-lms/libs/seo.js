@@ -10,16 +10,16 @@ export const getSEOTags = ({
 } = {}) => {
   const defaultKeywords = [
     config.appName,
-    "deportistas",
-    "entrenamiento",
-    "rendimiento",
-    "video bajo demanda",
-    "atletas",
+    "atletas de combate",
+    "MMA",
     "preparación física",
+    "fuerza y acondicionamiento",
+    "entrenamiento online",
+    "peleadores",
   ];
 
   return {
-    title: title || `${config.appName} — Entrenamiento y contenido para deportistas`,
+    title: title || `${config.appName} — Fuerza y conditioning online para atletas de combate`,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,

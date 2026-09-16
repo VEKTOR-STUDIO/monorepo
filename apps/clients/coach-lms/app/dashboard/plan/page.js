@@ -32,7 +32,7 @@ export default async function MyPlanPage() {
       <div className="border border-dashed border-base-300 p-10 text-center">
         <h1 className="display text-3xl text-base-content">Aún no tienes plan</h1>
         <p className="mx-auto mt-3 max-w-md text-base-content/60">
-          Cuando Frank te asigne un plan de entrenamiento aparecerá aquí, con todas sus
+          Cuando el coach te asigne un plan de entrenamiento aparecerá aquí, con todas sus
           sesiones y ejercicios.
         </p>
         <Link href="/dashboard/biblioteca" className="btn btn-primary mt-6">
@@ -47,7 +47,7 @@ export default async function MyPlanPage() {
       <header>
         <h1 className="display text-4xl text-base-content sm:text-5xl">Mi plan</h1>
         <p className="mt-2 text-base-content/60">
-          Marca cada sesión al terminarla: así sumas XP y Frank ve tu progreso.
+          Marca cada sesión al terminarla: así sumas XP y el coach ve tu progreso.
         </p>
       </header>
 
@@ -85,7 +85,7 @@ export default async function MyPlanPage() {
               {assignment.notes && (
                 <p className="mt-3 border-l-2 border-accent pl-3 text-sm text-base-content/70">
                   <span className="font-bold uppercase tracking-wide text-accent">
-                    Nota de Frank:{" "}
+                    Nota del coach:{" "}
                   </span>
                   {assignment.notes}
                 </p>

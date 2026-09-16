@@ -1,14 +1,14 @@
 "use client";
 
 const ITEMS = [
-  "Fuerza",
-  "BJJ",
-  "Rehabilitación deportiva",
-  "Rendimiento",
-  "Movilidad",
-  "Brazilian Jiu Jitsu",
-  "Recuperación",
-  "Preparación física",
+  "MMA",
+  "Striking",
+  "Grappling",
+  "Fuerza & potencia",
+  "Conditioning",
+  "Capacidad anaeróbica",
+  "Control de peso",
+  "Respiración",
 ];
 
 export default function Marquee() {

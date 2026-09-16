@@ -1,5 +1,3 @@
-import config from "@/config";
-
 const ManifiestoSection = () => {
   return (
     <section
@@ -16,29 +14,30 @@ const ManifiestoSection = () => {
 
       <div className="relative mx-auto max-w-4xl">
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-          El método
+          El sistema
         </p>
         <h2
           id="intro-heading"
           className="display mb-10 text-4xl text-base-content sm:text-5xl md:text-6xl"
         >
-          Filosofía de<span className="text-primary">.</span> entrenamiento
+          La ciencia detrás<span className="text-primary">.</span> del rendimiento
         </h2>
 
         <div className="grid gap-8 border-l-2 border-primary pl-6 md:pl-10">
           <p className="text-lg leading-relaxed text-base-content/80 md:text-xl">
-            El progreso no es casualidad: es la suma de sesiones bien hechas,
-            descanso inteligente y nutrición acorde a tu objetivo. Aquí
-            priorizamos técnica, volumen adecuado y recuperación.
+            Ningún plan empieza por los ejercicios. Empieza por el atleta: su
+            récord, su peso y su categoría, su estilo y la estrategia que quiere
+            imponer. De ahí sale el objetivo del bloque y el de cada semana.
           </p>
           <p className="text-lg leading-relaxed text-base-content/80 md:text-xl">
-            Ya compitas, entrenes por salud o prepares un evento, necesitas un
-            sistema claro: qué hacer, cuándo y por qué. Ese es el espíritu de
-            esta plataforma.
+            En fuerza y potencia la regla es calidad neuromuscular sobre cantidad
+            de trabajo: cada repetición explosiva, la serie termina cuando baja
+            la velocidad y nunca se llega al fallo.
           </p>
-          <p className="text-base leading-relaxed text-base-content/50">
-            En {config.appName} el contenido es de demostración: reemplázalo por
-            tu metodología y valores de marca.
+          <p className="text-lg leading-relaxed text-base-content/80 md:text-xl">
+            El conditioning no es solo cardio. Los sprints y los rounds simulan
+            intercambios, flurries y derribos defensivos, para que la potencia
+            se repita cuando la pelea lo exige.
           </p>
         </div>
       </div>

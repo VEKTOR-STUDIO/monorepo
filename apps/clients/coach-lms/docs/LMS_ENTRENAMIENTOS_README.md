@@ -9,7 +9,7 @@
 >
 > **Lo que cambió respecto a lo que dice más abajo:**
 > - Los planes ahora nacen **privados**. Solo salen en el catálogo público los
->   que tienen `is_public = true` (los 3 de ejemplo lo tienen).
+>   que tienen `is_public = true` (el camp de ejemplo lo tiene).
 > - El área de atletas (`/dashboard`) y el panel del entrenador (`/admin`) exigen
 >   sesión iniciada.
 > - Los ejercicios tienen `animation_slug`: se ven animados sin necesidad de video.
@@ -24,7 +24,7 @@
 | `/entrenamientos` | Home del LMS: grid de **programas** + **biblioteca de video**. |
 | `/entrenamientos/[slug]` | Detalle de un programa: reproductor + sesiones (**workouts**) con sus **ejercicios**. |
 
-Enlaces actualizados a `/entrenamientos` (antes iban a `/signin`): `Header`, `HeroFrank`, `CTASection`.
+Enlaces actualizados a `/entrenamientos` (antes iban a `/signin`): `Header`, `HeroCoach`, `CTASection`.
 
 ### Archivos nuevos
 ```
@@ -67,8 +67,8 @@ videos     (biblioteca de video independiente)
 
 **Opción A — Supabase CLI (recomendado):**
 ```bash
-cd apps/clients/frank-manzano
-supabase link --project-ref <TU_PROJECT_REF>   # el ref de kmtfmivwhgtfvdljtjfy...
+cd apps/clients/coach-lms
+supabase link --project-ref <TU_PROJECT_REF>   # el ref del proyecto NUEVO de Camargo Coach
 supabase db push
 ```
 

@@ -97,7 +97,7 @@ const ExerciseCard = ({ exercise, sets, onToggleSet, onChangeField, onRest }) =>
             <h3 className="text-xl font-bold text-base-content">{exercise.name}</h3>
             {exercise.superset_group && (
               <span className="border border-accent/50 px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest text-accent">
-                Serie {exercise.superset_group}
+                Ronda {exercise.superset_group}
               </span>
             )}
           </div>
@@ -105,6 +105,8 @@ const ExerciseCard = ({ exercise, sets, onToggleSet, onChangeField, onRest }) =>
           <p className="mt-1 text-sm text-base-content/60">
             {totalSets} {totalSets === 1 ? "serie" : "series"}
             {exercise.reps ? ` × ${exercise.reps}` : ""}
+            {exercise.per_side ? " por lado" : ""}
+            {exercise.intensity ? ` · ${exercise.intensity}` : ""}
             {exercise.target_weight_kg ? ` · ${exercise.target_weight_kg} kg` : ""}
             {exercise.rest_seconds ? ` · descanso ${exercise.rest_seconds}s` : ""}
             {exercise.tempo ? ` · tempo ${exercise.tempo}` : ""}
@@ -367,16 +369,28 @@ const WorkoutRunner = ({ workout, assignmentId = null }) => {
         />
       )}
 
-      {(workout.exercises || []).map((exercise) => (
-        <ExerciseCard
-          key={exercise.id}
-          exercise={exercise}
-          sets={state[exercise.id] || []}
-          onToggleSet={toggleSet}
-          onChangeField={changeField}
-          onRest={(seconds) => setRest({ seconds, at: Date.now() })}
-        />
-      ))}
+      {(workout.exercises || []).map((exercise, index, list) => {
+        // Cabecera de bloque (Warm up, Contrast set…) cuando cambia respecto
+        // al ejercicio anterior: así la sesión se lee como la escribe el coach.
+        const previous = index > 0 ? list[index - 1].block_name : null;
+        const startsBlock = exercise.block_name && exercise.block_name !== previous;
+        return (
+          <div key={exercise.id} className="space-y-4">
+            {startsBlock && (
+              <h2 className="display border-b border-base-300 pb-1 pt-4 text-2xl text-base-content">
+                <span className="text-primary">/</span> {exercise.block_name}
+              </h2>
+            )}
+            <ExerciseCard
+              exercise={exercise}
+              sets={state[exercise.id] || []}
+              onToggleSet={toggleSet}
+              onChangeField={changeField}
+              onRest={(seconds) => setRest({ seconds, at: Date.now() })}
+            />
+          </div>
+        );
+      })}
 
       {(workout.exercises || []).length === 0 && (
         <p className="border border-dashed border-base-300 p-8 text-center text-base-content/60">

@@ -1,4 +1,4 @@
-# 🎮 Dashboard de Administrador - Daniel Tamayo
+# 🎮 Dashboard de Administrador - Camargo Coach (heredado del boilerplate de citas)
 
 Sistema dual de dashboards con diseño inspirado en videojuegos modernos para gestión de citas.
 
@@ -238,6 +238,6 @@ Tu sistema de gestión de citas con dashboard dual está completamente funcional
 
 ---
 
-**Desarrollado para Daniel Tamayo** 🚀
+**Heredado del boilerplate; en Camargo Coach el panel real es `/admin` (ver docs/SISTEMA_ENTRENAMIENTO.md)** 🚀
 *No solo diseño cejas, diseño confianza.*
 

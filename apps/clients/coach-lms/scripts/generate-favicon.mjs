@@ -37,7 +37,7 @@ function buildSvg(size) {
     font-weight="700"
     font-size="${fontSize}"
     fill="${PRIMARY}"
-  >F</text>
+  >C</text>
 </svg>
 `;
 }
@@ -55,5 +55,5 @@ for (const s of sizes) {
   console.log(`✓ public/${name} (${s}×${s})`);
 }
 
-console.log("\nFavicon generado: F en blanco (#FFFFFF) sobre fondo negro (#000000).");
+console.log("\nFavicon generado: C en blanco (#FFFFFF) sobre fondo negro (#000000).");
 console.log("El favicon en producción lo sirve Next.js desde app/icon.js.");

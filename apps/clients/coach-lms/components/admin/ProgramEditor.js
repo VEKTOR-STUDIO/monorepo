@@ -19,13 +19,25 @@ import {
 // -----------------------------------------------------------------------------
 // Editor de un plan de entrenamiento.
 //
-// Pensado para que Frank lo use sin manual:
+// Pensado para que el coach lo use sin manual:
 //   * Todo se ve en una sola página, sin pestañas escondidas.
 //   * Los cambios se guardan con un botón "Guardar" explícito, no al vuelo:
 //     así siempre sabe si quedó grabado o no.
 //   * El orden se cambia con flechas ↑ ↓, no arrastrando.
 //   * Para añadir un ejercicio se abre el libro entero, con los monigotes.
 // -----------------------------------------------------------------------------
+
+// Los bloques de una sesión del sistema, en su orden. Se ofrecen como
+// sugerencia al escribir; el coach puede poner otro nombre si lo necesita.
+const SESSION_BLOCKS = [
+  "Warm up",
+  "Plyometrics",
+  "Contrast set",
+  "Push + Pull",
+  "Midsection",
+  "Conditioning",
+  "Breathing",
+];
 
 const LEVEL_OPTIONS = [
   { value: "todos", label: "Todos los niveles" },
@@ -49,6 +61,9 @@ const ExerciseRow = ({ exercise, workoutId, programId, isFirst, isLast }) => {
     description: exercise.description || "",
     videoUrl: exercise.video_url || "",
     supersetGroup: exercise.superset_group || "",
+    blockName: exercise.block_name || "",
+    intensity: exercise.intensity || "",
+    perSide: Boolean(exercise.per_side),
   });
 
   const run = (work) =>
@@ -83,7 +98,10 @@ const ExerciseRow = ({ exercise, workoutId, programId, isFirst, isLast }) => {
             {exercise.name}
           </span>
           <span className="block text-xs text-base-content/50">
+            {exercise.block_name ? `${exercise.block_name} · ` : ""}
             {exercise.sets || "?"} × {exercise.reps || "?"}
+            {exercise.per_side ? " por lado" : ""}
+            {exercise.intensity ? ` · ${exercise.intensity}` : ""}
             {exercise.rest_seconds ? ` · ${exercise.rest_seconds}s descanso` : ""}
             {exercise.target_weight_kg ? ` · ${exercise.target_weight_kg} kg` : ""}
           </span>
@@ -167,11 +185,60 @@ const ExerciseRow = ({ exercise, workoutId, programId, isFirst, isLast }) => {
             </label>
             <label className="block">
               <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-base-content/50">
-                Bloque (A, B…)
+                Ronda (A, B…)
               </span>
-              <input type="text" maxLength={2} {...field("supersetGroup")} className="input input-bordered input-sm w-full" />
+              <input
+                type="text"
+                maxLength={2}
+                placeholder="A"
+                {...field("supersetGroup")}
+                className="input input-bordered input-sm w-full"
+              />
+            </label>
+            <label className="block sm:col-span-2">
+              <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                Bloque de la sesión
+              </span>
+              <input
+                type="text"
+                list="bloques-sesion"
+                placeholder="Warm up, Contrast set, Conditioning…"
+                {...field("blockName")}
+                className="input input-bordered input-sm w-full"
+              />
+            </label>
+            <label className="block">
+              <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-base-content/50">
+                Intensidad
+              </span>
+              <input
+                type="text"
+                placeholder="60 % 1RM, RPE 8, 130 BPM"
+                {...field("intensity")}
+                className="input input-bordered input-sm w-full"
+              />
+            </label>
+            <label className="flex items-center gap-2 self-end border border-base-300 px-3 py-2">
+              <input
+                type="checkbox"
+                checked={form.perSide}
+                onChange={(event) => setForm({ ...form, perSide: event.target.checked })}
+                className="checkbox checkbox-primary checkbox-sm"
+              />
+              <span className="text-xs font-semibold uppercase tracking-wide text-base-content/60">
+                Por lado
+              </span>
             </label>
           </div>
+          <datalist id="bloques-sesion">
+            {SESSION_BLOCKS.map((block) => (
+              <option key={block} value={block} />
+            ))}
+          </datalist>
+          <p className="text-xs text-base-content/50">
+            Descanso: para una ronda (A1, A2, A3…) pon el descanso largo solo en el último
+            ejercicio de la ronda; en los demás, el corto o 0.
+          </p>
 
           <label className="block">
             <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-base-content/50">

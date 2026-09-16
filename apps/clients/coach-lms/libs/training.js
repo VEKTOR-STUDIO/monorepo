@@ -26,7 +26,7 @@ export const getCurrentUser = cache(async () => {
   const { data: profile } = await supabase
     .from("profiles")
     .select(
-      "id, email, full_name, image, role, phone, goal, level, show_in_ranking, is_active"
+      "id, email, full_name, image, role, phone, goal, level, show_in_ranking, is_active, weight_kg, height_cm, weight_class, discipline, fight_record, fight_strategy"
     )
     .eq("id", user.id)
     .single();
@@ -133,7 +133,7 @@ export async function getWorkoutDetail(workoutId) {
        programs ( id, slug, title ),
        exercises ( id, name, description, sets, reps, rest_seconds, tempo, video_url,
                    animation_slug, target_weight_kg, rpe_target, superset_group, sort_order,
-                   library_id,
+                   block_name, intensity, per_side, library_id,
                    exercise_library ( slug, name, animation_slug, exercise_type, cues,
                                       equipment, primary_muscle ) )`
     )
@@ -273,7 +273,9 @@ export async function getAthletes() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("profiles")
-    .select("id, email, full_name, image, phone, goal, level, is_active, created_at, role")
+    .select(
+      "id, email, full_name, image, phone, goal, level, is_active, created_at, role, weight_kg, weight_class, discipline"
+    )
     .order("created_at", { ascending: false });
 
   const athletes = (data || []).filter((profile) => profile.role !== "admin");
@@ -320,7 +322,7 @@ export async function getAthleteDetail(athleteId) {
       supabase
         .from("profiles")
         .select(
-          "id, email, full_name, image, phone, birth_date, goal, level, coach_notes, is_active, created_at"
+          "id, email, full_name, image, phone, birth_date, goal, level, coach_notes, is_active, created_at, weight_kg, height_cm, weight_class, discipline, fight_record, fight_strategy"
         )
         .eq("id", athleteId)
         .maybeSingle(),
@@ -380,7 +382,8 @@ export async function getAdminProgram(programId) {
                   duration_minutes, sort_order, is_published,
                   exercises ( id, name, description, sets, reps, rest_seconds, tempo,
                               video_url, animation_slug, target_weight_kg, rpe_target,
-                              superset_group, sort_order, library_id ) )`
+                              superset_group, block_name, intensity, per_side,
+                              sort_order, library_id ) )`
     )
     .eq("id", programId)
     .maybeSingle();

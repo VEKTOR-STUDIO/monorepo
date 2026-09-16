@@ -32,7 +32,7 @@ export default function TwitterImage() {
             letterSpacing: "-0.02em",
           }}
         >
-          F
+          C
         </span>
         <span
           style={{
@@ -41,7 +41,7 @@ export default function TwitterImage() {
             fontFamily: "system-ui, sans-serif",
           }}
         >
-          {config.appName} — Anti-Fragilidad y Entrenamiento de Élite
+          {config.appName} — La ciencia detrás del rendimiento
         </span>
       </div>
     ),

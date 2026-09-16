@@ -161,8 +161,10 @@ const ProgramContent = ({ workouts = [] }) => {
                                 </span>
                                 <span className="mt-0.5 block text-xs text-base-content/50">
                                   {[
+                                    ex.block_name || null,
                                     ex.sets ? `${ex.sets} series` : null,
-                                    ex.reps ? `${ex.reps} reps` : null,
+                                    ex.reps ? `${ex.reps}${ex.per_side ? " por lado" : ""}` : null,
+                                    ex.intensity || null,
                                     ex.rest_seconds ? `${ex.rest_seconds}s descanso` : null,
                                   ]
                                     .filter(Boolean)

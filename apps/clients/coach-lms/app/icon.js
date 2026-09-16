@@ -30,7 +30,7 @@ export default function Icon() {
             letterSpacing: "-0.02em",
           }}
         >
-          F
+          C
         </span>
       </div>
     ),

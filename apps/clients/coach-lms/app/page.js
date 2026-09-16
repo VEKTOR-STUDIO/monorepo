@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 import { createClient } from "@/libs/supabase/server";
 import Header from "@/components/Header";
-import HeroFrank from "@/components/HeroFrank";
+import HeroCoach from "@/components/HeroCoach";
 import Marquee from "@/components/Marquee";
 import ManifiestoSection from "@/components/ManifiestoSection";
 import CredencialesSection from "@/components/CredencialesSection";
 import DisciplinesSection from "@/components/DisciplinesSection";
-import HorariosSection from "@/components/HorariosSection";
+import ComoFuncionaSection from "@/components/ComoFuncionaSection";
 import Pricing from "@/components/Pricing";
 import CTASection from "@/components/CTASection";
 import Footer from "@/components/Footer";
@@ -33,12 +33,12 @@ export default async function Home() {
         <Header />
       </Suspense>
       <main>
-        <HeroFrank />
+        <HeroCoach />
         <Marquee />
         <ManifiestoSection />
         <CredencialesSection />
         <DisciplinesSection disciplines={disciplines} />
-        <HorariosSection />
+        <ComoFuncionaSection />
         <Pricing />
         <CTASection />
       </main>

@@ -25,7 +25,7 @@ export default async function AthleteLayout({ children }) {
       <header className="border-b border-base-300 bg-base-200/60">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <Link href="/" className="display text-xl leading-none">
-            Frank<span className="text-primary">Manzano</span>
+            Camargo<span className="text-primary">Coach</span>
           </Link>
 
           <div className="flex items-center gap-3">

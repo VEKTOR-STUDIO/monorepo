@@ -60,6 +60,86 @@ const AthleteForm = ({ athlete }) => {
         </label>
       </div>
 
+      <fieldset className="space-y-4 border border-base-300 p-4">
+        <legend className="px-2 text-xs font-bold uppercase tracking-[0.18em] text-primary">
+          Ficha de peleador
+        </legend>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Estilo</span>
+            <input
+              type="text"
+              name="discipline"
+              defaultValue={athlete.discipline || ""}
+              placeholder="Striker, grappler, MMA…"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Récord</span>
+            <input
+              type="text"
+              name="fight_record"
+              defaultValue={athlete.fight_record || ""}
+              placeholder="5-0 Pro"
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Altura (cm)</span>
+            <input
+              type="number"
+              name="height_cm"
+              min="120"
+              max="230"
+              defaultValue={athlete.height_cm ?? ""}
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold">Peso actual (kg)</span>
+            <input
+              type="number"
+              name="weight_kg"
+              min="30"
+              max="200"
+              step="0.1"
+              defaultValue={athlete.weight_kg ?? ""}
+              className="input input-bordered w-full"
+            />
+          </label>
+
+          <label className="block lg:col-span-2">
+            <span className="mb-1 block text-sm font-semibold">Categoría</span>
+            <input
+              type="text"
+              name="weight_class"
+              defaultValue={athlete.weight_class || ""}
+              placeholder="155 lb (70,3 kg)"
+              className="input input-bordered w-full"
+            />
+          </label>
+        </div>
+
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold">
+            Estrategia de pelea{" "}
+            <span className="font-normal text-base-content/50">(la ve el alumno, solo tú la editas)</span>
+          </span>
+          <textarea
+            name="fight_strategy"
+            rows={2}
+            defaultValue={athlete.fight_strategy || ""}
+            placeholder="Control del centro del octágono: presión, velocidad de entrada, potencia corta y capacidad de repetir esfuerzos."
+            className="textarea textarea-bordered w-full"
+          />
+        </label>
+      </fieldset>
+
       <label className="block">
         <span className="mb-1 block text-sm font-semibold">Su objetivo</span>
         <textarea

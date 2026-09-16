@@ -13,29 +13,25 @@ const CTASection = () => {
             aria-hidden="true"
             className="display text-stroke pointer-events-none absolute -bottom-8 -right-2 select-none text-[8rem] leading-none md:text-[12rem]"
           >
-            GO
+            OSS
           </span>
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-            Zona de atletas
+            Área de atletas
           </p>
           <h2
             id="cta-heading"
             className="display max-w-2xl text-4xl text-base-content sm:text-5xl md:text-6xl"
           >
-            Entrena con la mente.
+            Entrena con ciencia.
             <br />
-            <span className="text-primary">Gana</span> en el ring.
+            <span className="text-primary">Pelea</span> con ventaja.
           </h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-base-content/60">
-            Explora los programas de entrenamiento funcional, rutinas por sesión
-            y videos guiados. Pronto detrás de tu cuenta; por ahora, acceso
-            libre para la demo.
+            Tu plan, tus sesiones y tu progreso en un solo lugar. Entra con tu
+            correo, sin contraseñas, y empieza la sesión de hoy.
           </p>
-          <Link
-            href="/entrenamientos"
-            className="btn btn-primary btn-lg mt-8 px-10"
-          >
-            Ver entrenamientos
+          <Link href="/dashboard" className="btn btn-primary btn-lg mt-8 px-10">
+            Entrar al área de atletas
           </Link>
         </div>
       </div>

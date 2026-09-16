@@ -6,14 +6,14 @@ import Link from "next/link";
 import config from "@/config";
 
 const links = [
-  { href: "/#intro", label: "Filosofía" },
-  { href: "/entrenamientos", label: "Entrenamientos" },
-  { href: "/#horarios", label: "Horarios" },
+  { href: "/#intro", label: "El sistema" },
+  { href: "/entrenamientos", label: "Programas" },
+  { href: "/#como-funciona", label: "Cómo funciona" },
 ];
 
 const Wordmark = ({ className = "" }) => (
   <span className={`display leading-none ${className}`}>
-    Frank<span className="text-primary">Manzano</span>
+    Camargo<span className="text-primary">Coach</span>
   </span>
 );
 

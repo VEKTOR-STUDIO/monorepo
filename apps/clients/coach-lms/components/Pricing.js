@@ -1,42 +1,48 @@
 import Link from "next/link";
+import config from "@/config";
 
-const plans = [
+// Programas de coaching online. Sin precios inventados: cada uno se cotiza
+// según el atleta y la fecha de pelea. El botón lleva a WhatsApp si está
+// configurado en config.js; si no, al acceso de atletas.
+const programas = [
   {
-    name: "Base",
-    price: "$0",
-    period: "/mes",
+    name: "Bloque de 4 semanas",
+    price: "A consultar",
     benefits: [
-      "Biblioteca básica de sesiones",
-      "1 plan de entrenamiento demo",
-      "Soporte por email",
+      "Ficha y objetivo del bloque",
+      "3 sesiones por semana, 55 a 65 min",
+      "Progresión semanal sobre los mismos ejercicios",
+      "Registro y seguimiento en la app",
     ],
     highlighted: false,
   },
   {
-    name: "Atleta Pro",
-    price: "$29",
-    period: "/mes",
+    name: "Fight camp · 8 semanas",
+    price: "A consultar",
     benefits: [
-      "Todo en Base",
-      "VOD completo y nuevas sesiones",
-      "Prioridad en consultas",
+      "Todo lo del bloque de 4 semanas",
+      "Fase específica y sistema híbrido de rounds",
+      "Control del peso hacia la categoría",
+      "Recomendaciones de camp: fatiga, respiración, mentalidad",
     ],
     highlighted: true,
   },
   {
-    name: "Equipo",
+    name: "Equipo / gimnasio",
     price: "A medida",
-    period: "",
     benefits: [
-      "Varios perfiles / club",
-      "Contenido exclusivo",
-      "Facturación y SLA",
+      "Varios atletas en un mismo panel",
+      "Planes compartidos y ranking del equipo",
+      "Condiciones según número de peleadores",
     ],
     highlighted: false,
   },
 ];
 
 const Pricing = () => {
+  const whatsapp = config.business?.whatsapp?.replace(/\s/g, "") ?? "";
+  const contactHref = whatsapp ? `https://wa.me/${whatsapp}` : "/signin";
+
   return (
     <section
       className="border-t border-base-300 bg-base-200 px-6 py-20 sm:px-8 md:py-28"
@@ -45,38 +51,31 @@ const Pricing = () => {
       <div className="mx-auto max-w-6xl">
         <div className="mb-12 text-center">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-            Planes
+            Programas
           </p>
           <h2 className="display text-4xl text-base-content sm:text-5xl md:text-6xl">
-            Elige tu nivel
+            Elige tu bloque
           </h2>
         </div>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {plans.map((plan) => (
+          {programas.map((plan) => (
             <div
               key={plan.name}
               className={`flex flex-col border bg-base-100 p-8 ${
-                plan.highlighted
-                  ? "border-primary"
-                  : "border-base-300"
+                plan.highlighted ? "border-primary" : "border-base-300"
               }`}
             >
               {plan.highlighted && (
                 <span className="tag-skew mb-4 self-start bg-primary px-3 py-1 text-[10px] text-primary-content">
-                  <span>Más elegido</span>
+                  <span>Para fecha de pelea</span>
                 </span>
               )}
               <h3 className="display text-2xl text-base-content">{plan.name}</h3>
               <p className="mt-3 flex items-baseline gap-1">
-                <span className="display text-5xl text-base-content">
+                <span className="display text-4xl text-base-content">
                   {plan.price}
                 </span>
-                {plan.period ? (
-                  <span className="text-sm text-base-content/50">
-                    {plan.period}
-                  </span>
-                ) : null}
               </p>
               <ul className="mt-8 flex-1 space-y-3">
                 {plan.benefits.map((b) => (
@@ -101,12 +100,12 @@ const Pricing = () => {
                 ))}
               </ul>
               <Link
-                href="/signin"
+                href={contactHref}
                 className={`btn mt-8 w-full ${
                   plan.highlighted ? "btn-primary" : "btn-outline"
                 }`}
               >
-                Elegir plan
+                Pedir mi plan
               </Link>
             </div>
           ))}

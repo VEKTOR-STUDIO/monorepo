@@ -296,13 +296,13 @@ export default function SignIn() {
             aria-hidden="true"
             className="display text-stroke pointer-events-none absolute inset-0 flex select-none items-center justify-center text-[9rem] leading-none opacity-60"
           >
-            FM
+            CC
           </span>
           <div className="absolute bottom-10 left-10 max-w-xs">
             <span className="display text-4xl leading-none text-base-content">
               Entrena
               <br />
-              <span className="text-primary">sin excusas.</span>
+              <span className="text-primary">con ciencia.</span>
             </span>
           </div>
         </div>

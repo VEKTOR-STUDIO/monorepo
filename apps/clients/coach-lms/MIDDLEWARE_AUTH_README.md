@@ -216,6 +216,6 @@ curl -b "cookies.txt" http://localhost:3000/signin
 
 ---
 
-**Sistema implementado en Daniel Tamayo** 🚀
+**Sistema heredado del boilerplate, activo en Camargo Coach** 🚀
 *Next.js 15 + Supabase SSR*
 

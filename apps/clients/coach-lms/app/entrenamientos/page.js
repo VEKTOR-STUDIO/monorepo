@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export const metadata = getSEOTags({
   title: `Entrenamientos | ${config.appName}`,
   description:
-    "Programas de entrenamiento funcional, rutinas y videos guiados. Entrena con método desde cualquier lugar.",
+    "Programas de fuerza, potencia y conditioning para atletas de combate, con progresión semanal y cada ejercicio explicado.",
   canonicalUrlRelative: "/entrenamientos",
 });
 
@@ -33,18 +33,19 @@ export default async function EntrenamientosPage() {
             aria-hidden="true"
             className="display text-stroke pointer-events-none absolute -right-2 top-2 select-none text-[7rem] leading-none opacity-50 md:text-[13rem]"
           >
-            VOD
+            S&amp;C
           </span>
           <div className="relative mx-auto max-w-5xl text-center">
             <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-              Área de entrenamiento
+              Programas
             </p>
             <h1 className="display mb-4 text-5xl text-base-content sm:text-6xl md:text-7xl">
-              Entrena con método
+              Entrena con ciencia
             </h1>
             <p className="mx-auto max-w-2xl text-base text-base-content/60 md:text-lg">
-              Programas de entrenamiento funcional, rutinas por sesión y videos
-              guiados paso a paso. Elige tu plan y empieza a moverte mejor.
+              Fuerza, potencia y conditioning para peleadores. Bloques con
+              objetivo semanal, cada ejercicio explicado y una progresión que se
+              ve de una semana a la siguiente.
             </p>
           </div>
         </section>
@@ -58,7 +59,7 @@ export default async function EntrenamientosPage() {
                   Programas
                 </h2>
                 <p className="mt-1 text-sm text-base-content/60">
-                  Planes completos con progresión semanal.
+                  Bloques completos con progresión semanal.
                 </p>
               </div>
             </div>
@@ -79,7 +80,7 @@ export default async function EntrenamientosPage() {
                   Biblioteca de video
                 </h2>
                 <p className="mt-1 text-sm text-base-content/60">
-                  Clases sueltas de técnica, movilidad y teoría.
+                  Clases sueltas de técnica, respiración y teoría.
                 </p>
               </div>
               <VideoLibrary videos={videos} />

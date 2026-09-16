@@ -1,23 +1,45 @@
+// Los siete bloques de una sesión del sistema. Si la tabla `disciplines` de
+// Supabase tiene filas, se muestran esas; si no, estos valores por defecto.
+const BLOQUES = [
+  {
+    name: "Warm up",
+    description:
+      "Assault bike o cuerda, serie dinámica de cadera, columna torácica y hombros, activación de glúteo y escápula.",
+  },
+  {
+    name: "Plyometrics",
+    description:
+      "Depth jumps, saltos laterales y reactivos: el primer paso explosivo y los cambios de ángulo.",
+  },
+  {
+    name: "Contrast set",
+    description:
+      "Fuerza pesada seguida de un gesto explosivo: box squat con medball slam, peso muerto con lanzamientos y golpeo.",
+  },
+  {
+    name: "Push + Pull",
+    description:
+      "Push press y dominadas balísticas en clusters: potencia de empuje y tracción sin acumular fatiga.",
+  },
+  {
+    name: "Midsection",
+    description:
+      "Rotaciones con landmine y banda terminadas en golpe: transferencia directa a la potencia de puño.",
+  },
+  {
+    name: "Conditioning",
+    description:
+      "Sprints en assault bike y rounds híbridos que simulan intercambios, flurries y derribos.",
+  },
+  {
+    name: "Breathing",
+    description:
+      "Respiración diafragmática 4·6·4·6 para bajar pulsaciones y recuperar entre rounds.",
+  },
+];
+
 const DisciplinesSection = ({ disciplines = [] }) => {
-  if (!disciplines?.length) {
-    disciplines = [
-      {
-        name: "Fuerza & potencia",
-        description:
-          "Variantes de cargas, velocidad de ejecución y progresiones para ganar explosividad sin descuidar la técnica.",
-      },
-      {
-        name: "Condición & capacidad aeróbica",
-        description:
-          "Trabajo metabólico y series estructuradas para mejorar resistencia según tu disciplina.",
-      },
-      {
-        name: "Movilidad / prevención",
-        description:
-          "Patrones de movimiento, activación y enfriamiento para sostener semanas de carga altas.",
-      },
-    ];
-  }
+  const items = disciplines?.length ? disciplines : BLOQUES;
 
   return (
     <section
@@ -34,21 +56,21 @@ const DisciplinesSection = ({ disciplines = [] }) => {
 
       <div className="relative mx-auto max-w-6xl">
         <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">
-          Programa
+          La sesión
         </p>
         <h2
           id="features-heading"
           className="display mb-4 text-4xl text-base-content sm:text-5xl md:text-6xl"
         >
-          Líneas de entrenamiento
+          Estructura de cada sesión
         </h2>
         <p className="mb-12 max-w-2xl text-sm leading-relaxed text-base-content/60">
-          Si conectas Supabase, estas tarjetas se alimentan desde tu tabla de
-          disciplinas; si no, se muestran estos ejemplos.
+          Siete bloques, siempre en el mismo orden. Cambian las cargas, las
+          series y el objetivo de la semana; la estructura no.
         </p>
 
-        <div className="grid grid-cols-1 gap-px overflow-hidden border border-base-300 bg-base-300 md:grid-cols-3">
-          {disciplines.map((d, i) => (
+        <div className="grid grid-cols-1 gap-px overflow-hidden border border-base-300 bg-base-300 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((d, i) => (
             <article
               key={d.id || d.name}
               className="group relative bg-base-100 p-8 transition-colors duration-300 hover:bg-base-200 md:p-10"

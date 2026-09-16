@@ -1,7 +1,7 @@
 const config = {
-  appName: "Frank Manzano",
+  appName: "Camargo Coach",
   appDescription:
-    "Entrenamiento, preparación física y contenido en video para deportistas. Método, constancia y rendimiento real.",
+    "High Performance System for Combat Sports. Fuerza, potencia y conditioning online para atletas de combate: plan por bloques, progresión semanal y seguimiento de cada sesión.",
   domainName: "yourdomain.com",
   siteUrl:
     process.env.NODE_ENV === "development"
@@ -27,25 +27,25 @@ const config = {
     cdn: "",
   },
   resend: {
-    fromNoReply: `Frank Manzano <noreply@yourdomain.com>`,
-    fromAdmin: `Frank Manzano <admin@yourdomain.com>`,
+    fromNoReply: `Camargo Coach <noreply@yourdomain.com>`,
+    fromAdmin: `Camargo Coach <admin@yourdomain.com>`,
     supportEmail: "support@yourdomain.com",
   },
   colors: {
-    // Tema único oscuro estilo Nike (definido en app/globals.css).
-    theme: "frank",
-    // Color de marca (rojo eléctrico). Cambia también --color-primary en globals.css.
+    // Tema único oscuro (definido en app/globals.css).
+    theme: "camargo",
+    // Color de marca (rojo). Cambia también --color-primary en globals.css.
     main: "#E11D2A",
   },
   business: {
-    address: "Instalaciones / Centro de entrenamiento — Ciudad, País",
+    address: "Entrenamiento online para atletas de combate",
     phone: "",
     email: "support@yourdomain.com",
-    location: "Ciudad, País",
-    tagline: "Rendimiento, constancia y método. Entrena con propósito.",
+    location: "Online",
+    tagline: "La ciencia detrás del rendimiento.",
     whatsapp: "",
     instagram: "",
-    organizationName: "Alto Rendimiento Athletics",
+    organizationName: "Camargo Coach · High Performance System for Combat Sports",
   },
   auth: {
     loginUrl: "/signin",

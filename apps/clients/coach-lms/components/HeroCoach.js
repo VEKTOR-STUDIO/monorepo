@@ -7,12 +7,12 @@ import Link from "next/link";
 // -----------------------------------------------------------------------------
 
 const HIGHLIGHTS = [
-  { number: "01", label: "Sesiones en video" },
-  { number: "02", label: "Plan semanal" },
-  { number: "03", label: "Progreso medible" },
+  { number: "01", label: "Ficha del atleta" },
+  { number: "02", label: "Plan por bloques" },
+  { number: "03", label: "Seguimiento por sesión" },
 ];
 
-const HeroFrank = () => {
+const HeroCoach = () => {
   return (
     <section
       id="hero"
@@ -41,37 +41,37 @@ const HeroFrank = () => {
         aria-hidden="true"
         className="vertical-label pointer-events-none absolute right-6 top-1/2 hidden -translate-y-1/2 select-none text-xs font-bold uppercase tracking-[0.35em] text-base-content/35 lg:block"
       >
-        Alto rendimiento
+        High performance system
       </span>
 
       <div className="container relative z-10 mx-auto flex flex-1 items-center px-6 sm:px-8">
         <div className="max-w-4xl py-16">
           <div className="rise rise-1">
             <span className="tag-skew bg-primary px-3 py-1 text-xs text-primary-content">
-              <span>VOD · Preparación física · Rendimiento</span>
+              <span>Online · Fuerza & conditioning · Combat sports</span>
             </span>
           </div>
 
           <h1 className="display rise rise-2 mt-6 text-[2.6rem] text-base-content sm:text-6xl md:text-8xl lg:text-9xl">
-            Tu próximo nivel
+            La ciencia detrás
             <br />
             <span className="slash-block mt-3">
-              <span>empieza aquí</span>
+              <span>del rendimiento</span>
             </span>
           </h1>
 
           <p className="rise rise-3 mt-8 max-w-xl border-l-2 border-primary pl-5 text-lg font-medium leading-relaxed text-base-content/70">
-            Entrena con método: sesiones en video, planificación y contenido
-            pensado para deportistas que buscan constancia, recuperación y
-            resultados medibles.
+            Fuerza, potencia y conditioning online para atletas de combate. Un
+            plan por bloques construido desde tu ficha, con progresión semanal
+            y seguimiento de cada sesión.
           </p>
 
           <div className="rise rise-4 mt-10 flex flex-wrap items-center gap-4">
-            <Link href="/entrenamientos" className="btn btn-primary btn-lg px-10">
+            <Link href="/dashboard" className="btn btn-primary btn-lg px-10">
               Entrar al área de atletas
             </Link>
-            <Link href="/signin" className="btn btn-outline btn-lg">
-              Ya tengo cuenta
+            <Link href="/entrenamientos" className="btn btn-outline btn-lg">
+              Ver programas
             </Link>
           </div>
         </div>
@@ -99,4 +99,4 @@ const HeroFrank = () => {
   );
 };
 
-export default HeroFrank;
+export default HeroCoach;

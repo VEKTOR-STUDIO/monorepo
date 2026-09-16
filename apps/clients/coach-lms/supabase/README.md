@@ -1,4 +1,7 @@
-# Supabase — Frank Manzano
+# Supabase — Camargo Coach
+
+> Usa un proyecto de Supabase **propio** para esta app. El `.env.local` heredado
+> apunta al de otro cliente: cámbialo antes de pegar el SQL.
 
 Este proyecto **no** está conectado por MCP ni por la CLI, así que el esquema se
 entrega como SQL para pegar en el **SQL Editor** del dashboard de Supabase.
@@ -38,8 +41,8 @@ lo edites a mano, vuelve a ejecutar el script.
 
 ## Antes de ejecutar
 
-Abre la migración y busca `>>> CAMBIA ESTE CORREO POR EL DE FRANK <<<`. Si no lo
-cambias, Frank entrará como alumno normal y no verá el panel de entrenador.
+Abre la migración y busca `>>> CAMBIA ESTE CORREO POR EL DEL COACH <<<`. Si no lo
+cambias, el coach entrará como alumno normal y no verá el panel de entrenador.
 
 Si ya se registró antes de que lo cambies:
 

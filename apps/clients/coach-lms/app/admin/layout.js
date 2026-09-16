@@ -23,7 +23,7 @@ export default async function AdminLayout({ children }) {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
           <div className="flex items-center gap-3">
             <Link href="/" className="display text-xl leading-none">
-              Frank<span className="text-primary">Manzano</span>
+              Camargo<span className="text-primary">Coach</span>
             </Link>
             <span className="border border-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
               Entrenador
