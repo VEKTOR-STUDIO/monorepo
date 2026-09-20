@@ -467,6 +467,115 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+ * Cintas de texto  (solo la puerta de la demo)
+ * ------------------------------------------------------------------------ */
+
+.cintillo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-block: 0.7rem;
+  user-select: none;
+  background-color: color-mix(in oklab, var(--color-base-100) 92%, transparent);
+  border-block: 1px solid color-mix(in oklab, var(--color-primary) 22%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 75%, transparent);
+  /* Se difumina por los bordes: el texto nace y muere, no se corta en seco. */
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* La pista lleva el contenido DOS veces y se desplaza media pista: al llegar
+   al -50 % la segunda copia está donde empezó la primera, así que el salto al
+   reiniciar no se ve. */
+.cintillo-pista {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  animation: cinta 38s linear infinite;
+}
+
+.cintillo:hover .cintillo-pista {
+  animation-play-state: paused;
+}
+
+.cintillo-texto {
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.cintillo-punto {
+  font-size: 0.5rem;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cintillo-pista {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Portada de edición  (solo la puerta de la demo)
+ *
+ * La puerta no es una pantalla de login: es el escaparate donde se vende el
+ * sistema. De ahí el lenguaje de carátula de edición especial —insignia, lo
+ * que trae, rebaja y cuenta atrás—, que todo el mundo sabe leer de un vistazo
+ * y que aquí además es verdad: hay un precio, hay una fecha y hay una lista
+ * de lo que se lleva quien compre.
+ *
+ * Nada de esto entra en la tienda: ahí vende Hardcore, no nosotros.
+ * ------------------------------------------------------------------------ */
+
+/* El sello de rebaja. Va girado, como el adhesivo de una caja. */
+.sello-descuento {
+  transform: rotate(-9deg);
+  background-color: var(--color-primary);
+  color: var(--color-primary-content);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-primary) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-primary) 80%, transparent);
+}
+
+/* Cada cosa que trae la edición, como una línea de contenido descargable. */
+.linea-dlc {
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 4%, transparent);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linea-dlc:hover {
+  transform: translateX(3px);
+  border-color: color-mix(in oklab, var(--color-primary) 45%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* Resplandor rojo detrás de lo que tiene que mirarse primero. */
+.resplandor {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    0 0 70px -14px color-mix(in oklab, var(--color-primary) 55%, transparent);
+}
+
+/* El latido del punto de "en directo". */
+@keyframes pulso {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+
+/* --------------------------------------------------------------------------
  * Cristal
  *
  * El acabado de un bote de suplementos: superficie translúcida, un filo

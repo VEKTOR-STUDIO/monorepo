@@ -41,8 +41,14 @@ export default function PantallaVehiculo({
         </p>
       </div>
 
-      {/* La foto manda: ocupa todo el espacio que sobre. */}
-      <div className="relative min-h-0 flex-1">
+      {/* La foto manda: ocupa todo el espacio que sobre, pero con un suelo.
+          Dentro de este hueco no hay más que una imagen posicionada en
+          absoluto, así que no tiene altura propia: un flex-1 sin mínimo se
+          encoge a cero en cuanto la pantalla es baja —una ventana de portátil,
+          un móvil apaisado, cualquier alto de 640px o menos, donde además
+          .pantalla deja de medir 100svh— y la sección se queda con el título,
+          el precio y ningún vehículo. */}
+      <div className="relative min-h-[40svh] flex-1">
         <FotoVehiculo
           vehiculo={vehiculo}
           tono={tono}

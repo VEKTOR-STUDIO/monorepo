@@ -2,30 +2,42 @@
 
 import { useEffect, useRef, useState } from "react";
 import { LogoCuadrado } from "@/components/Logo";
+import Cintillo from "@/components/Cintillo";
+import Contador from "@/components/demo/Contador";
 import { contexto, usarGsap } from "@/libs/animaciones";
+import config from "@/config";
 
 /**
  * La puerta de la demo.
  *
- * Primero se enciende el logo, después aparece el formulario. La animación no
- * bloquea nada: quien ya sabe la contraseña puede escribirla desde el primer
- * momento, solo que el campo llega solo a los 1,7 s.
+ * No es una pantalla de login: es el escaparate donde se vende el sistema, y
+ * la única pantalla que ve seguro quien recibe el enlace. Por eso está montada
+ * como la carátula de una edición —insignia, lo que trae, cuenta atrás y
+ * cintas de texto corriendo— con la caja de acceso a la derecha, que es donde
+ * la vista termina cayendo.
  *
- * Toda la secuencia es una línea de tiempo de GSAP. Frente a los @keyframes de
- * antes gana en que los tres momentos —entrada, error y salida— comparten los
- * mismos elementos y se pueden encadenar o interrumpir entre sí.
+ * Todo lo que anuncia es verdad y está en `config.demo`: el precio, la fecha
+ * en que se acaba y la lista de lo que se lleva quien compre. El sello de
+ * rebaja solo aparece si `precioAnterior` tiene algo; vacío, no se inventa
+ * ninguna oferta.
  *
- * Aquí manda la firma de Alessandrovaru y no la marca de Hardcore, y es a
- * propósito: quien llega todavía no es cliente de Hardcore —es alguien a quien
- * se le está enseñando un trabajo—. La marca del cliente aparece debajo, como
- * lo que hay detrás de la puerta. En cuanto se entra, la jerarquía se invierte
- * y la tienda entera pasa a ser suya.
+ * Aquí manda la firma de Alessandrovaru y no la marca de Hardcore: quien llega
+ * todavía no es cliente de Hardcore, es alguien a quien se le está enseñando
+ * un trabajo. Al entrar, la jerarquía se invierte y la tienda pasa a ser suya.
  *
  * Esto es la cara del candado; el candado de verdad está en el middleware.
- * Sin la cookie correcta el servidor no sirve ni una página de la tienda, así
- * que saltarse esta pantalla con las herramientas del navegador no lleva a
- * ningún sitio.
+ * Sin la cookie correcta el servidor no sirve ni una página de la tienda.
  */
+
+/** "$690" y "$399" → 42. Null si no hay rebaja que anunciar. */
+function calcularDescuento(antes, ahora) {
+  const limpiar = (v) => Number(String(v ?? "").replace(/[^\d.]/g, ""));
+  const a = limpiar(antes);
+  const b = limpiar(ahora);
+  if (!a || !b || b >= a) return null;
+  return Math.round((1 - b / a) * 100);
+}
+
 export default function PantallaAcceso({ destino = "/" }) {
   const [clave, setClave] = useState("");
   const [enviando, setEnviando] = useState(false);
@@ -33,6 +45,9 @@ export default function PantallaAcceso({ destino = "/" }) {
   const [abierto, setAbierto] = useState(false);
   const campo = useRef(null);
   const raiz = useRef(null);
+
+  const { precio, precioAnterior, precioNota, incluye } = config.demo;
+  const descuento = calcularDescuento(precioAnterior, precio);
 
   // Entrada
   useEffect(
@@ -48,32 +63,28 @@ export default function PantallaAcceso({ destino = "/" }) {
             "[data-puerta='logo']",
             {
               opacity: 0,
-              scale: 0.72,
+              scale: 0.78,
               filter: "blur(16px) brightness(2.4)",
               duration: 1.1,
-              // Al acabar hay que borrar filter Y transform. Cualquiera de
-              // los dos crea un contexto de apilado, y dentro de él el
-              // `mix-blend-screen` del logo deja de fundirse con el fondo de
-              // la página: en vez de solo las letras se ve el recuadro negro
-              // del JPEG.
+              // Hay que borrar filter Y transform: cualquiera de los dos crea
+              // un contexto de apilado, y dentro de él el `mix-blend-screen`
+              // del logo deja de fundirse con el fondo —se vería el recuadro
+              // negro del JPEG en vez de solo las letras.
               clearProps: "filter,transform",
             },
             0
           )
-          .from("[data-puerta='anillo']", { opacity: 0, duration: 0.8 }, 0.5)
-          .from("[data-puerta='marca']", { opacity: 0, y: -12 }, 0.8)
-          .from("[data-puerta='rotulo']", { opacity: 0, y: 14 }, 1.05)
-          .from("[data-puerta='titulo']", { opacity: 0, y: 16 }, 1.2)
-          .from("[data-puerta='forma']", { opacity: 0, y: 16 }, 1.4)
-          .from("[data-puerta='pie']", { opacity: 0, y: 12 }, 1.6);
-
-        // El anillo gira mientras la pantalla esté viva.
-        g.to("[data-puerta='anillo']", {
-          rotation: 360,
-          duration: 4.5,
-          ease: "none",
-          repeat: -1,
-        });
+          .from("[data-puerta='marca']", { opacity: 0, y: -12 }, 0.6)
+          .from("[data-puerta='insignia']", { opacity: 0, scale: 0.85, duration: 0.7 }, 0.85)
+          .from("[data-puerta='titulo']", { opacity: 0, y: 16 }, 1.0)
+          .from("[data-puerta='caja']", { opacity: 0, y: 24, duration: 0.9 }, 1.1)
+          .from("[data-puerta='sello']", { opacity: 0, scale: 0.4, rotate: -40, duration: 0.6 }, 1.5)
+          .from(
+            "[data-puerta='dlc'] > *",
+            { opacity: 0, x: -18, duration: 0.5, stagger: 0.07 },
+            1.3
+          )
+          .from("[data-puerta='pie']", { opacity: 0, y: 12 }, 1.8);
 
         // La luz que repasa el logo, cada pocos segundos.
         g.fromTo(
@@ -148,161 +159,232 @@ export default function PantallaAcceso({ destino = "/" }) {
   };
 
   return (
-    <main
-      ref={raiz}
-      // Se le descuenta el crédito del pie para que no quede un scroll de dos
-      // dedos en una pantalla que debería caber justa.
-      className="relative flex min-h-[calc(100svh-var(--alto-credito))] flex-col items-center justify-center overflow-hidden px-6"
-    >
+    <main ref={raiz} className="relative min-h-svh overflow-hidden">
+      {/* ---------------- Fondo ---------------- */}
+      <div className="humo absolute inset-0" aria-hidden="true" />
+      <div className="panal absolute inset-0 opacity-50" aria-hidden="true" />
       <div className="malla malla-centro absolute inset-0" aria-hidden="true" />
       <div className="textura absolute inset-0" aria-hidden="true" />
-
-      {/* Halo rojo detrás del logo */}
       <div
         data-puerta="halo"
-        className="pointer-events-none absolute left-1/2 top-1/2 size-[32rem] -translate-x-1/2 -translate-y-1/2 opacity-75"
+        className="pointer-events-none absolute left-1/2 top-1/3 size-[36rem] -translate-x-1/2 -translate-y-1/2 opacity-70"
         aria-hidden="true"
         style={{
           background:
             "radial-gradient(circle, color-mix(in oklab, var(--color-primary) 34%, transparent), transparent 62%)",
-          filter: "blur(70px)",
+          filter: "blur(80px)",
         }}
       />
 
-      <div className="relative flex w-full max-w-sm flex-col items-center">
-        {/* Logo con su anillo */}
-        {/* La firma, arriba del todo: esto lo enseña Alessandrovaru. */}
-        <div data-puerta="marca" className="mb-9 flex flex-col items-center">
-          <a
-            href="https://alessandrovaru.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="microgramma text-sm text-base-content/90 transition-colors hover:text-primary"
-            style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
-          >
-            Alessandrovaru
-          </a>
-          <span className="mt-3 h-px w-16 bg-base-content/20" aria-hidden="true" />
-          <p className="microgramma mt-3 text-[0.6rem] text-base-content/40">
-            Sistemas a medida
+      {/* ---------------- Cinta de arriba ---------------- */}
+      <Cintillo variante="puerta" velocidad={26} className="relative z-20" />
+
+      {/* ---------------- Cuerpo ---------------- */}
+      <div className="relative z-10 mx-auto grid max-w-6xl gap-10 px-5 py-12 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:py-16">
+        {/* ============ Columna izquierda: la carátula ============ */}
+        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
+          <div data-puerta="marca" className="flex items-center gap-3">
+            <a
+              href="https://alessandrovaru.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="microgramma text-xs text-base-content/85 transition-colors hover:text-primary"
+              style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
+            >
+              Alessandrovaru
+            </a>
+            <span className="h-px w-8 bg-base-content/20" aria-hidden="true" />
+            <span className="microgramma text-[0.6rem] text-base-content/40">
+              Sistemas a medida
+            </span>
+          </div>
+
+          <div data-puerta="insignia" className="mt-7">
+            <span className="insignia bg-primary px-4 py-2">
+              <span className="microgramma text-[0.65rem] text-primary-content">
+                ◆ Edición completa · Acceso anticipado
+              </span>
+            </span>
+          </div>
+
+          <div data-puerta="logo" className="relative mt-8">
+            <div className="relative overflow-hidden rounded-2xl">
+              <LogoCuadrado lado={172} prioridad />
+
+              {/* Barrido de luz sobre el logo */}
+              <div
+                data-puerta="barrido"
+                className="pointer-events-none absolute inset-x-0 h-1/3"
+                aria-hidden="true"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-primary) 24%, transparent), transparent)",
+                }}
+              />
+            </div>
+          </div>
+
+          <p data-puerta="titulo" className="mt-6 max-w-md leading-relaxed text-base-content/60">
+            La tienda entera, funcionando: catálogo, carrito, panel e importador.
+            Entra con tu contraseña y recórrela — lo que ves es lo que se entrega.
           </p>
-          <p className="microgramma mt-7 text-[0.6rem] text-base-content/35">
-            Demo privada de
-          </p>
-        </div>
 
-        <div data-puerta="logo" className="relative">
-          <div
-            data-puerta="anillo"
-            className="absolute -inset-5 rounded-full opacity-60"
-            aria-hidden="true"
-            style={{
-              background:
-                "conic-gradient(from 0deg, transparent 0deg, color-mix(in oklab, var(--color-primary) 85%, transparent) 55deg, transparent 130deg)",
-              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-              WebkitMask:
-                "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-            }}
-          />
+          {/* Lo que trae la edición. */}
+          <div className="mt-9 w-full">
+            <p className="microgramma text-[0.6rem] text-base-content/45">
+              Incluido en esta edición
+            </p>
 
-          <div className="relative overflow-hidden rounded-2xl">
-            <LogoCuadrado lado={188} prioridad />
-
-            {/* Barrido de luz sobre el logo */}
-            <div
-              data-puerta="barrido"
-              className="pointer-events-none absolute inset-x-0 h-1/3"
-              aria-hidden="true"
-              style={{
-                background:
-                  "linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-primary) 24%, transparent), transparent)",
-              }}
-            />
+            <ul data-puerta="dlc" className="mt-4 space-y-2">
+              {incluye.map((cosa, i) => (
+                <li
+                  key={cosa}
+                  className="linea-dlc flex items-start gap-3 rounded-md px-4 py-3 text-left"
+                >
+                  <span className="microgramma shrink-0 text-[0.65rem] text-base-content/35">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-sm leading-snug text-base-content/80">{cosa}</span>
+                  <span className="ml-auto shrink-0 text-primary/60" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                      <path d="m20 6-11 11-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <p data-puerta="rotulo" className="microgramma mt-8 text-[0.65rem] text-primary">
-          Acceso privado
-        </p>
+        {/* ============ Columna derecha: la caja de acceso ============ */}
+        <div className="lg:sticky lg:top-8 lg:self-start">
+          <div data-puerta="caja" className="cristal resplandor relative p-6 sm:p-7">
+            {/* El sello de rebaja, pegado en la esquina. Solo si hay rebaja. */}
+            {descuento && (
+              <div
+                data-puerta="sello"
+                className="sello-descuento absolute -right-3 -top-4 rounded-lg px-3 py-2 text-center sm:-right-5"
+              >
+                <p className="cifra text-lg font-bold leading-none">−{descuento}%</p>
+                <p className="microgramma mt-0.5 text-[0.5rem] opacity-90">hoy</p>
+              </div>
+            )}
 
-        <h1 data-puerta="titulo" className="display mt-3 text-center text-2xl">
-          ESTA DEMO ES CON INVITACIÓN
-        </h1>
+            <p className="microgramma flex items-center gap-2 text-[0.6rem] text-base-content/50">
+              <span
+                className="inline-block size-1.5 rounded-full bg-primary"
+                style={{ animation: "pulso 1.8s ease-in-out infinite" }}
+                aria-hidden="true"
+              />
+              Oferta de lanzamiento
+            </p>
 
-        <form data-puerta="forma" onSubmit={enviar} className="cristal mt-8 w-full p-5">
-          {/* Campo de usuario oculto: aquí no hay usuarios, pero sin él los
-              gestores de contraseñas no saben a qué cuenta asociar la clave y
-              Chrome se queja. Va oculto y fuera del recorrido del tabulador. */}
-          <input
-            type="text"
-            name="username"
-            value="hardcore-demo"
-            autoComplete="username"
-            readOnly
-            tabIndex={-1}
-            aria-hidden="true"
-            className="sr-only"
-          />
+            <div className="mt-3 flex items-end gap-3">
+              {precioAnterior && (
+                <span className="cifra text-xl text-base-content/35 line-through">
+                  {precioAnterior}
+                </span>
+              )}
+              <span className="cifra text-5xl font-bold leading-none text-primary">
+                {precio}
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-base-content/45">{precioNota}</p>
 
-          <label htmlFor="clave" className="sr-only">
-            Contraseña de acceso
-          </label>
+            <div className="mt-5">
+              <p className="microgramma text-[0.6rem] text-base-content/45">Termina en</p>
+              <Contador formato="completo" className="mt-2" />
+            </div>
 
-          <div>
-            <input
-              ref={campo}
-              id="clave"
-              type="password"
-              value={clave}
-              onChange={(e) => {
-                setClave(e.target.value);
-                if (error) setError("");
-              }}
-              disabled={enviando || abierto}
-              autoComplete="current-password"
-              placeholder="Contraseña"
-              aria-invalid={Boolean(error)}
-              aria-describedby={error ? "error-clave" : undefined}
-              className={`entrada text-center tracking-[0.3em] ${error ? "border-error!" : ""}`}
-            />
+            {/* La llave. */}
+            <form onSubmit={enviar} className="mt-7 border-t border-base-content/10 pt-6">
+              <p className="microgramma text-[0.65rem] text-primary">
+                Acceso privado · con invitación
+              </p>
+
+              {/* Campo de usuario oculto: aquí no hay usuarios, pero sin él los
+                  gestores de contraseñas no saben a qué cuenta asociar la clave
+                  y el navegador se queja. Fuera del tabulador. */}
+              <input
+                type="text"
+                name="username"
+                value="hardcore-demo"
+                autoComplete="username"
+                readOnly
+                tabIndex={-1}
+                aria-hidden="true"
+                className="sr-only"
+              />
+
+              <label htmlFor="clave" className="sr-only">
+                Contraseña de acceso
+              </label>
+
+              <div className="mt-3">
+                <input
+                  ref={campo}
+                  id="clave"
+                  type="password"
+                  value={clave}
+                  onChange={(e) => {
+                    setClave(e.target.value);
+                    if (error) setError("");
+                  }}
+                  disabled={enviando || abierto}
+                  autoComplete="current-password"
+                  placeholder="Contraseña"
+                  aria-invalid={Boolean(error)}
+                  aria-describedby={error ? "error-clave" : undefined}
+                  className={`entrada text-center tracking-[0.3em] ${error ? "border-error!" : ""}`}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={enviando || abierto || !clave}
+                className="btn btn-primary mt-3 w-full"
+              >
+                {abierto ? "Pasa" : enviando ? "Comprobando…" : "Entrar a la demo"}
+              </button>
+
+              <p
+                id="error-clave"
+                role="alert"
+                className={`mt-3 text-center text-sm text-error transition-opacity ${
+                  error ? "opacity-100" : "opacity-0"
+                }`}
+              >
+                {error || " "}
+              </p>
+            </form>
           </div>
-
-          <button
-            type="submit"
-            disabled={enviando || abierto || !clave}
-            className="btn btn-primary mt-3 w-full"
-          >
-            {abierto ? "Pasa" : enviando ? "Comprobando…" : "Entrar"}
-          </button>
 
           <p
-            id="error-clave"
-            role="alert"
-            className={`mt-3 text-center text-sm text-error transition-opacity ${
-              error ? "opacity-100" : "opacity-0"
-            }`}
+            data-puerta="pie"
+            className="mt-5 text-center text-xs leading-relaxed text-base-content/35"
           >
-            {error || " "}
+            Construida por{" "}
+            <a
+              href="https://alessandrovaru.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="microgramma text-base-content/60 underline-offset-4 transition-colors hover:text-primary hover:underline"
+              style={{ fontFamily: "var(--microgramma-font)" }}
+            >
+              Alessandrovaru
+            </a>
+            . Si llegaste sin contraseña, escríbeme y te doy acceso.
           </p>
-        </form>
-
-        <p
-          data-puerta="pie"
-          className="mt-4 text-center text-xs leading-relaxed text-base-content/35"
-        >
-          Tienda de demostración construida por{" "}
-          <a
-            href="https://alessandrovaru.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="microgramma text-base-content/60 underline-offset-4 transition-colors hover:text-primary hover:underline"
-            style={{ fontFamily: "var(--microgramma-font)" }}
-          >
-            Alessandrovaru
-          </a>
-          . Si llegaste sin contraseña, escríbeme y te doy acceso.
-        </p>
+        </div>
       </div>
+
+      {/* ---------------- Cinta de abajo, al revés ---------------- */}
+      <Cintillo
+        variante="puertaInversa"
+        invertido
+        velocidad={32}
+        className="relative z-20"
+      />
     </main>
   );
 }
