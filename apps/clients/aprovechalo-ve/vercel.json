@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "app/admin/**": {
+      "maxDuration": 60
+    },
+    "app/api/**": {
+      "maxDuration": 60
+    }
+  }
+}
