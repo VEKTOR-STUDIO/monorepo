@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180">
+  <rect width="180" height="180" fill="#0D0D0D"/>
+  <text
+    x="50%"
+    y="44%"
+    dominant-baseline="central"
+    text-anchor="middle"
+    font-family="system-ui, sans-serif"
+    font-weight="800"
+    font-style="italic"
+    font-size="101"
+    fill="#FFFFFF"
+  >C</text>
+  <g transform="skewX(-18) translate(48.41 0)">
+    <rect x="14.40" y="140" width="43.20" height="18" fill="#009246"/>
+    <rect x="68.40" y="140" width="43.20" height="18" fill="#FFFFFF"/>
+    <rect x="122.40" y="140" width="43.20" height="18" fill="#CE2B37"/>
+  </g>
+</svg>

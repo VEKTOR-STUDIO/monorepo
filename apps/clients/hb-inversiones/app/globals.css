@@ -1,0 +1,783 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tema "hb".
+ *
+ * No se inventó una paleta: se copió la del cliente. Las trece páginas de su
+ * «CATÁLOGO DE VEHÍCULOS HB» son exactamente lo mismo repetido —negro, rojo y
+ * blanco cortados en diagonal, el modelo en itálica condensada arriba a la
+ * izquierda, el logo de la marca arriba a la derecha, las viñetas abajo a la
+ * derecha y la dirección abajo a la izquierda—, así que esa retícula es la
+ * identidad y la web la hereda entera.
+ *
+ * Tres decisiones que vienen de ahí y no de un gusto:
+ *
+ *   · FONDO NEGRO. Su catálogo es negro; una web blanca hubiera sido otra
+ *     marca. Además los vehículos que venden son casi todos blancos o claros,
+ *     y sobre negro recortan solos.
+ *   · EL CORTE EN DIAGONAL manda en todo: fondos, fotos, botones y hasta la
+ *     forma en que entran las cosas al hacer scroll (libs/animaciones.js).
+ *   · EL ROJO NO DECORA, SEÑALA. Es el precio, el botón y la condición "0 km".
+ *     Si se usara de relleno dejaría de significar nada.
+ *
+ * Para mover el rojo de marca: --color-primary aquí y config.colors.main.
+ * ------------------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "hb";
+  default: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(13% 0 0);
+  --color-base-200: oklch(17.5% 0 0);
+  --color-base-300: oklch(24% 0 0);
+  --color-base-content: oklch(97% 0 0);
+
+  /* El rojo del catálogo (#E11019). */
+  --color-primary: oklch(55% 0.225 27);
+  --color-primary-content: oklch(99% 0 0);
+
+  /* El blanco del catálogo, que es el otro color de la marca. */
+  --color-secondary: oklch(97% 0 0);
+  --color-secondary-content: oklch(13% 0 0);
+
+  --color-accent: oklch(55% 0.225 27);
+  --color-accent-content: oklch(99% 0 0);
+
+  --color-neutral: oklch(22% 0 0);
+  --color-neutral-content: oklch(95% 0 0);
+
+  --color-info: oklch(70% 0.11 240);
+  --color-info-content: oklch(13% 0 0);
+  --color-success: oklch(72% 0.16 155);
+  --color-success-content: oklch(13% 0 0);
+  --color-warning: oklch(80% 0.15 75);
+  --color-warning-content: oklch(13% 0 0);
+  --color-error: oklch(60% 0.22 27);
+  --color-error-content: oklch(99% 0 0);
+
+  /* Radio mínimo: el catálogo no tiene ni una esquina redondeada de verdad.
+     Se deja un pelo para que los campos y los botones no corten. */
+  --radius-selector: 0.125rem;
+  --radius-field: 0.125rem;
+  --radius-box: 0.125rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  /* Barlow Condensed en negrita itálica es lo más cerca que se llega del
+     titular del catálogo sin licenciar su tipografía: condensada, muy pesada,
+     inclinada y con los remates cortados en recto. */
+  --font-display: var(--font-barlow), "Arial Narrow", system-ui, sans-serif;
+  --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* -------------------------------------------------------------------------
+   * Un solo radio en toda la web, y es casi cero.
+   *
+   * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
+   * mismo valor a propósito: así da igual cuál escriba cada componente, el
+   * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
+   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos de
+   * verdad —puntos de estado, el logo— y esos sí deben seguir siendo redondos.
+   * ----------------------------------------------------------------------- */
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.125rem;
+  --radius-xl: 0.125rem;
+  --radius-2xl: 0.125rem;
+  --radius-3xl: 0.125rem;
+
+  --color-tinta: oklch(13% 0 0);
+  --color-humo: oklch(62% 0 0);
+  --color-acero: oklch(30% 0 0);
+  --color-rojo: oklch(55% 0.225 27);
+  --color-rojo-hondo: oklch(42% 0.19 27);
+
+  --animate-flecha: flecha 2.2s ease-in-out infinite;
+  --animate-cinta: cinta 42s linear infinite;
+
+  /* La flecha de "sigue bajando" del final de la portada. */
+  @keyframes flecha {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateY(0.4rem);
+      opacity: 1;
+    }
+  }
+
+  @keyframes cinta {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+  }
+
+  /* El latido del punto de "en directo" de la puerta. */
+  @keyframes pulso {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.82);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+
+  /* Alto de la franja de demo. Sin demo vale 0 y la cabecera vuelve arriba
+     del todo; con demo, la cabecera se pega justo debajo de la franja. */
+  --alto-barra-demo: 0px;
+
+  /* Alto del crédito de autoría del final (components/FooterFoot.js). */
+  --alto-credito: 1.9rem;
+
+  /* El ángulo de la marca. Se usa en las diagonales y en los biseles, y está
+     aquí arriba para que cambiarlo cambie la página entera de una vez. */
+  --angulo-hb: -18deg;
+
+  background-color: var(--color-base-100);
+}
+
+html[data-demo="true"] {
+  --alto-barra-demo: 2.5rem;
+}
+
+/* En demo, la tarjeta flotante de venta se posa abajo. En pantalla estrecha
+   ocupa todo el ancho y taparía el crédito, así que se le da aire. */
+html[data-demo="true"] .footer-foot {
+  padding-bottom: 9.5rem;
+}
+
+@media (min-width: 640px) {
+  html[data-demo="true"] .footer-foot {
+    padding-bottom: 0.25rem;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-base-100);
+}
+
+:target {
+  scroll-margin-top: calc(var(--alto-barra-demo) + 5rem);
+}
+
+::selection {
+  background-color: var(--color-rojo);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+ * Tipografía
+ * ------------------------------------------------------------------------ */
+
+/* El titular del catálogo: condensado, muy pesado, en itálica y en mayúsculas.
+   Es lo que hace que un bloque de texto se lea como una portada de HB y no
+   como una web de plantilla. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.005em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+/* Variante recta, para los sitios donde la itálica cansaría: tablas, fichas
+   técnicas, nombres largos de modelo. */
+.display-recto {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.005em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Etiquetas pequeñas de sección. */
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
+}
+
+/* Cifras que se comparan entre sí: precios, kilómetros, años. */
+.cifra {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+ * Los titulares que entran línea a línea
+ *
+ * SplitText envuelve cada línea en una caja con `overflow: clip` para que el
+ * texto ASOME en vez de aparecer. El recorte es exactamente a ras de la caja
+ * de la línea, así que en español se comería las tildes de las mayúsculas
+ * —"ÚNICO", "2024 TOYOTA URBAN CRUISER"— y el rabo de la itálica por la
+ * derecha.
+ *
+ * Se le da hueco con padding y se recupera con un margen negativo igual, que
+ * en un elemento generado por GSAP no compite con ninguna utilidad de
+ * Tailwind.
+ * ------------------------------------------------------------------------ */
+.linea-titulo-mask {
+  padding-top: 0.24em;
+  margin-top: -0.24em;
+  padding-right: 0.18em;
+  margin-right: -0.18em;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+/* --------------------------------------------------------------------------
+ * Microgramma y los cintillos
+ *
+ * Esta página tiene DOS voces y conviene no confundirlas:
+ *
+ *   · Lo que ve el comprador —vehículos, cómo se compra, contacto— va con la
+ *     tipografía de la casa.
+ *   · Lo que le habla al DUEÑO de HB —cómo se publica, qué incluye, cuánto
+ *     cuesta— va en Microgramma, que es la tipografía de la firma de
+ *     Alessandrovaru, la misma del crédito del pie.
+ *
+ * Entre una voz y otra se cruza un cintillo animado, para que se vea de un
+ * golpe dónde termina el escaparate y dónde empieza la oferta.
+ * ------------------------------------------------------------------------ */
+
+.microgramma {
+  font-family: var(--microgramma-font), var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cintillo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-block: 0.7rem;
+  user-select: none;
+  /* Se difumina por los bordes: el texto nace y muere, no se corta en seco. */
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* La pista lleva el contenido DOS veces y se desplaza media pista: al llegar
+   al -50 % la segunda copia está exactamente donde empezó la primera, así que
+   el salto al reiniciar no se ve. */
+.cintillo-pista {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  animation: cinta 38s linear infinite;
+}
+
+.cintillo:hover .cintillo-pista {
+  animation-play-state: paused;
+}
+
+/* La voz de venta: el rojo de la casa, que aquí sí llena. */
+.cintillo-venta {
+  background-color: var(--color-rojo);
+  color: #fff;
+}
+
+/* La vuelta al escaparate: oscura y discreta, que no compita. */
+.cintillo-cliente {
+  background-color: var(--color-base-200);
+  color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+  border-block: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+.cintillo-texto {
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+/* La barra inclinada que separa una frase de la siguiente: el mismo ángulo
+   que todo lo demás. */
+.cintillo-punto {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.75rem;
+  background-color: currentColor;
+  opacity: 0.5;
+  transform: skewX(var(--angulo-hb));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cintillo-pista {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * La gráfica de la casa: el corte en diagonal
+ *
+ * En el catálogo, el negro y el rojo nunca se encuentran en horizontal: se
+ * cruzan en diagonal, de abajo-izquierda a arriba-derecha. Aquí ese corte
+ * aparece de cuatro formas, de más a menos fuerte.
+ * ------------------------------------------------------------------------ */
+
+/* 1. La franja, para acentos cortos: bajo un titular, en un rótulo. */
+.banda {
+  height: 0.25rem;
+  width: 3.5rem;
+  background-color: var(--color-rojo);
+  transform: skewX(var(--angulo-hb));
+}
+
+.banda-ancha {
+  width: 100%;
+  transform: none;
+}
+
+/* 2. El bisel, para botones y etiquetas: la caja va sesgada y el contenido
+      se contra-sesga para que el texto salga recto. */
+.bisel {
+  display: inline-block;
+  transform: skewX(var(--angulo-hb));
+}
+
+.bisel > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-hb) * -1));
+}
+
+/* 3. El corte, para fotos y bloques enteros: una esquina rebajada, como el
+      canto de las fichas del catálogo. */
+.corte {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
+}
+
+.corte-doble {
+  clip-path: polygon(
+    1.5rem 0,
+    100% 0,
+    100% calc(100% - 1.5rem),
+    calc(100% - 1.5rem) 100%,
+    0 100%,
+    0 1.5rem
+  );
+}
+
+/* 4. El campo: el fondo diagonal completo, para las secciones que tienen que
+      sonar a portada de catálogo. Son dos cuñas, una roja y una gris, sobre
+      negro, con el mismo ángulo que todo lo demás. */
+.campo-hb {
+  background-color: var(--color-base-100);
+  background-image:
+    linear-gradient(
+      100deg,
+      transparent 0 34%,
+      var(--color-rojo-hondo) 34% 41%,
+      transparent 41% 100%
+    ),
+    linear-gradient(
+      100deg,
+      transparent 0 62%,
+      color-mix(in oklab, var(--color-base-content) 7%, transparent) 62% 66%,
+      transparent 66% 100%
+    );
+}
+
+/* El fondo donde se posan las fotos del catálogo: negro con una insinuación
+   de foco, como el suelo del local. */
+.estudio {
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 50% 42%,
+      oklch(26% 0 0) 0%,
+      oklch(18% 0 0) 48%,
+      oklch(12% 0 0) 100%
+    );
+}
+
+/* La sombra elíptica bajo el vehículo. Sin esto las siluetas flotan. */
+.sombra-piso {
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, oklch(0% 0 0 / 0.55), transparent 70%);
+  filter: blur(6px);
+}
+
+/* --------------------------------------------------------------------------
+ * Texturas
+ *
+ * Kilómetros de negro liso se ven baratos en una pantalla grande. Estas dos
+ * capas le dan superficie sin llamar la atención, y van como CAPA —un div
+ * absoluto dentro de la sección— y no como pseudoelemento: con un z-index
+ * negativo acabarían por detrás del propio fondo y no se verían nunca.
+ *
+ *   <div className="textura absolute inset-0" aria-hidden="true" />
+ * ------------------------------------------------------------------------ */
+
+/* Grano fino. Es ruido que genera el navegador (feTurbulence), así que no hay
+   que servir ninguna imagen. Sobre negro tiene que ACLARAR. */
+.textura {
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* Rejilla técnica muy tenue, para los fondos que piden textura sin gráfica:
+   el 404, la pantalla de error y el fondo de la puerta. Se desvanece hacia los
+   bordes con una máscara para que no se vea dónde termina. */
+.malla {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+}
+
+.malla-centro {
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+}
+
+/* El panal del techo del local. En las fotos de su Instagram el showroom está
+   iluminado con hexágonos, así que el motivo es suyo, no un adorno genérico.
+   Se reserva para las secciones que hablan del negocio: en todas dejaría de
+   significar nada. */
+.textura-panal {
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='96' viewBox='0 0 112 96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2'%3E%3Cpath d='M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z'/%3E%3Cpath d='M84 0 L112 16 L112 48 L84 64 L56 48 L56 16 Z'/%3E%3Cpath d='M28 64 L56 80 L56 96'/%3E%3Cpath d='M84 64 L112 80 L112 96'/%3E%3Cpath d='M0 80 L0 96'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 112px 96px;
+}
+
+/* --------------------------------------------------------------------------
+ * Portada de edición  (solo la puerta de la demo)
+ *
+ * La puerta no es una pantalla de login: es el escaparate donde se vende el
+ * sistema. De ahí el lenguaje de carátula de edición especial —insignia,
+ * lista de lo que trae, sello de rebaja, cuenta atrás—, que todo el mundo
+ * sabe leer de un vistazo y que aquí además es verdad: hay un precio, hay una
+ * fecha y hay una lista de lo que se lleva quien compre.
+ *
+ * Nada de esto entra en el escaparate del cliente: ahí vende él, no nosotros.
+ * ------------------------------------------------------------------------ */
+
+.insignia-edicion {
+  display: inline-block;
+  transform: skewX(var(--angulo-hb));
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 30%, transparent);
+  background-image: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    color-mix(in oklab, var(--color-base-content) 4%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 22%, transparent),
+    0 12px 30px -16px #000;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.insignia-edicion > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-hb) * -1));
+}
+
+/* El sello de rebaja. Va girado, como el adhesivo de una caja. */
+.sello-descuento {
+  transform: rotate(-9deg);
+  background-color: var(--color-rojo);
+  color: #fff;
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-rojo) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-rojo) 70%, transparent);
+}
+
+/* Cada cosa que trae la edición, como una línea de contenido descargable. */
+.linea-dlc {
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 4%, transparent);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linea-dlc:hover {
+  transform: translateX(4px);
+  border-color: color-mix(in oklab, var(--color-rojo) 55%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* Resplandor detrás de lo que tiene que mirarse primero. */
+.resplandor {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    0 0 70px -14px color-mix(in oklab, var(--color-rojo) 55%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Tarjetas
+ *
+ * Nada de cristal ni de sombras pesadas: una línea finísima sobre el negro y
+ * un filo rojo que aparece al pasar por encima. El peso visual lo tiene la
+ * foto, que ya viene con la gráfica de HB impresa.
+ * ------------------------------------------------------------------------ */
+
+.ficha {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  transition:
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+.ficha:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--color-rojo) 60%, transparent);
+  box-shadow: 0 26px 60px -30px #000;
+}
+
+/* El filo rojo del borde inferior, que solo crece al pasar por encima. */
+.ficha::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background-color: var(--color-rojo);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ficha:hover::after {
+  transform: scaleX(1);
+}
+
+/* Panel sin interacción: avisos, bloques de datos. */
+.panel {
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* La cabecera cuando ya se ha bajado un poco. La clase la pone y la quita
+   GSAP desde components/Header.js, en vez de un estado de React: así el fondo
+   cambia en el mismo fotograma que el scroll y no en el siguiente render. */
+header.con-fondo {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+/* Barra translúcida de la cabecera. */
+.barra-vidrio {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* --------------------------------------------------------------------------
+ * Hoja de especificaciones
+ * ------------------------------------------------------------------------ */
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .specs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.specs > * {
+  background-color: var(--color-base-100);
+  padding: 1rem 1.15rem;
+}
+
+/* --------------------------------------------------------------------------
+ * Botones
+ *
+ * En la itálica condensada de la casa, mayúsculas y muy espaciados. Se pensó
+ * en sesgarlos como las franjas, y se descartó: un `skewX` sobre el botón
+ * inclina también su texto, que YA viene inclinado por la itálica, y el
+ * resultado eran dos pendientes distintas peleándose. El corte diagonal se
+ * queda donde se lee bien —las franjas, las fotos, las etiquetas— y el botón
+ * se gana la marca por la tipografía.
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+}
+
+.btn-primary {
+  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-rojo) 95%, transparent);
+}
+
+.btn-primary:hover {
+  background-color: color-mix(in oklab, var(--color-rojo) 88%, #fff);
+}
+
+/* El botón secundario sobre negro: solo un filo blanco. */
+.btn-filo {
+  background-color: transparent;
+  color: var(--color-base-content);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-base-content) 28%, transparent);
+}
+
+.btn-filo:hover {
+  background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-base-content) 55%, transparent);
+}
+
+/* El botón que va encima de una foto. */
+.btn-sobre-foto {
+  background-color: color-mix(in oklab, var(--color-base-100) 72%, transparent);
+  color: var(--color-base-content);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-sobre-foto:hover {
+  background-color: color-mix(in oklab, var(--color-base-100) 92%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Formularios
+ * ------------------------------------------------------------------------ */
+
+.entrada {
+  width: 100%;
+  border-radius: var(--radius-field);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 18%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 5%, transparent);
+  padding: 0.75rem 1.1rem;
+  font-size: 0.9375rem;
+  color: var(--color-base-content);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.entrada::placeholder {
+  color: color-mix(in oklab, var(--color-base-content) 35%, transparent);
+}
+
+.entrada:focus {
+  border-color: var(--color-rojo);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-rojo) 22%, transparent);
+}
+
+/* Los desplegables nativos heredan el fondo del sistema en sus opciones, que
+   en un tema oscuro sale blanco sobre blanco en varios navegadores. */
+.entrada option {
+  background-color: var(--color-base-200);
+  color: var(--color-base-content);
+}
+
+/* --------------------------------------------------------------------------
+ * Entrada en escena por scroll (ver components/Revelar.js)
+ * ------------------------------------------------------------------------ */
+
+/* Lo que va a entrar animado se oculta ya en el HTML, para que no dé un salto
+   entre que el servidor lo pinta y GSAP toma el control. Quien no tenga
+   JavaScript lo recupera con el <noscript> del layout. */
+[data-anima] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anima] {
+    opacity: 1;
+  }
+}
+
+/* La barra de progreso de lectura, arriba del todo. */
+.progreso {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* Barra de scroll discreta. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-300);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rojo);
+}
+
+/* Quien pide menos movimiento, no lo tiene. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

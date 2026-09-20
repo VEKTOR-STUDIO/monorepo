@@ -64,7 +64,7 @@ export default function FichaProducto({ producto, prioridad = false }) {
             </Link>
           </h3>
 
-          <p className={`mt-2 flex items-center gap-1.5 text-[0.7rem] ${estado.clase}`}>
+          <p className={`mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-0.5 text-[0.7rem] ${estado.clase}`}>
             <span className={`inline-block size-1.5 rounded-full ${estado.punto}`} aria-hidden="true" />
             {estado.texto}
             {producto.variaciones?.length > 1 && (

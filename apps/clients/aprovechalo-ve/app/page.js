@@ -189,7 +189,9 @@ export default function Inicio() {
           <div className="textura absolute inset-0" aria-hidden="true" />
 
           <div className="relative mx-auto max-w-7xl">
-            <Revelar className="flex flex-wrap items-end justify-between gap-4">
+            {/* En móvil el título y el enlace se apilan y se centran; desde
+                sm vuelven a ir uno a cada lado. */}
+            <Revelar className="flex flex-col items-center gap-4 text-center sm:flex-row sm:flex-wrap sm:items-end sm:justify-between sm:text-left">
               <div>
                 <p className="rotulo">Recién publicados</p>
                 <h2 className="display mt-4 text-3xl sm:text-4xl">Lo último que entró</h2>

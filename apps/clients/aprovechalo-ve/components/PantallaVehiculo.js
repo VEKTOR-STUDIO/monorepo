@@ -28,7 +28,7 @@ export default function PantallaVehiculo({
 
   return (
     <section
-      className={`px-4 py-20 sm:px-6 sm:py-24 ${oscuro ? "bg-base-content text-base-100" : "bg-base-100"}`}
+      className={`px-4 py-24 sm:px-6 ${oscuro ? "bg-base-content text-base-100" : "bg-base-100"}`}
     >
       <div className="mx-auto max-w-4xl">
         {/* Encabezado: qué es. */}
@@ -68,17 +68,29 @@ export default function PantallaVehiculo({
             {enDolares(vehiculo.precio)}
           </p>
 
+          {/* Sobre fondo oscuro los botones se invierten. El color principal
+              del tema es casi negro, así que un btn-primary sobre la sección
+              oscura desaparecía: el botón que manda pasa a ser el claro, y el
+              secundario se queda en un contorno. */}
           <div className="mx-auto mt-6 flex max-w-md flex-col gap-3 sm:flex-row">
             <Link
               href={`/vehiculo/${vehiculo.slug}`}
-              className="btn btn-primary flex-1"
+              className={`btn flex-1 ${
+                oscuro
+                  ? "bg-base-100 text-base-content hover:bg-base-100/90"
+                  : "btn-primary"
+              }`}
             >
               Ver ficha completa
             </Link>
             <BotonContacto
               vehiculo={vehiculo}
               demo={demo}
-              className={`btn flex-1 ${oscuro ? "btn-sobre-foto" : "btn-ghost border border-base-content/15"}`}
+              className={`btn btn-ghost flex-1 ${
+                oscuro
+                  ? "border border-base-100/25 text-base-100 hover:bg-base-100/10"
+                  : "border border-base-content/15"
+              }`}
             />
           </div>
         </div>

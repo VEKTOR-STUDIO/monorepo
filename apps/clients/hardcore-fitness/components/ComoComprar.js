@@ -29,7 +29,7 @@ export default function ComoComprar() {
     <section className="relative overflow-hidden border-y border-base-content/10 bg-base-200/30">
       <div className="textura absolute inset-0" aria-hidden="true" />
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
-        <Revelar>
+        <Revelar className="text-center sm:text-left">
           <p className="rotulo">Sin vueltas</p>
           <h2 className="cromo display mt-3 text-3xl sm:text-4xl">CÓMO SE COMPRA</h2>
         </Revelar>

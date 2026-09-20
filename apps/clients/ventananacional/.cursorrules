@@ -1,0 +1,53 @@
+# Venta Nacional · reglas del proyecto
+
+Página de la concesionaria **Venta Nacional** (@ventanacional): inventario de
+vehículos con dos salas, ficha por vehículo y contacto por WhatsApp.
+
+> Este archivo venía copiado de otro cliente del monorepo y hablaba de Supabase,
+> Stripe y de un coach deportivo. Aquí no hay nada de eso.
+
+## Pila
+
+- **Next.js 15** (App Router, Turbopack en desarrollo) · **React 19**
+- **Tailwind CSS 4** (configuración en CSS, no en JS) · **daisyUI 5**
+- **GSAP** para las animaciones (`libs/animaciones.js`, `components/Revelar.js`)
+- **Sin base de datos y sin cuentas.** El inventario es `data/vehiculos.json` y
+  la tasa del BCV sale de una API pública con caché en memoria (`libs/bcv.js`).
+
+## Cómo se escribe aquí
+
+- **Todo en español**: nombres de archivo, componentes, variables, comentarios
+  y textos. `PantallaVehiculo`, `leerVehiculos`, `esDemo`, `hayCandado`.
+- Los comentarios explican **por qué**, no qué. Si algo está hecho de una
+  manera rara, el comentario dice contra qué error se hizo así.
+- Nada de `any`, nada de TypeScript: el proyecto es JavaScript.
+
+## Reglas que no se saltan
+
+1. **La contraseña de la demo no va en `config.js`.** Ese archivo lo importan
+   componentes de cliente y Next lo empaqueta para el navegador. Vive en
+   `libs/acceso.js`, que solo corre en servidor.
+2. **Los cortes del modo demo van en el servidor** (middleware y rutas de API),
+   nunca solo en la interfaz. Un botón deshabilitado se habilita con F12.
+3. **El tema es oscuro y de cristal.** El vidrio se monta con `color-mix` sobre
+   `--color-luz` (blanco), no sobre `--color-base-100`, que aquí es casi negro.
+   Las clases están en `app/globals.css`: `.vidrio`, `.ficha`, `.panel`,
+   `.barra-vidrio`, `.btn-vidrio`.
+4. **Un solo radio** en toda la web: las escalas de Tailwind están aplastadas a
+   1rem a propósito. `rounded-full` se queda fuera, para los círculos de verdad.
+5. **GSAP: `fromTo`, no `from`.** Lo que entra animado ya está en `opacity: 0`
+   desde el CSS (`[data-anima]`), así que un `from` animaría de 0 a 0 y la
+   sección no aparecería nunca.
+6. **`background-clip: text` necesita hueco arriba** (`.cromo`), o las tildes de
+   "IMPORTACIÓN" se quedan fuera de la caja y desaparecen.
+7. Antes de dar algo por bueno: `npx next build` y **mirar la página entera**.
+   Los fallos de esta capa son secciones que no salen, y esas no dan error en
+   consola.
+
+## Comandos
+
+```bash
+pnpm --filter ventananacional dev      # http://localhost:3000
+pnpm --filter ventananacional build
+pnpm --filter ventananacional generate-favicon
+```

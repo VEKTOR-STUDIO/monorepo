@@ -180,7 +180,7 @@ export function PanelFiltros({ facetas }) {
         <summary className="cursor-pointer text-sm font-medium">
           Filtros
           {activos > 0 && (
-            <span className="cifra ml-2 rounded bg-primary px-1.5 text-primary-content">
+            <span className="cifra ml-2 rounded-lg bg-primary px-1.5 text-primary-content">
               {activos}
             </span>
           )}

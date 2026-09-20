@@ -1,0 +1,46 @@
+# Citta Cars — reglas del proyecto
+
+Página del concesionario **Citta Cars** (@cittacars): inventario con ficha por
+vehículo, taller de accesorios y detailing, consignación y contacto por
+WhatsApp. Vive en el monorepo de Alessandrovaru, en `apps/clients/cittacars`.
+
+## Stack
+
+- **Next.js 15** (App Router) con React 19 y Turbopack
+- **Tailwind 4** + **daisyUI 5**, configurados desde CSS en `app/globals.css`
+- **GSAP** para las entradas por scroll (`components/Revelar.js`)
+- **Sin base de datos y sin pasarela de pago.** El inventario es
+  `data/vehiculos.json` y la tasa del BCV se lee de una API pública que, si
+  falla, no debe tumbar nada.
+
+## Cómo se escribe aquí
+
+- **Todo en español**: nombres de archivo, componentes, variables, funciones y
+  comentarios. `leerVehiculos`, no `getVehicles`.
+- Los comentarios explican **por qué**, no qué. Si una decisión tiene una
+  alternativa obvia que se descartó, se dice por qué se descartó.
+- Nada de `any`, nada de código muerto y nada de dependencias nuevas sin
+  motivo: esta página tiene que poder desplegarse sin configurar nada.
+
+## Marca
+
+- El tema es **oscuro** y no es un capricho: el logotipo es blanco sobre negro
+  y se usa tal cual (`public/marca/cittacars.jpg`), fundido con
+  `mix-blend-mode: screen`. Sobre fondo claro no habría blend que sirviera.
+- Los colores son los del logotipo: negro, blanco, **rojo** (`--color-primary`)
+  y verde con cuentagotas. El rojo es el único color que llama; si algo ya es
+  rojo, lo siguiente va en blanco.
+- Las tres barras inclinadas (`components/Barras.js`, `.banda`,
+  `.textura-barras`) son el signo de la casa. Las siluetas de vehículo
+  (`components/Silueta.js`) son formas genéricas dibujadas para el proyecto, no
+  el contorno de ninguna marca.
+
+## Modo demo
+
+La página se enseña antes de venderla, así que lleva una capa de demo:
+contraseña en `/entrar`, muro en el inventario, cortes en el servidor y bloques
+de precio. **El candado va siempre en el servidor** (middleware o ruta de API),
+nunca solo en pantalla. La contraseña vive en `libs/acceso.js`, que no llega al
+navegador; nunca en `config.js`. Todo se apaga con `NEXT_PUBLIC_DEMO=false`.
+
+Ver el README para la tabla completa de qué corta y cómo se entrega.

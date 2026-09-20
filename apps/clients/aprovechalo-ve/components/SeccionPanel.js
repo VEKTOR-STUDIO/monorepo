@@ -46,7 +46,7 @@ function FilaMaqueta({ nombre, precio, estado, tono }) {
 
   return (
     <div className="flex items-center gap-3 border-t border-base-content/8 px-4 py-2.5">
-      <span className="size-7 shrink-0 rounded bg-base-content/8" aria-hidden="true" />
+      <span className="size-7 shrink-0 rounded-lg bg-base-content/8" aria-hidden="true" />
       <span className="min-w-0 flex-1 truncate text-xs font-medium text-base-content/75">
         {nombre}
       </span>

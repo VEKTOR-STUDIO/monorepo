@@ -1,0 +1,378 @@
+{
+  "_nota": "DATOS DE MUESTRA. Todo vehículo con \"muestra\": true está inventado para poder enseñar la página: no sale de @cittacars. Las fotos son de stock (Unsplash, uso comercial permitido) y corresponden al modelo que dice la ficha, pero NO son el vehículo real en venta: por eso llevan \"fotoStock\": true, que pinta el aviso «Foto de referencia». Sustituye este archivo por las publicaciones reales y quita ambos campos. Ver README, sección «Cargar los vehículos reales».",
+  "actualizado": "2026-09-20",
+  "vehiculos": [
+    {
+      "slug": "ford-f150-raptor-2021",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Ford",
+      "modelo": "F-150 Raptor",
+      "version": "Doble cabina 4x4",
+      "anio": 2021,
+      "carroceria": "pickup",
+      "precio": 58000,
+      "km": 41000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x4",
+      "motor": "3.5 EcoBoost V6",
+      "puestos": 5,
+      "color": "Negro",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": true,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Suspensión de fábrica para terreno duro",
+        "Forro de batea y roll bar montados en el taller",
+        "Estribos, faros auxiliares y cámara de retroceso"
+      ],
+      "descripcion": "La pick-up con la que se abre el showroom. Trabajo pesado y carretera larga con el motor turbo que mueve lo que le pongas, y ya viene armada: batea forrada, roll bar, estribos y luces montadas aquí mismo. Kilometraje bajo para el año e historial completo de mantenimiento.",
+      "fotos": [
+        "/vehiculos/ford-f150-raptor-2021.jpg"
+      ]
+    },
+    {
+      "slug": "hyundai-palisade-2023",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Hyundai",
+      "modelo": "Palisade",
+      "version": "Limited",
+      "anio": 2023,
+      "carroceria": "camioneta",
+      "precio": 49000,
+      "km": 29000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x2",
+      "motor": "3.8 V6",
+      "puestos": 7,
+      "color": "Gris grafito",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": true,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Siete puestos con la tercera fila eléctrica",
+        "Vidrios ahumados y protección de pintura hechos en casa",
+        "Garantía de fábrica vigente"
+      ],
+      "descripcion": "La camioneta familiar del inventario: siete puestos de verdad, poco kilometraje y todavía con garantía. Se le hizo ahumado y tratamiento de pintura en el taller antes de ponerla en piso.",
+      "fotos": [
+        "/vehiculos/hyundai-palisade-2023.jpg"
+      ]
+    },
+    {
+      "slug": "lexus-gx-460-2017",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Lexus",
+      "modelo": "GX 460",
+      "version": "Premium 4x4",
+      "anio": 2017,
+      "carroceria": "camioneta",
+      "precio": 46000,
+      "km": 94000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x4",
+      "motor": "4.6 V8",
+      "puestos": 7,
+      "color": "Negro",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": true,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "V8 con mantenimiento al día y facturas",
+        "Tres filas de asientos, cuero original",
+        "Detailing completo antes de entregarla"
+      ],
+      "descripcion": "Camioneta grande de las que ya no se hacen: chasis de verdad, V8 y tres filas. Entró en consignación de un solo dueño, pasó por revisión y salió del taller pulida y con los cueros tratados. Para quien quiere tamaño sin renunciar a la mecánica probada.",
+      "fotos": [
+        "/vehiculos/lexus-gx-460-2017.jpg"
+      ]
+    },
+    {
+      "slug": "toyota-rav4-2019",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Toyota",
+      "modelo": "RAV4",
+      "version": "XLE",
+      "anio": 2019,
+      "carroceria": "camioneta",
+      "precio": 32000,
+      "km": 68000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x2",
+      "motor": "2.5 4 cilindros",
+      "puestos": 5,
+      "color": "Blanco perlado",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": true,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Mantenimiento al día con factura",
+        "Cauchos nuevos, cuatro y repuesto",
+        "Un solo dueño"
+      ],
+      "descripcion": "La camioneta que no se discute: repuestos en cualquier esquina del país, consumo razonable y reventa asegurada. Esta está original, sin choques y con los papeles en regla.",
+      "fotos": [
+        "/vehiculos/toyota-rav4-2019.jpg"
+      ]
+    },
+    {
+      "slug": "mercedes-clase-c-2022",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Mercedes-Benz",
+      "modelo": "Clase C",
+      "version": "C 200 AMG Line",
+      "anio": 2022,
+      "carroceria": "sedan",
+      "precio": 52000,
+      "km": 31000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x2",
+      "motor": "2.0 turbo",
+      "puestos": 5,
+      "color": "Blanco",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Poco kilometraje, prácticamente nuevo",
+        "Cuero claro y techo panorámico",
+        "Tratamiento cerámico de pintura"
+      ],
+      "descripcion": "El carro de lujo del piso. Poco recorrido, interior impecable y con tratamiento cerámico hecho en el taller. Para quien quiere sedán y no camioneta.",
+      "fotos": [
+        "/vehiculos/mercedes-clase-c-2022.jpg"
+      ]
+    },
+    {
+      "slug": "ram-1500-2020",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "RAM",
+      "modelo": "1500",
+      "version": "Big Horn doble cabina",
+      "anio": 2020,
+      "carroceria": "pickup",
+      "precio": 42000,
+      "km": 72000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x4",
+      "motor": "5.7 HEMI V8",
+      "puestos": 5,
+      "color": "Plata",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "HEMI V8 con arrastre de fábrica",
+        "Batea con forro y cubierta enrollable",
+        "Cauchos con poco uso"
+      ],
+      "descripcion": "Pick-up de trabajo y de carretera, con el V8 que arrastra sin quejarse. Viene con forro de batea y cubierta, y se le puede montar lo que falte antes de entregarla.",
+      "fotos": [
+        "/vehiculos/ram-1500-2020.jpg"
+      ]
+    },
+    {
+      "slug": "infiniti-qx50-2021",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Infiniti",
+      "modelo": "QX50",
+      "version": "Essential",
+      "anio": 2021,
+      "carroceria": "camioneta",
+      "precio": 38500,
+      "km": 52000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x4",
+      "motor": "2.0 turbo",
+      "puestos": 5,
+      "color": "Blanco",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Motor turbo de compresión variable",
+        "Interior en cuero, cámara 360°",
+        "Detailing completo hecho en el taller"
+      ],
+      "descripcion": "Camioneta de lujo mediana, para quien quiere altura y acabados sin irse a un tamaño grande. Salió del taller con pulitura completa y el interior tratado.",
+      "fotos": [
+        "/vehiculos/infiniti-qx50-2021.jpg"
+      ]
+    },
+    {
+      "slug": "jeep-grand-cherokee-2017",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Jeep",
+      "modelo": "Grand Cherokee",
+      "version": "Limited 4x4",
+      "anio": 2017,
+      "carroceria": "camioneta",
+      "precio": 27500,
+      "km": 108000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x4",
+      "motor": "3.6 V6",
+      "puestos": 5,
+      "color": "Verde oscuro",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "reservado",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Tracción 4x4 con reductora",
+        "Estribos y parrilla instalados aquí",
+        "Mantenimiento reciente de frenos y cauchos"
+      ],
+      "descripcion": "La 4x4 clásica del catálogo: rueda bien en monte y se comporta en ciudad. Esta lleva estribos y parrilla montados en el taller y acaba de pasar por frenos y cauchos. Reservada, pero se consigue otra igual.",
+      "fotos": [
+        "/vehiculos/jeep-grand-cherokee-2017.jpg"
+      ]
+    },
+    {
+      "slug": "hyundai-sonata-2021",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Hyundai",
+      "modelo": "Sonata",
+      "version": "Limited",
+      "anio": 2021,
+      "carroceria": "sedan",
+      "precio": 23500,
+      "km": 58000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x2",
+      "motor": "2.5 4 cilindros",
+      "puestos": 5,
+      "color": "Plata",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Sedán grande, cómodo para carretera",
+        "Pantalla grande y cámara de retroceso",
+        "Mantenimiento al día"
+      ],
+      "descripcion": "Sedán amplio y moderno, cómodo para viajar y sencillo de mantener. Está original y con los papeles en orden.",
+      "fotos": [
+        "/vehiculos/hyundai-sonata-2021.jpg"
+      ]
+    },
+    {
+      "slug": "kia-sportage-2019",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Kia",
+      "modelo": "Sportage",
+      "version": "EX",
+      "anio": 2019,
+      "carroceria": "camioneta",
+      "precio": 21900,
+      "km": 86000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x2",
+      "motor": "2.0 4 cilindros",
+      "puestos": 5,
+      "color": "Gris grafito",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Consumo bajo para su tamaño",
+        "Servicio de 80.000 km hecho",
+        "Vidrios ahumados incluidos"
+      ],
+      "descripcion": "Camioneta chica para ciudad, de mantenimiento barato y repuestos fáciles. Buena primera camioneta: entra en cualquier puesto y gasta poco.",
+      "fotos": [
+        "/vehiculos/kia-sportage-2019.jpg"
+      ]
+    },
+    {
+      "slug": "hyundai-kona-2020",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Hyundai",
+      "modelo": "Kona",
+      "version": "GLS",
+      "anio": 2020,
+      "carroceria": "camioneta",
+      "precio": 19800,
+      "km": 64000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x2",
+      "motor": "2.0 4 cilindros",
+      "puestos": 5,
+      "color": "Blanco",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "disponible",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "La más económica del inventario",
+        "Pantalla con cámara de retroceso",
+        "Un solo dueño, sin choques"
+      ],
+      "descripcion": "La puerta de entrada al inventario: camioneta compacta, automática y fácil de mantener. Para quien quiere salir del carro pequeño sin gastar de más.",
+      "fotos": [
+        "/vehiculos/hyundai-kona-2020.jpg"
+      ]
+    },
+    {
+      "slug": "mazda-6-2017",
+      "muestra": true,
+      "fotoStock": true,
+      "marca": "Mazda",
+      "modelo": "6",
+      "version": "Grand Touring",
+      "anio": 2017,
+      "carroceria": "sedan",
+      "precio": 18500,
+      "km": 97000,
+      "transmision": "Automática",
+      "combustible": "Gasolina",
+      "traccion": "4x2",
+      "motor": "2.5 4 cilindros",
+      "puestos": 5,
+      "color": "Rojo",
+      "ubicacion": "Showroom Citta Cars",
+      "estado": "vendido",
+      "destacado": false,
+      "documentos": "Título propio, solvente",
+      "detalles": [
+        "Se vendió en tres días",
+        "Entregado con detailing completo",
+        "Traspaso acompañado hasta la firma"
+      ],
+      "descripcion": "Ya vendido. Se deja publicado a propósito: así se ve qué sale y a qué precio. Si buscas algo parecido, se consigue.",
+      "fotos": [
+        "/vehiculos/mazda-6-2017.jpg"
+      ]
+    }
+  ]
+}

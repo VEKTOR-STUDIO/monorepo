@@ -109,12 +109,18 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
       />
 
       <div className="relative mx-auto grid max-w-7xl gap-12 px-4 pb-16 pt-16 sm:px-6 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:pb-24 lg:pt-24">
-        <div>
+        {/* En móvil la columna va centrada: con una sola columna, el texto
+            pegado a la izquierda deja un vacío a la derecha que hace que la
+            pantalla parezca mal cuadrada. Desde lg vuelve a alinearse a la
+            izquierda, que es donde sí tiene el collage al lado. */}
+        <div className="text-center lg:text-left">
           <p data-hero="rotulo" className="rotulo">
             Caracas · Centro Lido, El Rosal
           </p>
 
-          <h1 className="display mt-5 text-5xl sm:text-6xl lg:text-7xl">
+          {/* Un punto menos en móvil: a text-5xl, "TODO LO QUE" no cabe en
+              390px y dejaba "QUE" solo en un renglón. */}
+          <h1 className="display mt-5 text-4xl sm:text-6xl lg:text-7xl">
             {/* Cada renglón en su caja recortada: así puede subir desde abajo
                 sin asomar por encima del anterior. */}
             <span className="block overflow-hidden pb-[0.08em]">
@@ -136,13 +142,13 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
 
           <p
             data-hero="texto"
-            className="mt-6 max-w-lg text-lg leading-relaxed text-base-content/65"
+            className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-base-content/65 lg:mx-0"
           >
             Proteínas, creatina, pre-entreno, vitaminas, accesorios de gimnasio, natación y
             bolsos. Lista actualizada, stock real y tres formas de pago.
           </p>
 
-          <div data-hero="botones" className="mt-8 flex flex-wrap gap-3">
+          <div data-hero="botones" className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
             <Link href="/tienda" className="btn btn-primary btn-lg">
               Ver catálogo
             </Link>
@@ -151,7 +157,7 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
             </Link>
           </div>
 
-          <dl className="mt-12 grid max-w-lg grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4">
+          <dl className="mx-auto mt-12 grid max-w-lg grid-cols-2 gap-x-8 gap-y-6 sm:grid-cols-4 lg:mx-0">
             {datos.map((dato) => (
               <div key={dato.etiqueta} data-hero="dato">
                 <dt className="cifra text-3xl font-bold leading-none text-primary">
@@ -193,7 +199,7 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
                   key={producto.slug}
                   href={`/producto/${producto.slug}`}
                   data-hero="pieza"
-                  className={`ficha group relative overflow-hidden ${i % 2 === 1 ? "mt-8" : ""}`}
+                  className={`ficha group relative overflow-hidden ${i % 2 === 1 ? "sm:mt-8" : ""}`}
                 >
                   <div className="foto-producto relative aspect-square">
                     {producto.imagen && (
