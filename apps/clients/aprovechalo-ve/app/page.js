@@ -135,8 +135,11 @@ export default function Inicio() {
         {/* ------------------------------------------------------------------
             Por tipo de vehículo.
            ---------------------------------------------------------------- */}
-        <section className="border-t border-base-content/10 px-4 py-24 sm:px-6">
-          <div className="mx-auto max-w-7xl">
+        <section className="relative overflow-hidden border-t border-base-content/10 px-4 py-24 sm:px-6">
+          <div className="textura absolute inset-0" aria-hidden="true" />
+          <div className="textura-estrellas absolute inset-0" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-7xl">
             <Revelar className="text-center">
               <p className="rotulo">Qué buscas</p>
               <h2 className="display mt-4 text-3xl sm:text-4xl">Elige por tipo</h2>
@@ -174,8 +177,10 @@ export default function Inicio() {
         {/* ------------------------------------------------------------------
             Los últimos que entraron.
            ---------------------------------------------------------------- */}
-        <section className="bg-base-200 px-4 py-24 sm:px-6">
-          <div className="mx-auto max-w-7xl">
+        <section className="relative overflow-hidden bg-base-200 px-4 py-24 sm:px-6">
+          <div className="textura absolute inset-0" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-7xl">
             <Revelar className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="rotulo">Recién publicados</p>
@@ -196,8 +201,10 @@ export default function Inicio() {
             Cómo se compra. Es el recorrido que hoy se hace por WhatsApp,
             puesto por escrito para que el comprador sepa a qué atenerse.
            ---------------------------------------------------------------- */}
-        <section id="como-comprar" className="px-4 py-24 sm:px-6">
-          <div className="mx-auto max-w-7xl">
+        <section id="como-comprar" className="relative overflow-hidden px-4 py-24 sm:px-6">
+          <div className="textura absolute inset-0" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-7xl">
             <Revelar className="text-center">
               <p className="rotulo">Cómo comprar</p>
               <h2 className="display mt-4 text-3xl sm:text-4xl">Tres pasos, sin vueltas</h2>
@@ -269,6 +276,10 @@ export default function Inicio() {
           {/* La foto es muy clara; sin este velo el texto blanco no se lee. */}
           <div
             className="absolute inset-0 bg-base-content/55"
+            aria-hidden="true"
+          />
+          <div
+            className="textura-estrellas textura-estrellas-claras absolute inset-0"
             aria-hidden="true"
           />
 

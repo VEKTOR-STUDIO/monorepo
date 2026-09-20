@@ -1,4 +1,5 @@
 import BotonComprar from "@/components/demo/BotonComprar";
+import Contador from "@/components/demo/Contador";
 import config from "@/config";
 
 /**
@@ -51,6 +52,13 @@ export default function MuroDemo({ ocultos, children }) {
             <span className="cifra text-3xl font-bold text-primary">{config.demo.precio}</span>
           </p>
           <p className="mt-1 text-xs text-base-content/45">{config.demo.precioNota}</p>
+
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <p className="microgramma text-[0.6rem] text-base-content/45">
+              Este precio termina en
+            </p>
+            <Contador formato="completo" />
+          </div>
 
           <BotonComprar className="btn btn-primary mt-5 w-full" />
         </div>

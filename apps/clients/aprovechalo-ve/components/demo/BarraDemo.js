@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import BotonComprar from "@/components/demo/BotonComprar";
+import Contador from "@/components/demo/Contador";
 import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
@@ -41,6 +42,10 @@ export default function BarraDemo() {
             </span>
           )}
           <span className="cifra font-bold text-base-content">{config.demo.precio}</span>
+          <span className="ml-2.5 hidden text-base-content/55 xs:inline sm:inline">
+            <span className="microgramma mr-1.5 text-[0.6rem]">termina en</span>
+            <Contador formato="compacto" className="text-base-content/80" />
+          </span>
         </p>
 
         <BotonComprar className="btn btn-primary btn-xs ml-auto shrink-0 sm:btn-sm" />

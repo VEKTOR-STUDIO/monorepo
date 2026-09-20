@@ -34,7 +34,9 @@
   --color-base-300: oklch(93% 0.004 250);
   --color-base-content: oklch(21% 0.012 250);
 
-  --color-primary: oklch(47% 0.155 253);
+  /* Su identidad es blanco sobre negro —su logo son estrellas blancas sobre
+     fondo negro—, así que el color principal es el negro y no un azul. */
+  --color-primary: oklch(20% 0.008 250);
   --color-primary-content: oklch(99% 0 0);
 
   --color-secondary: oklch(21% 0.012 250);
@@ -71,8 +73,9 @@
   --font-sans: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
 
-  --color-azul: oklch(47% 0.155 253);
-  --color-azul-claro: oklch(72% 0.1 240);
+  --color-tinta: oklch(20% 0.008 250);
+  --color-gris: oklch(62% 0.006 250);
+  --color-gris-claro: oklch(86% 0.004 250);
   --color-rojo: oklch(56% 0.21 27);
   --color-asfalto: oklch(21% 0.012 250);
 
@@ -276,7 +279,9 @@ body {
   font-size: 0.6875rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--color-primary);
+  /* Gris y no negro: con el color principal en negro, el rótulo pesaría
+     tanto como el titular que tiene debajo y se anularían. */
+  color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
 }
 
 /* Cifras que se comparan entre sí: precios, kilómetros, años. */
@@ -337,7 +342,7 @@ body {
 
 /* La voz de venta: fondo oscuro, letra clara. */
 .cintillo-venta {
-  background-color: var(--color-asfalto);
+  background-color: var(--color-tinta);
   color: oklch(97% 0.002 250);
 }
 
@@ -410,9 +415,9 @@ body {
   width: 3.5rem;
   background: linear-gradient(
     to right,
-    var(--color-azul-claro) 0 33.33%,
-    var(--color-azul) 33.33% 66.66%,
-    var(--color-rojo) 66.66% 100%
+    var(--color-gris-claro) 0 33.33%,
+    var(--color-gris) 33.33% 66.66%,
+    var(--color-tinta) 66.66% 100%
   );
   transform: skewX(-22deg);
 }
@@ -466,6 +471,51 @@ body {
 
 .malla-centro {
   mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+}
+
+/* --------------------------------------------------------------------------
+ * Texturas
+ *
+ * Los fondos planos de una paleta en blanco y negro se ven baratos en
+ * pantallas grandes: kilómetros de gris liso. Estas tres capas les dan
+ * superficie sin llamar la atención, y van en pseudoelementos para no tocar
+ * el fondo real del elemento.
+ * ------------------------------------------------------------------------ */
+
+/* Se usan como CAPA, en un div absoluto dentro de la sección, igual que
+   `.malla`:  <div className="textura absolute inset-0" aria-hidden="true" />
+   No como pseudoelemento del contenedor: con un z-index negativo la capa
+   acabaría por detrás del propio fondo de la sección y no se vería nunca. */
+
+/* Grano fino. Es ruido que genera el navegador (feTurbulence), así que no hay
+   que servir ninguna imagen. */
+.textura {
+  pointer-events: none;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.2'/%3E%3C/svg%3E");
+}
+
+/* Sobre fondo oscuro el grano tiene que aclarar, no oscurecer. */
+.textura-oscura {
+  mix-blend-mode: soft-light;
+  opacity: 0.8;
+}
+
+/* El arco de estrellas de la marca, repetido muy tenue. Se reserva para las
+   secciones que hablan del negocio: en todas dejaría de significar nada. */
+.textura-estrellas {
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='%23000000'%3E%3Cpolygon points='100,24 105,38 120,38 108,47 113,61 100,52 87,61 92,47 80,38 95,38'/%3E%3Cpolygon points='34,104 38,115 50,115 40,122 44,133 34,126 24,133 28,122 18,115 30,115'/%3E%3Cpolygon points='166,104 170,115 182,115 172,122 176,133 166,126 156,133 160,122 150,115 162,115'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* La versión clara del motivo, para fondos oscuros. */
+.textura-estrellas-claras {
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='%23ffffff'%3E%3Cpolygon points='100,24 105,38 120,38 108,47 113,61 100,52 87,61 92,47 80,38 95,38'/%3E%3Cpolygon points='34,104 38,115 50,115 40,122 44,133 34,126 24,133 28,122 18,115 30,115'/%3E%3Cpolygon points='166,104 170,115 182,115 172,122 176,133 166,126 156,133 160,122 150,115 162,115'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 200px 200px;
 }
 
 /* --------------------------------------------------------------------------

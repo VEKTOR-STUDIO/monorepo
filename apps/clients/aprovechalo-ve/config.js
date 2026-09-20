@@ -111,6 +111,14 @@ const config = {
     // se enseña ninguna rebaja.
     precioAnterior: "$690",
     precioNota: "Pago único · dominio, montaje y carga del catálogo incluidos",
+
+    // Hasta cuándo vale el precio rebajado. Es una FECHA REAL, no una cuenta
+    // atrás que se reinicia en cada visita: eso último es un truco de tienda
+    // barata y quien está evaluando comprar un sistema lo detecta recargando.
+    //
+    // Cuando la fecha pasa, el contador desaparece solo y el precio se queda
+    // sin rebaja. Para alargar la oferta, se mueve esta fecha.
+    ofertaHasta: "2026-10-15T23:59:59-04:00",
     // A dónde va el botón de comprar. Mientras esté vacío, los botones llevan
     // a /contacto en vez de a un enlace roto.
     urlCompra: "",

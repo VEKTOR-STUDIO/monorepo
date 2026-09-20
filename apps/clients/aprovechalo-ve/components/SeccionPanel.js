@@ -60,8 +60,13 @@ function FilaMaqueta({ nombre, precio, estado, tono }) {
 
 export default function SeccionPanel() {
   return (
-    <section id="panel" className="border-t border-base-content/10 bg-base-200 px-4 py-24 sm:px-6">
-      <div className="mx-auto max-w-7xl">
+    <section
+      id="panel"
+      className="relative overflow-hidden border-t border-base-content/10 bg-base-200 px-4 py-24 sm:px-6"
+    >
+      <div className="textura absolute inset-0" aria-hidden="true" />
+
+      <div className="relative mx-auto max-w-7xl">
         <Revelar className="text-center">
           <p className="rotulo">Sin intermediarios</p>
           <h2 className="display mt-4 text-3xl sm:text-4xl">

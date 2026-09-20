@@ -25,6 +25,8 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
 | Modo demo (puerta, muro, precio, bloqueos) | ✅ activo por defecto |
 | Imágenes del landing (hero, categorías, inmuebles…) | ✅ de stock, en `public/landing/` |
 | Cintillos de venta y comparación con Linktree | ✅ solo visibles en demo |
+| Contador de oferta limitada | ✅ con fecha real, **revísala antes de enseñarla** |
+| Logo del cliente y paleta blanco/negro | ✅ montados |
 | **Vehículos reales del Instagram** | ⏳ **pendiente — hoy son de muestra, con fotos de stock** |
 | Panel para publicar vehículos | ⏳ **anunciado en la portada, sin construir** |
 | Número de WhatsApp | ⏳ **pendiente** |
@@ -163,13 +165,19 @@ bloque de precio, y el contacto empieza a funcionar de verdad.
 La portada le habla a dos personas distintas y conviene no mezclarlas:
 
 - **El escaparate** (hero, vehículos, categorías, cómo comprar, inmuebles) le
-  habla a quien viene a comprar un carro. Va con la tipografía de la casa.
+  habla a quien viene a comprar un carro. Va con la tipografía de la casa y con
+  el arco de estrellas de su marca.
 - **La oferta** (el panel, la comparación con Linktree, el precio) le habla al
   dueño de @aprovechalo.ve sobre el sistema que se le está vendiendo. Va en
   **Microgramma**, la tipografía de la firma, con la clase `.microgramma`.
 
 Entre una y otra se cruza un **cintillo animado** (`components/Cintillo.js`),
 que se pausa al pasar el ratón y se detiene entero con `prefers-reduced-motion`.
+
+La **puerta de acceso** (`/entrar`) va aparte: ahí manda la firma de
+Alessandrovaru y la marca del cliente aparece debajo, como lo que hay detrás de
+la puerta. Quien llega todavía no es cliente de Aprovéchalo, es alguien a quien
+se le está enseñando un trabajo. Al entrar, la jerarquía se invierte.
 
 Todo lo de la segunda voz **desaparece con `NEXT_PUBLIC_DEMO=false`**: los
 cintillos, la comparación con Linktree y el bloque de precio. La única que se
@@ -183,6 +191,41 @@ hoy resuelve su Instagram con una lista de enlaces. Está escrita reconociendo
 que un Linktree hace bien lo que promete —eso da credibilidad al resto— y las
 siete filas son comprobables en esta misma página, no promesas vagas. El cierre
 propone convivir con él, no sustituirlo: la página entra como primer enlace.
+
+---
+
+## La oferta con fecha
+
+El precio rebajado lleva una cuenta atrás (`components/demo/Contador.js`) en la
+franja de arriba, el muro del inventario, el aviso flotante y el bloque final.
+
+Cuelga de **`config.demo.ofertaHasta`**, que es una **fecha real**
+(`2026-10-15T23:59:59-04:00` ahora mismo). No es un contador que se reinicia en
+cada visita: eso es un truco de tienda barata y quien está evaluando comprar un
+sistema lo descubre recargando la página. Cuando la fecha pasa, el contador
+desaparece solo y el precio se queda sin rebaja.
+
+> **Antes de enseñar la demo, mueve esa fecha** a una que tenga sentido para la
+> conversación que vas a tener. Si ya venció, no se rompe nada, pero el
+> argumento de urgencia deja de estar.
+
+---
+
+## Marca y textura
+
+- **El logo del cliente** es un arco de siete estrellas blancas sobre negro
+  (su foto de perfil, en `public/marca/aprovechalo.jpg`). Sobre fondo oscuro se
+  usa la imagen con `mix-blend-mode: screen`, que se come el negro del JPEG.
+  Sobre el fondo claro no hay blend que sirva —en `multiply` se pierden las
+  estrellas—, así que el motivo está **dibujado** en
+  `components/Estrellas.js`: se calcula el arco por fórmula, se pinta con
+  `currentColor` y escala a cualquier tamaño.
+- **La paleta** es la suya: blanco y negro. El color principal es negro y la
+  banda de tres franjas va en escala de grises.
+- **Las texturas** (`.textura`, `.textura-estrellas`) se usan como capa
+  absoluta dentro de la sección, igual que `.malla`, y nunca como
+  pseudoelemento del contenedor: con `z-index` negativo la capa acabaría por
+  detrás del fondo de la propia sección y no se vería.
 
 ---
 

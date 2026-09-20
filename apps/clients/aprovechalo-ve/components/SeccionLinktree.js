@@ -58,8 +58,10 @@ const COMPARACION = [
 
 export default function SeccionLinktree() {
   return (
-    <section id="por-que" className="px-4 py-24 sm:px-6">
-      <div className="mx-auto max-w-5xl">
+    <section id="por-que" className="relative overflow-hidden px-4 py-24 sm:px-6">
+      <div className="textura absolute inset-0" aria-hidden="true" />
+
+      <div className="relative mx-auto max-w-5xl">
         <Revelar className="text-center">
           <p className="microgramma text-xs text-primary">La pregunta de siempre</p>
           <h2 className="display mt-4 text-3xl sm:text-4xl">

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { LogoGrande } from "@/components/Logo";
+import { LogoFoto } from "@/components/Logo";
 import { contexto, usarGsap } from "@/libs/animaciones";
 
 /**
@@ -11,6 +11,12 @@ import { contexto, usarGsap } from "@/libs/animaciones";
  * Va sobre fondo oscuro, al revés que el resto del sitio: esta pantalla no
  * vende nada, corta el paso, y el contraste lo deja claro antes de leer una
  * palabra.
+ *
+ * Aquí manda la firma de Alessandrovaru y no la marca de Aprovéchalo, y es a
+ * propósito: quien llega todavía no es cliente de Aprovéchalo —es alguien a
+ * quien se le está enseñando un trabajo—. La marca del cliente aparece debajo,
+ * presentada como lo que hay detrás de la puerta. En cuanto se entra, la
+ * jerarquía se invierte y la página entera pasa a ser suya.
  *
  * Primero se enciende el logotipo, después aparece el formulario. La animación
  * no bloquea nada: quien ya sabe la contraseña puede escribirla desde el primer
@@ -49,6 +55,7 @@ export default function PantallaAcceso({ destino = "/" }) {
             },
             0
           )
+          .from("[data-puerta='marca']", { opacity: 0, y: -12 }, 0.75)
           .from("[data-puerta='rotulo']", { opacity: 0, y: 14 }, 1.0)
           .from("[data-puerta='titulo']", { opacity: 0, y: 16 }, 1.15)
           .from("[data-puerta='forma']", { opacity: 0, y: 16 }, 1.35)
@@ -131,6 +138,11 @@ export default function PantallaAcceso({ destino = "/" }) {
       <div className="absolute inset-0 bg-base-content/55" aria-hidden="true" />
 
       <div className="malla malla-centro absolute inset-0 opacity-40" aria-hidden="true" />
+      <div className="textura textura-oscura absolute inset-0" aria-hidden="true" />
+      <div
+        className="textura-estrellas textura-estrellas-claras absolute inset-0"
+        aria-hidden="true"
+      />
 
       {/* Halo azul detrás del logotipo. */}
       <div
@@ -145,11 +157,31 @@ export default function PantallaAcceso({ destino = "/" }) {
       />
 
       <div className="relative flex w-full max-w-sm flex-col items-center">
-        <div data-puerta="logo">
-          <LogoGrande tono="oscuro" />
+        {/* La firma, arriba del todo: esto lo enseña Alessandrovaru. */}
+        <div data-puerta="marca" className="flex flex-col items-center">
+          <a
+            href="https://alessandrovaru.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="microgramma text-sm text-base-100/90 transition-colors hover:text-base-100"
+            style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
+          >
+            Alessandrovaru
+          </a>
+          <span className="mt-3 h-px w-16 bg-base-100/25" aria-hidden="true" />
+          <p className="microgramma mt-3 text-[0.6rem] text-base-100/45">
+            Sistemas a medida
+          </p>
         </div>
 
-        <p data-puerta="rotulo" className="rotulo mt-9 text-primary">
+        {/* Y debajo, de quién es lo que hay detrás de la puerta. */}
+        <div data-puerta="logo" className="mt-10 flex flex-col items-center">
+          <p className="microgramma text-[0.6rem] text-base-100/40">Demo privada de</p>
+          <LogoFoto lado={128} className="mt-2" prioridad />
+          <p className="display -mt-3 text-2xl text-base-100">Aprovéchalo</p>
+        </div>
+
+        <p data-puerta="rotulo" className="microgramma mt-8 text-[0.65rem] text-base-100/60">
           Acceso privado
         </p>
 
@@ -224,8 +256,17 @@ export default function PantallaAcceso({ destino = "/" }) {
           data-puerta="pie"
           className="mt-4 text-center text-xs leading-relaxed text-base-100/40"
         >
-          Página de demostración. Si llegaste aquí sin contraseña, escríbenos y
-          te damos acceso.
+          Página de demostración construida por{" "}
+          <a
+            href="https://alessandrovaru.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="microgramma text-base-100/70 underline-offset-4 transition-colors hover:text-base-100 hover:underline"
+            style={{ fontFamily: "var(--microgramma-font)" }}
+          >
+            Alessandrovaru
+          </a>
+          . Si llegaste sin contraseña, escríbeme y te doy acceso.
         </p>
       </div>
     </main>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import BotonComprar from "@/components/demo/BotonComprar";
+import Contador from "@/components/demo/Contador";
 import config from "@/config";
 
 const LLAVE = "aprovechalo.demo.aviso-cerrado";
@@ -98,6 +99,10 @@ export default function AvisoFlotante() {
               <span className="cifra text-xl font-bold text-primary">{config.demo.precio}</span>
             </p>
             <p className="text-[0.7rem] text-base-content/40">{config.demo.precioNota}</p>
+            <p className="mt-1 flex items-center gap-1.5">
+              <span className="microgramma text-[0.55rem] text-base-content/40">quedan</span>
+              <Contador formato="compacto" className="text-[0.7rem] text-base-content/70" />
+            </p>
           </div>
           <BotonComprar className="btn btn-primary btn-sm shrink-0" />
         </div>
