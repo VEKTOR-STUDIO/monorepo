@@ -56,7 +56,7 @@ export default function FotoVehiculo({
 export function AvisoSinFoto({ className = "" }) {
   return (
     <span
-      className={`cifra rounded-full bg-base-content/6 px-2.5 py-1 text-[0.65rem] text-base-content/45 ${className}`}
+      className={`cifra rounded-lg bg-base-content/6 px-2.5 py-1 text-[0.65rem] text-base-content/45 ${className}`}
     >
       Foto pendiente
     </span>
@@ -74,7 +74,7 @@ export function AvisoSinFoto({ className = "" }) {
 export function AvisoFotoStock({ className = "" }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full bg-base-content/6 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-lg bg-base-content/6 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
     >
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />

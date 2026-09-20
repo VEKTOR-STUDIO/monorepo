@@ -78,7 +78,7 @@ export function BarraTienda({ facetas, total, mostrados }) {
               key={clave}
               type="button"
               onClick={() => cambiar(clave, null)}
-              className="flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs text-primary transition-colors hover:bg-primary/20"
+              className="flex items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-3 py-1 text-xs text-primary transition-colors hover:bg-primary/20"
             >
               {etiquetaDe(clave, parametros.get(clave), facetas)}
               <span aria-hidden="true">×</span>

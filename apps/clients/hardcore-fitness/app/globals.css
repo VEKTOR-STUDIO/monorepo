@@ -47,9 +47,9 @@
   --color-error: oklch(62% 0.245 22);
   --color-error-content: oklch(99% 0 0);
 
-  /* Esquinas suaves: es una tienda, no un cartel de combate. */
-  --radius-selector: 0.75rem;
-  --radius-field: 0.625rem;
+  /* Un solo radio para todo: tarjetas, campos, botones e insignias. */
+  --radius-selector: 1rem;
+  --radius-field: 1rem;
   --radius-box: 1rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
@@ -64,6 +64,23 @@
   --font-display: var(--font-sora), "Segoe UI", system-ui, sans-serif;
   --font-sans: var(--font-questrial), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* -------------------------------------------------------------------------
+   * Un solo radio en toda la web.
+   *
+   * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
+   * mismo valor a propósito: así da igual cuál escriba cada componente, el
+   * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
+   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos de
+   * verdad —puntos de estado, avatares— y esos sí deben seguir siendo redondos.
+   * ----------------------------------------------------------------------- */
+  --radius-xs: 1rem;
+  --radius-sm: 1rem;
+  --radius-md: 1rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1rem;
 
   --color-rojo: oklch(62% 0.245 22);
   --color-humo: oklch(17% 0.012 20);
@@ -386,12 +403,12 @@ body {
   -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 12%, #000 26%, transparent 62%);
 }
 
-/* Insignia sesgada, de filo duro: nada de píldoras redondas. El contenido se
-   contra-sesga para que el texto salga recto. */
+/* Insignia sesgada. El contenido se contra-sesga para que el texto salga
+   recto. El redondeo es el único de la web, como el del resto de elementos. */
 .insignia {
   display: inline-block;
   transform: skewX(-12deg);
-  border-radius: 2px;
+  border-radius: var(--radius-box);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 6px 16px -8px rgba(0, 0, 0, 0.9);

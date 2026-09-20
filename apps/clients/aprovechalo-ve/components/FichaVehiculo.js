@@ -29,12 +29,12 @@ export default function FichaVehiculo({ vehiculo, prioridad = false }) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
 
-        <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-base-100/90 px-2.5 py-1 text-[0.7rem] font-medium backdrop-blur-sm">
+        <span className="absolute left-3 top-3 flex items-center gap-1.5 rounded-lg bg-base-100/90 px-2.5 py-1 text-[0.7rem] font-medium backdrop-blur-sm">
           <span className={`size-1.5 rounded-full ${estado.punto}`} aria-hidden="true" />
           <span className={estado.clase}>{estado.texto}</span>
         </span>
 
-        <span className="cifra absolute right-3 top-3 rounded-full bg-base-content/85 px-2.5 py-1 text-[0.7rem] font-semibold text-base-100">
+        <span className="cifra absolute right-3 top-3 rounded-lg bg-base-content/85 px-2.5 py-1 text-[0.7rem] font-semibold text-base-100">
           {vehiculo.anio}
         </span>
       </div>

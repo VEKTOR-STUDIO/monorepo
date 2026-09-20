@@ -51,7 +51,7 @@ function FilaMaqueta({ nombre, precio, estado, tono }) {
         {nombre}
       </span>
       <span className="cifra hidden text-xs text-base-content/55 sm:block">{precio}</span>
-      <span className={`rounded-full px-2 py-0.5 text-[0.6rem] font-medium ${colores[tono]}`}>
+      <span className={`rounded-lg px-2 py-0.5 text-[0.6rem] font-medium ${colores[tono]}`}>
         {estado}
       </span>
     </div>
@@ -98,7 +98,7 @@ export default function SeccionPanel() {
                 {/* Cabecera del formulario. */}
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-semibold">Publicar vehículo</p>
-                  <span className="rounded-full bg-primary px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-primary-content">
+                  <span className="rounded-lg bg-primary px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-wider text-primary-content">
                     Guardar
                   </span>
                 </div>

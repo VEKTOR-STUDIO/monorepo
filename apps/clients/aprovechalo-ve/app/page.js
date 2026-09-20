@@ -86,16 +86,24 @@ export default function Inicio() {
               </BotonContacto>
             </div>
 
-            {/* Las cifras que dan confianza de entrada. */}
-            <dl className="mt-14 grid w-full max-w-lg grid-cols-3 gap-4">
+            {/* Las cifras que dan confianza de entrada.
+
+                En móvil van más pequeñas y con menos hueco a propósito: a
+                tamaño de escritorio, "USD 9.800" no cabe en un tercio de 390px
+                y se montaba encima de la cifra de al lado. El `min-w-0` es lo
+                que deja a las columnas encogerse; sin él, la anchura mínima
+                del contenido manda sobre el reparto de la rejilla. */}
+            <dl className="mt-14 grid w-full max-w-lg grid-cols-3 gap-2 sm:gap-4">
               {[
                 { valor: vehiculos.length, etiqueta: "en inventario" },
                 { valor: enDolares(desde), etiqueta: "desde" },
                 { valor: config.business.seguidores, etiqueta: "en Instagram" },
               ].map((dato) => (
-                <div key={dato.etiqueta}>
-                  <dt className="cifra text-2xl font-bold text-base-content">{dato.valor}</dt>
-                  <dd className="mt-1 text-[0.7rem] uppercase tracking-wider text-base-content/45">
+                <div key={dato.etiqueta} className="min-w-0">
+                  <dt className="cifra text-lg font-bold text-base-content sm:text-2xl">
+                    {dato.valor}
+                  </dt>
+                  <dd className="mt-1 text-[0.65rem] uppercase tracking-wide text-base-content/45 sm:text-[0.7rem] sm:tracking-wider">
                     {dato.etiqueta}
                   </dd>
                 </div>

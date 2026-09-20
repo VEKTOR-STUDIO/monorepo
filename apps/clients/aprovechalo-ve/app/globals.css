@@ -57,9 +57,9 @@
   --color-error: oklch(56% 0.21 27);
   --color-error-content: oklch(99% 0 0);
 
-  /* Botones de cápsula: la forma manda en toda la página. */
-  --radius-selector: 999px;
-  --radius-field: 999px;
+  /* Un solo radio para todo: tarjetas, campos, botones e insignias. */
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
   --radius-box: 0.5rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
@@ -72,6 +72,23 @@
   --font-display: var(--font-sora), "Segoe UI", system-ui, sans-serif;
   --font-sans: var(--font-questrial), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* -------------------------------------------------------------------------
+   * Un solo radio en toda la web.
+   *
+   * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
+   * mismo valor a propósito: así da igual cuál escriba cada componente, el
+   * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
+   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos de
+   * verdad —puntos de estado, avatares— y esos sí deben seguir siendo redondos.
+   * ----------------------------------------------------------------------- */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.5rem;
 
   --color-tinta: oklch(20% 0.008 250);
   --color-gris: oklch(62% 0.006 250);
@@ -724,10 +741,6 @@ body {
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 16%, transparent);
 }
 
-/* Campo de área de texto: la cápsula no le sienta bien. */
-textarea.entrada {
-  border-radius: 0.75rem;
-}
 
 /* --------------------------------------------------------------------------
  * Entrada en escena por scroll (ver components/Revelar.js)

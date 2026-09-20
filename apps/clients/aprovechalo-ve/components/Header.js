@@ -71,7 +71,7 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setAbierto((v) => !v)}
-          className="ml-auto rounded-full p-2 text-base-content/70 transition-colors hover:bg-base-200 md:hidden"
+          className="ml-auto rounded-lg p-2 text-base-content/70 transition-colors hover:bg-base-200 md:hidden"
           aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={abierto}
         >
