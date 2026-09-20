@@ -59,10 +59,10 @@
 }
 
 @theme {
-  /* Geométricas. Sora manda en los titulares, Outfit en el cuerpo y
+  /* Geométricas. Sora manda en los titulares, Questrial en el cuerpo y
      JetBrains Mono en precios y códigos, que así quedan alineados. */
   --font-display: var(--font-sora), "Segoe UI", system-ui, sans-serif;
-  --font-sans: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-questrial), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
 
   --color-rojo: oklch(62% 0.245 22);

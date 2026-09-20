@@ -1,4 +1,4 @@
-import { Sora, Outfit, JetBrains_Mono } from "next/font/google";
+import { Sora, Questrial, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
@@ -11,7 +11,7 @@ import { esDemo } from "@/libs/demo";
 import config from "@/config";
 import "./globals.css";
 
-// Geométricas: titulares con Sora, cuerpo con Outfit y cifras con JetBrains
+// Geométricas: titulares con Sora, cuerpo con Questrial y cifras con JetBrains
 // Mono, que alinea los precios en columna.
 const sora = Sora({
   subsets: ["latin"],
@@ -20,10 +20,13 @@ const sora = Sora({
   display: "swap",
 });
 
-const outfit = Outfit({
+// Questrial solo se publica en un peso, el 400. Lo que en el cuerpo pida
+// negrita lo sintetiza el navegador; los titulares no dependen de esto, que
+// para eso está Sora.
+const questrial = Questrial({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-outfit",
+  weight: "400",
+  variable: "--font-questrial",
   display: "swap",
 });
 
@@ -61,7 +64,7 @@ export default function RootLayout({ children }) {
       data-theme={config.colors.theme}
       // Lo lee el CSS para dejarle sitio a la franja de demo (--alto-barra-demo).
       data-demo={demo ? "true" : undefined}
-      className={`${sora.variable} ${outfit.variable} ${jetbrains.variable} ${microgramma.variable}`}
+      className={`${sora.variable} ${questrial.variable} ${jetbrains.variable} ${microgramma.variable}`}
     >
       <head>
         {renderSchemaTags()}

@@ -70,7 +70,7 @@
 
 @theme {
   --font-display: var(--font-sora), "Segoe UI", system-ui, sans-serif;
-  --font-sans: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-questrial), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
 
   --color-tinta: oklch(20% 0.008 250);
