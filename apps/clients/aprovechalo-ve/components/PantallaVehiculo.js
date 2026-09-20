@@ -41,20 +41,22 @@ export default function PantallaVehiculo({
         </p>
       </div>
 
-      {/* La foto manda: ocupa todo el espacio que sobre, pero con un suelo.
-          Dentro de este hueco no hay más que una imagen posicionada en
-          absoluto, así que no tiene altura propia: un flex-1 sin mínimo se
-          encoge a cero en cuanto la pantalla es baja —una ventana de portátil,
-          un móvil apaisado, cualquier alto de 640px o menos, donde además
-          .pantalla deja de medir 100svh— y la sección se queda con el título,
-          el precio y ningún vehículo. */}
-      <div className="relative min-h-[40svh] flex-1">
+      {/* La foto, en un rectángulo con su proporción fija y centrado en lo
+          que sobre de la pantalla. 3:2 es lo que miden las fotos del catálogo,
+          así que el recorte es mínimo y el vehículo se ve entero.
+
+          El tamaño se lo da el aspect-ratio, no el hueco: es el mismo patrón
+          que usan la tarjeta del listado y la ficha. A FotoVehiculo no se le
+          pasa nunca posicionamiento —ya trae `relative` de fábrica, que es lo
+          que necesita la imagen `fill` de dentro— porque las dos utilidades
+          pesan igual en Tailwind y ganaría la que la hoja escribe después. */}
+      <div className="flex flex-1 items-center justify-center px-4 py-10 sm:px-6">
         <FotoVehiculo
           vehiculo={vehiculo}
           tono={tono}
           prioridad={prioridad}
-          className="absolute inset-0 size-full"
-          sizes="100vw"
+          className="aspect-3/2 w-full max-w-4xl rounded-lg"
+          sizes="(max-width: 896px) 100vw, 896px"
         />
       </div>
 
