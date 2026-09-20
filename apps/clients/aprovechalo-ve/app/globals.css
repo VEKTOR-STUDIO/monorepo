@@ -519,6 +519,87 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+ * Portada de edición  (solo la puerta de la demo)
+ *
+ * La puerta no es una pantalla de login: es el escaparate donde se vende el
+ * sistema. De ahí el lenguaje de carátula de edición especial —insignia,
+ * lista de lo que trae, sello de rebaja, cuenta atrás—, que todo el mundo
+ * sabe leer de un vistazo y que aquí además es verdad: hay un precio, hay una
+ * fecha y hay una lista de lo que se lleva quien compre.
+ *
+ * Nada de esto entra en el landing del cliente: ahí vende él, no nosotros.
+ * ------------------------------------------------------------------------ */
+
+/* La insignia de la edición: filo biselado, nada de píldoras. El contenido se
+   contra-sesga para que el texto salga recto. */
+.insignia-edicion {
+  display: inline-block;
+  transform: skewX(-11deg);
+  border: 1px solid color-mix(in oklab, var(--color-base-100) 45%, transparent);
+  background-image: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-base-100) 22%, transparent),
+    color-mix(in oklab, var(--color-base-100) 6%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-100) 40%, transparent),
+    0 12px 30px -16px #000;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.insignia-edicion > * {
+  display: inline-block;
+  transform: skewX(11deg);
+}
+
+/* El sello de rebaja. Va girado, como el adhesivo de una caja. */
+.sello-descuento {
+  transform: rotate(-9deg);
+  background-color: var(--color-rojo);
+  color: oklch(99% 0 0);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-rojo) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-rojo) 70%, transparent);
+}
+
+/* Cada cosa que trae la edición, como una línea de contenido descargable. */
+.linea-dlc {
+  border: 1px solid color-mix(in oklab, var(--color-base-100) 14%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-100) 6%, transparent);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linea-dlc:hover {
+  transform: translateX(3px);
+  border-color: color-mix(in oklab, var(--color-base-100) 32%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-100) 11%, transparent);
+}
+
+/* Resplandor detrás de lo que tiene que mirarse primero. */
+.resplandor {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-base-100) 22%, transparent),
+    0 0 60px -12px color-mix(in oklab, var(--color-base-100) 30%, transparent);
+}
+
+/* El latido del punto de "en directo". */
+@keyframes pulso {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.35;
+    transform: scale(0.82);
+  }
+}
+
+/* --------------------------------------------------------------------------
  * Tarjetas
  *
  * Nada de cristal ni de sombras pesadas: una línea finísima y una sombra que

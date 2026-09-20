@@ -27,29 +27,67 @@ const MENSAJES = {
     "Volvemos al escaparate",
     "Lo que ve quien viene a comprar",
   ],
+
+  // La puerta. Aquí el tono es de lanzamiento: es lo primero que se ve y
+  // tiene que dejar claro en dos segundos que hay algo a la venta.
+  puerta: [
+    "Edición completa",
+    "Acceso anticipado",
+    "Precio de lanzamiento",
+    "Todo incluido · sin mensualidad",
+    "El código es tuyo",
+    "Plazas limitadas",
+  ],
+
+  // La de abajo, girando al revés para que las dos no vayan en paralelo.
+  puertaInversa: [
+    "Dominio propio",
+    "Inventario ilimitado",
+    "Panel incluido",
+    "Soporte de puesta en marcha",
+    "Entrega en 7 días",
+  ],
 };
 
 /**
- * @param {"venta"|"cliente"} variante  a quién le habla lo que viene debajo
+ * @param {"venta"|"cliente"|"puerta"|"puertaInversa"} variante
+ *   a quién le habla lo que viene debajo
+ * @param {boolean} invertido  gira en sentido contrario
+ * @param {number} velocidad  segundos por vuelta; menos = más rápido
  */
-export default function Cintillo({ variante = "venta" }) {
+export default function Cintillo({
+  variante = "venta",
+  invertido = false,
+  velocidad,
+  className = "",
+}) {
   const frases = MENSAJES[variante] || MENSAJES.venta;
 
   // Dos vueltas de lo mismo: la segunda tapa el hueco que deja la primera al
   // desplazarse, y así la cinta no parpadea al reiniciar.
   const pista = [...frases, ...frases];
 
+  // Las dos variantes de la puerta comparten el estilo oscuro de "venta".
+  const estilo = variante.startsWith("puerta") ? "venta" : variante;
+
   return (
     <div
-      className={`cintillo cintillo-${variante}`}
+      className={`cintillo cintillo-${estilo} ${className}`}
       role="separator"
       aria-label={
-        variante === "venta"
+        estilo === "venta"
           ? "A partir de aquí, información sobre el sistema a la venta"
           : "A partir de aquí, el escaparate de vehículos"
       }
     >
-      <div className="cintillo-pista" aria-hidden="true">
+      <div
+        className="cintillo-pista"
+        aria-hidden="true"
+        style={{
+          animationDirection: invertido ? "reverse" : undefined,
+          animationDuration: velocidad ? `${velocidad}s` : undefined,
+        }}
+      >
         {pista.map((frase, i) => (
           <span key={`${frase}-${i}`} className="flex items-center gap-10">
             <span className="microgramma cintillo-texto">{frase}</span>
