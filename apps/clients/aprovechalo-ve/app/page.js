@@ -1,12 +1,13 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Revelar from "@/components/Revelar";
-import Silueta from "@/components/Silueta";
 import PantallaVehiculo from "@/components/PantallaVehiculo";
 import RejillaVehiculos from "@/components/RejillaVehiculos";
 import BotonContacto from "@/components/BotonContacto";
 import SeccionPanel from "@/components/SeccionPanel";
+import Cintillo from "@/components/Cintillo";
 import BloqueVenta from "@/components/demo/BloqueVenta";
 import { leerVehiculos, facetasDe, filtrar, hayMuestra } from "@/libs/vehiculos";
 import { esDemo } from "@/libs/demo";
@@ -37,16 +38,24 @@ export default function Inicio() {
             y hay tantos disponibles.
            ---------------------------------------------------------------- */}
         <section className="pantalla items-center justify-center overflow-hidden bg-base-200">
-          <div className="malla absolute inset-0" aria-hidden="true" />
+          {/* La fotografía ocupa el fondo entero, anclada abajo para que el
+              vehículo quede bajo el texto y no detrás de él. */}
+          <Image
+            src="/landing/hero.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-bottom"
+          />
 
-          {/* La silueta grande de fondo, muy lavada: da escala sin competir
-              con el texto. */}
+          {/* El velo que hace legible el titular: opaco arriba, donde va el
+              texto, y transparente en la franja del vehículo. Sin esto, el
+              texto oscuro se pierde contra el cielo claro. */}
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-[12%] flex justify-center opacity-[0.07]"
+            className="absolute inset-0 bg-linear-to-b from-base-100 via-base-100/85 via-45% to-transparent"
             aria-hidden="true"
-          >
-            <Silueta tipo="camioneta" className="w-[130%] max-w-5xl text-base-content" />
-          </div>
+          />
 
           <div className="relative z-10 mx-auto flex max-w-3xl flex-1 flex-col items-center justify-center px-4 py-24 text-center">
             <span className="banda mb-7" aria-hidden="true" />
@@ -137,16 +146,23 @@ export default function Inicio() {
                 <Revelar key={tipo.slug} retraso={i * 80}>
                   <Link
                     href={`/vehiculos?tipo=${tipo.slug}`}
-                    className="ficha group flex h-full flex-col items-center p-7 text-center"
+                    className="ficha group block h-full overflow-hidden"
                   >
-                    <Silueta
-                      tipo={tipo.slug}
-                      className="h-20 w-full text-base-content/30 transition-colors group-hover:text-primary"
-                    />
-                    <h3 className="display mt-5 text-lg">{tipo.nombre}</h3>
-                    <p className="cifra mt-1.5 text-sm text-base-content/45">
-                      {tipo.total} {tipo.total === 1 ? "disponible" : "disponibles"}
-                    </p>
+                    <div className="relative aspect-4/3 overflow-hidden">
+                      <Image
+                        src={`/landing/tipo-${tipo.slug}.jpg`}
+                        alt={tipo.nombre}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="p-5 text-center">
+                      <h3 className="display text-lg">{tipo.nombre}</h3>
+                      <p className="cifra mt-1.5 text-sm text-base-content/45">
+                        {tipo.total} {tipo.total === 1 ? "disponible" : "disponibles"}
+                      </p>
+                    </div>
                   </Link>
                 </Revelar>
               ))}
@@ -180,23 +196,42 @@ export default function Inicio() {
             puesto por escrito para que el comprador sepa a qué atenerse.
            ---------------------------------------------------------------- */}
         <section id="como-comprar" className="px-4 py-24 sm:px-6">
-          <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-7xl">
             <Revelar className="text-center">
               <p className="rotulo">Cómo comprar</p>
               <h2 className="display mt-4 text-3xl sm:text-4xl">Tres pasos, sin vueltas</h2>
             </Revelar>
 
-            <div className="mt-14 grid gap-10 sm:grid-cols-3">
-              {config.compra.pasos.map((paso, i) => (
-                <Revelar key={paso.titulo} retraso={i * 110}>
-                  <p className="cifra text-4xl font-bold text-primary/25">0{i + 1}</p>
-                  <span className="banda mt-4" aria-hidden="true" />
-                  <h3 className="display mt-5 text-lg">{paso.titulo}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-                    {paso.detalle}
-                  </p>
-                </Revelar>
-              ))}
+            <div className="mt-14 grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+              <Revelar desde="izquierda">
+                <div className="relative aspect-4/3 overflow-hidden rounded-lg">
+                  <Image
+                    src="/landing/comprar.jpg"
+                    alt="Entrega de las llaves al comprador"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+              </Revelar>
+
+              <div>
+                {config.compra.pasos.map((paso, i) => (
+                  <Revelar key={paso.titulo} retraso={i * 110}>
+                    <div className="flex gap-5 border-b border-base-content/10 py-6 last:border-0">
+                      <span className="cifra shrink-0 text-2xl font-bold text-primary/30">
+                        0{i + 1}
+                      </span>
+                      <div>
+                        <h3 className="display text-lg">{paso.titulo}</h3>
+                        <p className="mt-2 text-sm leading-relaxed text-base-content/60">
+                          {paso.detalle}
+                        </p>
+                      </div>
+                    </div>
+                  </Revelar>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -206,7 +241,9 @@ export default function Inicio() {
             primero se explica cómo se compra y enseguida por qué lo que se
             acaba de ver está al día.
            ---------------------------------------------------------------- */}
+        <Cintillo variante="venta" />
         <SeccionPanel />
+        <Cintillo variante="cliente" />
 
         {/* ------------------------------------------------------------------
             La otra pata del negocio. La cuenta es, antes que nada, de
@@ -214,9 +251,22 @@ export default function Inicio() {
            ---------------------------------------------------------------- */}
         <section
           id="inmuebles"
-          className="border-y border-base-content/10 bg-base-content px-4 py-24 text-base-100 sm:px-6"
+          className="relative overflow-hidden border-y border-base-content/10 bg-base-content px-4 py-24 text-base-100 sm:px-6"
         >
-          <div className="mx-auto max-w-4xl text-center">
+          <Image
+            src="/landing/inmuebles.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover opacity-30"
+          />
+          {/* La foto es muy clara; sin este velo el texto blanco no se lee. */}
+          <div
+            className="absolute inset-0 bg-base-content/55"
+            aria-hidden="true"
+          />
+
+          <div className="relative mx-auto max-w-4xl text-center">
             <Revelar>
               <p className="cifra text-xs uppercase tracking-[0.24em] text-base-100/55">
                 También
@@ -270,6 +320,7 @@ export default function Inicio() {
           </section>
         )}
 
+        {demo && <Cintillo variante="venta" />}
         <BloqueVenta />
       </main>
 

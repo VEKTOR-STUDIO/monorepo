@@ -30,7 +30,7 @@ export default function MuroDemo({ ocultos, children }) {
 
       <div className="absolute inset-x-0 top-6 flex justify-center px-4">
         <div className="ficha w-full max-w-md p-7 text-center shadow-xl shadow-base-content/5">
-          <p className="rotulo">Hasta aquí llega la demo</p>
+          <p className="microgramma text-[0.65rem] text-primary">Hasta aquí llega la demo</p>
 
           <p className="display mt-4 text-2xl">
             <span className="cifra text-primary">+{ocultos}</span>{" "}
@@ -42,7 +42,14 @@ export default function MuroDemo({ ocultos, children }) {
             y el botón de WhatsApp que llega con el modelo ya escrito.
           </p>
 
-          <p className="cifra mt-5 text-3xl font-bold text-primary">{config.demo.precio}</p>
+          <p className="mt-5 flex items-baseline justify-center gap-2.5">
+            {config.demo.precioAnterior && (
+              <span className="cifra text-lg text-base-content/35 line-through">
+                {config.demo.precioAnterior}
+              </span>
+            )}
+            <span className="cifra text-3xl font-bold text-primary">{config.demo.precio}</span>
+          </p>
           <p className="mt-1 text-xs text-base-content/45">{config.demo.precioNota}</p>
 
           <BotonComprar className="btn btn-primary mt-5 w-full" />

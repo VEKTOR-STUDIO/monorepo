@@ -11,13 +11,13 @@ import config from "@/config";
 export default function BloqueVenta() {
   if (!esDemo()) return null;
 
-  const { precio, precioNota, incluye } = config.demo;
+  const { precio, precioAnterior, precioNota, incluye } = config.demo;
 
   return (
     <section className="relative overflow-hidden border-t border-base-content/10 bg-base-200">
       <div className="relative mx-auto max-w-5xl px-4 py-20 sm:px-6">
         <Revelar className="text-center">
-          <p className="rotulo">Lo que acabas de ver</p>
+          <p className="microgramma text-xs text-primary">Lo que acabas de ver</p>
           <h2 className="display mt-4 text-3xl sm:text-4xl">
             Esta página
             <br />
@@ -44,7 +44,13 @@ export default function BloqueVenta() {
 
             <div className="mt-8 flex flex-col items-center gap-4 border-t border-base-content/10 pt-7 sm:flex-row sm:justify-between">
               <div className="text-center sm:text-left">
-                <p className="cifra text-4xl font-bold text-primary">{precio}</p>
+                {precioAnterior && (
+                  <p className="microgramma text-[0.65rem] text-base-content/40">
+                    Antes{" "}
+                    <span className="cifra line-through">{precioAnterior}</span>
+                  </p>
+                )}
+                <p className="cifra mt-0.5 text-4xl font-bold text-primary">{precio}</p>
                 <p className="mt-1 text-xs text-base-content/45">{precioNota}</p>
               </div>
 

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FiltrosVehiculos from "@/components/FiltrosVehiculos";
@@ -44,11 +45,21 @@ export default async function Vehiculos({ searchParams }) {
       <Header />
 
       <main>
-        <section className="border-b border-base-content/10 bg-base-200 px-4 py-14 sm:px-6">
-          <div className="mx-auto max-w-7xl">
+        <section className="relative overflow-hidden border-b border-base-content/10 bg-base-content px-4 py-16 text-base-100 sm:px-6">
+          <Image
+            src="/landing/cabecera-inv.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-35"
+          />
+          <div className="absolute inset-0 bg-base-content/55" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-7xl">
             <span className="banda" aria-hidden="true" />
             <h1 className="display mt-5 text-4xl sm:text-5xl">Inventario</h1>
-            <p className="mt-3 max-w-xl text-base-content/60">
+            <p className="mt-3 max-w-xl text-base-100/70">
               Todo lo que hay disponible ahora mismo. Cada vehículo con su año,
               kilometraje, motor y estado de documentos.
             </p>

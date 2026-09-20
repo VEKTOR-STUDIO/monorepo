@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { LogoGrande } from "@/components/Logo";
 import { contexto, usarGsap } from "@/libs/animaciones";
 
@@ -117,6 +118,18 @@ export default function PantallaAcceso({ destino = "/" }) {
       // dedos en una pantalla que debería caber justa.
       className="relative flex min-h-[calc(100svh-var(--alto-credito))] flex-col items-center justify-center overflow-hidden bg-base-content px-6"
     >
+      {/* La fotografía del fondo, muy apagada: da contexto sin restarle
+          protagonismo al formulario, que es lo único que importa aquí. */}
+      <Image
+        src="/landing/puerta.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover opacity-20"
+      />
+      <div className="absolute inset-0 bg-base-content/55" aria-hidden="true" />
+
       <div className="malla malla-centro absolute inset-0 opacity-40" aria-hidden="true" />
 
       {/* Halo azul detrás del logotipo. */}

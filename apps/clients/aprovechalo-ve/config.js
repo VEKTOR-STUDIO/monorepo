@@ -105,8 +105,11 @@ const config = {
     // componentes del navegador y acabaría en el bundle, a la vista de
     // cualquiera. Vive en libs/acceso.js, que solo corre en el servidor.
 
-    // PENDIENTE: confirmar precio y poner el enlace de compra.
-    precio: "$690",
+    // PENDIENTE: poner el enlace de compra.
+    precio: "$399",
+    // El precio de antes, que sale tachado al lado del de ahora. Vacío = no
+    // se enseña ninguna rebaja.
+    precioAnterior: "$690",
     precioNota: "Pago único · dominio, montaje y carga del catálogo incluidos",
     // A dónde va el botón de comprar. Mientras esté vacío, los botones llevan
     // a /contacto en vez de a un enlace roto.

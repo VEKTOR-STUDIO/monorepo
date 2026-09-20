@@ -80,7 +80,7 @@ export default function AvisoFlotante() {
           </svg>
         </button>
 
-        <p className="rotulo">Estás viendo una demo</p>
+        <p className="microgramma text-[0.65rem] text-primary">Estás viendo una demo</p>
 
         <p className="mt-2.5 pr-5 text-sm leading-relaxed text-base-content/70">
           Inventario, ficha por vehículo y contacto directo por WhatsApp. Todo
@@ -89,7 +89,14 @@ export default function AvisoFlotante() {
 
         <div className="mt-4 flex items-center justify-between gap-3">
           <div>
-            <p className="cifra text-xl font-bold text-primary">{config.demo.precio}</p>
+            <p className="flex items-baseline gap-2">
+              {config.demo.precioAnterior && (
+                <span className="cifra text-sm text-base-content/35 line-through">
+                  {config.demo.precioAnterior}
+                </span>
+              )}
+              <span className="cifra text-xl font-bold text-primary">{config.demo.precio}</span>
+            </p>
             <p className="text-[0.7rem] text-base-content/40">{config.demo.precioNota}</p>
           </div>
           <BotonComprar className="btn btn-primary btn-sm shrink-0" />

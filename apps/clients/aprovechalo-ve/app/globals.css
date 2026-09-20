@@ -287,6 +287,85 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+ * Microgramma y los cintillos
+ *
+ * Esta página tiene DOS voces y conviene no confundirlas:
+ *
+ *   · Lo que ve el cliente final —vehículos, inmuebles, contacto— va con la
+ *     tipografía de la casa.
+ *   · Lo que le habla al DUEÑO de Aprovéchalo —cómo se publica, qué incluye,
+ *     cuánto cuesta— va en Microgramma, que es la tipografía de la firma de
+ *     Alessandrovaru, la misma del crédito del pie.
+ *
+ * Entre una voz y otra se cruza un cintillo animado, para que se vea de un
+ * golpe dónde termina el escaparate y dónde empieza la oferta.
+ * ------------------------------------------------------------------------ */
+
+.microgramma {
+  font-family: var(--microgramma-font), var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cintillo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-block: 0.7rem;
+  user-select: none;
+  /* Se difumina por los bordes: el texto nace y muere, no se corta en seco. */
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* La pista lleva el contenido DOS veces y se desplaza media pista: al llegar
+   al -50 % la segunda copia está exactamente donde empezó la primera, así que
+   el salto al reiniciar no se ve. */
+.cintillo-pista {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  animation: cinta 38s linear infinite;
+}
+
+.cintillo:hover .cintillo-pista {
+  animation-play-state: paused;
+}
+
+/* La voz de venta: fondo oscuro, letra clara. */
+.cintillo-venta {
+  background-color: var(--color-asfalto);
+  color: oklch(97% 0.002 250);
+}
+
+/* La vuelta al escaparate: clara y discreta, que no compita. */
+.cintillo-cliente {
+  background-color: var(--color-base-200);
+  color: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+  border-block: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+.cintillo-texto {
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+/* El rombo que separa una frase de la siguiente. */
+.cintillo-punto {
+  font-size: 0.5rem;
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cintillo-pista {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
  * Pantallas
  *
  * Cada sección de la portada ocupa la pantalla entera y se encaja sola al

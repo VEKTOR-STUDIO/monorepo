@@ -32,9 +32,14 @@ export default function BarraDemo() {
         </span>
 
         <p className="min-w-0 truncate text-xs text-base-content/70">
-          <span className="hidden sm:inline">
-            Página de demostración. El sistema completo está a la venta ·{" "}
+          <span className="microgramma hidden text-[0.65rem] sm:inline">
+            Página de demostración · a la venta{" "}
           </span>
+          {config.demo.precioAnterior && (
+            <span className="cifra mr-1.5 text-base-content/40 line-through">
+              {config.demo.precioAnterior}
+            </span>
+          )}
           <span className="cifra font-bold text-base-content">{config.demo.precio}</span>
         </p>
 

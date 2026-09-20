@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Revelar from "@/components/Revelar";
@@ -25,12 +26,22 @@ export default function Contacto() {
       <Header />
 
       <main>
-        <section className="border-b border-base-content/10 bg-base-200 px-4 py-16 sm:px-6">
-          <div className="mx-auto max-w-7xl">
+        <section className="relative overflow-hidden border-b border-base-content/10 bg-base-content px-4 py-20 text-base-100 sm:px-6">
+          <Image
+            src="/landing/contacto.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-base-content/60" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-7xl">
             <Revelar>
               <span className="banda" aria-hidden="true" />
               <h1 className="display mt-5 text-4xl sm:text-5xl">Hablemos</h1>
-              <p className="mt-4 max-w-lg text-lg text-base-content/60">
+              <p className="mt-4 max-w-lg text-lg text-base-100/70">
                 Lo más rápido es WhatsApp. Si prefieres, déjanos qué buscas y te
                 escribimos nosotros.
               </p>
