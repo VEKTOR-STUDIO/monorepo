@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/tasa-bcv",
+      "schedule": "5 9 * * *"
+    }
+  ],
+  "functions": {
+    "app/admin/**": {
+      "maxDuration": 60
+    },
+    "app/api/**": {
+      "maxDuration": 60
+    }
+  }
+}

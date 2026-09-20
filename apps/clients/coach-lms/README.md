@@ -14,3 +14,13 @@ Lema: *"La ciencia detrás del rendimiento"*.
 > El `.env.local` heredado apunta al de otro cliente; crea uno nuevo y cambia
 > `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY` antes de aplicar
 > la migración.
+
+## Ver en local
+
+```bash
+pnpm dev   # http://localhost:3000
+```
+
+Con `NEXT_PUBLIC_DEV_NO_LOGIN=true` en `.env.local` (ya está puesto) entras a
+`/dashboard` y `/admin` sin iniciar sesión, con datos de ejemplo. Solo aplica en
+desarrollo; guardar cambios sigue exigiendo login real.

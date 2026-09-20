@@ -1,10 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
+import { DEV_NO_LOGIN } from "@/libs/dev-mode";
 
 const LANDING_ONLY = process.env.NEXT_PUBLIC_LANDING_ONLY === "true";
 
 export async function updateSession(request) {
   const { pathname } = request.nextUrl;
+
+  // Modo local sin login (ver libs/dev-mode.js): nada de redirecciones.
+  if (DEV_NO_LOGIN) {
+    return NextResponse.next({ request });
+  }
 
   // Landing only: no Supabase; redirect signin/dashboard to /
   if (LANDING_ONLY) {

@@ -1,0 +1,250 @@
+# Hardcore · tienda online
+
+Tienda de suplementación deportiva y equipo de entrenamiento de **Hardcore**
+(Centro Lido, El Rosal, Caracas · [@hardcore.fitshop](https://instagram.com/hardcore.fitshop/)).
+
+La fuente de verdad del catálogo es el **PDF que Hardcore manda por WhatsApp**.
+Este proyecto lo lee, lo convierte en tienda y permite repetir la operación cada
+vez que sale una lista nueva, sin escribir un producto a mano.
+
+Base: plantilla Shipfast del monorepo · Next.js 15 (App Router) · Tailwind 4 +
+daisyUI 5 · Supabase.
+
+---
+
+## Estado
+
+| Pieza | Estado |
+|---|---|
+| Catálogo (231 productos, 231 fotos, del PDF de septiembre) | ✅ listo |
+| Tienda, filtros, ficha, carrito, checkout | ✅ listo |
+| Panel de administración e importador de PDF | ✅ listo, **necesita Supabase** |
+| Pedidos guardados | ⏳ **necesita Supabase** |
+| Tasa del BCV automática | ⏳ **necesita Supabase + `CRON_SECRET`** |
+| Login con Google | ⏳ **lo configuras tú en Supabase** |
+| Dominio propio | ⏳ pendiente |
+
+Sin Supabase la tienda **funciona igual**: lee el catálogo de
+`data/catalogo.json` y el checkout abre WhatsApp con el pedido, solo que no lo
+guarda.
+
+---
+
+## Lo que tienes que hacer tú
+
+### 1. Crear el proyecto de Supabase
+
+Uno **propio de Hardcore**. El `.env.local` venía copiado de otro cliente y
+apuntaba al proyecto de `frank-manzano`; se vació a propósito.
+
+Copia de *Project Settings → API* a `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+### 2. Crear el esquema y cargar el catálogo
+
+En el **SQL Editor** de Supabase, en este orden:
+
+1. `supabase/migrations/20260920000000_tienda.sql` — tablas, RLS y el bucket de
+   fotos.
+2. `supabase/seeds/catalogo.sql` — los 231 productos del PDF.
+
+Las fotos ya están en `public/productos/` y el seed apunta a ellas, así que no
+hace falta subir nada para empezar.
+
+### 3. Darte el rol de admin
+
+Entra una vez a `/signin` para que se cree tu perfil, y luego:
+
+```sql
+update public.perfiles set rol = 'admin' where email = 'tu@correo.com';
+```
+
+Sin eso, `/admin` te dice que no tienes permisos (y te enseña justo esta
+consulta con tu correo puesto).
+
+### 4. Activar Google en Supabase
+
+*Authentication → Providers → Google*. En la consola de Google Cloud, la URL de
+redirección es:
+
+```
+https://<tu-proyecto>.supabase.co/auth/v1/callback
+```
+
+Y en *Authentication → URL Configuration* añade tu dominio a las *Redirect URLs*.
+El código ya está: `/signin` ofrece Google y enlace mágico por correo.
+
+### 5. El cron de la tasa BCV
+
+```bash
+CRON_SECRET=$(openssl rand -hex 32)
+```
+
+Ponlo en `.env.local` y en las variables de entorno de Vercel. El cron está
+declarado en `vercel.json` y corre a las **5:05 a.m. hora de Venezuela**
+(`5 9 * * *` en UTC), que es cuando el BCV ya publicó la tasa del día.
+
+> El plan Hobby de Vercel solo permite un cron diario. Con Pro puedes añadir una
+> segunda pasada por la tarde.
+
+Mientras tanto, en `/admin/tasa` hay un botón **Actualizar ahora** que hace lo
+mismo a mano.
+
+### 6. Dominio
+
+Cambia `domainName` y `siteUrl` en `config.js` y `SITE_URL` en el entorno. Ahora
+mismo lleva `hardcorestore.ve` como ejemplo.
+
+---
+
+## Actualizar el catálogo cuando llegue un PDF nuevo
+
+**Opción A — Hardcore, desde la web** (la que usarán ellos)
+
+`/admin/importar` → subir el PDF → ver el resumen de cambios → *Aplicar*.
+
+El resumen dice cuántos productos son nuevos, a cuáles les cambió el precio o la
+disponibilidad y cuáles dejaron de venir en la lista. Nada se escribe hasta que
+se aprueba. Lo que desaparece de la lista **se oculta, no se borra**: los pedidos
+viejos siguen apuntando a ese producto.
+
+**Opción B — tú, desde la terminal** (para meter los cambios al repositorio)
+
+```bash
+npm run importar-catalogo -- "public/Catalogo Hardcore 3 precios.pdf"
+```
+
+Genera `data/catalogo.json`, las imágenes en `public/productos/` y
+`supabase/seeds/catalogo.sql`.
+
+### Cómo se lee el PDF
+
+`libs/pdf-catalog.mjs` abre el PDF sin dependencias externas (solo `zlib` de
+Node) y reconstruye la tabla **por coordenadas**: cada celda se asigna a su
+columna por la posición X y a su fila por la Y, y la foto de cada producto es la
+que cae dentro del alto de esa fila. Por eso funciona aunque el texto venga
+desordenado en el archivo.
+
+De ahí salen: categoría, nombre, variaciones (sabores/tallas), disponibilidad,
+los tres precios y el sello de *Oferta flash*.
+
+`libs/catalogo-normalizar.mjs` traduce las categorías tal y como las teclean
+("Proteina Whey", "BCAAA", "Healty") a una taxonomía con acentos y agrupada en
+14 familias. **El dato original se conserva** en `categoriaOriginal`. Si en un
+PDF futuro aparece una categoría que no está en la tabla, cae en "Otros" y el
+importador la lista para que la añadas.
+
+---
+
+## Los tres precios
+
+El catálogo trae tres precios por producto y la tienda los muestra los tres:
+
+| Columna del PDF | En la tienda | Se cobra |
+|---|---|---|
+| Precio Oferta | **Contado en divisas** | Efectivo o Zelle. Es el más bajo. |
+| Precio | **Transferencia en bolívares** | En Bs. a la tasa del BCV del día. |
+| Precio PM | **Pago Móvil** | En Bs. a la tasa del BCV. Sin Cashea. |
+
+Los dos que se cobran en bolívares muestran también el equivalente en Bs.,
+calculado con la tasa guardada en `tasas_cambio`.
+
+> **Supuesto a confirmar con Hardcore:** se interpretó que "Precio" (BCV) y
+> "Precio PM" se pagan en bolívares a la tasa, y que "Precio Oferta" es contado
+> en divisas, según el pie del PDF ("Venta de Contado $" / "Venta PM SIN
+> CASHEA"). Si alguno se cobra de otra forma, se cambia en `config.pagos`.
+
+### De dónde sale la tasa
+
+`libs/bcv.js` lee la página del Banco Central (`bcv.org.ve`), que es la fuente.
+Ese sitio sirve su certificado sin el intermedio, así que la descarga tolera la
+cadena incompleta **pero comprueba a mano que el certificado sea el de
+bcv.org.ve** antes de leer nada. Si el BCV no responde, se usan espejos
+(`bcv.today`, `ve.dolarapi.com`), que van un día por detrás y quedan anotados en
+el historial.
+
+---
+
+## Cómo se compra
+
+1. Carrito (vive en el navegador, sin cuenta).
+2. `/checkout`: datos, forma de pago y entrega. El total se recalcula al cambiar
+   la forma de pago.
+3. Al confirmar: el pedido se guarda en Supabase con un código (`HC-2609-K3F8`)
+   y se abre WhatsApp con el resumen escrito.
+4. El pago y la entrega se cierran en el chat, como hasta ahora.
+
+**Los precios los pone el servidor, nunca el navegador.** `/api/checkout`
+ignora lo que le manden y recalcula todo contra el catálogo; también descarta
+variaciones que el producto no tiene y topa las cantidades.
+
+---
+
+## Desarrollo
+
+```bash
+pnpm install          # desde la raíz del monorepo
+npm run dev           # http://localhost:3000
+npm run build
+```
+
+`NEXT_PUBLIC_DEV_NO_LOGIN=true` en `.env.local` deja entrar a `/admin` sin
+sesión. **Solo local**: se ignora con `NODE_ENV=production`.
+
+### Mapa
+
+```
+app/
+  page.js                  portada
+  tienda/                  catálogo con filtros (el estado vive en la URL)
+  producto/[slug]/         ficha, con los tres precios y las presentaciones
+  carrito/ checkout/ pedido/[codigo]/
+  contacto/                cómo comprar y preguntas frecuentes
+  cuenta/                  pedidos del cliente que inició sesión
+  admin/                   panel (resumen, importar, productos, pedidos, tasa)
+    acciones.js            server actions; todas comprueban el rol admin
+  api/
+    checkout/              crea el pedido y arma el mensaje de WhatsApp
+    cron/tasa-bcv/         lo llama Vercel una vez al día
+
+libs/
+  pdf-catalog.mjs          lector del PDF (texto + imágenes, por coordenadas)
+  catalogo-normalizar.mjs  taxonomía, marcas y slugs
+  catalogo.js              acceso a datos: Supabase y, si no, catalogo.json
+  bcv.js                   tasa del Banco Central
+  formato.js               dinero, fechas y estados
+
+data/catalogo.json         el catálogo importado
+public/productos/          las 231 fotos sacadas del PDF
+supabase/                  migración y seed
+```
+
+### Estilo
+
+Tema `hardcore` en `app/globals.css`: negro y rojo de marca tratados como neón
+(humo rojo de fondo, bordes que se encienden, rejilla técnica). Tipografía
+geométrica: **Sora** en titulares, **Outfit** en el cuerpo y **JetBrains Mono**
+en precios y códigos, para que las cifras alineen en columna.
+
+Para mover el rojo: `--color-primary` en `globals.css` y `colors.main` en
+`config.js`.
+
+---
+
+## Limitaciones conocidas
+
+- **Las fotos son pequeñas.** Salen del PDF y miden unos 90×126 px. Se muestran
+  a tamaño contenido para que no se deshagan. Cuando Hardcore tenga fotos
+  mejores, se suben desde el panel y sustituyen a las del PDF sin tocar código.
+- **Los productos se identifican por su nombre.** Si en un PDF nuevo cambian
+  cómo se escribe un producto, entra como nuevo y el anterior se oculta. El
+  resumen previo a la importación deja verlo antes de aplicar.
+- **Los datos son de la lista de septiembre** y el propio Hardcore avisa de que
+  los precios cambian. La fecha de la última importación se ve en `/admin`.
+- **El catálogo no trae descripciones** de producto: el PDF solo tiene nombre,
+  presentación y precios. No se inventó ninguna.

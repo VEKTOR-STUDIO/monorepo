@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tema "hardcore" — tienda nocturna.
+ *
+ * Negro y rojo, que son los colores de la marca, pero tratados como neón:
+ * fondos casi negros con capas de humo rojo, bordes que se encienden al pasar
+ * por encima y tipografía geométrica (nada de condensadas de póster).
+ *
+ * Para mover el rojo de marca: --color-primary aquí y config.colors.main.
+ * ------------------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "hardcore";
+  default: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(13% 0.008 20);
+  --color-base-200: oklch(17% 0.012 20);
+  --color-base-300: oklch(23% 0.016 20);
+  --color-base-content: oklch(97% 0.003 20);
+
+  --color-primary: oklch(62% 0.245 22);
+  --color-primary-content: oklch(99% 0 0);
+
+  --color-secondary: oklch(97% 0.003 20);
+  --color-secondary-content: oklch(13% 0.008 20);
+
+  --color-accent: oklch(70% 0.19 35);
+  --color-accent-content: oklch(13% 0.008 20);
+
+  --color-neutral: oklch(20% 0.012 20);
+  --color-neutral-content: oklch(97% 0.003 20);
+
+  --color-info: oklch(72% 0.14 235);
+  --color-info-content: oklch(13% 0.008 20);
+  --color-success: oklch(76% 0.18 155);
+  --color-success-content: oklch(13% 0.008 20);
+  --color-warning: oklch(80% 0.16 75);
+  --color-warning-content: oklch(13% 0.008 20);
+  --color-error: oklch(62% 0.245 22);
+  --color-error-content: oklch(99% 0 0);
+
+  /* Esquinas suaves: es una tienda, no un cartel de combate. */
+  --radius-selector: 0.75rem;
+  --radius-field: 0.625rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  /* Geométricas. Sora manda en los titulares, Outfit en el cuerpo y
+     JetBrains Mono en precios y códigos, que así quedan alineados. */
+  --font-display: var(--font-sora), "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  --color-rojo: oklch(62% 0.245 22);
+  --color-humo: oklch(17% 0.012 20);
+
+  --animate-subir: subir 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-latido: latido 3.5s ease-in-out infinite;
+  --animate-cinta: cinta 42s linear infinite;
+  --animate-brillo: brillo 2.2s ease-in-out infinite;
+
+  @keyframes subir {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 0.45;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.06);
+    }
+  }
+
+  @keyframes cinta {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes brillo {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-base-100);
+}
+
+/* --------------------------------------------------------------------------
+ * Titulares
+ * ------------------------------------------------------------------------ */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+/* Etiquetas pequeñas de sección: mono, espaciadas, en rojo. */
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+/* Cifras que se comparan entre sí (precios, totales). */
+.cifra {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+ * Neón
+ * ------------------------------------------------------------------------ */
+
+/* Humo rojo detrás de un bloque. El padre necesita position/overflow. */
+.humo::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 70%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    color-mix(in oklab, var(--color-primary) 32%, transparent),
+    transparent 68%
+  );
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.texto-glow {
+  text-shadow: 0 0 28px color-mix(in oklab, var(--color-primary) 55%, transparent);
+}
+
+/* Rejilla técnica de fondo, muy tenue. */
+.malla {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 5%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 20%, transparent 75%);
+}
+
+/* --------------------------------------------------------------------------
+ * Tarjetas de producto
+ * ------------------------------------------------------------------------ */
+
+.ficha {
+  position: relative;
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-200) 80%, transparent);
+  border-radius: var(--radius-box);
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.ficha:hover {
+  border-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-primary) 18%, transparent),
+    0 18px 50px -18px color-mix(in oklab, var(--color-primary) 45%, transparent);
+  transform: translateY(-3px);
+}
+
+/* Las fotos del catálogo vienen recortadas sobre blanco y son pequeñas.
+   El cuadro es blanco puro a propósito: así el fondo del JPEG se funde con él
+   y no se ve el recuadro de la foto dentro de la tarjeta. */
+.foto-producto {
+  background: #ffffff;
+}
+
+/* Se ven mejor sin suavizado al ampliarlas: son ~90×126 px. */
+.foto-producto img {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* --------------------------------------------------------------------------
+ * Formularios
+ * ------------------------------------------------------------------------ */
+
+.entrada {
+  width: 100%;
+  border-radius: var(--radius-field);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-200) 60%, transparent);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: var(--color-base-content);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.entrada::placeholder {
+  color: color-mix(in oklab, var(--color-base-content) 35%, transparent);
+}
+
+.entrada:focus {
+  border-color: color-mix(in oklab, var(--color-primary) 60%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-200) 90%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Botones
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.btn-primary {
+  box-shadow: 0 10px 34px -14px color-mix(in oklab, var(--color-primary) 85%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Entrada en escena por scroll (ver components/Revelar.js)
+ * ------------------------------------------------------------------------ */
+
+[data-revelar] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-revelar="visible"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Barra de scroll discreta. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-300);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in oklab, var(--color-primary) 60%, var(--color-base-300));
+}
+
+/* Quien pide menos movimiento, no lo tiene. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  [data-revelar] {
+    opacity: 1;
+    transform: none;
+  }
+}

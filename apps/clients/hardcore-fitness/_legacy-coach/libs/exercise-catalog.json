@@ -1,0 +1,4755 @@
+[
+  {
+    "slug": "decline-sit-up",
+    "name": "Abdominales en banco declinado",
+    "name_en": "Decline Sit-Up",
+    "equipment": "Banco",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "banded-standing-hip-abduction",
+    "name": "Abducción de cadera de pie con banda",
+    "name_en": "Banded Standing Hip Abduction",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-standing-hip-abduction",
+    "name": "Abducción de cadera de pie en polea",
+    "name_en": "Cable Standing Hip Abduction",
+    "equipment": "Polea",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-seated-hip-abduction",
+    "name": "Abducción de cadera sentado con banda",
+    "name_en": "Banded Seated Hip Abduction",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "side-lying-hip-abduction",
+    "name": "Abducción de cadera tumbado de lado",
+    "name_en": "Side-Lying Hip Abduction",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "fire-hydrant",
+    "name": "Abducción en cuadrupedia",
+    "name_en": "Fire Hydrant",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-fire-hydrant",
+    "name": "Abducción en cuadrupedia con banda",
+    "name_en": "Banded Fire Hydrant",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hip-abduction-machine",
+    "name": "Abductores en máquina",
+    "name_en": "Hip Abduction Machine",
+    "equipment": "Máquina",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-standing-hip-adduction",
+    "name": "Aducción de cadera de pie en polea",
+    "name_en": "Cable Standing Hip Adduction",
+    "equipment": "Polea",
+    "primary_muscle": "Aductores",
+    "secondary_muscles": [
+      "Core",
+      "Glúteos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hip-adduction-machine",
+    "name": "Aductores en máquina",
+    "name_en": "Hip Adduction Machine",
+    "equipment": "Máquina",
+    "primary_muscle": "Aductores",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "clamshell",
+    "name": "Almeja (clamshell)",
+    "name_en": "Clamshell",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-clamshell",
+    "name": "Almeja con banda",
+    "name_en": "Banded Clamshell",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "reverse-snow-angel",
+    "name": "Ángel invertido",
+    "name_en": "Reverse Snow Angel",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Deltoides posterior",
+      "Zona lumbar",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "band-pull-apart",
+    "name": "Aperturas con banda",
+    "name_en": "Band Pull-Apart",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Deltoides posterior",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-fly",
+    "name": "Aperturas con mancuernas",
+    "name_en": "Dumbbell Fly",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-fly",
+    "name": "Aperturas en polea",
+    "name_en": "Cable Fly",
+    "equipment": "Polea",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "incline-cable-fly",
+    "name": "Aperturas inclinadas en polea",
+    "name_en": "Incline Cable Fly",
+    "equipment": "Polea",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "rear-delt-fly",
+    "name": "Aperturas posteriores",
+    "name_en": "Rear Delt Fly",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Deltoides posterior",
+    "secondary_muscles": [
+      "Espalda alta"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-rear-delt-fly",
+    "name": "Aperturas posteriores en polea",
+    "name_en": "Cable Rear Delt Fly",
+    "equipment": "Polea",
+    "primary_muscle": "Deltoides posterior",
+    "secondary_muscles": [
+      "Espalda alta"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "assault-bike",
+    "name": "Assault bike",
+    "name_en": "Assault Bike",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Cardio",
+      "Hombros"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "step-down",
+    "name": "Bajada controlada del cajón",
+    "name_en": "Step-Down",
+    "equipment": "Cajón",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Gemelos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "leg-swings-stretch",
+    "name": "Balanceo de piernas",
+    "name_en": "Leg Swings",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Movilidad",
+    "secondary_muscles": [
+      "Cadera",
+      "Isquiotibiales",
+      "Cuádriceps"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "cycling",
+    "name": "Bicicleta",
+    "name_en": "Cycling",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "bird-dog",
+    "name": "Bird dog",
+    "name_en": "Bird Dog",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Glúteos",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "good-morning",
+    "name": "Buenos días (good morning)",
+    "name_en": "Good Morning",
+    "equipment": "Barra",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Zona lumbar"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "burpee",
+    "name": "Burpee",
+    "name_en": "Burpee",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros",
+      "Core",
+      "Cardio"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "walking",
+    "name": "Caminar",
+    "name_en": "Walking",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "lying-hamstring-walkout",
+    "name": "Caminata de isquios tumbado",
+    "name_en": "Lying Hamstring Walkout",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "treadmill-incline-walk",
+    "name": "Caminata inclinada en cinta",
+    "name_en": "Treadmill Incline Walk",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Glúteos",
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "banded-lateral-walk",
+    "name": "Caminata lateral con banda",
+    "name_en": "Banded Lateral Walk",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "arm-circles",
+    "name": "Círculos de brazos",
+    "name_en": "Arm Circles",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Pecho",
+      "Espalda alta",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "active-hang",
+    "name": "Colgarse activo",
+    "name_en": "Active Hang",
+    "equipment": "Barra de dominadas",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Espalda alta",
+      "Antebrazos",
+      "Core"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dead-hang",
+    "name": "Colgarse pasivo",
+    "name_en": "Dead Hang",
+    "equipment": "Barra de dominadas",
+    "primary_muscle": "Antebrazos",
+    "secondary_muscles": [
+      "Dorsales",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "pec-deck",
+    "name": "Contractor de pecho (peck deck)",
+    "name_en": "Pec Deck",
+    "equipment": "Máquina",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "reverse-pec-deck",
+    "name": "Contractor inverso",
+    "name_en": "Reverse Pec Deck",
+    "equipment": "Máquina",
+    "primary_muscle": "Deltoides posterior",
+    "secondary_muscles": [
+      "Espalda alta"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "running",
+    "name": "Correr",
+    "name_en": "Running",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "crunch",
+    "name": "Crunch abdominal",
+    "name_en": "Crunch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "bicycle-crunch",
+    "name": "Crunch bicicleta",
+    "name_en": "Bicycle Crunch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Piernas"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "weighted-crunch",
+    "name": "Crunch con peso",
+    "name_en": "Weighted Crunch",
+    "equipment": "Disco",
+    "primary_muscle": "Core",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "cable-crunch",
+    "name": "Crunch en polea",
+    "name_en": "Cable Crunch",
+    "equipment": "Polea",
+    "primary_muscle": "Core",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "reverse-crunch",
+    "name": "Crunch inverso",
+    "name_en": "Reverse Crunch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "battle-ropes",
+    "name": "Cuerdas de batalla",
+    "name_en": "Battle Ropes",
+    "equipment": "Cardio",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Core",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "ez-bar-curl",
+    "name": "Curl con barra Z",
+    "name_en": "EZ-Bar Curl",
+    "equipment": "Barra",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "concentration-curl",
+    "name": "Curl concentrado",
+    "name_en": "Concentration Curl",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "bicep-curl",
+    "name": "Curl de bíceps",
+    "name_en": "Bicep Curl",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "wrist-curl",
+    "name": "Curl de muñeca",
+    "name_en": "Wrist Curl",
+    "equipment": "Barra",
+    "primary_muscle": "Antebrazos",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "drag-curl",
+    "name": "Curl drag",
+    "name_en": "Drag Curl",
+    "equipment": "Barra",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "preacher-curl",
+    "name": "Curl en banco Scott",
+    "name_en": "Preacher Curl",
+    "equipment": "Máquina",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-curl",
+    "name": "Curl en polea",
+    "name_en": "Cable Curl",
+    "equipment": "Polea",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "leg-curl",
+    "name": "Curl femoral",
+    "name_en": "Leg Curl",
+    "equipment": "Máquina",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Gemelos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "stability-ball-hamstring-curl",
+    "name": "Curl femoral con fitball",
+    "name_en": "Stability Ball Hamstring Curl",
+    "equipment": "Fitball",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "towel-hamstring-curl",
+    "name": "Curl femoral con toalla",
+    "name_en": "Towel Hamstring Curl",
+    "equipment": "Toalla",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "seated-leg-curl",
+    "name": "Curl femoral sentado",
+    "name_en": "Seated Leg Curl",
+    "equipment": "Máquina",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Gemelos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "lying-leg-curl",
+    "name": "Curl femoral tumbado",
+    "name_en": "Lying Leg Curl",
+    "equipment": "Máquina",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Gemelos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "incline-dumbbell-curl",
+    "name": "Curl inclinado con mancuernas",
+    "name_en": "Incline Dumbbell Curl",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "reverse-curl",
+    "name": "Curl inverso",
+    "name_en": "Reverse Curl",
+    "equipment": "Barra",
+    "primary_muscle": "Antebrazos",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hammer-curl",
+    "name": "Curl martillo",
+    "name_en": "Hammer Curl",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "rope-hammer-curl",
+    "name": "Curl martillo con cuerda",
+    "name_en": "Rope Hammer Curl",
+    "equipment": "Polea",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "nordic-hamstring-curl",
+    "name": "Curl nórdico",
+    "name_en": "Nordic Hamstring Curl",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Gemelos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "spider-curl",
+    "name": "Curl spider",
+    "name_en": "Spider Curl",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dead-bug",
+    "name": "Dead bug",
+    "name_en": "Dead Bug",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Piernas"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "banded-dead-bug",
+    "name": "Dead bug con banda",
+    "name_en": "Banded Dead Bug",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Glúteos",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "lateral-shuffle",
+    "name": "Desplazamiento lateral",
+    "name_en": "Lateral Shuffle",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Glúteos",
+      "Gemelos",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "commando-pull-up",
+    "name": "Dominada comando",
+    "name_en": "Commando Pull-up",
+    "equipment": "Barra de dominadas",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps",
+      "Espalda alta",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "towel-pull-up",
+    "name": "Dominada con toalla",
+    "name_en": "Towel Pull-up",
+    "equipment": "Toalla",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps",
+      "Antebrazos",
+      "Espalda alta"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "l-sit-pull-up",
+    "name": "Dominada en L",
+    "name_en": "L-Sit Pull-up",
+    "equipment": "Barra de dominadas",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps",
+      "Core",
+      "Antebrazos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "scapular-pull-up",
+    "name": "Dominada escapular",
+    "name_en": "Scapular Pull-up",
+    "equipment": "Barra de dominadas",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Espalda alta",
+      "Antebrazos",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "negative-pull-up",
+    "name": "Dominada negativa",
+    "name_en": "Negative Pull-up",
+    "equipment": "Barra de dominadas",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps",
+      "Espalda alta",
+      "Antebrazos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "pull-up",
+    "name": "Dominadas",
+    "name_en": "Pull-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "neutral-grip-pull-up",
+    "name": "Dominadas agarre neutro",
+    "name_en": "Neutral-Grip Pull-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "assisted-pull-up",
+    "name": "Dominadas asistidas",
+    "name_en": "Assisted Pull-up",
+    "equipment": "Máquina",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "assisted_bodyweight",
+    "exercise_type_label": "Asistido",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "weighted-pull-up",
+    "name": "Dominadas con lastre",
+    "name_en": "Weighted Pull-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "chin-up",
+    "name": "Dominadas supinas",
+    "name_en": "Chin-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Dorsales"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "assisted-chin-up",
+    "name": "Dominadas supinas asistidas",
+    "name_en": "Assisted Chin-up",
+    "equipment": "Máquina",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Dorsales"
+    ],
+    "exercise_type": "assisted_bodyweight",
+    "exercise_type_label": "Asistido",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "weighted-chin-up",
+    "name": "Dominadas supinas con lastre",
+    "name_en": "Weighted Chin-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Bíceps",
+    "secondary_muscles": [
+      "Dorsales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dragon-flag",
+    "name": "Dragon flag",
+    "name_en": "Dragon Flag",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Dorsales",
+      "Cuádriceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "worlds-greatest-stretch",
+    "name": "El mejor estiramiento del mundo",
+    "name_en": "World's Greatest Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Movilidad",
+    "secondary_muscles": [
+      "Cadera",
+      "Isquiotibiales",
+      "Espalda alta"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "calf-raise",
+    "name": "Elevación de gemelos",
+    "name_en": "Calf Raise",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "single-leg-calf-raise",
+    "name": "Elevación de gemelos a una pierna",
+    "name_en": "Single-Leg Calf Raise",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "standing-calf-raise",
+    "name": "Elevación de gemelos de pie",
+    "name_en": "Standing Calf Raise",
+    "equipment": "Máquina",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "seated-calf-raise",
+    "name": "Elevación de gemelos sentado",
+    "name_en": "Seated Calf Raise",
+    "equipment": "Máquina",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "donkey-calf-raise",
+    "name": "Elevación de gemelos tipo burro",
+    "name_en": "Donkey Calf Raise",
+    "equipment": "Máquina",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "side-lying-leg-raise",
+    "name": "Elevación de pierna tumbado de lado",
+    "name_en": "Side-Lying Leg Raise",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hanging-leg-raise",
+    "name": "Elevación de piernas colgado",
+    "name_en": "Hanging Leg Raise",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Grip"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "lying-leg-raise",
+    "name": "Elevación de piernas tumbado",
+    "name_en": "Lying Leg Raise",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "hanging-knee-raise",
+    "name": "Elevación de rodillas colgado",
+    "name_en": "Hanging Knee Raise",
+    "equipment": "Barra de dominadas",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Grip"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "captains-chair-knee-raise",
+    "name": "Elevación de rodillas en silla romana",
+    "name_en": "Captain's Chair Knee Raise",
+    "equipment": "Máquina",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "prone-t-raise",
+    "name": "Elevación en T boca abajo",
+    "name_en": "Prone T Raise",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Deltoides posterior",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "prone-y-raise",
+    "name": "Elevación en Y boca abajo",
+    "name_en": "Prone Y Raise",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Deltoides posterior",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "front-raise",
+    "name": "Elevaciones frontales",
+    "name_en": "Front Raise",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Pecho"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "plate-front-raise",
+    "name": "Elevaciones frontales con disco",
+    "name_en": "Plate Front Raise",
+    "equipment": "Disco",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Pecho"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-front-raise",
+    "name": "Elevaciones frontales en polea",
+    "name_en": "Cable Front Raise",
+    "equipment": "Polea",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Pecho"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "lateral-raise",
+    "name": "Elevaciones laterales",
+    "name_en": "Lateral Raise",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Espalda alta"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "machine-lateral-raise",
+    "name": "Elevaciones laterales en máquina",
+    "name_en": "Machine Lateral Raise",
+    "equipment": "Máquina",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Espalda alta"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-lateral-raise",
+    "name": "Elevaciones laterales en polea",
+    "name_en": "Cable Lateral Raise",
+    "equipment": "Polea",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Espalda alta"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "elliptical",
+    "name": "Elíptica",
+    "name_en": "Elliptical",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-shrug",
+    "name": "Encogimientos con mancuernas",
+    "name_en": "Dumbbell Shrug",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "shrug",
+    "name": "Encogimientos de hombros",
+    "name_en": "Barbell Shrug",
+    "equipment": "Barra",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Antebrazos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "seated-knee-tuck",
+    "name": "Encogimientos sentado",
+    "name_en": "Seated Knee Tuck",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "mountain-climber",
+    "name": "Escalador (mountain climber)",
+    "name_en": "Mountain Climber",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros",
+      "Piernas"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "stair-climber",
+    "name": "Escaladora",
+    "name_en": "Stair Climber",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "standing-quad-stretch",
+    "name": "Estiramiento de cuádriceps de pie",
+    "name_en": "Standing Quad Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Cadera",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "wall-calf-stretch",
+    "name": "Estiramiento de gemelo en pared",
+    "name_en": "Wall Calf Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "cross-body-shoulder-stretch",
+    "name": "Estiramiento de hombro cruzado",
+    "name_en": "Cross-Body Shoulder Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Espalda alta",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "hamstring-stretch",
+    "name": "Estiramiento de isquiotibiales",
+    "name_en": "Hamstring Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Gemelos",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "doorway-chest-stretch",
+    "name": "Estiramiento de pecho en puerta",
+    "name_en": "Doorway Chest Stretch",
+    "equipment": "Marco de puerta",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "kneeling-hip-flexor-stretch",
+    "name": "Estiramiento de psoas de rodillas",
+    "name_en": "Kneeling Hip Flexor Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cadera",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "butterfly-stretch",
+    "name": "Estiramiento mariposa",
+    "name_en": "Butterfly Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cadera",
+    "secondary_muscles": [
+      "Groin",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "leg-extension",
+    "name": "Extensión de cuádriceps",
+    "name_en": "Leg Extension",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "wrist-extension",
+    "name": "Extensión de muñeca",
+    "name_en": "Wrist Extension",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Antebrazos",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "single-arm-dumbbell-tricep-extension",
+    "name": "Extensión de tríceps a una mano",
+    "name_en": "Single Arm Dumbbell Tricep Extension",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "rope-tricep-pushdown",
+    "name": "Extensión de tríceps con cuerda",
+    "name_en": "Rope Tricep Pushdown",
+    "equipment": "Polea",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-overhead-tricep-extension",
+    "name": "Extensión de tríceps con mancuerna sobre la cabeza",
+    "name_en": "Dumbbell Overhead Tricep Extension",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "tricep-pushdown",
+    "name": "Extensión de tríceps en polea",
+    "name_en": "Tricep Pushdown",
+    "equipment": "Polea",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "overhead-tricep-extension",
+    "name": "Extensión de tríceps sobre la cabeza",
+    "name_en": "Overhead Tricep Extension",
+    "equipment": "Polea",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "glute-focused-back-extension",
+    "name": "Extensión lumbar enfocada en glúteo",
+    "name_en": "Glute-Focused Back Extension",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Zona lumbar"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "back-extension",
+    "name": "Extensiones lumbares",
+    "name_en": "Back Extension",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Zona lumbar",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "face-pull",
+    "name": "Face pull",
+    "name_en": "Face Pull",
+    "equipment": "Polea",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Deltoides posterior",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-face-pull",
+    "name": "Face pull con banda",
+    "name_en": "Banded Face Pull",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Deltoides posterior",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "seated-forward-fold-stretch",
+    "name": "Flexión adelante sentado",
+    "name_en": "Seated Forward Fold",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Espalda",
+      "Gemelos",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "push-up",
+    "name": "Flexiones",
+    "name_en": "Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "wide-push-up",
+    "name": "Flexiones agarre ancho",
+    "name_en": "Wide Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros",
+      "Tríceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "archer-push-up",
+    "name": "Flexiones arquero",
+    "name_en": "Archer Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "weighted-push-up",
+    "name": "Flexiones con lastre",
+    "name_en": "Weighted Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "push-up-shoulder-tap",
+    "name": "Flexiones con toque de hombro",
+    "name_en": "Push-up Shoulder Tap",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros",
+      "Tríceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "handstand-push-up",
+    "name": "Flexiones de pino",
+    "name_en": "Handstand Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps",
+      "Core",
+      "Pecho"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "wall-handstand-push-up",
+    "name": "Flexiones de pino en pared",
+    "name_en": "Wall Handstand Push-up",
+    "equipment": "Pared",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps",
+      "Core",
+      "Pecho"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "knee-push-up",
+    "name": "Flexiones de rodillas",
+    "name_en": "Knee Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "decline-push-up",
+    "name": "Flexiones declinadas (pies elevados)",
+    "name_en": "Decline Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros",
+      "Tríceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "diamond-push-up",
+    "name": "Flexiones diamante",
+    "name_en": "Diamond Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "wall-push-up",
+    "name": "Flexiones en pared",
+    "name_en": "Wall Push-up",
+    "equipment": "Pared",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "scapular-push-up",
+    "name": "Flexiones escapulares",
+    "name_en": "Scapular Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Espalda alta",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "explosive-push-up",
+    "name": "Flexiones explosivas",
+    "name_en": "Explosive Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hindu-push-up",
+    "name": "Flexiones hindúes",
+    "name_en": "Hindu Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros",
+      "Tríceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "incline-push-up",
+    "name": "Flexiones inclinadas (manos elevadas)",
+    "name_en": "Incline Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "typewriter-push-up",
+    "name": "Flexiones máquina de escribir",
+    "name_en": "Typewriter Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "pike-push-up",
+    "name": "Flexiones pike",
+    "name_en": "Pike Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps",
+      "Pecho",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "feet-elevated-pike-push-up",
+    "name": "Flexiones pike con pies elevados",
+    "name_en": "Feet-Elevated Pike Push-up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps",
+      "Pecho",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "assisted-dip",
+    "name": "Fondos asistidos",
+    "name_en": "Assisted Dip",
+    "equipment": "Máquina",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Pecho"
+    ],
+    "exercise_type": "assisted_bodyweight",
+    "exercise_type_label": "Asistido",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "chest-dip",
+    "name": "Fondos con énfasis en pecho",
+    "name_en": "Chest Dip",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "weighted-dip",
+    "name": "Fondos con lastre",
+    "name_en": "Weighted Dip",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "bench-dip",
+    "name": "Fondos en banco",
+    "name_en": "Bench Dip",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dip",
+    "name": "Fondos en paralelas",
+    "name_en": "Dip",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "chair-dip",
+    "name": "Fondos en silla",
+    "name_en": "Chair Dip",
+    "equipment": "Silla",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "frog-pump",
+    "name": "Frog pump",
+    "name_en": "Frog Pump",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-frog-pump",
+    "name": "Frog pump con banda",
+    "name_en": "Banded Frog Pump",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cat-cow-stretch",
+    "name": "Gato-camello",
+    "name_en": "Cat-Cow Stretch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Movilidad",
+    "secondary_muscles": [
+      "Espalda",
+      "Core"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "leg-press-calf-raise",
+    "name": "Gemelos en prensa",
+    "name_en": "Leg Press Calf Raise",
+    "equipment": "Máquina",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "russian-twist",
+    "name": "Giro ruso",
+    "name_en": "Russian Twist",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "weighted-russian-twist",
+    "name": "Giro ruso con peso",
+    "name_en": "Weighted Russian Twist",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "inchworm",
+    "name": "Gusano (inchworm)",
+    "name_en": "Inchworm",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros",
+      "Isquiotibiales",
+      "Pecho"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "hip-airplane",
+    "name": "Hip airplane",
+    "name_en": "Hip Airplane",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hip-thrust",
+    "name": "Hip thrust",
+    "name_en": "Hip Thrust",
+    "equipment": "Barra",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-hip-thrust",
+    "name": "Hip thrust con banda",
+    "name_en": "Banded Hip Thrust",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-hip-thrust",
+    "name": "Hip thrust con mancuerna",
+    "name_en": "Dumbbell Hip Thrust",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "smith-machine-hip-thrust",
+    "name": "Hip thrust en multipower",
+    "name_en": "Smith Machine Hip Thrust",
+    "equipment": "Máquina",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "reverse-hyperextension",
+    "name": "Hiperextensión inversa",
+    "name_en": "Reverse Hyperextension",
+    "equipment": "Máquina",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Zona lumbar"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hollow-body-hold",
+    "name": "Hollow hold",
+    "name_en": "Hollow Body Hold",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "hollow-rock",
+    "name": "Hollow rock",
+    "name_en": "Hollow Rock",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-side-bend",
+    "name": "Inclinación lateral con mancuerna",
+    "name_en": "Dumbbell Side Bend",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Grip"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "cable-pallof-hold",
+    "name": "Isometría Pallof en polea",
+    "name_en": "Cable Pallof Hold",
+    "equipment": "Polea",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Glúteos",
+      "Hombros"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "wide-grip-lat-pulldown",
+    "name": "Jalón agarre ancho",
+    "name_en": "Wide-Grip Lat Pulldown",
+    "equipment": "Polea",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "close-grip-lat-pulldown",
+    "name": "Jalón agarre cerrado",
+    "name_en": "Close-Grip Lat Pulldown",
+    "equipment": "Polea",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "lat-pulldown",
+    "name": "Jalón al pecho",
+    "name_en": "Lat Pulldown",
+    "equipment": "Polea",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-lat-pulldown",
+    "name": "Jalón al pecho con banda",
+    "name_en": "Banded Lat Pulldown",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Bíceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "straight-arm-pulldown",
+    "name": "Jalón con brazos extendidos",
+    "name_en": "Straight-Arm Pulldown",
+    "equipment": "Polea",
+    "primary_muscle": "Dorsales",
+    "secondary_muscles": [
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "l-sit-hold",
+    "name": "L-sit",
+    "name_en": "L-Sit Hold",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Tríceps",
+      "Cuádriceps",
+      "Hombros"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "banded-woodchop",
+    "name": "Leñador con banda",
+    "name_en": "Banded Woodchop",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros",
+      "Glúteos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "cable-woodchop",
+    "name": "Leñador en polea",
+    "name_en": "Cable Woodchop",
+    "equipment": "Polea",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "crab-walk",
+    "name": "Marcha del cangrejo",
+    "name_en": "Crab Walk",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core",
+      "Hombros"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "bear-crawl",
+    "name": "Marcha del oso",
+    "name_en": "Bear Crawl",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros",
+      "Cuádriceps",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "half-burpee",
+    "name": "Medio burpee",
+    "name_en": "Half Burpee",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Piernas",
+      "Hombros",
+      "Cardio"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "banded-monster-walk",
+    "name": "Monster walk con banda",
+    "name_en": "Banded Monster Walk",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "swimming",
+    "name": "Natación",
+    "name_en": "Swimming",
+    "equipment": "Cardio",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Hombros",
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "bent-over-rear-delt-raise",
+    "name": "Pájaros inclinado con mancuernas",
+    "name_en": "Bent-Over Rear Delt Raise",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Deltoides posterior",
+    "secondary_muscles": [
+      "Espalda alta"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "farmer-carry",
+    "name": "Paseo del granjero",
+    "name_en": "Farmer Carry",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Antebrazos",
+    "secondary_muscles": [
+      "Espalda alta",
+      "Core"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-kickback",
+    "name": "Patada atrás con banda",
+    "name_en": "Banded Kickback",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "donkey-kick",
+    "name": "Patada de glúteo",
+    "name_en": "Donkey Kick",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-donkey-kick",
+    "name": "Patada de glúteo con banda",
+    "name_en": "Banded Donkey Kick",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "machine-glute-kickback",
+    "name": "Patada de glúteo en máquina",
+    "name_en": "Machine Glute Kickback",
+    "equipment": "Máquina",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-kickback",
+    "name": "Patada de glúteo en polea",
+    "name_en": "Cable Kickback",
+    "equipment": "Polea",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "tricep-kickback",
+    "name": "Patada de tríceps",
+    "name_en": "Tricep Kickback",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "deadlift",
+    "name": "Peso muerto",
+    "name_en": "Deadlift",
+    "equipment": "Barra",
+    "primary_muscle": "Cadena posterior",
+    "secondary_muscles": [
+      "Espalda",
+      "Grip"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "trap-bar-deadlift",
+    "name": "Peso muerto con barra hexagonal",
+    "name_en": "Trap Bar Deadlift",
+    "equipment": "Barra",
+    "primary_muscle": "Cadena posterior",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Grip"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "romanian-deadlift",
+    "name": "Peso muerto rumano",
+    "name_en": "Romanian Deadlift",
+    "equipment": "Barra",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Zona lumbar"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "single-leg-romanian-deadlift",
+    "name": "Peso muerto rumano a una pierna",
+    "name_en": "Single-Leg Romanian Deadlift",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "kettlebell-romanian-deadlift",
+    "name": "Peso muerto rumano con kettlebell",
+    "name_en": "Kettlebell Romanian Deadlift",
+    "equipment": "Kettlebell",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Zona lumbar"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "landmine-romanian-deadlift",
+    "name": "Peso muerto rumano con landmine",
+    "name_en": "Landmine Romanian Deadlift",
+    "equipment": "Barra",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Zona lumbar"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-romanian-deadlift",
+    "name": "Peso muerto rumano con mancuernas",
+    "name_en": "Dumbbell Romanian Deadlift",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Zona lumbar"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "smith-machine-romanian-deadlift",
+    "name": "Peso muerto rumano en multipower",
+    "name_en": "Smith Machine Romanian Deadlift",
+    "equipment": "Máquina",
+    "primary_muscle": "Isquiotibiales",
+    "secondary_muscles": [
+      "Glúteos",
+      "Zona lumbar"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "sumo-deadlift",
+    "name": "Peso muerto sumo",
+    "name_en": "Sumo Deadlift",
+    "equipment": "Barra",
+    "primary_muscle": "Cadena posterior",
+    "secondary_muscles": [
+      "Glúteos",
+      "Cuádriceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-sumo-deadlift",
+    "name": "Peso muerto sumo con mancuerna",
+    "name_en": "Dumbbell Sumo Deadlift",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cadena posterior",
+    "secondary_muscles": [
+      "Glúteos",
+      "Cuádriceps",
+      "Aductores"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "fast-feet",
+    "name": "Pies rápidos",
+    "name_en": "Fast Feet",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [
+      "Piernas",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "plank",
+    "name": "Plancha",
+    "name_en": "Plank",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "plank-jack",
+    "name": "Plancha con salto de piernas",
+    "name_en": "Plank Jack",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "plank-shoulder-tap",
+    "name": "Plancha con toque de hombro",
+    "name_en": "Plank Shoulder Tap",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros",
+      "Pecho"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "copenhagen-plank",
+    "name": "Plancha de Copenhague",
+    "name_en": "Copenhagen Plank",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Glúteos"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "bear-plank",
+    "name": "Plancha del oso",
+    "name_en": "Bear Plank",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Hombros"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "side-plank",
+    "name": "Plancha lateral",
+    "name_en": "Side Plank",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "side-plank-hip-dip",
+    "name": "Plancha lateral con caída de cadera",
+    "name_en": "Side Plank Hip Dip",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros",
+      "Glúteos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "childs-pose",
+    "name": "Postura del niño",
+    "name_en": "Child's Pose",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Hombros",
+      "Cadera",
+      "Movilidad"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "leg-press",
+    "name": "Prensa de piernas",
+    "name_en": "Leg Press",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "arnold-press",
+    "name": "Press Arnold",
+    "name_en": "Arnold Press",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "landmine-press",
+    "name": "Press con landmine",
+    "name_en": "Landmine Press",
+    "equipment": "Barra",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Pecho",
+      "Tríceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "bench-press",
+    "name": "Press de banca",
+    "name_en": "Bench Press",
+    "equipment": "Barra",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "close-grip-bench-press",
+    "name": "Press de banca agarre cerrado",
+    "name_en": "Close-Grip Bench Press",
+    "equipment": "Barra",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Pecho",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-bench-press",
+    "name": "Press de banca con mancuernas",
+    "name_en": "Dumbbell Bench Press",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "smith-machine-bench-press",
+    "name": "Press de banca en multipower",
+    "name_en": "Smith Machine Bench Press",
+    "equipment": "Máquina",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "standing-dumbbell-press",
+    "name": "Press de hombros de pie con mancuernas",
+    "name_en": "Standing Dumbbell Press",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "machine-shoulder-press",
+    "name": "Press de hombros en máquina",
+    "name_en": "Machine Shoulder Press",
+    "equipment": "Máquina",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "seated-dumbbell-press",
+    "name": "Press de hombros sentado con mancuernas",
+    "name_en": "Dumbbell Seated Shoulder Press",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "machine-chest-press",
+    "name": "Press de pecho en máquina",
+    "name_en": "Machine Chest Press",
+    "equipment": "Máquina",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "decline-bench-press",
+    "name": "Press declinado con barra",
+    "name_en": "Decline Bench Press",
+    "equipment": "Barra",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "decline-dumbbell-press",
+    "name": "Press declinado con mancuernas",
+    "name_en": "Decline Dumbbell Press",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Tríceps",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "skull-crusher",
+    "name": "Press francés",
+    "name_en": "Skull Crusher",
+    "equipment": "Barra",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-skull-crusher",
+    "name": "Press francés con mancuernas",
+    "name_en": "Two Dumbbell Skullcrusher",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "single-dumbbell-skullcrusher",
+    "name": "Press francés con una mancuerna",
+    "name_en": "Single Dumbbell Skullcrusher",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Tríceps",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "incline-bench-press",
+    "name": "Press inclinado con barra",
+    "name_en": "Incline Bench Press",
+    "equipment": "Barra",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros",
+      "Tríceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "incline-dumbbell-press",
+    "name": "Press inclinado con mancuernas",
+    "name_en": "Incline Dumbbell Press",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros",
+      "Tríceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "overhead-press",
+    "name": "Press militar con barra",
+    "name_en": "Overhead Press",
+    "equipment": "Barra",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "pallof-press",
+    "name": "Press Pallof",
+    "name_en": "Pallof Press",
+    "equipment": "Polea",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "banded-pallof-press",
+    "name": "Press Pallof con banda",
+    "name_en": "Banded Pallof Press",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Glúteos",
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "half-kneeling-pallof-press",
+    "name": "Press Pallof de rodillas",
+    "name_en": "Half-Kneeling Pallof Press",
+    "equipment": "Polea",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Glúteos",
+      "Hombros"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "glute-bridge",
+    "name": "Puente de glúteos",
+    "name_en": "Glute Bridge",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "single-leg-glute-bridge",
+    "name": "Puente de glúteos a una pierna",
+    "name_en": "Single-Leg Glute Bridge",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-glute-bridge",
+    "name": "Puente de glúteos con banda",
+    "name_en": "Banded Glute Bridge",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "barbell-glute-bridge",
+    "name": "Puente de glúteos con barra",
+    "name_en": "Barbell Glute Bridge",
+    "equipment": "Barra",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-glute-bridge",
+    "name": "Puente de glúteos con mancuerna",
+    "name_en": "Dumbbell Glute Bridge",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "glute-bridge-march",
+    "name": "Puente de glúteos con marcha",
+    "name_en": "Glute Bridge March",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cable-pull-through",
+    "name": "Pull through en polea",
+    "name_en": "Cable Pull-Through",
+    "equipment": "Polea",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Zona lumbar"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "push-press",
+    "name": "Push press",
+    "name_en": "Push Press",
+    "equipment": "Barra",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Tríceps",
+      "Cuádriceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "rack-pull",
+    "name": "Rack pull",
+    "name_en": "Rack Pull",
+    "equipment": "Barra",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "one-arm-dumbbell-row",
+    "name": "Remo a una mano con mancuerna",
+    "name_en": "One-Arm Dumbbell Row",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "single-arm-cable-row",
+    "name": "Remo a una mano en polea",
+    "name_en": "Single-Arm Cable Row",
+    "equipment": "Polea",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "upright-row",
+    "name": "Remo al mentón",
+    "name_en": "Upright Row",
+    "equipment": "Barra",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Espalda alta",
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-row",
+    "name": "Remo con banda",
+    "name_en": "Banded Row",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Espalda alta"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "barbell-row",
+    "name": "Remo con barra",
+    "name_en": "Barbell Row",
+    "equipment": "Barra",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "chest-supported-row",
+    "name": "Remo con pecho apoyado",
+    "name_en": "Chest Supported Row",
+    "equipment": "Máquina",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "towel-row",
+    "name": "Remo con toalla",
+    "name_en": "Towel Row",
+    "equipment": "Toalla",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Espalda alta",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "machine-row",
+    "name": "Remo en máquina",
+    "name_en": "Machine Row",
+    "equipment": "Máquina",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "doorway-row",
+    "name": "Remo en marco de puerta",
+    "name_en": "Doorway Row",
+    "equipment": "Marco de puerta",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Espalda alta",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "t-bar-row",
+    "name": "Remo en T",
+    "name_en": "T-Bar Row",
+    "equipment": "Máquina",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "rowing",
+    "name": "Remo ergómetro",
+    "name_en": "Rowing",
+    "equipment": "Cardio",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Piernas",
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-bent-over-row",
+    "name": "Remo inclinado con mancuernas",
+    "name_en": "Dumbbell Bent Over Row",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "inverted-row",
+    "name": "Remo invertido",
+    "name_en": "Inverted Row",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "meadows-row",
+    "name": "Remo Meadows",
+    "name_en": "Meadows Row",
+    "equipment": "Barra",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "pendlay-row",
+    "name": "Remo Pendlay",
+    "name_en": "Pendlay Row",
+    "equipment": "Barra",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "seated-row",
+    "name": "Remo sentado en polea",
+    "name_en": "Seated Cable Row",
+    "equipment": "Polea",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Bíceps",
+      "Deltoides posterior"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "high-knees",
+    "name": "Rodillas altas",
+    "name_en": "High Knees",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Core",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "torso-twist-stretch",
+    "name": "Rotación de torso",
+    "name_en": "Torso Twists",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Movilidad",
+    "secondary_muscles": [
+      "Core",
+      "Espalda"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": true,
+    "category": "movilidad",
+    "frames": 3
+  },
+  {
+    "slug": "ab-wheel",
+    "name": "Rueda abdominal",
+    "name_en": "Ab Wheel Rollout",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Hombros"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "jump-rope",
+    "name": "Saltar la cuerda",
+    "name_en": "Jump Rope",
+    "equipment": "Cardio",
+    "primary_muscle": "Gemelos",
+    "secondary_muscles": [
+      "Cardio",
+      "Hombros"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "skater-hop",
+    "name": "Salto del patinador",
+    "name_en": "Skater Hop",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Glúteos",
+      "Gemelos",
+      "Cardio"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "jumping-jack",
+    "name": "Saltos de tijera",
+    "name_en": "Jumping Jack",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Hombros",
+      "Gemelos",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "seal-jack",
+    "name": "Seal jack",
+    "name_en": "Seal Jack",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Pecho",
+    "secondary_muscles": [
+      "Hombros",
+      "Piernas",
+      "Cardio"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hiking",
+    "name": "Senderismo",
+    "name_en": "Hiking",
+    "equipment": "Cardio",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Glúteos",
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "single-leg-box-squat",
+    "name": "Sentadilla a una pierna en cajón",
+    "name_en": "Single-Leg Box Squat",
+    "equipment": "Cajón",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "bulgarian-split-squat",
+    "name": "Sentadilla búlgara",
+    "name_en": "Bulgarian Split Squat",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "smith-machine-bulgarian-split-squat",
+    "name": "Sentadilla búlgara en multipower",
+    "name_en": "Smith Machine Bulgarian Split Squat",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "banded-squat",
+    "name": "Sentadilla con banda",
+    "name_en": "Banded Squat",
+    "equipment": "Banda elástica",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "squat",
+    "name": "Sentadilla con barra",
+    "name_en": "Squat",
+    "equipment": "Barra",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "belt-squat",
+    "name": "Sentadilla con cinturón",
+    "name_en": "Belt Squat",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "landmine-squat",
+    "name": "Sentadilla con landmine",
+    "name_en": "Landmine Squat",
+    "equipment": "Barra",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "jump-squat",
+    "name": "Sentadilla con salto",
+    "name_en": "Jump Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Gemelos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "cossack-squat",
+    "name": "Sentadilla cosaca",
+    "name_en": "Cossack Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "skater-squat",
+    "name": "Sentadilla del patinador",
+    "name_en": "Skater Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "smith-machine-squat",
+    "name": "Sentadilla en multipower",
+    "name_en": "Smith Machine Squat",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "front-squat",
+    "name": "Sentadilla frontal",
+    "name_en": "Front Squat",
+    "equipment": "Barra",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Core",
+      "Glúteos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "goblet-squat",
+    "name": "Sentadilla goblet",
+    "name_en": "Goblet Squat",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "heel-elevated-goblet-squat",
+    "name": "Sentadilla goblet con talones elevados",
+    "name_en": "Heel-Elevated Goblet Squat",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "hack-squat",
+    "name": "Sentadilla hack",
+    "name_en": "Hack Squat",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "wall-sit",
+    "name": "Sentadilla isométrica en pared",
+    "name_en": "Wall Sit",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "pistol-squat",
+    "name": "Sentadilla pistol",
+    "name_en": "Pistol Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "assisted-pistol-squat",
+    "name": "Sentadilla pistol asistida",
+    "name_en": "Assisted Pistol Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "shrimp-squat",
+    "name": "Sentadilla shrimp",
+    "name_en": "Shrimp Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "bodyweight-squat",
+    "name": "Sentadilla sin peso",
+    "name_en": "Bodyweight Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "sissy-squat",
+    "name": "Sentadilla sissy",
+    "name_en": "Sissy Squat",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Core",
+      "Gemelos"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-sumo-squat",
+    "name": "Sentadilla sumo con mancuerna",
+    "name_en": "Dumbbell Sumo Squat",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Aductores",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "skierg",
+    "name": "SkiErg",
+    "name_en": "SkiErg",
+    "equipment": "Cardio",
+    "primary_muscle": "Espalda",
+    "secondary_muscles": [
+      "Tríceps",
+      "Core",
+      "Cardio"
+    ],
+    "exercise_type": "distance_duration",
+    "exercise_type_label": "Distancia / tiempo",
+    "is_stretch": false,
+    "category": "cardio",
+    "frames": 3
+  },
+  {
+    "slug": "sprawl",
+    "name": "Sprawl",
+    "name_en": "Sprawl",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Piernas",
+    "secondary_muscles": [
+      "Core",
+      "Hombros",
+      "Cardio"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "squat-thrust",
+    "name": "Squat thrust",
+    "name_en": "Squat Thrust",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Piernas",
+      "Hombros",
+      "Cardio"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "step-up",
+    "name": "Subida al cajón",
+    "name_en": "Step-Up",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "superman",
+    "name": "Superman",
+    "name_en": "Superman",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Zona lumbar",
+    "secondary_muscles": [
+      "Glúteos",
+      "Espalda alta",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "superman-hold",
+    "name": "Superman isométrico",
+    "name_en": "Superman Hold",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Zona lumbar",
+    "secondary_muscles": [
+      "Glúteos",
+      "Espalda alta",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "kettlebell-swing",
+    "name": "Swing con kettlebell",
+    "name_en": "Kettlebell Swing",
+    "equipment": "Kettlebell",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Isquiotibiales",
+      "Core",
+      "Cardio"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "flutter-kick",
+    "name": "Tijeras",
+    "name_en": "Flutter Kick",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps"
+    ],
+    "exercise_type": "duration",
+    "exercise_type_label": "Tiempo",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "toe-touch",
+    "name": "Toque de puntas",
+    "name_en": "Toe Touch",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "heel-tap",
+    "name": "Toque de talones",
+    "name_en": "Heel Tap",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "v-up",
+    "name": "V-up",
+    "name_en": "V-Up",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Core",
+    "secondary_muscles": [
+      "Cuádriceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "core",
+    "frames": 3
+  },
+  {
+    "slug": "wall-walk",
+    "name": "Wall walk",
+    "name_en": "Wall Walk",
+    "equipment": "Pared",
+    "primary_muscle": "Hombros",
+    "secondary_muscles": [
+      "Core",
+      "Pecho",
+      "Tríceps"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "deficit-reverse-lunge",
+    "name": "Zancada atrás en déficit",
+    "name_en": "Deficit Reverse Lunge",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "smith-machine-reverse-lunge",
+    "name": "Zancada atrás en multipower",
+    "name_en": "Smith Machine Reverse Lunge",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "front-foot-elevated-split-squat",
+    "name": "Zancada con pie delantero elevado",
+    "name_en": "Front-Foot Elevated Split Squat",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "curtsy-lunge",
+    "name": "Zancada cruzada",
+    "name_en": "Curtsy Lunge",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-curtsy-lunge",
+    "name": "Zancada cruzada con mancuerna",
+    "name_en": "Dumbbell Curtsy Lunge",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Glúteos",
+    "secondary_muscles": [
+      "Cuádriceps",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "split-squat",
+    "name": "Zancada estática",
+    "name_en": "Split Squat",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "smith-machine-split-squat",
+    "name": "Zancada estática en multipower",
+    "name_en": "Smith Machine Split Squat",
+    "equipment": "Máquina",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Core"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "forward-lunge",
+    "name": "Zancada hacia adelante",
+    "name_en": "Forward Lunge",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "reverse-lunge",
+    "name": "Zancada hacia atrás",
+    "name_en": "Reverse Lunge",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "lateral-lunge",
+    "name": "Zancada lateral",
+    "name_en": "Lateral Lunge",
+    "equipment": "Peso corporal",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales",
+      "Core"
+    ],
+    "exercise_type": "bodyweight_reps",
+    "exercise_type_label": "Repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "dumbbell-lateral-lunge",
+    "name": "Zancada lateral con mancuerna",
+    "name_en": "Dumbbell Lateral Lunge",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Aductores",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  },
+  {
+    "slug": "walking-lunge",
+    "name": "Zancadas caminando",
+    "name_en": "Walking Lunge",
+    "equipment": "Mancuernas",
+    "primary_muscle": "Cuádriceps",
+    "secondary_muscles": [
+      "Glúteos",
+      "Isquiotibiales"
+    ],
+    "exercise_type": "weight_reps",
+    "exercise_type_label": "Peso × repeticiones",
+    "is_stretch": false,
+    "category": "fuerza",
+    "frames": 3
+  }
+]
