@@ -12,7 +12,7 @@ import { revalidatePath, revalidateTag } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
 import { createAdminClient } from "@/libs/supabase/admin";
 import { leerCatalogo } from "@/libs/catalogo";
-import { obtenerTasaConDetalle } from "@/libs/bcv";
+import { obtenerTasaConDetalle, olvidarTasa } from "@/libs/bcv";
 import { leerCatalogoPdf, extraerImagen } from "@/libs/pdf-catalog.mjs";
 import { normalizarProductos } from "@/libs/catalogo-normalizar.mjs";
 import { esDemo, MENSAJE_BLOQUEADO } from "@/libs/demo";
@@ -327,6 +327,7 @@ export async function actualizarTasaAhora() {
     await exigirAdmin();
 
     revalidateTag("tasa-bcv");
+    olvidarTasa();
     const tasa = await obtenerTasaConDetalle();
     if (!tasa) {
       return { ok: false, error: "Ninguna fuente respondió.", avisos: [] };

@@ -8,6 +8,7 @@ import BloqueVenta from "@/components/demo/BloqueVenta";
 import Precios from "@/components/Precios";
 import { ElegirYAgregar } from "@/components/BotonAgregar";
 import FichaProducto from "@/components/FichaProducto";
+import RejillaProductos from "@/components/RejillaProductos";
 import Revelar from "@/components/Revelar";
 import { leerProducto, leerRelacionados, leerTasa, leerCatalogo } from "@/libs/catalogo";
 import { ESTADOS, enDolares } from "@/libs/formato";
@@ -107,7 +108,10 @@ export default async function Producto({ params }) {
 
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="relative">
-            <div className="foto-producto ficha relative mx-auto flex aspect-square w-full max-w-md items-center justify-center overflow-hidden p-10">
+            {/* El marco de la foto no es de cristal: tiene que ser blanco
+                opaco para que el fondo del JPEG se funda con él. Se le deja
+                solo el filo y la sombra, para que case con el resto. */}
+            <div className="foto-producto relative mx-auto flex aspect-square w-full max-w-md items-center justify-center overflow-hidden rounded-2xl p-10 shadow-[0_20px_50px_-24px_rgba(0,0,0,0.9)] ring-1 ring-black/10">
               {producto.imagen ? (
                 <Image
                   src={producto.imagen}
@@ -206,11 +210,11 @@ export default async function Producto({ params }) {
               <h2 className="display mt-3 text-2xl sm:text-3xl">SIGUE MIRANDO</h2>
             </Revelar>
 
-            <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-6">
+            <RejillaProductos className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-6">
               {relacionados.map((otro) => (
                 <FichaProducto key={otro.slug} producto={otro} />
               ))}
-            </div>
+            </RejillaProductos>
           </section>
         )}
       </main>

@@ -329,13 +329,59 @@ de 638×638 con las letras arqueadas y mucho negro alrededor.
 
 ### Estilo
 
-Tema `hardcore` en `app/globals.css`: negro y rojo de marca tratados como neón
-(humo rojo de fondo, bordes que se encienden, rejilla técnica). Tipografía
-geométrica: **Sora** en titulares, **Outfit** en el cuerpo y **JetBrains Mono**
-en precios y códigos, para que las cifras alineen en columna.
+Tema `hardcore` en `app/globals.css`: negro y rojo de marca con acabado de
+**cristal**, el aire de un bote de suplementos. Tipografía geométrica: **Sora**
+en titulares, **Outfit** en el cuerpo y **JetBrains Mono** en precios y códigos,
+para que las cifras alineen en columna.
 
 Para mover el rojo: `--color-primary` en `globals.css` y `colors.main` en
 `config.js`.
+
+**Las piezas del cristal:**
+
+| Clase | Dónde |
+|---|---|
+| `.cristal` | paneles sueltos (precios, formulario de la puerta, avisos) |
+| `.ficha` | tarjetas de producto; mismo acabado, más el reflejo al pasar por encima |
+| `.barra-cristal` | cabecera, franja de demo y pie, sin esquinas ni borde en caja |
+| `.cristal-solido` | variante más opaca para lo que tiene que dejar leer |
+| `.reflejo` | la luz que cruza la tarjeta al pasar el ratón |
+
+Dos detalles que conviene no deshacer sin querer:
+
+- El borde va en un `::before` con máscara, no en `border`, porque un borde
+  normal no admite degradados: así el filo puede ir de blanco a rojo.
+- `<Ambiente />` (en el layout) pinta tres manchas de color que se mueven muy
+  despacio por detrás de todo. **El cristal no se ve sin ellas**: sobre un negro
+  plano, `backdrop-filter` no tiene nada que desenfocar y los paneles quedan
+  como cajas grises.
+- `.foto-producto` es blanco opaco a propósito y anula el cristal. Las fotos del
+  PDF traen fondo blanco: sobre cualquier degradado se vería su recuadro.
+
+### Animaciones
+
+Todo GSAP, con ScrollTrigger, centralizado en `libs/animaciones.js`: allí se
+registra el plugin una vez y se fijan las curvas y los tiempos, para que una
+tarjeta que entra en la portada se sienta igual que una del catálogo.
+
+| Dónde | Qué hace |
+|---|---|
+| `Ambiente` | las manchas del fondo, en bucle lento |
+| `Revelar` | entrada al asomar en pantalla (`once`: no se repite al subir) |
+| `HeroTienda` | una línea de tiempo encadena rótulo, renglones del titular, texto, botones y cifras; las cifras cuentan desde cero; el collage hace paralaje al bajar |
+| `RejillaProductos` | entrada escalonada por filas con `ScrollTrigger.batch` |
+| `CintaMarcas` | la cinta acelera con la velocidad del scroll y se para al pasar el ratón |
+| `PantallaAcceso` | el logo se enciende, gira el anillo, sube el formulario; y al acertar, la salida |
+| `Header` | despliegue del menú móvil y salto del globo del carrito |
+
+**Todo pasa por `contexto()`**, que envuelve `gsap.context` y `matchMedia`. Dos
+cosas que da gratis: se limpia solo al cambiar de página (sin disparadores
+huérfanos apuntando a nodos muertos) y atiende `prefers-reduced-motion`, que
+deja el contenido quieto y visible.
+
+Lo que va a entrar animado lleva `data-anima` y el CSS lo oculta de entrada,
+para que no dé un salto entre que el servidor lo pinta y GSAP toma el control.
+Sin JavaScript el `<noscript>` del layout lo vuelve a mostrar.
 
 ---
 

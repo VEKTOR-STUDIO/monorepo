@@ -40,11 +40,23 @@ const FUENTES = [
 
 const HOY = () => new Date().toISOString().slice(0, 10);
 
+// Memoria del proceso, por encima del caché de fetch de Next.
+//
+// Hace falta porque al construir el sitio se generan 231 fichas de producto y
+// todas piden la tasa: sin esto, cada worker sale a la red por cada página,
+// la API acaba cortando y la build se cae por tiempo de espera. Con la
+// memoria, cada proceso consulta una vez y reparte el resultado.
+let recordado = null; // { tasa, momento }
+let enCurso = null; // promesa compartida mientras se consulta
+const MEMORIA_FALLO_MS = 60_000;
+
 async function consultar(fuente) {
   const respuesta = await fetch(fuente.url, {
     headers: { Accept: "application/json" },
-    signal: AbortSignal.timeout(8000),
-    // Aquí está el ahorro: Next guarda la respuesta y la reparte.
+    // Corto a propósito: si una fuente tarda, se pasa a la siguiente antes de
+    // que el generador de páginas pierda la paciencia.
+    signal: AbortSignal.timeout(5000),
+    // Aquí está el ahorro entre peticiones: Next guarda la respuesta.
     next: { revalidate: SEGUNDOS_DE_CACHE, tags: ["tasa-bcv"] },
   });
 
@@ -74,18 +86,46 @@ async function consultar(fuente) {
  *   se enseñan solo los precios en dólares.
  */
 export async function obtenerTasa() {
-  const fallos = [];
+  const ahora = Date.now();
 
-  for (const fuente of FUENTES) {
-    try {
-      return await consultar(fuente);
-    } catch (error) {
-      fallos.push(`${fuente.nombre}: ${error.message}`);
-    }
+  // ¿Ya la tenemos en este proceso y sigue fresca? Los fallos también se
+  // recuerdan, un minuto, para no insistir contra una API caída.
+  if (recordado) {
+    const vida = recordado.tasa ? SEGUNDOS_DE_CACHE * 1000 : MEMORIA_FALLO_MS;
+    if (ahora - recordado.momento < vida) return recordado.tasa;
   }
 
-  console.error("[bcv] ninguna fuente respondió:", fallos.join(" · "));
-  return null;
+  // Si otra página ya está preguntando, esperamos a esa misma respuesta en
+  // vez de abrir una consulta nueva.
+  if (enCurso) return enCurso;
+
+  enCurso = (async () => {
+    const detalle = await obtenerTasaConDetalle();
+    if (!detalle) console.error("[bcv] ninguna fuente respondió");
+
+    recordado = {
+      tasa: detalle
+        ? { valor: detalle.valor, fechaValor: detalle.fechaValor, fuente: detalle.fuente }
+        : null,
+      momento: Date.now(),
+    };
+    enCurso = null;
+    return recordado.tasa;
+  })();
+
+  return enCurso;
+}
+
+/**
+ * Tira la memoria del proceso.
+ *
+ * La usa el botón "actualizar ahora" del panel: sin esto, invalidar el caché
+ * de Next no serviría de nada porque esta memoria seguiría devolviendo la
+ * cifra vieja.
+ */
+export function olvidarTasa() {
+  recordado = null;
+  enCurso = null;
 }
 
 /**

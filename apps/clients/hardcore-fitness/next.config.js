@@ -1,5 +1,8 @@
 const nextConfig = {
   reactStrictMode: true,
+  // Son 231 fichas de producto. En un equipo cargado, alguna se pasa del
+  // minuto que Next da por defecto y tumba la build entera.
+  staticPageGenerationTimeout: 180,
   images: {
     remotePatterns: [
       {

@@ -1,47 +1,54 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { contexto, DISPARO, TIEMPOS } from "@/libs/animaciones";
 
 /**
  * Hace aparecer a su contenido cuando entra en pantalla.
  *
- * Un solo IntersectionObserver por instancia, que se desconecta en cuanto ha
- * revelado: no hace falta seguir observando algo que ya se vio. Si el navegador
- * no lo soporta, o el usuario pidió menos movimiento (lo resuelve el CSS), el
- * contenido simplemente está ahí.
+ * Antes era un IntersectionObserver con transiciones CSS; ahora lo lleva GSAP
+ * con ScrollTrigger, que da control sobre el momento exacto del disparo y
+ * encaja con el resto de animaciones del sitio.
+ *
+ * `once` a propósito: revelar algo cada vez que pasa por pantalla marea al
+ * volver hacia arriba.
  */
-export default function Revelar({ children, retraso = 0, className = "", as: Etiqueta = "div" }) {
-  const referencia = useRef(null);
+export default function Revelar({
+  children,
+  retraso = 0,
+  desde = "abajo",
+  className = "",
+  as: Etiqueta = "div",
+}) {
+  const nodo = useRef(null);
 
-  useEffect(() => {
-    const nodo = referencia.current;
-    if (!nodo) return;
+  useEffect(
+    () =>
+      contexto((g) => {
+        const salida = {
+          abajo: { y: 30 },
+          izquierda: { x: -34 },
+          derecha: { x: 34 },
+          escala: { scale: 0.94 },
+        }[desde] || { y: 30 };
 
-    if (typeof IntersectionObserver === "undefined") {
-      nodo.dataset.revelar = "visible";
-      return;
-    }
-
-    const observador = new IntersectionObserver(
-      ([entrada]) => {
-        if (!entrada.isIntersecting) return;
-        nodo.dataset.revelar = "visible";
-        observador.disconnect();
-      },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.05 }
-    );
-
-    observador.observe(nodo);
-    return () => observador.disconnect();
-  }, []);
+        g.from(nodo.current, {
+          opacity: 0,
+          ...salida,
+          duration: TIEMPOS.entrada,
+          delay: retraso / 1000,
+          scrollTrigger: {
+            trigger: nodo.current,
+            start: DISPARO,
+            once: true,
+          },
+        });
+      }, nodo),
+    [retraso, desde]
+  );
 
   return (
-    <Etiqueta
-      ref={referencia}
-      data-revelar=""
-      style={retraso ? { transitionDelay: `${retraso}ms` } : undefined}
-      className={className}
-    >
+    <Etiqueta ref={nodo} data-anima className={className}>
       {children}
     </Etiqueta>
   );

@@ -68,7 +68,7 @@ export default function AvisoFlotante() {
       }`}
       aria-hidden={!visible}
     >
-      <div className="ficha pointer-events-auto w-full max-w-sm p-5 shadow-2xl shadow-black/70 backdrop-blur-xl">
+      <div className="ficha pointer-events-auto w-full max-w-sm p-5 shadow-2xl shadow-black/70">
         <button
           type="button"
           onClick={cerrar}

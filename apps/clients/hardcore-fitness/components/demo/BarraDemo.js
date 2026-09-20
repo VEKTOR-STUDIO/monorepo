@@ -21,7 +21,7 @@ export default function BarraDemo() {
   if (!esDemo() || ruta === "/entrar") return null;
 
   return (
-    <div className="sticky top-0 z-60 h-10 border-b border-primary/25 bg-primary/12 backdrop-blur-xl">
+    <div className="barra-cristal sticky top-0 z-60 h-10 border-b border-primary/25">
       <div className="mx-auto flex h-full max-w-7xl items-center gap-3 px-4 sm:px-6">
         <span className="flex items-center gap-2">
           <span

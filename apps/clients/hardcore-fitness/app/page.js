@@ -8,6 +8,7 @@ import CintaMarcas from "@/components/CintaMarcas";
 import RejillaFamilias from "@/components/RejillaFamilias";
 import ComoComprar from "@/components/ComoComprar";
 import FichaProducto from "@/components/FichaProducto";
+import RejillaProductos from "@/components/RejillaProductos";
 import Revelar from "@/components/Revelar";
 import { leerCatalogo, facetasDe, leerTasa, filtrar } from "@/libs/catalogo";
 
@@ -68,13 +69,11 @@ export default async function Inicio() {
               </Link>
             </Revelar>
 
-            <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-              {ofertas.slice(0, 4).map((producto, i) => (
-                <Revelar key={producto.slug} retraso={i * 60}>
-                  <FichaProducto producto={producto} />
-                </Revelar>
+            <RejillaProductos className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+              {ofertas.slice(0, 4).map((producto) => (
+                <FichaProducto key={producto.slug} producto={producto} />
               ))}
-            </div>
+            </RejillaProductos>
           </section>
         )}
 

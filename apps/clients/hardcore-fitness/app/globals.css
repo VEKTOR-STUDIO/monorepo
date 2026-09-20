@@ -308,33 +308,168 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+ * Cristal
+ *
+ * El acabado de un bote de suplementos: superficie translúcida, un filo
+ * metálico arriba donde pega la luz y sombra profunda debajo. El desenfoque
+ * de fondo necesita que haya ALGO detrás; de eso se encarga <Ambiente />, que
+ * pinta manchas de color por toda la página.
+ * ------------------------------------------------------------------------ */
+
+/* `.ficha` es la tarjeta de producto y `.cristal` el panel genérico: mismo
+   acabado, así que comparten declaración. */
+.cristal,
+.ficha {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-box);
+  /* Un degradado, no un color plano: el cristal tiene que verse más claro
+     arriba, como si la luz entrara por ahí. */
+  background-image: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--color-base-content) 9%, transparent),
+    color-mix(in oklab, var(--color-base-200) 62%, transparent) 42%,
+    color-mix(in oklab, var(--color-base-100) 72%, transparent)
+  );
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  box-shadow:
+    /* filo interior claro arriba, oscuro abajo: relieve */
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 16%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, #000 40%, transparent),
+    0 18px 40px -24px color-mix(in oklab, #000 90%, transparent);
+}
+
+/* El borde va en un ::before con máscara en vez de en `border`, porque un
+   borde normal no admite degradados: así el filo puede ir de blanco a rojo,
+   que es lo que da el aire metálico. */
+.cristal::before,
+.ficha::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--color-base-content) 26%, transparent),
+    transparent 38%,
+    transparent 62%,
+    color-mix(in oklab, var(--color-primary) 22%, transparent)
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  z-index: 2;
+  transition: background 0.4s ease;
+}
+
+/* Barras a todo lo ancho (cabecera, franja de demo, pie). Llevan el mismo
+   acabado pero sin esquinas redondeadas ni borde en caja: solo el filo de
+   luz arriba y la línea de sombra abajo. */
+.barra-cristal {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-base-100) 72%, transparent),
+    color-mix(in oklab, var(--color-base-100) 88%, transparent)
+  );
+  backdrop-filter: blur(20px) saturate(155%);
+  -webkit-backdrop-filter: blur(20px) saturate(155%);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 12%, transparent),
+    0 1px 0 color-mix(in oklab, #000 55%, transparent);
+}
+
+/* Versión más sólida, para lo que se queda pegado en pantalla y tiene que
+   dejar leer lo que lleva encima. */
+.cristal-solido {
+  background-image: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--color-base-content) 7%, transparent),
+    color-mix(in oklab, var(--color-base-100) 88%, transparent)
+  );
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+}
+
+/* --------------------------------------------------------------------------
  * Tarjetas de producto
  * ------------------------------------------------------------------------ */
 
 .ficha {
-  position: relative;
-  border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
-  background-color: color-mix(in oklab, var(--color-base-200) 80%, transparent);
-  border-radius: var(--radius-box);
   transition:
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.3s ease;
+    box-shadow 0.35s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ficha:hover {
-  border-color: color-mix(in oklab, var(--color-primary) 55%, transparent);
+  transform: translateY(-4px);
   box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--color-primary) 18%, transparent),
-    0 18px 50px -18px color-mix(in oklab, var(--color-primary) 45%, transparent);
-  transform: translateY(-3px);
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 24%, transparent),
+    inset 0 -1px 0 color-mix(in oklab, #000 40%, transparent),
+    0 26px 60px -26px color-mix(in oklab, var(--color-primary) 55%, transparent);
+}
+
+/* Al pasar por encima, el filo se enciende en rojo. */
+.ficha:hover::before {
+  background: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--color-base-content) 38%, transparent),
+    color-mix(in oklab, var(--color-primary) 30%, transparent) 45%,
+    color-mix(in oklab, var(--color-primary) 70%, transparent)
+  );
+}
+
+/* Reflejo que cruza la tarjeta al pasar por encima, como la luz sobre un
+   envase brillante. Va en un pseudoelemento y se mueve con transform, que es
+   lo único que el navegador anima sin repintar. */
+.reflejo {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.reflejo::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  bottom: -60%;
+  left: 0;
+  width: 40%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in oklab, var(--color-base-content) 16%, transparent),
+    transparent
+  );
+  transform: translateX(-180%) rotate(18deg);
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ficha:hover .reflejo::after {
+  transform: translateX(380%) rotate(18deg);
 }
 
 /* Las fotos del catálogo vienen recortadas sobre blanco y son pequeñas.
    El cuadro es blanco puro a propósito: así el fondo del JPEG se funde con él
    y no se ve el recuadro de la foto dentro de la tarjeta. */
 .foto-producto {
+  /* Opaco y blanco puro: es lo único que funde el fondo del JPEG con el
+     cuadro. Nada de cristal aquí, por mucho que el resto de la tarjeta lo
+     sea; el degradado se vería a través del recuadro de la foto. */
   background: #ffffff;
+  background-image: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Se ven mejor sin suavizado al ampliarlas: son ~90×126 px. */
@@ -349,8 +484,11 @@ body {
 .entrada {
   width: 100%;
   border-radius: var(--radius-field);
-  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
-  background-color: color-mix(in oklab, var(--color-base-200) 60%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 14%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-200) 45%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 8%, transparent);
   padding: 0.625rem 0.875rem;
   font-size: 0.875rem;
   color: var(--color-base-content);
@@ -366,7 +504,10 @@ body {
 
 .entrada:focus {
   border-color: color-mix(in oklab, var(--color-primary) 60%, transparent);
-  background-color: color-mix(in oklab, var(--color-base-200) 90%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-200) 75%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 10%, transparent),
+    0 0 0 3px color-mix(in oklab, var(--color-primary) 14%, transparent);
 }
 
 /* --------------------------------------------------------------------------
@@ -386,17 +527,18 @@ body {
  * Entrada en escena por scroll (ver components/Revelar.js)
  * ------------------------------------------------------------------------ */
 
-[data-revelar] {
+/* Lo que va a entrar animado se oculta ya en el HTML, para que no dé un salto
+   entre que el servidor lo pinta y GSAP toma el control. Quien no tenga
+   JavaScript lo recupera con el <noscript> del layout. */
+[data-anima] {
   opacity: 0;
-  transform: translateY(1.5rem);
-  transition:
-    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-revelar="visible"] {
-  opacity: 1;
-  transform: none;
+/* Quien pide menos movimiento lo ve directamente, sin esperar a nada. */
+@media (prefers-reduced-motion: reduce) {
+  [data-anima] {
+    opacity: 1;
+  }
 }
 
 /* Barra de scroll discreta. */
@@ -426,9 +568,5 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-  [data-revelar] {
-    opacity: 1;
-    transform: none;
   }
 }

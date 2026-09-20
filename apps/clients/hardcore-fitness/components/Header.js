@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FAMILIAS } from "@/libs/catalogo-normalizar.mjs";
 import Logo from "@/components/Logo";
+import { usarGsap } from "@/libs/animaciones";
 import { useCarrito } from "@/components/CarritoContext";
 import config from "@/config";
 
@@ -35,8 +36,11 @@ export default function Header() {
   const [encogido, setEncogido] = useState(false);
   const { unidades } = useCarrito();
   const ruta = usePathname();
+  const menu = useRef(null);
+  const contador = useRef(null);
 
-  // La cabecera se compacta al bajar, para dejar sitio a la cuadrícula.
+  // La cabecera se vuelve de cristal al bajar; arriba del todo es transparente
+  // y deja ver el fondo de la portada.
   useEffect(() => {
     const alScrollear = () => setEncogido(window.scrollY > 12);
     alScrollear();
@@ -47,15 +51,46 @@ export default function Header() {
   // Cambiar de página cierra el menú móvil.
   useEffect(() => setAbierto(false), [ruta]);
 
+  // El menú móvil se despliega en alto y sus enlaces entran escalonados.
+  useEffect(() => {
+    if (!abierto || !menu.current) return;
+    const { gsap } = usarGsap();
+
+    const linea = gsap.timeline();
+    linea
+      .from(menu.current, { height: 0, opacity: 0, duration: 0.35, ease: "power2.out" })
+      .from(
+        menu.current.querySelectorAll("a"),
+        { opacity: 0, y: 10, stagger: 0.025, duration: 0.3 },
+        "-=0.15"
+      );
+
+    return () => linea.kill();
+  }, [abierto]);
+
+  // Cada vez que cambia el número del carrito, el globo da un salto: sin eso
+  // agregar algo desde la cuadrícula no se nota, porque el carrito está lejos.
+  const unidadesPrevias = useRef(unidades);
+  useEffect(() => {
+    if (unidades === unidadesPrevias.current) return;
+    unidadesPrevias.current = unidades;
+    if (!unidades || !contador.current) return;
+
+    const { gsap } = usarGsap();
+    gsap.fromTo(
+      contador.current,
+      { scale: 0.4 },
+      { scale: 1, duration: 0.55, ease: "back.out(3)" }
+    );
+  }, [unidades]);
+
   return (
     <header
       // Se pega debajo de la franja de demo, que mide --alto-barra-demo
       // (0 cuando no hay demo).
       style={{ top: "var(--alto-barra-demo)" }}
-      className={`sticky z-50 border-b transition-all duration-300 ${
-        encogido
-          ? "border-base-content/10 bg-base-100/85 backdrop-blur-xl"
-          : "border-transparent bg-base-100"
+      className={`sticky z-50 transition-all duration-500 ${
+        encogido ? "barra-cristal" : "bg-transparent"
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
@@ -84,7 +119,10 @@ export default function Header() {
           >
             <IconoCarrito />
             {unidades > 0 && (
-              <span className="cifra absolute -right-0.5 -top-0.5 flex min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[0.65rem] font-bold text-primary-content">
+              <span
+                ref={contador}
+                className="cifra absolute -right-0.5 -top-0.5 flex min-w-5 items-center justify-center rounded-full bg-primary px-1 text-[0.65rem] font-bold text-primary-content"
+              >
                 {unidades > 99 ? "99+" : unidades}
               </span>
             )}
@@ -109,7 +147,7 @@ export default function Header() {
       </div>
 
       {abierto && (
-        <div className="border-t border-base-content/10 bg-base-100 lg:hidden">
+        <div ref={menu} className="barra-cristal overflow-hidden border-t border-base-content/10 lg:hidden">
           <nav className="mx-auto max-w-7xl px-4 py-4 sm:px-6" aria-label="Principal móvil">
             <div className="grid grid-cols-2 gap-1.5">
               {FAMILIAS.filter(([slug]) => slug !== "otros").map(([slug, nombre]) => (
@@ -171,7 +209,7 @@ function MenuFamilias() {
 
       {abierto && (
         <div className="absolute left-0 top-full w-[30rem] pt-2">
-          <div className="grid grid-cols-2 gap-1 rounded-xl border border-base-content/10 bg-base-200 p-2 shadow-2xl shadow-black/60">
+          <div data-desplegable className="cristal grid grid-cols-2 gap-1 p-2 shadow-2xl shadow-black/60">
             {FAMILIAS.filter(([slug]) => slug !== "otros").map(([slug, nombre]) => (
               <Link
                 key={slug}

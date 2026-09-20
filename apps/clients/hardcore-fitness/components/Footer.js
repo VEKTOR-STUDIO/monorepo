@@ -7,7 +7,7 @@ const { business } = config;
 
 export default function Footer() {
   return (
-    <footer className="relative mt-24 border-t border-base-content/10 bg-base-200/40">
+    <footer className="barra-cristal relative mt-24 border-t border-base-content/10">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>

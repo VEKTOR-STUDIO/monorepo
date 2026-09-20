@@ -17,6 +17,9 @@ export default function FichaProducto({ producto, prioridad = false }) {
 
   return (
     <article className="ficha group flex flex-col overflow-hidden">
+      {/* La luz que cruza la tarjeta al pasar por encima (ver .reflejo). */}
+      <span className="reflejo" aria-hidden="true" />
+
       <Link
         href={`/producto/${producto.slug}`}
         className="relative block focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"

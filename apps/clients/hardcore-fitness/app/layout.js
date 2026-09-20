@@ -2,6 +2,7 @@ import { Sora, Outfit, JetBrains_Mono } from "next/font/google";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import { CarritoProvider } from "@/components/CarritoContext";
+import Ambiente from "@/components/Ambiente";
 import BarraDemo from "@/components/demo/BarraDemo";
 import AvisoFlotante from "@/components/demo/AvisoFlotante";
 import { esDemo } from "@/libs/demo";
@@ -50,8 +51,20 @@ export default function RootLayout({ children }) {
       data-demo={demo ? "true" : undefined}
       className={`${sora.variable} ${outfit.variable} ${jetbrains.variable}`}
     >
-      <head>{renderSchemaTags()}</head>
+      <head>
+        {renderSchemaTags()}
+        {/* Lo que va a entrar animado se oculta desde el CSS para que no dé un
+            salto entre que el servidor lo pinta y GSAP toma el control. Si no
+            hay JavaScript nadie lo animaría y se quedaría invisible, así que
+            aquí se vuelve a mostrar. */}
+        <noscript
+          dangerouslySetInnerHTML={{
+            __html: `<style>[data-anima]{opacity:1 !important}</style>`,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased bg-base-100 text-base-content">
+        <Ambiente />
         <BarraDemo />
         <CarritoProvider>
           <ClientLayout>{children}</ClientLayout>

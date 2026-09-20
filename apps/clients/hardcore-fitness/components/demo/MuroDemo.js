@@ -29,7 +29,7 @@ export default function MuroDemo({ ocultos, children }) {
       />
 
       <div className="absolute inset-x-0 top-6 flex justify-center px-4">
-        <div className="ficha w-full max-w-md p-7 text-center backdrop-blur-xl">
+        <div className="ficha w-full max-w-md p-7 text-center">
           <p className="rotulo">Hasta aquí llega la demo</p>
 
           <p className="display mt-4 text-2xl">

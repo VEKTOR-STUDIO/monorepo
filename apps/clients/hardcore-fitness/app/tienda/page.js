@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BarraTienda, PanelFiltros } from "@/components/FiltrosTienda";
 import FichaProducto from "@/components/FichaProducto";
+import RejillaProductos from "@/components/RejillaProductos";
 import { leerCatalogo, filtrar, facetasDe } from "@/libs/catalogo";
 import { getSEOTags } from "@/libs/seo";
 import { FAMILIAS } from "@/libs/catalogo-normalizar.mjs";
@@ -106,11 +107,11 @@ export default async function Tienda({ searchParams }) {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+                <RejillaProductos className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
                   {visibles.map((producto, i) => (
                     <FichaProducto key={producto.slug} producto={producto} prioridad={i < 4} />
                   ))}
-                </div>
+                </RejillaProductos>
 
                 {tapados.length > 0 && (
                   <MuroDemo ocultos={tapados.length}>
