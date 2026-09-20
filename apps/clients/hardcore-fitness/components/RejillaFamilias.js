@@ -14,7 +14,7 @@ export default function RejillaFamilias({ familias }) {
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
       <Revelar>
         <p className="rotulo">Qué hay</p>
-        <h2 className="display mt-3 text-3xl sm:text-4xl">POR CATEGORÍA</h2>
+        <h2 className="cromo display mt-3 text-3xl sm:text-4xl">POR CATEGORÍA</h2>
       </Revelar>
 
       <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">

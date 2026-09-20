@@ -62,7 +62,7 @@ export default async function Inicio() {
             <Revelar className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="rotulo">Precio marcado</p>
-                <h2 className="display mt-3 text-3xl sm:text-4xl">OFERTAS FLASH</h2>
+                <h2 className="cromo display mt-3 text-3xl sm:text-4xl">OFERTAS FLASH</h2>
               </div>
               <Link href="/tienda?ofertas=1" className="btn btn-sm btn-outline">
                 Ver todas

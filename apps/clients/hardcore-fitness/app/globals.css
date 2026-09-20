@@ -308,6 +308,99 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+ * Gráfica de envase
+ *
+ * Lo que hace que un bote de MuscleTech se reconozca de lejos no es el cristal:
+ * son cuatro cosas muy concretas —letras cromadas, panal de fondo, ráfagas
+ * detrás del nombre y bandas diagonales— sobre negro. Aquí están las cuatro.
+ * ------------------------------------------------------------------------ */
+
+/* Letras cromadas. El degradado va sobre el texto y se recorta contra él; el
+   corte brusco en la mitad es lo que lee como metal pulido y no como un
+   degradado gris cualquiera. */
+.cromo {
+  /* Respiro arriba y abajo.
+     Hace falta porque `.display` usa line-height 0.95 y `background-clip:
+     text` solo pinta dentro de la caja del elemento: sin este hueco las
+     tildes se salen de la caja, se quedan sin degradado y desaparecen
+     ("POR CATEGORÍA" salía "POR CATEGORIA").
+     Se compensa con padding y NO con margen negativo: estas reglas van sin
+     capa y ganarían a las utilidades mt-* de Tailwind, dejando los titulares
+     pegados a lo de arriba. */
+  display: inline-block;
+  padding-top: 0.3em;
+  padding-bottom: 0.14em;
+
+  background-image: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #eef2f7 26%,
+    #aab3c0 47%,
+    #6f7885 51%,
+    #c9d2de 58%,
+    #ffffff 86%,
+    #dfe5ec 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* El bisel: una sombra dura pegada debajo, como el relieve de una etiqueta. */
+  filter:
+    drop-shadow(0 2px 0 rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 22px color-mix(in oklab, var(--color-base-content) 18%, transparent));
+}
+
+/* Panal de fondo. Es el patrón de la serie Cell-Tech; sustituye a la rejilla
+   cuadrada donde queremos que se note la marca. */
+.panal {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.07' stroke-width='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5z'/%3E%3Cpath d='M13.99 -15.75l13 7.5v15l-13 7.5L1 6.75v-15l12.99-7.5z'/%3E%3Cpath d='M13.99 34.25l13 7.5v15l-13 7.5L1 56.75v-15l12.99-7.5z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 56px 98px;
+}
+
+/* Ráfaga: los rayos que salen de detrás del producto. */
+.rayos {
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    color-mix(in oklab, var(--color-primary) 26%, transparent) 0deg 3deg,
+    transparent 3deg 11deg
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent 12%, #000 26%, transparent 62%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 12%, #000 26%, transparent 62%);
+}
+
+/* Insignia sesgada, de filo duro: nada de píldoras redondas. El contenido se
+   contra-sesga para que el texto salga recto. */
+.insignia {
+  display: inline-block;
+  transform: skewX(-12deg);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 6px 16px -8px rgba(0, 0, 0, 0.9);
+}
+
+.insignia > * {
+  display: inline-block;
+  transform: skewX(12deg);
+}
+
+/* Tajo: la banda diagonal que separa secciones. */
+.tajo {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-primary) 70%, transparent) 20%,
+    color-mix(in oklab, var(--color-base-content) 35%, transparent) 50%,
+    color-mix(in oklab, var(--color-primary) 70%, transparent) 80%,
+    transparent
+  );
+  transform: skewY(-0.6deg);
+}
+
+/* --------------------------------------------------------------------------
  * Cristal
  *
  * El acabado de un bote de suplementos: superficie translúcida, un filo

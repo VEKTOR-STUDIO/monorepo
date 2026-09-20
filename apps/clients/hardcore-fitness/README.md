@@ -337,6 +337,24 @@ para que las cifras alineen en columna.
 Para mover el rojo: `--color-primary` en `globals.css` y `colors.main` en
 `config.js`.
 
+**La gráfica de envase** (lo que hace que se reconozca como marca de
+suplementos y no como una web cualquiera):
+
+| Clase | Qué es |
+|---|---|
+| `.cromo` | letras cromadas con bisel, como los wordmarks de los botes |
+| `.panal` | textura hexagonal de fondo (la de la serie Cell-Tech) |
+| `.rayos` | la ráfaga que sale por detrás de los productos |
+| `.insignia` | etiqueta sesgada de filo duro, nada de píldoras redondas |
+| `.tajo` | banda diagonal para separar secciones |
+
+> `.cromo` lleva `padding` arriba y abajo a propósito. `background-clip: text`
+> solo pinta dentro de la caja del elemento y `.display` usa `line-height:
+> 0.95`, así que sin ese hueco **las tildes se quedan fuera y desaparecen**
+> ("POR CATEGORÍA" salía "POR CATEGORIA"). El hueco se compensa con padding y
+> no con margen negativo: estas reglas van sin capa y le ganarían a las
+> utilidades `mt-*` de Tailwind.
+
 **Las piezas del cristal:**
 
 | Clase | Dónde |
@@ -382,6 +400,12 @@ deja el contenido quieto y visible.
 Lo que va a entrar animado lleva `data-anima` y el CSS lo oculta de entrada,
 para que no dé un salto entre que el servidor lo pinta y GSAP toma el control.
 Sin JavaScript el `<noscript>` del layout lo vuelve a mostrar.
+
+> **Cuidado con `gsap.from()` sobre algo que lleve `data-anima`.** El CSS ya lo
+> dejó en `opacity: 0`, y `from` anima *desde* el valor que le des *hasta* el
+> actual: de 0 a 0. El elemento no aparece nunca. Se ve venir mal porque no da
+> error, solo deja la sección en blanco. Con `data-anima` hay que usar
+> `fromTo` y decir el destino a mano, que es lo que hace `Revelar`.
 
 ---
 

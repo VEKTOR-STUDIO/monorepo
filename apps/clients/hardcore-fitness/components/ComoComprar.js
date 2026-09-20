@@ -30,7 +30,7 @@ export default function ComoComprar() {
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <Revelar>
           <p className="rotulo">Sin vueltas</p>
-          <h2 className="display mt-3 text-3xl sm:text-4xl">CÓMO SE COMPRA</h2>
+          <h2 className="cromo display mt-3 text-3xl sm:text-4xl">CÓMO SE COMPRA</h2>
         </Revelar>
 
         <ol className="mt-10 grid gap-4 md:grid-cols-3">

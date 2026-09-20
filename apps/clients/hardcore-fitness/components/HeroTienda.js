@@ -48,7 +48,16 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
             "[data-hero='pieza']",
             { opacity: 0, y: 40, scale: 0.92, stagger: 0.1, duration: 0.95 },
             0.25
-          );
+          )
+          .from("[data-hero='rayos']", { opacity: 0, scale: 0.6, duration: 1.2 }, 0.2);
+
+        // La ráfaga gira muy despacio: da vida sin llamar la atención.
+        g.to("[data-hero='rayos']", {
+          rotation: 360,
+          duration: 120,
+          ease: "none",
+          repeat: -1,
+        });
 
         // Las cifras suben desde cero mientras entran.
         g.utils.toArray("[data-contador]").forEach((nodo) => {
@@ -89,7 +98,15 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
   return (
     <section ref={raiz} className="relative overflow-hidden">
       <div className="humo absolute inset-0" aria-hidden="true" />
-      <div className="malla absolute inset-0" aria-hidden="true" />
+      {/* Panal en vez de rejilla cuadrada: es el fondo de los botes. */}
+      <div
+        className="panal absolute inset-0 opacity-70"
+        aria-hidden="true"
+        style={{
+          maskImage: "radial-gradient(ellipse at 50% 0%, #000 15%, transparent 70%)",
+          WebkitMaskImage: "radial-gradient(ellipse at 50% 0%, #000 15%, transparent 70%)",
+        }}
+      />
 
       <div className="relative mx-auto grid max-w-7xl gap-12 px-4 pb-16 pt-16 sm:px-6 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:pb-24 lg:pt-24">
         <div>
@@ -101,12 +118,12 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
             {/* Cada renglón en su caja recortada: así puede subir desde abajo
                 sin asomar por encima del anterior. */}
             <span className="block overflow-hidden pb-[0.08em]">
-              <span data-hero="linea" className="block">
+              <span data-hero="linea" className="cromo block">
                 TODO LO QUE
               </span>
             </span>
             <span className="block overflow-hidden pb-[0.08em]">
-              <span data-hero="linea" className="block">
+              <span data-hero="linea" className="cromo block">
                 TU ENTRENO
               </span>
             </span>
@@ -161,7 +178,16 @@ export default function HeroTienda({ total, marcas, categorias, tasa, destacados
         {/* Collage de productos reales del catálogo. */}
         {destacados.length > 0 && (
           <div data-hero="collage" className="relative">
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            {/* La ráfaga de rayos detrás de los botes. */}
+            {/* Bien más grande que el collage: los rayos tienen que salir por
+                detrás de los botes, no asomar solo por los huecos. */}
+            <div
+              data-hero="rayos"
+              className="rayos pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[210%] -translate-x-1/2 -translate-y-1/2 opacity-30"
+              aria-hidden="true"
+            />
+
+            <div className="relative grid grid-cols-2 gap-3 sm:gap-4">
               {destacados.slice(0, 4).map((producto, i) => (
                 <Link
                   key={producto.slug}

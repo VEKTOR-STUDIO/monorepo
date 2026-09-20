@@ -63,10 +63,11 @@ export function contexto(construir, ambito) {
     mm.add("(prefers-reduced-motion: reduce)", () => {
       const raiz = ambito?.current ?? ambito;
       if (!raiz) return;
-      g.set([raiz, ...raiz.querySelectorAll("[data-anima]")], {
-        clearProps: "all",
-        opacity: 1,
-      });
+      const nodos = [raiz, ...raiz.querySelectorAll("[data-anima]")];
+      g.set(nodos, { clearProps: "all" });
+      // Quitar el marcador es lo que de verdad los muestra: es la regla
+      // [data-anima]{opacity:0} del CSS la que los tenía ocultos.
+      for (const nodo of nodos) nodo.removeAttribute?.("data-anima");
     });
 
     mm.add("(prefers-reduced-motion: no-preference)", () => construir(g, st));

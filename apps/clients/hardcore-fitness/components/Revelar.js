@@ -32,17 +32,30 @@ export default function Revelar({
           escala: { scale: 0.94 },
         }[desde] || { y: 30 };
 
-        g.from(nodo.current, {
-          opacity: 0,
-          ...salida,
-          duration: TIEMPOS.entrada,
-          delay: retraso / 1000,
-          scrollTrigger: {
-            trigger: nodo.current,
-            start: DISPARO,
-            once: true,
-          },
-        });
+        // fromTo y no from: el CSS ya deja esto en opacity 0 (para que no dé
+        // un salto al hidratar), y `from` animaría desde 0 hasta el valor
+        // actual, que también es 0. El destino hay que decirlo a mano.
+        g.fromTo(
+          nodo.current,
+          { opacity: 0, ...salida },
+          {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            scale: 1,
+            duration: TIEMPOS.entrada,
+            delay: retraso / 1000,
+            // Al terminar se quita el marcador. A partir de ahí el elemento
+            // deja de depender de la regla que lo ocultaba: aunque algo borre
+            // los estilos en línea, se queda visible.
+            onComplete: () => nodo.current?.removeAttribute("data-anima"),
+            scrollTrigger: {
+              trigger: nodo.current,
+              start: DISPARO,
+              once: true,
+            },
+          }
+        );
       }, nodo),
     [retraso, desde]
   );

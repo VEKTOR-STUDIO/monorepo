@@ -41,8 +41,9 @@ export default function FichaProducto({ producto, prioridad = false }) {
           )}
 
           {producto.ofertaFlash && (
-            <span className="absolute left-2.5 top-2.5 rounded-md bg-primary px-2 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-primary-content shadow-lg">
-              Oferta flash
+            // Insignia sesgada de filo duro, como las de los envases.
+            <span className="insignia absolute left-2.5 top-2.5 bg-primary px-2.5 py-1 text-[0.6rem] font-bold uppercase tracking-wider text-primary-content">
+              <span>Oferta flash</span>
             </span>
           )}
         </div>
