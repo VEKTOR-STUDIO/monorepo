@@ -11,7 +11,8 @@ que permite enseñarla sin regalarla: se ve casi todo, no se puede usar nada, y
 en cada pantalla hay una vía para comprarla.
 
 La implementación de referencia, funcionando, está en
-`apps/clients/hardcore-fitness`. Léela cuando necesites el código exacto de
+`apps/clients/aprovechalo-ve`, que es la más completa; `hardcore-fitness` tiene
+la versión anterior, más sobria. Léelas cuando necesites el código exacto de
 una pieza en vez de reescribirlo de memoria.
 
 ## La idea que sostiene todo
@@ -32,7 +33,7 @@ Siete piezas. Las tres primeras son el esqueleto; el resto es la venta.
 | Pieza | Archivo | Para qué |
 |---|---|---|
 | Interruptor | `libs/demo.js` | `esDemo()`, enlace de compra, mensaje de bloqueo, datos de ejemplo |
-| Puerta | `libs/acceso.js` + `middleware.js` + `app/entrar/` + `app/api/entrar/` | contraseña antes de servir nada |
+| Puerta | `libs/acceso.js` + `middleware.js` + `app/entrar/` + `app/api/entrar/` + `components/PantallaAcceso.js` | contraseña antes de servir nada, y el escaparate donde se vende |
 | Cortes | en cada server action y ruta de API | que la demo no escriba |
 | Franja | `components/demo/BarraDemo.js` | "esto es una demo, se vende, $X" |
 | Muro | `components/demo/MuroDemo.js` | corta el contenido y pide comprar |
@@ -53,13 +54,23 @@ En `config.js` del cliente, un bloque `demo`:
 demo: {
   activa: process.env.NEXT_PUBLIC_DEMO !== "false",
   precio: "$490",
+  precioAnterior: "$690",     // vacío → sin precio tachado ni sello de rebaja
   precioNota: "Pago único · instalación incluida",
+  // Fecha REAL de fin de oferta, no una cuenta atrás que se reinicia en cada
+  // visita: eso es truco de tienda barata y quien evalúa comprar un sistema lo
+  // descubre recargando. Cuando pasa, el contador se va y la rebaja también.
+  ofertaHasta: "2026-10-15T23:59:59-04:00",
   urlCompra: "",              // vacío → los botones llevan a /contacto
   textoBoton: "Quiero el sistema",
   elementosVisibles: 12,      // cuántos se ven antes del muro
   incluye: ["...", "..."],    // lo que se lleva quien compre
 }
 ```
+
+`precioAnterior`, `ofertaHasta` e `incluye` los usan a la vez la puerta, la
+franja y el bloque de venta. Están en un solo sitio para que no haya dos
+verdades que mantener: el sello de descuento se calcula a partir de los dos
+precios en vez de escribirse a mano.
 
 `activa` por defecto en `true` y se apaga con `NEXT_PUBLIC_DEMO=false`. Nace
 cerrada a propósito: si el valor por defecto fuera "abierta" y alguien
@@ -92,9 +103,27 @@ Lee `references/puerta.md`. Lo que no se puede improvisar:
   persona, incómodo para un script.
 - El destino al que volver se valida (`destinoSeguro`): sin eso tienes un
   redirector abierto hacia cualquier dominio.
+- La huella lleva el **nombre del cliente como sal** (`<cliente>::acceso::…`):
+  si dos demos acaban con la misma contraseña, la cookie de una no vale en la
+  otra.
+- `/entrar` va con `dynamic = "force-dynamic"` y metadata **noindex**: sin lo
+  primero, Next puede servir la puerta cacheada a quien ya tiene cookie; sin lo
+  segundo, la demo del cliente acaba en Google.
 
-La pantalla en sí conviene que sea buena —es lo primero que ve quien va a
-pagar—, pero recuerda que es solo la cara del candado.
+Y lo que cambió de raíz: **la puerta no es un login, es el escaparate.** Quien
+recibe el enlace puede no pasar de ahí —no tiene la clave a mano, la pierde,
+mira desde el móvil—, así que es la única pantalla que se ve seguro. Además del
+campo de la contraseña lleva la insignia de edición, la lista de lo que
+incluye, el precio con el anterior tachado, el sello de descuento, la cuenta
+atrás y la firma con enlace. Todo sale de `config.demo`, así que no hay nada
+que mantener por duplicado.
+
+Ahí la jerarquía de marca **se invierte**: manda la firma de Alessandrovaru y
+no la del cliente, porque quien llega todavía no es cliente del negocio, es
+alguien a quien se le está enseñando un trabajo. Al entrar, vuelve a mandar la
+marca del cliente.
+
+Aun así, recuerda que todo eso es solo la cara del candado.
 
 ### 3. Los cortes
 
@@ -168,6 +197,10 @@ No te fíes de la pantalla. Con el servidor levantado:
 ```bash
 # Sin cookie, todo redirige a la puerta
 curl -s -o /dev/null -w "%{http_code} %{redirect_url}\n" http://localhost:3000/
+
+# Cuerpo mal formado: 400, sin reventar la ruta
+curl -s -X POST localhost:3000/api/entrar -H "Content-Type: application/json" \
+  -d 'no-es-json' -w " [%{http_code}]\n"
 
 # Clave incorrecta
 curl -s -X POST localhost:3000/api/entrar -H "Content-Type: application/json" \
