@@ -267,13 +267,22 @@ export default function Checkout({ tasa }) {
 
         <p className="mt-2 text-[0.7rem] text-base-content/45">{pago.detalle}</p>
 
-        <button type="submit" disabled={enviando} className="btn btn-primary mt-5 w-full">
-          {enviando ? "Registrando…" : "Confirmar por WhatsApp"}
-        </button>
+        {demo ? (
+          <AvisoBloqueado titulo="El pedido no se envía" className="mt-5">
+            Hasta aquí llega la demo. En la tienda real este botón guarda el pedido con su
+            código y abre WhatsApp con el resumen ya escrito.
+          </AvisoBloqueado>
+        ) : (
+          <>
+            <button type="submit" disabled={enviando} className="btn btn-primary mt-5 w-full">
+              {enviando ? "Registrando…" : "Confirmar por WhatsApp"}
+            </button>
 
-        <p className="mt-3 text-center text-[0.7rem] text-base-content/40">
-          Se abre WhatsApp con el resumen ya escrito. El pago y la entrega se cierran ahí.
-        </p>
+            <p className="mt-3 text-center text-[0.7rem] text-base-content/40">
+              Se abre WhatsApp con el resumen ya escrito. El pago y la entrega se cierran ahí.
+            </p>
+          </>
+        )}
       </aside>
     </form>
   );

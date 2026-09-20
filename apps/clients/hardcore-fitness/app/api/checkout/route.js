@@ -3,6 +3,7 @@ import { createClient } from "@/libs/supabase/server";
 import { createAdminClient } from "@/libs/supabase/admin";
 import { leerCatalogo, leerTasa } from "@/libs/catalogo";
 import { precioSegunPago } from "@/libs/formato";
+import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
 export const dynamic = "force-dynamic";
@@ -62,6 +63,16 @@ function armarMensaje({ codigo, cliente, metodo, entrega, lineas, total, totalBs
 }
 
 export async function POST(peticion) {
+  // La demo no manda pedidos. El botón ya está desactivado en pantalla, pero
+  // esta ruta es pública: sin este corte, cualquiera podría hacerle llegar
+  // pedidos falsos a Hardcore por WhatsApp desde la tienda de muestra.
+  if (esDemo()) {
+    return NextResponse.json(
+      { error: "Esto es una demo: los pedidos no se envían." },
+      { status: 403 }
+    );
+  }
+
   let cuerpo;
   try {
     cuerpo = await peticion.json();

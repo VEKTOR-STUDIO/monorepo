@@ -8,12 +8,13 @@
 // página protegida, así que el permiso se verifica aquí, no en la pantalla.
 // -----------------------------------------------------------------------------
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
 import { createAdminClient } from "@/libs/supabase/admin";
-import { obtenerTasaDelBcv, guardarTasa } from "@/libs/bcv";
+import { obtenerTasaConDetalle } from "@/libs/bcv";
 import { leerCatalogoPdf, extraerImagen } from "@/libs/pdf-catalog.mjs";
 import { normalizarProductos } from "@/libs/catalogo-normalizar.mjs";
+import { esDemo, MENSAJE_BLOQUEADO } from "@/libs/demo";
 import { DEV_NO_LOGIN } from "@/libs/dev-mode";
 
 // Cuántas fotos se suben como mucho en una importación. Subir 231 en una sola
@@ -22,6 +23,11 @@ import { DEV_NO_LOGIN } from "@/libs/dev-mode";
 const MAXIMO_FOTOS_POR_TANDA = 40;
 
 async function exigirAdmin() {
+  // En demo el panel se recorre entero, pero no escribe. Se corta aquí, en el
+  // servidor: una server action es un endpoint público aunque el botón que la
+  // dispara esté deshabilitado en pantalla.
+  if (esDemo()) throw new Error(MENSAJE_BLOQUEADO);
+
   if (DEV_NO_LOGIN) return { id: null };
 
   const supabase = await createClient();
