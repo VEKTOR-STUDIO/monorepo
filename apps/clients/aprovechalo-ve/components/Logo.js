@@ -52,15 +52,22 @@ export function LogoGrande({ className = "", tono = "oscuro" }) {
  * estrellas quedan flotando sin recuadro.
  */
 export function LogoFoto({ lado = 160, className = "", prioridad = false }) {
+  // `lado` admite un número de píxeles o cualquier medida CSS —la puerta le pasa
+  // un `clamp()` para que el logo encoja con el alto de la pantalla—. Al
+  // navegador le vale cualquiera de las dos; Next necesita un número para
+  // elegir qué archivo servir, y ahí va el mayor que puede llegar a medir.
+  const medida = typeof lado === "number" ? `${lado}px` : lado;
+  const servir = typeof lado === "number" ? lado : 200;
+
   return (
     <Image
       src={ARCHIVO}
       alt="Aprovéchalo"
-      width={lado}
-      height={lado}
+      width={servir}
+      height={servir}
       priority={prioridad}
       className={`block mix-blend-screen ${className}`}
-      style={{ width: lado, height: lado }}
+      style={{ width: medida, height: medida }}
     />
   );
 }

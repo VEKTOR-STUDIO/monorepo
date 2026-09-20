@@ -234,8 +234,12 @@ servir la puerta cacheada a alguien que ya tiene la cookie.
 
 Dos columnas: la carátula a la izquierda (insignia, logo, lo que incluye) y la
 caja de acceso a la derecha, que es donde la vista termina cayendo. En móvil se
-apilan. La caja va `sticky` en escritorio para que no se pierda al bajar por la
-lista.
+apilan.
+
+**Y cabe en una pantalla, sin scroll.** No es un capricho: es la única pantalla
+que se ve seguro, y lo que quede por debajo del pliegue no lo lee nadie. Nada
+de `sticky` —sin scroll no pega nada— y nada de `min-h-svh`, que deja crecer.
+Cómo se consigue, más abajo.
 
 Lo que se monta encima de `config.demo`:
 
@@ -271,6 +275,164 @@ Detalles que se olvidan y cuestan:
   `window.location.href`, no con el router del cliente: la cookie acaba de
   ponerse y hace falta que el servidor la lea de nuevo. Bloquea el envío
   mientras tanto (`abierto`), o un doble clic dispara dos navegaciones.
+
+### El fondo: capas, y el plástico encima
+
+El fondo de la puerta se monta como una pila de `absolute inset-0` dentro del
+`<main>`, en este orden: foto (`opacity-25`), velo del color base, malla,
+textura de ruido, la textura propia de la marca, el halo difuminado y, encima
+de todo, el plástico.
+
+```css
+/* Foto casi negra con los pliegues en blanco → va en `screen`: el negro se
+   cae y solo quedan los brillos de las arrugas, que es lo que hace que la
+   portada parezca metida en una bolsa. En `multiply` pasaría lo contrario:
+   se comería el fondo y quedaría una mancha negra. */
+.plastico {
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  background-image: url("/plasticTexture.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+```
+
+La regla para elegir el modo es la textura, no el gusto: **textura oscura con
+detalle claro → `screen`; textura clara con detalle oscuro → `multiply`**. Y va
+como última capa del fondo, después del halo, para que arrugue también el
+resplandor; el contenido se queda por encima porque sube con `z-10`.
+
+### Una sola pantalla
+
+El armazón es una columna de tres piezas: cinta, cuerpo, cinta. Las cintas no
+se encogen y el cuerpo se queda con lo que sobre.
+
+```jsx
+<main ref={raiz} className="puerta relative flex h-svh flex-col overflow-hidden">
+  {/* capas de fondo, todas absolute inset-0 */}
+  <Cintillo variante="puerta" className="relative z-20 shrink-0" />
+
+  <div className="relative z-10 flex min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain">
+    <div className="m-auto grid w-full max-w-6xl gap-x-[clamp(1.5rem,4vw,3.5rem)] gap-y-[var(--puerta-v4)] px-5 py-[var(--puerta-v2)] lg:grid-cols-[1.15fr_1fr]">
+      <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">…</div>
+      <div className="min-w-0 lg:self-center">…</div>
+    </div>
+  </div>
+
+  <Cintillo variante="puertaInversa" invertido className="relative z-20 shrink-0" />
+</main>
+```
+
+Cada decisión de ahí paga algo:
+
+- **`h-svh`, no `vh` ni `min-h-`.** `vh` mide como si la barra del navegador
+  del móvil no existiera y deja el pie fuera de la pantalla; `min-h-` permite
+  crecer, que es justo lo que no queremos.
+- **`m-auto` en el grid, no `items-center` en el padre.** Si en alguna pantalla
+  rara el contenido no cupiera, `items-center` lo centra y recorta el
+  principio, que queda inalcanzable; los márgenes automáticos se anulan solos
+  cuando no hay hueco y dejan el contenido desde arriba, alcanzable con el
+  scroll interno.
+- **`min-h-0 flex-1 overflow-y-auto` en el cuerpo.** Es la red: el `overflow`
+  no se usa nunca en las medidas comprobadas, pero en un móvil raro vale más un
+  desplazamiento dentro del hueco que un botón cortado. La página, por fuera,
+  nunca hace scroll.
+- **`min-w-0` en las dos columnas.** Esta muerde: sin ella, un hijo ancho
+  —el carrusel de "lo que incluye"— estira la columna del grid hasta su
+  `min-content` (medido: 1616 px en una pantalla de 390) y el texto se sale por
+  los dos lados. Ver `trampas.md`.
+
+### El ritmo vertical se mide en `vh`
+
+Los `mt-5/7/8/9`, `p-6 sm:p-7`, `gap-10 lg:gap-14` fijos no caben en un
+portátil de 720 px. Cuatro variables en `app/globals.css`, sobre `.puerta`:
+
+```css
+.puerta {
+  --puerta-v1: clamp(0.3rem, 0.9vh, 0.75rem); /* una etiqueta y su dato */
+  --puerta-v2: clamp(0.5rem, 1.6vh, 1.25rem); /* piezas de un mismo bloque */
+  --puerta-v3: clamp(0.7rem, 2.4vh, 1.75rem); /* de un bloque al siguiente */
+  --puerta-v4: clamp(0.9rem, 3.2vh, 3.5rem);  /* entre las dos columnas */
+  --puerta-logo: clamp(4rem, 11vh, 8.25rem);  /* el máximo es el de antes */
+}
+```
+
+Se usan como `mt-[var(--puerta-v3)]`. El hueco **horizontal** entre columnas no
+va aquí: no tiene nada que ver con el alto, va en `vw`. El precio y el rótulo
+también encogen: `text-[clamp(1.9rem,5vh,3rem)]`.
+
+Los logotipos se piden en píxeles porque el mismo componente sirve en la
+cabecera. Para que encojan, se les enseña a aceptar una medida CSS —dos líneas
+en `components/Logo.js`, compatible hacia atrás:
+
+```js
+const medida = typeof lado === "number" ? `${lado}px` : lado;  // para el style
+const servir = typeof lado === "number" ? lado : 200;          // para next/image
+```
+
+y la puerta le pasa `lado="var(--puerta-logo)"`. Si el logotipo es apaisado
+—un rótulo de 6.4:1 mide 52 px de alto— no hace falta: ahí aprieta el ancho, y
+de eso se encarga el `max-w-full` del componente.
+
+### Qué se cae cuando no cabe, por orden
+
+En el móvil la columna es estrecha y todo se apila, así que hay que elegir. El
+orden está pensado para que lo último que se toque sea a lo que se viene: el
+logotipo, el precio y el formulario.
+
+| Dónde | Qué se va | Por qué no se pierde nada |
+|---|---|---|
+| `<lg` (una columna) | el párrafo de presentación | lo cuentan la insignia, el carrusel y las cintas |
+| `<lg` | la insignia de edición | la cinta de arriba dice literalmente lo mismo, girando |
+| `<lg` | la segunda frase del pie | la firma con enlace se queda |
+| `<lg` | las cuatro cajas del contador → `formato="compacto"` | misma cuenta, una línea, junto a su etiqueta |
+| `height < 45rem` | la etiqueta "Demo privada de" | adorno |
+| `height < 45rem` | **toda** la lista de lo que incluye | es lo único que se cuenta dos veces: las dos cintas llevan girando esas mismas ventajas |
+| `height < 46rem` **o** `<lg` | el párrafo de presentación | (la regla es `@media (width >= 64rem) and (height >= 46rem)`) |
+
+Cuidado con el umbral: `height < 40rem` deja fuera justo los 640 px, que es la
+pantalla que hay que rescatar. 45rem (720 px) recoge el 640, el 667 del SE y el
+portátil bajo, y no toca los móviles de 800 para arriba.
+
+Y la lista de "lo que incluye", que es la pieza más alta (siete u ocho
+renglones), en móvil se tumba: una fila que se arrastra de lado, con los puntos
+enganchados, saliéndose del margen para que se vea que hay más a la derecha.
+
+```css
+.puerta-incluye {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin-inline: -1.25rem;   /* se come el px-5 del grid */
+  padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+.puerta-incluye::-webkit-scrollbar { display: none; }
+.puerta-incluye > li { flex: 0 0 14rem; scroll-snap-align: start; }
+
+@media (width >= 64rem) {
+  .puerta-incluye {
+    display: grid;
+    gap: var(--puerta-v1);
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+  .puerta-incluye > li { flex: initial; }
+}
+```
+
+En escritorio vuelve a ser la lista vertical de siempre, que es como se lee
+mejor. Bajar el texto de los puntos a `text-xs` hace que en una columna de
+~560 px la mayoría quepa en un renglón: siete puntos pasan de 350 px a 230.
+
+Si un cliente apila foto + rótulo escrito + `@handle` (Venta Nacional), eso son
+150 px de marca antes de llegar al precio: en móvil van en fila —foto a la
+izquierda, nombre a la derecha— y de `lg` en adelante vuelve la carátula
+apilada.
 
 Las clases de apoyo (`insignia-edicion`, `sello-descuento`, `linea-dlc`,
 `resplandor`, `@keyframes pulso`) están en `app/globals.css` de aprovechalo.

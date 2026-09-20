@@ -477,6 +477,103 @@ body {
   background-repeat: no-repeat;
 }
 
+/* -----------------------------------------------------------------------------
+ * La puerta, de una sola pantalla.
+ *
+ * Es lo primero —y muchas veces lo único— que ve quien recibe el enlace, así
+ * que aquí no se hace scroll: la carátula, la caja de acceso y las dos cintas
+ * caben en `100svh` y ahí se quedan. `svh` y no `vh` porque en el móvil `vh`
+ * mide como si la barra del navegador no existiera y dejaría el pie fuera.
+ *
+ * Para que eso aguante igual en un portátil de 720 px que en un monitor, el
+ * ritmo vertical no va en `rem` fijos: estas medidas se calculan en `vh`, así
+ * que la página se encoge con la pantalla en vez de desbordarla. El mínimo de
+ * cada `clamp()` es el suelo por debajo del cual dejaría de respirar.
+ * -------------------------------------------------------------------------- */
+.puerta {
+  --puerta-v1: clamp(0.3rem, 0.9vh, 0.75rem); /* una etiqueta y su dato */
+  --puerta-v2: clamp(0.5rem, 1.6vh, 1.25rem); /* piezas de un mismo bloque */
+  --puerta-v3: clamp(0.7rem, 2.4vh, 1.75rem); /* de un bloque al siguiente */
+  --puerta-v4: clamp(0.9rem, 3.2vh, 3.5rem); /* entre las dos columnas */
+
+  /* El logotipo se pide en píxeles porque el mismo componente sirve en la
+     cabecera; aquí se le pasa esta medida para que encoja con el alto. */
+  --puerta-logo: clamp(3rem, 8vh, 4.875rem);
+}
+
+/* El crédito de autoría se monta en el layout raíz, así que también cae debajo
+   de la puerta. Ahí sobra: la puerta lleva su propia firma, y con el aire que
+   el modo demo le da al crédito son 171 px que rompen la pantalla única. */
+body:has(main.puerta) .footer-foot {
+  display: none;
+}
+
+/* El párrafo de presentación solo sale cuando hay sitio de sobra: en el móvil
+   la columna es estrecha y lo que se vende ya lo cuentan la insignia, el
+   carrusel y las cintas; en un portátil bajo es lo primero que estorba. */
+.puerta-presentacion {
+  display: none;
+}
+
+@media (width >= 64rem) and (height >= 46rem) {
+  .puerta-presentacion {
+    display: block;
+  }
+}
+
+/* Lo que trae la edición.
+ *
+ * Son siete u ocho renglones que en un móvil no caben en vertical junto a la
+ * caja de acceso, así que ahí la lista se tumba: una fila que se arrastra de
+ * lado, con los puntos enganchados, y que se sale del margen para que se vea
+ * que hay más a la derecha. De `lg` en adelante vuelve a ser la lista de
+ * siempre, que es como se lee mejor. */
+.puerta-incluye {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+
+.puerta-incluye::-webkit-scrollbar {
+  display: none;
+}
+
+.puerta-incluye > li {
+  flex: 0 0 14rem;
+  scroll-snap-align: start;
+}
+
+/* Por debajo de 45rem de alto —un Android de gama baja, un iPhone SE, un
+   portátil de 13 pulgadas con muchas barras— no cabe
+   todo, y hay que elegir qué se va. Primero los adornos; después la lista de
+   lo que trae la edición, que es lo único que se cuenta dos veces: las dos
+   cintas llevan girando esas mismas ventajas sin parar. Lo que no se toca es
+   el logotipo, el precio y el formulario, que es a lo que se viene. */
+@media (height < 45rem) {
+  .puerta-cortesia,
+  .puerta-incluido {
+    display: none;
+  }
+}
+
+@media (width >= 64rem) {
+  .puerta-incluye {
+    display: grid;
+    gap: var(--puerta-v1);
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .puerta-incluye > li {
+    flex: initial;
+  }
+}
+
 /* Rejilla técnica muy tenue, para los fondos que piden textura sin gráfica:
    el 404, la pantalla de error y el fondo de la puerta. Se desvanece hacia los
    bordes con una máscara para que no se vea dónde termina. */

@@ -26,6 +26,10 @@ const LADO_ORIGINAL = 116;
 
 /** El círculo del logotipo, tal cual. */
 export function LogoChapa({ lado = 36, className = "", prioridad = false }) {
+  // `lado` admite un número de píxeles o cualquier medida CSS: la puerta le
+  // pasa un `clamp()` para que la chapa encoja con el alto de la pantalla.
+  const medida = typeof lado === "number" ? `${lado}px` : lado;
+
   return (
     <Image
       src={ARCHIVO}
@@ -34,7 +38,7 @@ export function LogoChapa({ lado = 36, className = "", prioridad = false }) {
       height={LADO_ORIGINAL}
       priority={prioridad}
       className={`block shrink-0 rounded-full ${className}`}
-      style={{ width: lado, height: lado }}
+      style={{ width: medida, height: medida }}
     />
   );
 }

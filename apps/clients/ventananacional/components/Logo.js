@@ -69,6 +69,13 @@ export function LogoGrande({ className = "", tono = "claro" }) {
  * cuenta de Instagram.
  */
 export function LogoFoto({ lado = 160, className = "", prioridad = false }) {
+  // `lado` admite un número de píxeles o cualquier medida CSS —la puerta le pasa
+  // un `clamp()` para que el logo encoja con el alto de la pantalla—. Al
+  // navegador le vale cualquiera de las dos; Next necesita un número para
+  // elegir qué archivo servir, y ahí va el mayor que puede llegar a medir.
+  const medida = typeof lado === "number" ? `${lado}px` : lado;
+  const servir = typeof lado === "number" ? lado : 200;
+
   return (
     <span
       className={`vidrio inline-block overflow-hidden p-1.5 ${className}`}
@@ -77,11 +84,11 @@ export function LogoFoto({ lado = 160, className = "", prioridad = false }) {
       <Image
         src={ARCHIVO}
         alt="Venta Nacional"
-        width={lado}
-        height={lado}
+        width={servir}
+        height={servir}
         priority={prioridad}
         className="block rounded-[0.7rem]"
-        style={{ width: lado, height: lado }}
+        style={{ width: medida, height: medida }}
       />
     </span>
   );

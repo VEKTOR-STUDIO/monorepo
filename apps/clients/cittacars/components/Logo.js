@@ -36,16 +36,23 @@ const PROPORCION = "6.4 / 1";
  * @param {number} ancho  ancho en píxeles del rótulo
  */
 export default function Logo({ ancho = 150, className = "", prioridad = false }) {
+  // `ancho` admite un número de píxeles o cualquier medida CSS —la puerta le pasa
+  // un `clamp()` para que el logo encoja con el alto de la pantalla—. Al
+  // navegador le vale cualquiera de las dos; Next necesita un número para
+  // elegir qué archivo servir, y ahí va el mayor que puede llegar a medir.
+  const medida = typeof ancho === "number" ? `${ancho}px` : ancho;
+  const servir = typeof ancho === "number" ? ancho : 340;
+
   return (
     <span
       className={`relative block overflow-hidden ${className}`}
-      style={{ width: ancho, aspectRatio: PROPORCION }}
+      style={{ width: medida, aspectRatio: PROPORCION }}
     >
       <Image
         src={ARCHIVO}
         alt="Citta Cars"
         fill
-        sizes={`${ancho}px`}
+        sizes={`${servir}px`}
         priority={prioridad}
         className="object-cover"
         style={{ filter: "url(#marca-alfa)" }}

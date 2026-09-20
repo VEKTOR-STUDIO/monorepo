@@ -66,15 +66,22 @@ export default function Logo({ ancho = 132, className = "", prioridad = false })
 
 /** El cuadrado completo, tal cual lo usan en Instagram. */
 export function LogoCuadrado({ lado = 200, className = "", prioridad = false }) {
+  // `lado` admite un número de píxeles o cualquier medida CSS —la puerta le pasa
+  // un `clamp()` para que el logo encoja con el alto de la pantalla—. Al
+  // navegador le vale cualquiera de las dos; Next necesita un número para
+  // elegir qué archivo servir, y ahí va el mayor que puede llegar a medir.
+  const medida = typeof lado === "number" ? `${lado}px` : lado;
+  const servir = typeof lado === "number" ? lado : 200;
+
   return (
     <Image
       src={ARCHIVO}
       alt="Hardcore"
-      width={lado}
-      height={lado}
+      width={servir}
+      height={servir}
       priority={prioridad}
       className={`block mix-blend-screen ${className}`}
-      style={{ width: lado, height: lado }}
+      style={{ width: medida, height: medida }}
     />
   );
 }

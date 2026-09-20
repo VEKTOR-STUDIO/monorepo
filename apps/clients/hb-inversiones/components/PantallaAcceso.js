@@ -136,7 +136,7 @@ export default function PantallaAcceso({ destino = "/" }) {
   };
 
   return (
-    <main ref={raiz} className="relative min-h-svh overflow-hidden bg-base-100">
+    <main ref={raiz} className="puerta relative flex h-svh flex-col overflow-hidden bg-base-100">
       {/* ---------------- Fondo ---------------- */}
       <Diagonales variante="portada" deslizar={false} />
 
@@ -164,204 +164,230 @@ export default function PantallaAcceso({ destino = "/" }) {
       <div className="plastico absolute inset-0" aria-hidden="true" />
 
       {/* ---------------- Cinta de arriba ---------------- */}
-      <Cintillo variante="puerta" velocidad={26} className="relative z-20" />
+      <Cintillo variante="puerta" velocidad={26} className="relative z-20 shrink-0" />
 
-      {/* ---------------- Cuerpo ---------------- */}
-      <div className="relative z-10 mx-auto grid max-w-6xl gap-10 px-5 py-12 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:py-16">
-        {/* ============ Columna izquierda: la carátula ============ */}
-        <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-          <div data-puerta="marca" className="flex items-center gap-3">
-            <a
-              href="https://alessandrovaru.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="microgramma text-xs text-base-content/80 transition-colors hover:text-base-content"
-              style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
-            >
-              Alessandrovaru
-            </a>
-            <span className="h-px w-8 bg-base-content/25" aria-hidden="true" />
-            <span className="microgramma text-[0.6rem] text-base-content/45">
-              Sistemas a medida
-            </span>
-          </div>
+      {/* ---------------- Cuerpo ----------------
+          Entre las dos cintas y ni un píxel más. Lo de dentro se centra con
+          `m-auto` y no con `items-center` a propósito: si en alguna pantalla
+          rara no cupiera, se desplazaría por dentro en vez de comerse el
+          principio. La página, por fuera, no hace scroll nunca.
 
-          <div data-puerta="insignia" className="mt-7">
-            <span className="insignia-edicion px-4 py-2">
-              <span className="microgramma text-[0.65rem] text-base-content">
-                Edición completa · Acceso anticipado
-              </span>
-            </span>
-          </div>
-
-          <div data-puerta="logo" className="mt-8 flex flex-col items-center lg:items-start">
-            <p className="microgramma text-[0.6rem] text-base-content/40">Demo privada de</p>
-            <div className="mt-3 flex items-center gap-4">
-              <LogoChapa lado={78} prioridad />
-              <MarcaHB className="h-10 w-32 text-base-content" />
-            </div>
-            <h1 className="display mt-4 text-4xl sm:text-5xl">
-              HB <span className="text-primary">Inversiones</span>
-            </h1>
-          </div>
-
-          <p data-puerta="titulo" className="mt-5 max-w-md leading-relaxed text-base-content/65">
-            Tu catálogo de vehículos hecho página web, entero y funcionando: las trece
-            unidades del PDF, con su gráfica, su corte diagonal y su rojo. Entra con tu
-            contraseña y recórrela.
-          </p>
-
-          {/* Lo que trae la edición. */}
-          <div className="mt-9 w-full">
-            <p className="microgramma text-[0.6rem] text-base-content/45">
-              Incluido en esta edición
-            </p>
-
-            <ul data-puerta="dlc" className="mt-4 space-y-2">
-              {incluye.map((cosa, i) => (
-                <li key={cosa} className="linea-dlc flex items-start gap-3 px-4 py-3 text-left">
-                  <span className="microgramma shrink-0 text-[0.65rem] text-base-content/35">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="text-sm leading-snug text-base-content/80">{cosa}</span>
-                  <span className="ml-auto shrink-0 text-primary/60" aria-hidden="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
-                      <path d="m20 6-11 11-5-5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* ============ Columna derecha: la caja de acceso ============ */}
-        <div className="lg:sticky lg:top-8 lg:self-start">
-          <div
-            data-puerta="caja"
-            className="resplandor relative border border-base-content/15 bg-base-200/80 p-6 backdrop-blur-md sm:p-7"
-          >
-            {/* El sello de rebaja, pegado en la esquina. */}
-            {descuento && (
-              <div
-                data-puerta="sello"
-                className="sello-descuento absolute -right-3 -top-4 px-3 py-2 text-center sm:-right-5"
+          El `z-10` abre un contexto de apilamiento, y eso apaga el
+          `mix-blend-screen` con el que LogoCuadrado/LogoFoto se comen su
+          propio fondo negro: por eso el logotipo sale aquí dentro de un
+          cuadrado que en la cabecera no se ve. Quitarlo lo arregla —el fondo
+          va antes en el árbol, así que el cuerpo queda encima igual—, pero
+          cambia la carátula, así que se deja como estaba. */}
+      <div className="relative z-10 flex min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain">
+        <div className="m-auto grid w-full max-w-6xl gap-x-[clamp(1.5rem,4vw,3.5rem)] gap-y-[var(--puerta-v4)] px-5 py-[var(--puerta-v2)] lg:grid-cols-[1.15fr_1fr]">
+          {/* ============ Columna izquierda: la carátula ============ */}
+          <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">
+            <div data-puerta="marca" className="flex items-center gap-2 sm:gap-3">
+              <a
+                href="https://alessandrovaru.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="microgramma text-xs text-base-content/80 transition-colors hover:text-base-content"
+                style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
               >
-                <p className="cifra text-lg font-bold leading-none">−{descuento}%</p>
-                <p className="microgramma mt-0.5 text-[0.5rem] opacity-90">hoy</p>
-              </div>
-            )}
+                Alessandrovaru
+              </a>
+              <span className="h-px w-4 bg-base-content/25 sm:w-8" aria-hidden="true" />
+              <span className="microgramma whitespace-nowrap text-[0.6rem] text-base-content/45">
+                Sistemas a medida
+              </span>
+            </div>
 
-            <p className="microgramma flex items-center gap-2 text-[0.6rem] text-base-content/50">
-              <span
-                className="inline-block size-1.5 rounded-full bg-primary"
-                style={{ animation: "pulso 1.8s ease-in-out infinite" }}
-                aria-hidden="true"
-              />
-              Oferta de lanzamiento
-            </p>
-
-            <div className="mt-3 flex items-end gap-3">
-              {precioAnterior && (
-                <span className="cifra text-xl text-base-content/35 line-through">
-                  {precioAnterior}
+            {/* Repite lo que ya dice la cinta de arriba. En escritorio es un
+                adorno que cabe; en el móvil son 39 px de lo mismo. */}
+            <div data-puerta="insignia" className="mt-[var(--puerta-v3)] hidden lg:block">
+              <span className="insignia-edicion px-4 py-2">
+                <span className="microgramma text-[0.65rem] text-base-content">
+                  Edición completa · Acceso anticipado
                 </span>
-              )}
-              <span className="cifra text-5xl font-bold leading-none text-base-content">
-                {precio}
               </span>
             </div>
-            <p className="mt-2 text-xs text-base-content/45">{precioNota}</p>
 
-            <div className="mt-5">
-              <p className="microgramma text-[0.6rem] text-base-content/45">Termina en</p>
-              <Contador formato="completo" className="mt-2" />
+            <div data-puerta="logo" className="mt-[var(--puerta-v3)] flex flex-col items-center lg:items-start">
+              <p className="puerta-cortesia microgramma text-[0.6rem] text-base-content/40">Demo privada de</p>
+              <div className="mt-[var(--puerta-v1)] flex items-center gap-4">
+                <LogoChapa lado="var(--puerta-logo)" prioridad />
+                <MarcaHB className="h-10 w-32 text-base-content" />
+              </div>
+              <h1 className="display mt-[var(--puerta-v2)] text-[clamp(1.6rem,4.4vh,3rem)]">
+                HB <span className="text-primary">Inversiones</span>
+              </h1>
             </div>
 
-            {/* La llave. */}
-            <form onSubmit={enviar} className="mt-7 border-t border-base-content/12 pt-6">
-              <p className="microgramma text-[0.65rem] text-base-content/60">
-                Acceso privado · con invitación
+            <p data-puerta="titulo" className="puerta-presentacion mt-[var(--puerta-v3)] max-w-md leading-relaxed text-sm text-base-content/65">
+              Tu catálogo de vehículos hecho página web, entero y funcionando: las trece
+              unidades del PDF, con su gráfica, su corte diagonal y su rojo. Entra con tu
+              contraseña y recórrela.
+            </p>
+
+            {/* Lo que trae la edición. */}
+            <div className="puerta-incluido mt-[var(--puerta-v3)] w-full">
+              <p className="microgramma text-[0.6rem] text-base-content/45">
+                Incluido en esta edición
               </p>
 
-              {/* Campo de usuario oculto: aquí no hay usuarios, pero sin él los
-                  gestores de contraseñas no saben a qué cuenta asociar la clave
-                  y el navegador se queja. Fuera del tabulador. */}
-              <input
-                type="text"
-                name="username"
-                value="hb-inversiones-demo"
-                autoComplete="username"
-                readOnly
-                tabIndex={-1}
-                aria-hidden="true"
-                className="sr-only"
-              />
-
-              <label htmlFor="clave" className="sr-only">
-                Contraseña de acceso
-              </label>
-
-              <div className="mt-3">
-                <input
-                  ref={campo}
-                  id="clave"
-                  type="password"
-                  value={clave}
-                  onChange={(e) => {
-                    setClave(e.target.value);
-                    if (error) setError("");
-                  }}
-                  disabled={enviando || abierto}
-                  autoComplete="current-password"
-                  placeholder="Contraseña"
-                  aria-invalid={Boolean(error)}
-                  aria-describedby={error ? "error-clave" : undefined}
-                  className={`entrada text-center tracking-[0.3em] ${error ? "border-error!" : ""}`}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={enviando || abierto || !clave}
-                className="btn btn-primary mt-3 w-full"
-              >
-                {abierto ? "Pasa" : enviando ? "Comprobando…" : "Entrar a la demo"}
-              </button>
-
-              <p
-                id="error-clave"
-                role="alert"
-                className={`mt-3 text-center text-sm text-error transition-opacity ${
-                  error ? "opacity-100" : "opacity-0"
-                }`}
-              >
-                {error || " "}
-              </p>
-            </form>
+              <ul data-puerta="dlc" className="puerta-incluye mt-[var(--puerta-v2)]">
+                {incluye.map((cosa, i) => (
+                  <li key={cosa} className="linea-dlc flex items-start gap-3 px-3 py-[var(--puerta-v1)] text-left">
+                    <span className="microgramma shrink-0 text-[0.65rem] text-base-content/35">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-xs leading-snug text-base-content/80">{cosa}</span>
+                    <span className="ml-auto shrink-0 text-primary/60" aria-hidden="true">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                        <path d="m20 6-11 11-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          <p
-            data-puerta="pie"
-            className="mt-5 text-center text-xs leading-relaxed text-base-content/40"
-          >
-            Construida por{" "}
-            <a
-              href="https://alessandrovaru.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="microgramma text-base-content/70 underline-offset-4 transition-colors hover:text-base-content hover:underline"
-              style={{ fontFamily: "var(--microgramma-font)" }}
+          {/* ============ Columna derecha: la caja de acceso ============ */}
+          <div className="min-w-0 lg:self-center">
+            <div
+              data-puerta="caja"
+              className="resplandor relative border border-base-content/15 bg-base-200/80 p-[var(--puerta-v3)] backdrop-blur-md"
             >
-              Alessandrovaru
-            </a>
-            . Si llegaste sin contraseña, escríbeme y te doy acceso.
-          </p>
+              {/* El sello de rebaja, pegado en la esquina. */}
+              {descuento && (
+                <div
+                  data-puerta="sello"
+                  className="sello-descuento absolute -right-3 -top-4 px-3 py-2 text-center sm:-right-5"
+                >
+                  <p className="cifra text-lg font-bold leading-none">−{descuento}%</p>
+                  <p className="microgramma mt-0.5 text-[0.5rem] opacity-90">hoy</p>
+                </div>
+              )}
+
+              <p className="microgramma flex items-center gap-2 text-[0.6rem] text-base-content/50">
+                <span
+                  className="inline-block size-1.5 rounded-full bg-primary"
+                  style={{ animation: "pulso 1.8s ease-in-out infinite" }}
+                  aria-hidden="true"
+                />
+                Oferta de lanzamiento
+              </p>
+
+              <div className="mt-[var(--puerta-v2)] flex items-end gap-3">
+                {precioAnterior && (
+                  <span className="cifra text-xl text-base-content/35 line-through">
+                    {precioAnterior}
+                  </span>
+                )}
+                <span className="cifra text-[clamp(1.9rem,5vh,3rem)] font-bold leading-none text-base-content">
+                  {precio}
+                </span>
+              </div>
+              <p className="mt-[var(--puerta-v1)] text-xs text-base-content/45">{precioNota}</p>
+
+              <div className="mt-[var(--puerta-v2)] flex items-center justify-between gap-3 lg:block">
+                <p className="microgramma text-[0.6rem] text-base-content/45">Termina en</p>
+                {/* Las cuatro cajas son de escritorio: en el móvil se comen 48 px
+                    justo encima del formulario, así que ahí va la misma cuenta en
+                    una línea y pegada a su etiqueta. */}
+                <span className="lg:hidden">
+                  <Contador formato="compacto" className="text-sm" />
+                </span>
+                <div className="hidden lg:block">
+                  <Contador formato="completo" className="mt-[var(--puerta-v1)]" />
+                </div>
+              </div>
+
+              {/* La llave. */}
+              <form onSubmit={enviar} className="mt-[var(--puerta-v3)] border-t border-base-content/12 pt-[var(--puerta-v3)]">
+                <p className="microgramma text-[0.65rem] text-base-content/60">
+                  Acceso privado · con invitación
+                </p>
+
+                {/* Campo de usuario oculto: aquí no hay usuarios, pero sin él los
+                    gestores de contraseñas no saben a qué cuenta asociar la clave
+                    y el navegador se queja. Fuera del tabulador. */}
+                <input
+                  type="text"
+                  name="username"
+                  value="hb-inversiones-demo"
+                  autoComplete="username"
+                  readOnly
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  className="sr-only"
+                />
+
+                <label htmlFor="clave" className="sr-only">
+                  Contraseña de acceso
+                </label>
+
+                <div className="mt-[var(--puerta-v1)]">
+                  <input
+                    ref={campo}
+                    id="clave"
+                    type="password"
+                    value={clave}
+                    onChange={(e) => {
+                      setClave(e.target.value);
+                      if (error) setError("");
+                    }}
+                    disabled={enviando || abierto}
+                    autoComplete="current-password"
+                    placeholder="Contraseña"
+                    aria-invalid={Boolean(error)}
+                    aria-describedby={error ? "error-clave" : undefined}
+                    className={`entrada text-center tracking-[0.3em] ${error ? "border-error!" : ""}`}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={enviando || abierto || !clave}
+                  className="btn btn-primary mt-[var(--puerta-v1)] w-full"
+                >
+                  {abierto ? "Pasa" : enviando ? "Comprobando…" : "Entrar a la demo"}
+                </button>
+
+                <p
+                  id="error-clave"
+                  role="alert"
+                  className={`mt-[var(--puerta-v1)] text-center text-sm text-error transition-opacity ${
+                    error ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  {error || " "}
+                </p>
+              </form>
+            </div>
+
+            <p
+              data-puerta="pie"
+              className="mt-[var(--puerta-v2)] text-center text-xs leading-relaxed text-base-content/40"
+            >
+              Construida por{" "}
+              <a
+                href="https://alessandrovaru.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="microgramma text-base-content/70 underline-offset-4 transition-colors hover:text-base-content hover:underline"
+                style={{ fontFamily: "var(--microgramma-font)" }}
+              >
+                Alessandrovaru
+              </a>
+              .{" "}
+              <span className="hidden lg:inline">
+                Si llegaste sin contraseña, escríbeme y te doy acceso.
+              </span>
+            </p>
+          </div>
         </div>
       </div>
 
       {/* ---------------- Cinta de abajo, al revés ---------------- */}
-      <Cintillo variante="puertaInversa" invertido velocidad={32} className="relative z-20" />
+      <Cintillo variante="puertaInversa" invertido velocidad={32} className="relative z-20 shrink-0" />
     </main>
   );
 }

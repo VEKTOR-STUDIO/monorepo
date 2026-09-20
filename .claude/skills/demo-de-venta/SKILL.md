@@ -110,6 +110,17 @@ Lee `references/puerta.md`. Lo que no se puede improvisar:
   primero, Next puede servir la puerta cacheada a quien ya tiene cookie; sin lo
   segundo, la demo del cliente acaba en Google.
 
+Y dos cosas de forma que no son decoración:
+
+- **Cabe en una pantalla, sin scroll.** Es la única pantalla que se ve seguro;
+  lo que quede bajo el pliegue no lo lee nadie. El armazón (`h-svh`, columna
+  flex, cintas `shrink-0`, `m-auto`), el ritmo vertical en `vh` y el orden en
+  que se caen las piezas cuando no caben están en `references/puerta.md`.
+- **Se mide, no se mira.** El ojo no distingue "cabe" de "se pasa 40 px y el
+  botón queda debajo de la cinta". El método que funciona —Chromium de la
+  caché de Playwright, `prefers-reduced-motion` emulado y cuatro tamaños— está
+  en `references/trampas.md`.
+
 Y lo que cambió de raíz: **la puerta no es un login, es el escaparate.** Quien
 recibe el enlace puede no pasar de ahí —no tiene la clave a mano, la pierde,
 mira desde el móvil—, así que es la única pantalla que se ve seguro. Además del
@@ -229,9 +240,15 @@ Mira la página entera, de arriba abajo, no solo el primer pantallazo. Los
 fallos de esta capa suelen ser secciones que no aparecen, y esas no dan error
 en consola.
 
+Y la puerta, además, se mide: en 390×844, 360×800, 360×640 y 1440×800, con
+`scrollHeight - clientHeight` a cero en los cuatro. Cómo montar el navegador
+que hace falta, en `references/trampas.md`.
+
 ## Trampas
 
-`references/trampas.md` tiene seis que ya costaron caro en este monorepo:
-secciones que se quedan invisibles para siempre, tildes que desaparecen,
-logos que dejan de fundirse, builds que se caen por una API externa. Léelo
-antes de dar el trabajo por terminado; todas fallan en silencio.
+`references/trampas.md` tiene ocho que ya costaron caro en este monorepo:
+secciones que se quedan invisibles para siempre, tildes que desaparecen, logos
+que dejan de fundirse, builds que se caen por una API externa, una columna de
+grid que se estira a 1616 px en un móvil de 390, y un pie que el layout raíz
+cuelga debajo de tu pantalla completa. Léelo antes de dar el trabajo por
+terminado; todas fallan en silencio.
