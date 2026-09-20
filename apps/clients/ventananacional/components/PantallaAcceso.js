@@ -165,6 +165,10 @@ export default function PantallaAcceso({ destino = "/" }) {
         }}
       />
 
+      {/* El plástico, lo último del fondo: arruga por igual el halo y las capas
+          de abajo, como si la portada entera viniera envuelta. */}
+      <div className="plastico absolute inset-0" aria-hidden="true" />
+
       {/* ---------------- Cinta de arriba ---------------- */}
       <Cintillo variante="puerta" velocidad={26} className="relative z-20" />
 
