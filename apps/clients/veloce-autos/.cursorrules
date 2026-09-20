@@ -1,0 +1,40 @@
+# HB Inversiones — reglas del proyecto
+
+Catálogo web de HB Inversiones C.A. (@hb_inversiones_12), concesionario de
+Barquisimeto que importa 0 km y vende usados. Léete el README antes de tocar
+nada: explica de dónde sale cada decisión de diseño.
+
+## Pila
+- Next.js 15 (App Router) + React 19, Turbopack en dev
+- Tailwind CSS 4 (configurado en CSS, sin tailwind.config) + daisyUI 5
+- GSAP 3 (ScrollTrigger y SplitText)
+- **Sin base de datos.** El catálogo es `data/vehiculos.json`. No hay Supabase,
+  no hay Stripe, no hay cuentas de usuario. Si algo pide una, está mal.
+
+## Cómo se escribe aquí
+- **Todo en español**: nombres de componentes, funciones, variables, props y
+  comentarios. `leerVehiculos`, no `getVehicles`.
+- Los comentarios explican **por qué**, no qué. Si un comentario se limita a
+  repetir el código, sobra.
+- Nada de `any`, nada de abstracciones a futuro: se escribe lo que hace falta
+  hoy.
+
+## Lo que no se toca sin pensarlo
+- **El candado de la demo vive en el servidor** (`middleware.js`, las rutas de
+  API). Bloquear algo solo en pantalla no es bloquearlo.
+- **La contraseña no puede entrar en `config.js`**: ese archivo lo importan
+  componentes de cliente y acabaría en el bundle. Va en `libs/acceso.js`.
+- **GSAP: `fromTo`, nunca `from`** para lo que entra en escena. El CSS deja
+  `[data-anima]` en `opacity: 0` y `from` animaría de 0 a 0.
+- **Las fotos son páginas del catálogo del cliente**: se enseñan enteras y no
+  se les superpone nada.
+- El ángulo de la marca es `--angulo-hb` (−18°). Se usa esa variable, no un
+  número suelto.
+
+## Comprobar antes de dar algo por hecho
+```bash
+npx next build && npx next lint
+NEXT_PUBLIC_DEMO=false npm run dev   # ¿sigue siendo el sistema entero?
+```
+Y mirar la pantalla entera, de arriba abajo: los fallos de esta capa son
+secciones que no aparecen, y esas no dan error en consola.
