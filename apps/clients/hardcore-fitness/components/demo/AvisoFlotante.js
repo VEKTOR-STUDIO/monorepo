@@ -19,8 +19,9 @@ export default function AvisoFlotante() {
   const [cerrado, setCerrado] = useState(true); // hasta saber, no se enseña
   const ruta = usePathname();
 
-  // El panel ya lleva su propio aviso arriba; dos a la vez cansan.
-  const fuera = ruta?.startsWith("/admin");
+  // El panel ya lleva su propio aviso arriba, y en la puerta todavía no hay a
+  // quién venderle nada.
+  const fuera = ruta?.startsWith("/admin") || ruta === "/entrar";
 
   useEffect(() => {
     try {

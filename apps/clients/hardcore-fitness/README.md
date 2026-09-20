@@ -20,6 +20,7 @@ daisyUI 5 · Supabase.
 | Tienda, filtros, ficha, carrito, checkout | ✅ listo |
 | Panel de administración e importador de PDF | ✅ listo, **necesita Supabase para guardar** |
 | Modo demo (muro, precio, bloqueos) | ✅ activo por defecto |
+| Puerta con contraseña antes de entrar | ✅ activa, **cambia la contraseña** |
 | Pedidos guardados | ⏳ **necesita Supabase** |
 | Tasa del BCV del día | ✅ listo, sin configurar nada |
 | Login con Google | ⏳ **lo configuras tú en Supabase** |
@@ -29,9 +30,9 @@ Sin Supabase la tienda **funciona igual**: lee el catálogo de
 `data/catalogo.json` y la tasa del BCV de una API pública. Lo único que falta es
 guardar los pedidos.
 
-> **Ahora mismo está en modo demo.** Ver [Modo demo](#modo-demo) más abajo: el
-> catálogo se corta, los pedidos no se envían y el panel no escribe. Se apaga
-> con `NEXT_PUBLIC_DEMO=false`.
+> **Ahora mismo está en modo demo y con contraseña.** Ver [Modo demo](#modo-demo):
+> antes de ver nada hay que pasar la puerta, el catálogo se corta, los pedidos no
+> se envían y el panel no escribe. Todo se apaga con `NEXT_PUBLIC_DEMO=false`.
 
 ---
 
@@ -202,10 +203,41 @@ demo: {
 > los botones del sitio apuntan solos. Revisa también que `precio` sea el que
 > quieres cobrar.
 
+### La puerta
+
+Antes de la tienda hay una pantalla con el logo que pide contraseña. El logo se
+enciende, gira un anillo rojo alrededor y después aparece el campo.
+
+```bash
+DEMO_PASSWORD=loquetuquieras
+```
+
+> **PENDIENTE: cámbiala.** Si no pones nada se usa la de reserva que hay en
+> `libs/acceso.js` (`hardcore2026`). Existe para que la demo nazca cerrada:
+> si el valor por defecto fuera vacío y se olvidara la variable al desplegar,
+> la tienda quedaría abierta a cualquiera.
+
+Cómo funciona, y por qué así:
+
+- **El candado está en el middleware**, no en la pantalla. Sin la cookie
+  correcta el servidor no sirve ni una página de la tienda, así que borrar el
+  overlay con F12 no lleva a ninguna parte.
+- **La cookie no guarda la contraseña**, guarda su huella SHA-256. Es `httpOnly`,
+  así que ni un script de la propia página puede leerla, y dura 7 días.
+- **La contraseña no viaja al navegador.** Por eso vive en `libs/acceso.js`
+  (solo servidor) y no en `config.js`, que sí se empaqueta para el cliente.
+- Cada intento fallido tarda medio segundo: irrelevante para una persona,
+  incómodo para un script.
+- Al acertar, se vuelve a donde se iba: `/tienda` con la puerta delante lleva a
+  `/entrar?destino=/tienda` y de vuelta a `/tienda`.
+
+Con `NEXT_PUBLIC_DEMO=false` la puerta desaparece entera.
+
 ### Qué corta la demo
 
 | Sitio | Qué pasa |
 |---|---|
+| Antes de todo | Pantalla con el logo animado pidiendo contraseña |
 | Franja superior | "Demo · el sistema está a la venta · $490" + botón, en todas las páginas |
 | `/tienda` | 12 productos nítidos, el resto difuminado detrás de la oferta |
 | Al bajar media página | Asoma una tarjeta con el precio. Si la cierras, no vuelve en la sesión |
@@ -264,8 +296,10 @@ app/
   cuenta/                  pedidos del cliente que inició sesión
   admin/                   panel (resumen, importar, productos, pedidos, tasa)
     acciones.js            server actions; comprueban rol admin y modo demo
+  entrar/                  la puerta: logo animado y contraseña
   api/
     checkout/              crea el pedido y arma el mensaje de WhatsApp
+    entrar/                comprueba la contraseña y pone la cookie
 
 libs/
   pdf-catalog.mjs          lector del PDF (texto + imágenes, por coordenadas)
@@ -273,12 +307,25 @@ libs/
   catalogo.js              acceso a datos: Supabase y, si no, catalogo.json
   bcv.js                   tasa del BCV, pedida a una API y cacheada
   demo.js                  el modo demo: qué se corta y qué se bloquea
+  acceso.js                la puerta con contraseña (solo servidor)
   formato.js               dinero, fechas y estados
 
 data/catalogo.json         el catálogo importado
 public/productos/          las 231 fotos sacadas del PDF
 supabase/                  migración y seed
 ```
+
+### El logo
+
+`components/Logo.js`. El original es su foto de perfil de Instagram: un cuadrado
+de 638×638 con las letras arqueadas y mucho negro alrededor.
+
+- `<Logo />` recorta solo las letras (medidas: x 70→579, y 259→404) y las escala
+  al ancho que se le pida. El recorte se hace con CSS, no con un editor: si
+  mandan un logo nuevo, se cambia el archivo y como mucho cuatro números.
+- `<LogoCuadrado />` usa el cuadrado entero, en la puerta.
+- Los dos llevan `mix-blend-mode: screen`, que hace desaparecer el negro del
+  JPEG sobre cualquier fondo oscuro. No hace falta una versión con transparencia.
 
 ### Estilo
 

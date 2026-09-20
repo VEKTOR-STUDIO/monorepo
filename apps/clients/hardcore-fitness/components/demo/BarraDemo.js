@@ -1,3 +1,6 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import BotonComprar from "@/components/demo/BotonComprar";
 import { esDemo } from "@/libs/demo";
 import config from "@/config";
@@ -8,9 +11,14 @@ import config from "@/config";
  * Va pegada al borde superior y la cabecera de la tienda se coloca justo
  * debajo, desplazada por la variable --alto-barra-demo que pone el layout.
  * Si el modo demo está apagado, no existe y la cabecera vuelve a top: 0.
+ *
+ * En la pantalla de acceso no sale: a quien todavía no ha entrado no se le
+ * vende nada, primero se le deja pasar.
  */
 export default function BarraDemo() {
-  if (!esDemo()) return null;
+  const ruta = usePathname();
+
+  if (!esDemo() || ruta === "/entrar") return null;
 
   return (
     <div className="sticky top-0 z-60 h-10 border-b border-primary/25 bg-primary/12 backdrop-blur-xl">

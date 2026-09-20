@@ -114,6 +114,107 @@
       opacity: 1;
     }
   }
+
+  /* ---------------- Pantalla de acceso ---------------- */
+
+  /* El logo entra desenfocado y se enfoca, como si se encendiera un rótulo. */
+  @keyframes encender {
+    0% {
+      opacity: 0;
+      transform: scale(0.72);
+      filter: blur(16px) brightness(2.4);
+    }
+    60% {
+      opacity: 1;
+      filter: blur(0) brightness(1.5);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0) brightness(1);
+    }
+  }
+
+  /* El halo rojo que crece detrás del logo. */
+  @keyframes halo {
+    0% {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    100% {
+      opacity: 0.75;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes girar {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  /* Línea de luz que repasa el logo de arriba abajo. */
+  @keyframes barrer {
+    0% {
+      transform: translateY(-120%);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    45% {
+      opacity: 1;
+    }
+    60%,
+    100% {
+      transform: translateY(120%);
+      opacity: 0;
+    }
+  }
+
+  /* Cada pieza del formulario sube a su turno. */
+  @keyframes surgir {
+    from {
+      opacity: 0;
+      transform: translateY(0.9rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Contraseña incorrecta. */
+  @keyframes negar {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    15%,
+    75% {
+      transform: translateX(-0.45rem);
+    }
+    35%,
+    95% {
+      transform: translateX(0.45rem);
+    }
+  }
+
+  /* Al acertar, la pantalla se abre y deja paso a la tienda. */
+  @keyframes abrir-paso {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    30% {
+      transform: scale(1.03);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.12);
+      visibility: hidden;
+    }
+  }
 }
 
 html {
@@ -197,6 +298,13 @@ body {
     linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 5%, transparent) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse at 50% 0%, #000 20%, transparent 75%);
+}
+
+/* Variante centrada, para pantallas sin cabecera (la puerta de acceso).
+   Va después de .malla a propósito: las dos definen mask-image y, con la
+   misma especificidad, manda la última. */
+.malla-centro {
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 55%);
 }
 
 /* --------------------------------------------------------------------------

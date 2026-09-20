@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Logo from "@/components/Logo";
 import config from "@/config";
 import { FAMILIAS } from "@/libs/catalogo-normalizar.mjs";
 
@@ -10,7 +11,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <p className="display text-2xl">HARDCORE</p>
+            <Logo ancho={168} />
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-base-content/60">
               {business.tagline} Suplementación deportiva, equipo de entrenamiento y accesorios
               en {business.ciudad}.

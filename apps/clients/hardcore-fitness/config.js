@@ -102,6 +102,10 @@ const config = {
   demo: {
     activa: process.env.NEXT_PUBLIC_DEMO !== "false",
 
+    // La contraseña de la puerta NO está aquí: este archivo lo importan
+    // componentes del navegador y acabaría en el bundle, a la vista de
+    // cualquiera. Vive en libs/acceso.js, que solo corre en el servidor.
+
     // PENDIENTE: poner el precio real y el enlace de compra antes de enseñarla.
     precio: "$490",
     precioNota: "Pago único · instalación y catálogo cargado incluidos",

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FAMILIAS } from "@/libs/catalogo-normalizar.mjs";
+import Logo from "@/components/Logo";
 import { useCarrito } from "@/components/CarritoContext";
 import config from "@/config";
 
@@ -13,18 +14,17 @@ const ENLACES = [
   { href: "/contacto", texto: "Contacto" },
 ];
 
-function Logo({ className = "" }) {
+function Marca({ className = "" }) {
   return (
-    <Link href="/" className={`group flex items-center gap-2.5 ${className}`}>
-      <span className="relative flex size-8 items-center justify-center rounded-lg bg-primary text-primary-content">
-        <span className="display text-base leading-none">H</span>
-        <span className="absolute inset-0 rounded-lg bg-primary opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-70" />
-      </span>
-      <span className="display text-lg tracking-tight">
-        HARDCORE
-        <span className="ml-1.5 align-middle text-[0.6rem] font-medium tracking-[0.2em] text-base-content/40">
-          FIT SHOP
-        </span>
+    <Link
+      href="/"
+      aria-label="Hardcore · inicio"
+      className={`group flex items-end gap-2 ${className}`}
+    >
+      {/* El logo de verdad, recortado del cuadrado de su Instagram. */}
+      <Logo ancho={116} className="transition-transform duration-300 group-hover:scale-105" />
+      <span className="hidden pb-1 text-[0.6rem] font-medium tracking-[0.2em] text-base-content/40 sm:inline">
+        FIT SHOP
       </span>
     </Link>
   );
@@ -59,7 +59,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
-        <Logo />
+        <Marca />
 
         <nav className="ml-4 hidden items-center gap-1 lg:flex" aria-label="Principal">
           <MenuFamilias />
