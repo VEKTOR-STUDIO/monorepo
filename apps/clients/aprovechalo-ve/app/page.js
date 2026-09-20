@@ -6,6 +6,7 @@ import Silueta from "@/components/Silueta";
 import PantallaVehiculo from "@/components/PantallaVehiculo";
 import RejillaVehiculos from "@/components/RejillaVehiculos";
 import BotonContacto from "@/components/BotonContacto";
+import SeccionPanel from "@/components/SeccionPanel";
 import BloqueVenta from "@/components/demo/BloqueVenta";
 import { leerVehiculos, facetasDe, filtrar, hayMuestra } from "@/libs/vehiculos";
 import { esDemo } from "@/libs/demo";
@@ -201,6 +202,13 @@ export default function Inicio() {
         </section>
 
         {/* ------------------------------------------------------------------
+            Quién publica esto. Va justo después de "cómo comprar" a propósito:
+            primero se explica cómo se compra y enseguida por qué lo que se
+            acaba de ver está al día.
+           ---------------------------------------------------------------- */}
+        <SeccionPanel />
+
+        {/* ------------------------------------------------------------------
             La otra pata del negocio. La cuenta es, antes que nada, de
             consultoría inmobiliaria: ignorarlo sería enseñar medio negocio.
            ---------------------------------------------------------------- */}
@@ -245,8 +253,9 @@ export default function Inicio() {
             <div className="panel mx-auto max-w-3xl p-6 text-center">
               <p className="rotulo">Catálogo de muestra</p>
               <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-                Los vehículos que ves son de ejemplo, para poder enseñar cómo queda
-                la página. Al cargar las publicaciones reales de{" "}
+                Los vehículos que ves son de ejemplo y las fotos son de banco de
+                imágenes: corresponden al modelo de cada ficha, pero no son la unidad
+                en venta. Al cargar las publicaciones reales de{" "}
                 <a
                   href={config.business.instagramUrl}
                   target="_blank"

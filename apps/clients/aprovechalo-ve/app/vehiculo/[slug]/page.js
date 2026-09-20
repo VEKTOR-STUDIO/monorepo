@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FotoVehiculo, { AvisoSinFoto } from "@/components/FotoVehiculo";
+import FotoVehiculo, { AvisoSinFoto, AvisoFotoStock } from "@/components/FotoVehiculo";
 import BotonContacto from "@/components/BotonContacto";
 import Especificaciones, { EspecificacionesCompletas } from "@/components/Especificaciones";
 import RejillaVehiculos from "@/components/RejillaVehiculos";
@@ -95,6 +95,12 @@ export default async function Vehiculo({ params }) {
               {!vehiculo.fotos?.length && (
                 <div className="mt-3 flex justify-center">
                   <AvisoSinFoto />
+                </div>
+              )}
+
+              {vehiculo.fotoStock && vehiculo.fotos?.length > 0 && (
+                <div className="mt-3 flex justify-center">
+                  <AvisoFotoStock />
                 </div>
               )}
             </div>

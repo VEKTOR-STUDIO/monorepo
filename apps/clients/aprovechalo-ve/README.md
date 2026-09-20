@@ -23,7 +23,8 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
 | Precio en $ con equivalente en Bs. (tasa BCV del día) | ✅ listo, sin configurar nada |
 | Contacto y formulario | ✅ listo, **no reenvía a ningún sitio todavía** |
 | Modo demo (puerta, muro, precio, bloqueos) | ✅ activo por defecto |
-| **Vehículos reales del Instagram** | ⏳ **pendiente — hoy son de muestra** |
+| **Vehículos reales del Instagram** | ⏳ **pendiente — hoy son de muestra, con fotos de stock** |
+| Panel para publicar vehículos | ⏳ **anunciado en la portada, sin construir** |
 | Número de WhatsApp | ⏳ **pendiente** |
 | Dominio propio | ⏳ pendiente |
 
@@ -49,10 +50,20 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
 ## Cargar los vehículos reales
 
 La fuente de verdad es **`data/vehiculos.json`**. Hoy lleva 14 vehículos de
-muestra —plausibles del mercado venezolano, pero inventados— porque Instagram
-no deja leer las publicaciones de una cuenta sin iniciar sesión. Todos están
-marcados con `"muestra": true` y la portada lo dice en voz alta mientras quede
-alguno.
+muestra —inventados— porque Instagram no deja leer las publicaciones de una
+cuenta sin iniciar sesión. Todos están marcados con `"muestra": true` y la
+portada lo dice en voz alta mientras quede alguno.
+
+**Sobre las fotos.** Son de banco de imágenes (Unsplash, licencia de uso
+comercial), descargadas a `public/vehiculos/`. Cada una corresponde al modelo
+que dice su ficha —la foto del Mercedes es un Mercedes—, pero **no son la
+unidad en venta**, y por eso llevan `"fotoStock": true`, que pinta el aviso
+«Foto de referencia del modelo, no del vehículo en venta» debajo de la foto.
+
+El catálogo se escribió *a partir de* las fotos y no al revés: una búsqueda de
+stock por "camioneta" devuelve la marca que le da la gana, así que emparejar al
+revés dejaba la ficha de un Toyota con la foto de un Kia. Al cargar los
+vehículos reales, quita `fotoStock` de cada entrada y el aviso desaparece.
 
 Para sustituirlos, una entrada por publicación:
 
@@ -141,6 +152,23 @@ hay que **volver a construir**, no solo reiniciar el servidor.
 
 Con eso desaparecen la puerta, el muro, la franja, el aviso flotante y el
 bloque de precio, y el contacto empieza a funcionar de verdad.
+
+---
+
+## El panel de publicación
+
+La portada tiene una sección (`components/SeccionPanel.js`) que explica que el
+inventario lo suben ellos mismos desde un panel, con una maqueta de la interfaz
+dibujada en HTML.
+
+**Ese panel todavía no existe en este proyecto.** La sección lo describe como
+parte de lo que se entrega, que es la promesa de venta; construirlo es trabajo
+aparte y hay que contarlo en el precio. Mientras no esté, el inventario se
+actualiza editando `data/vehiculos.json` a mano.
+
+Cuando se construya, lo razonable es que escriba en ese mismo JSON o en una
+tabla de Supabase, y que `libs/vehiculos.js` sea el único archivo que haya que
+tocar para cambiar de origen.
 
 ---
 

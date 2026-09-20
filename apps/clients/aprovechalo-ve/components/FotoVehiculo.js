@@ -62,3 +62,25 @@ export function AvisoSinFoto({ className = "" }) {
     </span>
   );
 }
+
+/**
+ * "Esta foto es del modelo, no de este vehículo".
+ *
+ * Va en las fichas que todavía llevan una foto de banco de imágenes. Es una
+ * cuestión de honestidad, no de estilo: quien compra un carro tiene que saber
+ * que lo que está viendo no es la unidad que se vende. Desaparece solo en
+ * cuanto la ficha lleva fotos propias (`fotoStock` fuera del JSON).
+ */
+export function AvisoFotoStock({ className = "" }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full bg-base-content/6 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
+    >
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
+      </svg>
+      Foto de referencia del modelo, no del vehículo en venta
+    </span>
+  );
+}
