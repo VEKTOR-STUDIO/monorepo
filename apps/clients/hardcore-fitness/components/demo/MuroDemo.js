@@ -1,4 +1,5 @@
 import BotonComprar from "@/components/demo/BotonComprar";
+import Contador from "@/components/demo/Contador";
 import config from "@/config";
 
 /**
@@ -41,8 +42,22 @@ export default function MuroDemo({ ocultos, children }) {
             administrarlo y el importador que lo actualiza desde tu PDF.
           </p>
 
-          <p className="cifra mt-5 text-3xl font-bold text-primary">{config.demo.precio}</p>
+          <p className="mt-5 flex items-baseline justify-center gap-2.5">
+            {config.demo.precioAnterior && (
+              <span className="cifra text-lg text-base-content/35 line-through">
+                {config.demo.precioAnterior}
+              </span>
+            )}
+            <span className="cifra text-3xl font-bold text-primary">{config.demo.precio}</span>
+          </p>
           <p className="mt-1 text-xs text-base-content/45">{config.demo.precioNota}</p>
+
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <p className="microgramma text-[0.6rem] text-base-content/45">
+              Este precio termina en
+            </p>
+            <Contador formato="completo" />
+          </div>
 
           <BotonComprar className="btn btn-primary mt-5 w-full" />
         </div>

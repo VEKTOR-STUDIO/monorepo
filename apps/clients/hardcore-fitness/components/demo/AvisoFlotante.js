@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import BotonComprar from "@/components/demo/BotonComprar";
+import Contador from "@/components/demo/Contador";
 import config from "@/config";
 
 const LLAVE = "hardcore.demo.aviso-cerrado";
@@ -90,8 +91,19 @@ export default function AvisoFlotante() {
 
         <div className="mt-4 flex items-center justify-between gap-3">
           <div>
-            <p className="cifra text-xl font-bold text-primary">{config.demo.precio}</p>
+            <p className="flex items-baseline gap-2">
+              {config.demo.precioAnterior && (
+                <span className="cifra text-sm text-base-content/35 line-through">
+                  {config.demo.precioAnterior}
+                </span>
+              )}
+              <span className="cifra text-xl font-bold text-primary">{config.demo.precio}</span>
+            </p>
             <p className="text-[0.7rem] text-base-content/40">{config.demo.precioNota}</p>
+            <p className="mt-1 flex items-center gap-1.5">
+              <span className="microgramma text-[0.55rem] text-base-content/40">quedan</span>
+              <Contador formato="compacto" className="text-[0.7rem] text-base-content/70" />
+            </p>
           </div>
           <BotonComprar className="btn btn-primary btn-sm shrink-0" />
         </div>

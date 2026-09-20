@@ -27,6 +27,7 @@ export default function ComoComprar() {
 
   return (
     <section className="relative overflow-hidden border-y border-base-content/10 bg-base-200/30">
+      <div className="textura absolute inset-0" aria-hidden="true" />
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
         <Revelar>
           <p className="rotulo">Sin vueltas</p>

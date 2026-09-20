@@ -418,6 +418,55 @@ body {
 }
 
 /* --------------------------------------------------------------------------
+ * Microgramma
+ *
+ * La tipografía de la firma de Alessandrovaru. En la tienda no pinta nada
+ * —esa es la voz de Hardcore—, pero sí en todo lo que le habla al DUEÑO:
+ * la franja de demo, el muro, el contador de la oferta y la puerta de acceso.
+ * Así se distingue quién está hablando en cada momento.
+ * ------------------------------------------------------------------------ */
+
+.microgramma {
+  font-family: var(--microgramma-font), var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+ * Texturas
+ *
+ * Sobre negro plano, los degradados grandes dejan bandas y las secciones se
+ * ven muertas. Estas capas les dan superficie.
+ *
+ * Se usan como CAPA, en un div absoluto dentro de la sección, igual que
+ * `.malla` o `.panal`:
+ *     <div className="textura absolute inset-0" aria-hidden="true" />
+ * Nunca como pseudoelemento del contenedor: con z-index negativo acabarían
+ * por detrás del propio fondo de la sección y no se verían.
+ * ------------------------------------------------------------------------ */
+
+/* Grano fino. Lo genera el navegador (feTurbulence), no hay imagen que servir.
+   Sobre fondo oscuro tiene que ACLARAR, de ahí el `overlay`. */
+.textura {
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* Rayado diagonal muy tenue, del lenguaje de las etiquetas de suplementos.
+   Da dirección a los fondos largos sin competir con el producto. */
+.textura-rayas {
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, var(--color-base-content) 70%, transparent) 0 1px,
+    transparent 1px 9px
+  );
+}
+
+/* --------------------------------------------------------------------------
  * Cristal
  *
  * El acabado de un bote de suplementos: superficie translúcida, un filo

@@ -108,7 +108,18 @@ const config = {
 
     // PENDIENTE: poner el precio real y el enlace de compra antes de enseñarla.
     precio: "$490",
+    // El precio de antes, que saldría tachado al lado del de ahora. Se deja
+    // vacío a propósito: no hay rebaja inventada hasta que decidas cuál es.
+    precioAnterior: "",
     precioNota: "Pago único · instalación y catálogo cargado incluidos",
+
+    // Hasta cuándo vale el precio. Es una FECHA REAL, no una cuenta atrás que
+    // se reinicia en cada visita: eso último es un truco de tienda barata y
+    // quien está evaluando comprar un sistema lo detecta recargando.
+    //
+    // Cuando la fecha pasa, el contador desaparece solo. Para alargar la
+    // oferta se mueve esta fecha; muévela antes de cada demo.
+    ofertaHasta: "2026-10-15T23:59:59-04:00",
     // A dónde va el botón de comprar. Mientras esté vacío, los botones llevan
     // a /contacto en vez de a un enlace roto.
     urlCompra: "",

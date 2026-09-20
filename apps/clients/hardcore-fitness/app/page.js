@@ -58,7 +58,8 @@ export default async function Inicio() {
         <CintaMarcas marcas={facetas.marcas.slice(0, 22).map((m) => m.nombre)} />
 
         {ofertas.length > 0 && (
-          <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+          <section className="relative mx-auto max-w-7xl overflow-hidden px-4 py-20 sm:px-6">
+            <div className="textura absolute inset-0" aria-hidden="true" />
             <Revelar className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="rotulo">Precio marcado</p>
@@ -81,7 +82,8 @@ export default async function Inicio() {
 
         <ComoComprar />
 
-        <section className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6">
+        <section className="relative mx-auto max-w-7xl overflow-hidden px-4 py-20 text-center sm:px-6">
+          <div className="textura absolute inset-0" aria-hidden="true" />
           <Revelar>
             <h2 className="display text-3xl sm:text-4xl">
               ¿NO CONSIGUES

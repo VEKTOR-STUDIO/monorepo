@@ -11,7 +11,9 @@ export default function RejillaFamilias({ familias }) {
   if (!familias?.length) return null;
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+    <section className="relative mx-auto max-w-7xl overflow-hidden px-4 py-20 sm:px-6">
+      <div className="textura absolute inset-0" aria-hidden="true" />
+      <div className="textura-rayas absolute inset-0" aria-hidden="true" />
       <Revelar>
         <p className="rotulo">Qué hay</p>
         <h2 className="cromo display mt-3 text-3xl sm:text-4xl">POR CATEGORÍA</h2>

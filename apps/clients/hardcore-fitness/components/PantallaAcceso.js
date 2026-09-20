@@ -15,6 +15,12 @@ import { contexto, usarGsap } from "@/libs/animaciones";
  * antes gana en que los tres momentos —entrada, error y salida— comparten los
  * mismos elementos y se pueden encadenar o interrumpir entre sí.
  *
+ * Aquí manda la firma de Alessandrovaru y no la marca de Hardcore, y es a
+ * propósito: quien llega todavía no es cliente de Hardcore —es alguien a quien
+ * se le está enseñando un trabajo—. La marca del cliente aparece debajo, como
+ * lo que hay detrás de la puerta. En cuanto se entra, la jerarquía se invierte
+ * y la tienda entera pasa a ser suya.
+ *
  * Esto es la cara del candado; el candado de verdad está en el middleware.
  * Sin la cookie correcta el servidor no sirve ni una página de la tienda, así
  * que saltarse esta pantalla con las herramientas del navegador no lleva a
@@ -55,6 +61,7 @@ export default function PantallaAcceso({ destino = "/" }) {
             0
           )
           .from("[data-puerta='anillo']", { opacity: 0, duration: 0.8 }, 0.5)
+          .from("[data-puerta='marca']", { opacity: 0, y: -12 }, 0.8)
           .from("[data-puerta='rotulo']", { opacity: 0, y: 14 }, 1.05)
           .from("[data-puerta='titulo']", { opacity: 0, y: 16 }, 1.2)
           .from("[data-puerta='forma']", { opacity: 0, y: 16 }, 1.4)
@@ -148,6 +155,7 @@ export default function PantallaAcceso({ destino = "/" }) {
       className="relative flex min-h-[calc(100svh-var(--alto-credito))] flex-col items-center justify-center overflow-hidden px-6"
     >
       <div className="malla malla-centro absolute inset-0" aria-hidden="true" />
+      <div className="textura absolute inset-0" aria-hidden="true" />
 
       {/* Halo rojo detrás del logo */}
       <div
@@ -163,6 +171,26 @@ export default function PantallaAcceso({ destino = "/" }) {
 
       <div className="relative flex w-full max-w-sm flex-col items-center">
         {/* Logo con su anillo */}
+        {/* La firma, arriba del todo: esto lo enseña Alessandrovaru. */}
+        <div data-puerta="marca" className="mb-9 flex flex-col items-center">
+          <a
+            href="https://alessandrovaru.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="microgramma text-sm text-base-content/90 transition-colors hover:text-primary"
+            style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
+          >
+            Alessandrovaru
+          </a>
+          <span className="mt-3 h-px w-16 bg-base-content/20" aria-hidden="true" />
+          <p className="microgramma mt-3 text-[0.6rem] text-base-content/40">
+            Sistemas a medida
+          </p>
+          <p className="microgramma mt-7 text-[0.6rem] text-base-content/35">
+            Demo privada de
+          </p>
+        </div>
+
         <div data-puerta="logo" className="relative">
           <div
             data-puerta="anillo"
@@ -178,7 +206,7 @@ export default function PantallaAcceso({ destino = "/" }) {
           />
 
           <div className="relative overflow-hidden rounded-2xl">
-            <LogoCuadrado lado={232} prioridad />
+            <LogoCuadrado lado={188} prioridad />
 
             {/* Barrido de luz sobre el logo */}
             <div
@@ -193,7 +221,7 @@ export default function PantallaAcceso({ destino = "/" }) {
           </div>
         </div>
 
-        <p data-puerta="rotulo" className="rotulo mt-8">
+        <p data-puerta="rotulo" className="microgramma mt-8 text-[0.65rem] text-primary">
           Acceso privado
         </p>
 
@@ -262,8 +290,17 @@ export default function PantallaAcceso({ destino = "/" }) {
           data-puerta="pie"
           className="mt-4 text-center text-xs leading-relaxed text-base-content/35"
         >
-          Tienda de demostración. Si llegaste aquí sin contraseña, escríbenos y
-          te damos acceso.
+          Tienda de demostración construida por{" "}
+          <a
+            href="https://alessandrovaru.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="microgramma text-base-content/60 underline-offset-4 transition-colors hover:text-primary hover:underline"
+            style={{ fontFamily: "var(--microgramma-font)" }}
+          >
+            Alessandrovaru
+          </a>
+          . Si llegaste sin contraseña, escríbeme y te doy acceso.
         </p>
       </div>
     </main>
