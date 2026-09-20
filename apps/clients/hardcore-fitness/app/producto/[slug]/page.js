@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BloqueVenta from "@/components/demo/BloqueVenta";
 import Precios from "@/components/Precios";
 import { ElegirYAgregar } from "@/components/BotonAgregar";
 import FichaProducto from "@/components/FichaProducto";
@@ -214,6 +215,7 @@ export default async function Producto({ params }) {
         )}
       </main>
 
+      <BloqueVenta />
       <Footer />
     </>
   );

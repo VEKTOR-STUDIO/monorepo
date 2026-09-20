@@ -118,11 +118,25 @@
 
 html {
   scroll-behavior: smooth;
+
+  /* Alto de la franja de demo. Sin demo vale 0 y la cabecera vuelve arriba
+     del todo; con demo, la cabecera se pega justo debajo de la franja. */
+  --alto-barra-demo: 0px;
+}
+
+html[data-demo="true"] {
+  --alto-barra-demo: 2.5rem;
 }
 
 body {
   font-family: var(--font-sans);
   background-color: var(--color-base-100);
+}
+
+/* Con la franja y la cabecera pegadas arriba, un ancla no puede quedar debajo
+   de las dos. */
+:target {
+  scroll-margin-top: calc(var(--alto-barra-demo) + 5rem);
 }
 
 /* --------------------------------------------------------------------------

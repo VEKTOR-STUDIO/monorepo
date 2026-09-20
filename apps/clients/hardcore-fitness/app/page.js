@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BloqueVenta from "@/components/demo/BloqueVenta";
 import HeroTienda from "@/components/HeroTienda";
 import CintaMarcas from "@/components/CintaMarcas";
 import RejillaFamilias from "@/components/RejillaFamilias";
@@ -103,6 +104,7 @@ export default async function Inicio() {
         </section>
       </main>
 
+      <BloqueVenta />
       <Footer />
     </>
   );

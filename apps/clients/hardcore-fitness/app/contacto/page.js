@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BloqueVenta from "@/components/demo/BloqueVenta";
 import Revelar from "@/components/Revelar";
 import ComoComprar from "@/components/ComoComprar";
 import { getSEOTags } from "@/libs/seo";
@@ -149,6 +150,7 @@ export default function Contacto() {
         </section>
       </main>
 
+      <BloqueVenta />
       <Footer />
     </>
   );
@@ -168,7 +170,7 @@ const PREGUNTAS = [
   {
     titulo: "¿La tasa BCV que muestran es la de hoy?",
     respuesta:
-      "Se lee de la página del Banco Central todos los días y se ve junto a cada precio con su fecha. Al cerrar el pedido se confirma el monto exacto en bolívares.",
+      "Sí. La tienda consulta la tasa oficial del día y la muestra junto a cada precio con su fecha. Al cerrar el pedido se confirma el monto exacto en bolívares.",
   },
   {
     titulo: "¿Hacen envíos fuera de Caracas?",

@@ -1,0 +1,67 @@
+import BotonComprar from "@/components/demo/BotonComprar";
+import Revelar from "@/components/Revelar";
+import { esDemo } from "@/libs/demo";
+import config from "@/config";
+
+/**
+ * El cierre de las páginas en modo demo: qué es esto, qué incluye y cuánto
+ * cuesta. Va al final, cuando el visitante ya ha visto funcionar la tienda y
+ * sabe de qué le están hablando.
+ */
+export default function BloqueVenta() {
+  if (!esDemo()) return null;
+
+  const { precio, precioNota, incluye } = config.demo;
+
+  return (
+    <section className="relative overflow-hidden border-t border-base-content/10">
+      <div className="humo absolute inset-0" aria-hidden="true" />
+
+      <div className="relative mx-auto max-w-5xl px-4 py-20 sm:px-6">
+        <Revelar className="text-center">
+          <p className="rotulo">Lo que acabas de ver</p>
+          <h2 className="display mt-4 text-3xl sm:text-4xl">
+            ESTA TIENDA
+            <br />
+            <span className="text-primary texto-glow">PUEDE SER LA TUYA</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-lg text-base-content/60">
+            Es un sistema real funcionando, no una maqueta. Se adapta a tu marca,
+            a tus productos y a tu forma de cobrar.
+          </p>
+        </Revelar>
+
+        <Revelar retraso={100}>
+          <div className="ficha mx-auto mt-10 max-w-3xl p-7 sm:p-9">
+            <ul className="grid gap-3.5 sm:grid-cols-2">
+              {incluye.map((cosa) => (
+                <li key={cosa} className="flex gap-3 text-sm leading-snug">
+                  <span className="mt-0.5 shrink-0 text-primary" aria-hidden="true">
+                    ✓
+                  </span>
+                  <span className="text-base-content/70">{cosa}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8 flex flex-col items-center gap-4 border-t border-base-content/10 pt-7 sm:flex-row sm:justify-between">
+              <div className="text-center sm:text-left">
+                <p className="cifra text-4xl font-bold text-primary">{precio}</p>
+                <p className="mt-1 text-xs text-base-content/45">{precioNota}</p>
+              </div>
+
+              <BotonComprar className="btn btn-primary btn-lg w-full sm:w-auto" />
+            </div>
+          </div>
+        </Revelar>
+
+        <Revelar retraso={180}>
+          <p className="mx-auto mt-6 max-w-lg text-center text-xs text-base-content/35">
+            Los productos y precios que ves son el catálogo real de Hardcore, cargado
+            desde su propia lista en PDF. En tu tienda irían los tuyos.
+          </p>
+        </Revelar>
+      </div>
+    </section>
+  );
+}

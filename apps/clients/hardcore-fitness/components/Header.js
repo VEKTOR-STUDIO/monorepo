@@ -49,7 +49,10 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b transition-all duration-300 ${
+      // Se pega debajo de la franja de demo, que mide --alto-barra-demo
+      // (0 cuando no hay demo).
+      style={{ top: "var(--alto-barra-demo)" }}
+      className={`sticky z-50 border-b transition-all duration-300 ${
         encogido
           ? "border-base-content/10 bg-base-100/85 backdrop-blur-xl"
           : "border-transparent bg-base-100"

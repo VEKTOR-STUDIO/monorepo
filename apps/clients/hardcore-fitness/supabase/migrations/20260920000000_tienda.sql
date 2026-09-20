@@ -9,7 +9,6 @@
 --   perfiles        quién entra y con qué rol (cliente / admin)
 --   categorias      taxonomía de la tienda
 --   productos       el catálogo, con los tres precios del PDF
---   tasas_cambio    la tasa del BCV del día (la escribe el cron)
 --   pedidos         lo que pide el cliente antes de irse a WhatsApp
 --   pedido_items    las líneas de cada pedido
 --   importaciones   historial de cada PDF importado
@@ -118,21 +117,6 @@ create index if not exists productos_busqueda_idx on public.productos
   using gin (to_tsvector('spanish', coalesce(nombre, '') || ' ' || coalesce(marca, '')));
 
 -- -----------------------------------------------------------------------------
--- Tasa del BCV
--- -----------------------------------------------------------------------------
-create table if not exists public.tasas_cambio (
-  id           bigint generated always as identity primary key,
-  fuente       text not null default 'bcv',
-  valor        numeric(14, 6) not null check (valor > 0),
-  fecha_valor  date not null,
-  obtenida_en  timestamptz not null default now(),
-  unique (fuente, fecha_valor)
-);
-
-comment on table public.tasas_cambio is
-  'Bolívares por dólar publicados por el BCV. La escribe /api/cron/tasa-bcv una vez al día.';
-
--- -----------------------------------------------------------------------------
 -- Pedidos
 -- -----------------------------------------------------------------------------
 create table if not exists public.pedidos (
@@ -146,7 +130,9 @@ create table if not exists public.pedidos (
   entrega      text not null default 'retiro' check (entrega in ('retiro', 'delivery', 'envio')),
   direccion    text,
   nota         text,
-  -- Lo que costaba el pedido cuando se hizo, con la tasa de ese momento.
+  -- Lo que costaba el pedido cuando se hizo. La tasa se guarda aquí como
+  -- referencia histórica: la tienda la consulta en vivo a una API, así que
+  -- este es el único sitio donde queda constancia de la que se aplicó.
   subtotal     numeric(12, 2) not null default 0,
   tasa_bcv     numeric(14, 6),
   total_bs     numeric(14, 2),
@@ -198,7 +184,6 @@ create table if not exists public.importaciones (
 alter table public.perfiles      enable row level security;
 alter table public.categorias    enable row level security;
 alter table public.productos     enable row level security;
-alter table public.tasas_cambio  enable row level security;
 alter table public.pedidos       enable row level security;
 alter table public.pedido_items  enable row level security;
 alter table public.importaciones enable row level security;
@@ -212,15 +197,12 @@ drop policy if exists perfiles_editar_propio on public.perfiles;
 create policy perfiles_editar_propio on public.perfiles
   for update using (id = auth.uid()) with check (id = auth.uid() and rol = 'cliente');
 
--- Catálogo y tasa: lectura pública.
+-- Catálogo: lectura pública.
 drop policy if exists categorias_publicas on public.categorias;
 create policy categorias_publicas on public.categorias for select using (true);
 
 drop policy if exists productos_publicos on public.productos;
 create policy productos_publicos on public.productos for select using (activo or public.es_admin());
-
-drop policy if exists tasas_publicas on public.tasas_cambio;
-create policy tasas_publicas on public.tasas_cambio for select using (true);
 
 -- Catálogo: escribe el admin.
 drop policy if exists categorias_admin on public.categorias;

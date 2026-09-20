@@ -7,6 +7,10 @@ import FichaProducto from "@/components/FichaProducto";
 import { leerCatalogo, filtrar, facetasDe } from "@/libs/catalogo";
 import { getSEOTags } from "@/libs/seo";
 import { FAMILIAS } from "@/libs/catalogo-normalizar.mjs";
+import MuroDemo from "@/components/demo/MuroDemo";
+import BloqueVenta from "@/components/demo/BloqueVenta";
+import { esDemo } from "@/libs/demo";
+import config from "@/config";
 
 export const revalidate = 1800;
 
@@ -48,6 +52,12 @@ export default async function Tienda({ searchParams }) {
     FAMILIAS.find(([slug]) => slug === filtros.familia)?.[1] ||
     (filtros.soloOfertas ? "Ofertas flash" : null) ||
     (filtros.busqueda ? `Resultados para "${filtros.busqueda}"` : "Todo el catálogo");
+
+  // En demo se ven los primeros y el resto queda detrás del muro. Sin demo se
+  // ven todos y `tapados` queda vacío, así que el muro no se pinta.
+  const corte = esDemo() ? config.demo.productosVisibles : resultado.length;
+  const visibles = resultado.slice(0, corte);
+  const tapados = resultado.slice(corte);
 
   return (
     <>
@@ -95,16 +105,29 @@ export default async function Tienda({ searchParams }) {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
-                {resultado.map((producto, i) => (
-                  <FichaProducto key={producto.slug} producto={producto} prioridad={i < 4} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+                  {visibles.map((producto, i) => (
+                    <FichaProducto key={producto.slug} producto={producto} prioridad={i < 4} />
+                  ))}
+                </div>
+
+                {tapados.length > 0 && (
+                  <MuroDemo ocultos={tapados.length}>
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
+                      {tapados.slice(0, 8).map((producto) => (
+                        <FichaProducto key={producto.slug} producto={producto} />
+                      ))}
+                    </div>
+                  </MuroDemo>
+                )}
+              </>
             )}
           </div>
         </div>
       </main>
 
+      <BloqueVenta />
       <Footer />
     </>
   );

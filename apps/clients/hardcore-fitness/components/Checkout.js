@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useCarrito } from "@/components/CarritoContext";
+import AvisoBloqueado from "@/components/demo/AvisoBloqueado";
 import { enDolares, enBolivares, aBolivares } from "@/libs/formato";
+import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
 const PAGOS = Object.values(config.pagos);
@@ -14,6 +16,7 @@ const ENTREGAS = Object.values(config.entregas);
 export default function Checkout({ tasa }) {
   const router = useRouter();
   const { items, unidades, totalCon, vaciar } = useCarrito();
+  const demo = esDemo();
 
   const [metodoPago, setMetodoPago] = useState("contado");
   const [entrega, setEntrega] = useState("retiro");
@@ -43,6 +46,13 @@ export default function Checkout({ tasa }) {
   const enviar = async (evento) => {
     evento.preventDefault();
     if (enviando || items.length === 0) return;
+
+    // En demo el pedido no sale de aquí: nadie debería llegarle a Hardcore por
+    // WhatsApp desde una tienda de muestra. El servidor lo rechaza igualmente.
+    if (demo) {
+      toast("El pedido no se envía: esto es una demo.", { icon: "🔒" });
+      return;
+    }
 
     setEnviando(true);
     try {

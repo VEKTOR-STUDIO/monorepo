@@ -18,7 +18,7 @@
 import catalogoLocal from "@/data/catalogo.json";
 import { createClient } from "@/libs/supabase/server";
 import { haySupabase } from "@/libs/supabase/admin";
-import { leerTasaVigente } from "@/libs/bcv";
+import { obtenerTasa } from "@/libs/bcv";
 import { FAMILIAS, quitarAcentos } from "@/libs/catalogo-normalizar.mjs";
 
 const CAMPOS =
@@ -177,13 +177,11 @@ export async function leerRelacionados(producto, cuantos = 6) {
   return [...mismos, ...familia].slice(0, cuantos);
 }
 
-/** La tasa del BCV guardada. null si Supabase no está listo o el cron no ha corrido. */
+/**
+ * La tasa del BCV del día, pedida a la API (ver libs/bcv.js).
+ * No depende de Supabase: la tienda enseña bolívares aunque no haya base de
+ * datos. Devuelve null si ninguna fuente respondió.
+ */
 export async function leerTasa() {
-  if (!haySupabase()) return null;
-  try {
-    const supabase = await createClient();
-    return await leerTasaVigente(supabase);
-  } catch {
-    return null;
-  }
+  return obtenerTasa();
 }

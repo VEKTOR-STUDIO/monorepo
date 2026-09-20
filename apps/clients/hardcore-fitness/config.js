@@ -88,6 +88,41 @@ const config = {
     loginUrl: "/signin",
     callbackUrl: "/cuenta",
   },
+
+  // ---------------------------------------------------------------------------
+  // Modo demo
+  //
+  // Esta misma tienda se enseña a posibles clientes antes de venderla. Con el
+  // modo demo activo se ve casi todo, pero no se puede USAR: el catálogo se
+  // corta a mitad, el pedido no llega a WhatsApp y el panel no escribe nada.
+  //
+  // Se apaga con NEXT_PUBLIC_DEMO=false en el entorno, que es lo que hay que
+  // hacer el día que el sistema se entregue.
+  // ---------------------------------------------------------------------------
+  demo: {
+    activa: process.env.NEXT_PUBLIC_DEMO !== "false",
+
+    // PENDIENTE: poner el precio real y el enlace de compra antes de enseñarla.
+    precio: "$490",
+    precioNota: "Pago único · instalación y catálogo cargado incluidos",
+    // A dónde va el botón de comprar. Mientras esté vacío, los botones llevan
+    // a /contacto en vez de a un enlace roto.
+    urlCompra: "",
+    textoBoton: "Quiero el sistema",
+
+    // Cuántos productos se ven nítidos en /tienda antes del muro.
+    productosVisibles: 12,
+
+    // Lo que se lleva quien lo compre. Sale en el bloque de venta.
+    incluye: [
+      "Tienda completa con los 231 productos y sus fotos",
+      "Importador: subes el PDF de tu lista y el catálogo se actualiza solo",
+      "Panel de administración con pedidos, precios y disponibilidad",
+      "Carrito y pedidos que se cierran por WhatsApp",
+      "Tasa del BCV del día, automática, en cada precio",
+      "Diseño propio, dominio propio y código tuyo",
+    ],
+  },
 };
 
 export default config;
