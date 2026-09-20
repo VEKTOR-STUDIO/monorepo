@@ -2,7 +2,9 @@
 
 import { useActionState, useRef, useState } from "react";
 import { analizarPdf, aplicarImportacion } from "@/app/admin/acciones";
+import AvisoBloqueado from "@/components/demo/AvisoBloqueado";
 import { enDolares } from "@/libs/formato";
+import { esDemo } from "@/libs/demo";
 
 /**
  * Subir el PDF nuevo y ver qué cambia antes de tocar nada.
@@ -18,6 +20,9 @@ export default function ImportadorPdf() {
 
   const [analisis, analizar, analizando] = useActionState(analizarPdf, null);
   const [aplicado, aplicar, aplicando] = useActionState(aplicarImportacion, null);
+  // Analizar sí funciona en la demo: lee el PDF y compara, sin escribir nada.
+  // Lo que no se puede es aplicar.
+  const demo = esDemo();
 
   const resumen = analisis?.ok ? analisis.resumen : null;
 
@@ -55,6 +60,7 @@ export default function ImportadorPdf() {
           )}
         </label>
 
+        {!demo && (
         <label className="mt-4 flex items-start gap-3 text-sm">
           <input
             type="checkbox"
@@ -70,6 +76,7 @@ export default function ImportadorPdf() {
             </span>
           </span>
         </label>
+        )}
 
         <button type="submit" disabled={!archivo || analizando} className="btn btn-primary mt-5">
           {analizando ? "Leyendo el PDF…" : "Analizar"}
@@ -146,6 +153,13 @@ export default function ImportadorPdf() {
             </Lista>
           )}
 
+          {demo ? (
+            <AvisoBloqueado titulo="Hasta aquí llega la demo" className="mt-6">
+              Acabas de ver lo que de verdad importa: el PDF leído y comparado con la tienda.
+              En el sistema instalado, el siguiente botón aplica todos esos cambios al catálogo
+              de una vez.
+            </AvisoBloqueado>
+          ) : (
           <form
             action={aplicar}
             className="mt-6 flex flex-wrap items-center gap-3 border-t border-base-content/10 pt-5"
@@ -172,6 +186,7 @@ export default function ImportadorPdf() {
               Se actualizan precios, estados y productos nuevos.
             </span>
           </form>
+          )}
 
           {aplicado && !aplicado.ok && (
             <p className="mt-4 rounded-lg border border-error/40 bg-error/8 px-3.5 py-2.5 text-sm text-error">

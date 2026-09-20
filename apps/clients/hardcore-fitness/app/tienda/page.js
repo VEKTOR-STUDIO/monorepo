@@ -115,7 +115,7 @@ export default async function Tienda({ searchParams }) {
                 {tapados.length > 0 && (
                   <MuroDemo ocultos={tapados.length}>
                     <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4">
-                      {tapados.slice(0, 8).map((producto) => (
+                      {tapados.slice(0, 4).map((producto) => (
                         <FichaProducto key={producto.slug} producto={producto} />
                       ))}
                     </div>

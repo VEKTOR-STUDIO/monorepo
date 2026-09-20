@@ -11,6 +11,7 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { createClient } from "@/libs/supabase/server";
 import { createAdminClient } from "@/libs/supabase/admin";
+import { leerCatalogo } from "@/libs/catalogo";
 import { obtenerTasaConDetalle } from "@/libs/bcv";
 import { leerCatalogoPdf, extraerImagen } from "@/libs/pdf-catalog.mjs";
 import { normalizarProductos } from "@/libs/catalogo-normalizar.mjs";
@@ -22,13 +23,9 @@ import { DEV_NO_LOGIN } from "@/libs/dev-mode";
 // se avisa de cuántas quedan.
 const MAXIMO_FOTOS_POR_TANDA = 40;
 
-async function exigirAdmin() {
-  // En demo el panel se recorre entero, pero no escribe. Se corta aquí, en el
-  // servidor: una server action es un endpoint público aunque el botón que la
-  // dispara esté deshabilitado en pantalla.
-  if (esDemo()) throw new Error(MENSAJE_BLOQUEADO);
-
-  if (DEV_NO_LOGIN) return { id: null };
+/** Quién puede mirar el panel. En demo se deja mirar: es lo que se vende. */
+async function exigirLectura() {
+  if (esDemo() || DEV_NO_LOGIN) return { id: null };
 
   const supabase = await createClient();
   const {
@@ -44,6 +41,14 @@ async function exigirAdmin() {
 
   if (perfil?.rol !== "admin") throw new Error("Tu cuenta no tiene permisos de administración.");
   return user;
+}
+
+/** Quién puede cambiar algo. En demo, nadie. */
+async function exigirAdmin() {
+  // Se corta aquí, en el servidor: una server action es un endpoint público
+  // aunque el botón que la dispara esté deshabilitado en pantalla.
+  if (esDemo()) throw new Error(MENSAJE_BLOQUEADO);
+  return exigirLectura();
 }
 
 function refrescarTienda() {
@@ -86,15 +91,27 @@ async function leerPdfDeFormulario(formData) {
  */
 export async function analizarPdf(_previo, formData) {
   try {
-    await exigirAdmin();
+    // Analizar solo lee y compara, no escribe: se deja hacer también en la
+    // demo, porque es justo lo que hay que enseñar.
+    await exigirLectura();
     const { nombre, productos, paginas } = await leerPdfDeFormulario(formData);
-    const supabase = createAdminClient();
 
-    const { data: actuales } = await supabase
-      .from("productos")
-      .select("slug, nombre, precio_bcv, precio_contado, precio_pago_movil, estado, activo, imagen");
+    // Se compara contra lo que la tienda está sirviendo ahora mismo, venga de
+    // Supabase o del catálogo en JSON. Así el análisis funciona igual antes de
+    // conectar la base de datos.
+    const { productos: catalogoActual } = await leerCatalogo();
+    const actuales = catalogoActual.map((p) => ({
+      slug: p.slug,
+      nombre: p.nombre,
+      precio_bcv: p.precioBcv,
+      precio_contado: p.precioContado,
+      precio_pago_movil: p.precioPagoMovil,
+      estado: p.estado,
+      activo: true,
+      imagen: p.imagen,
+    }));
 
-    const porSlug = new Map((actuales || []).map((p) => [p.slug, p]));
+    const porSlug = new Map(actuales.map((p) => [p.slug, p]));
     const enElPdf = new Set(productos.map((p) => p.slug));
 
     const nuevos = [];
@@ -129,7 +146,7 @@ export async function analizarPdf(_previo, formData) {
       if (diferencias.length) cambios.push({ ...producto, diferencias });
     }
 
-    const desaparecidos = (actuales || []).filter((p) => p.activo && !enElPdf.has(p.slug));
+    const desaparecidos = actuales.filter((p) => !enElPdf.has(p.slug));
 
     return {
       ok: true,
@@ -145,7 +162,7 @@ export async function analizarPdf(_previo, formData) {
         desaparecidos: desaparecidos.slice(0, 50),
         totalDesaparecidos: desaparecidos.length,
         fotasPendientes: sinFoto.length + nuevos.filter((n) => n.imagenObj).length,
-        primeraVez: (actuales || []).length === 0,
+        primeraVez: actuales.length === 0,
       },
     };
   } catch (error) {
@@ -299,19 +316,32 @@ export async function aplicarImportacion(_previo, formData) {
 // Tasa
 // -----------------------------------------------------------------------------
 
+/**
+ * Vuelve a preguntar la tasa sin esperar a que caduque el caché.
+ *
+ * No guarda nada: la tasa se consulta a una API y Next la cachea una hora.
+ * Esto tira ese caché y fuerza una lectura nueva.
+ */
 export async function actualizarTasaAhora() {
   try {
     await exigirAdmin();
-    const supabase = createAdminClient();
-    const tasa = await obtenerTasaDelBcv();
-    await guardarTasa(supabase, tasa);
+
+    revalidateTag("tasa-bcv");
+    const tasa = await obtenerTasaConDetalle();
+    if (!tasa) {
+      return { ok: false, error: "Ninguna fuente respondió.", avisos: [] };
+    }
 
     refrescarTienda();
     revalidatePath("/admin/tasa");
 
-    return { ok: true, tasa: { valor: tasa.valor, fechaValor: tasa.fechaValor, fuente: tasa.fuente }, avisos: tasa.avisos };
+    return {
+      ok: true,
+      tasa: { valor: tasa.valor, fechaValor: tasa.fechaValor, fuente: tasa.fuente },
+      avisos: tasa.fallos,
+    };
   } catch (error) {
-    return { ok: false, error: error.message, avisos: error.avisos || [] };
+    return { ok: false, error: error.message, avisos: [] };
   }
 }
 

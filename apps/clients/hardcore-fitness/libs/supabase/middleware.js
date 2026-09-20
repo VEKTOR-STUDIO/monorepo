@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import { DEV_NO_LOGIN } from "@/libs/dev-mode";
+import { esDemo } from "@/libs/demo";
 
 const LANDING_ONLY = process.env.NEXT_PUBLIC_LANDING_ONLY === "true";
 
@@ -9,6 +10,23 @@ export async function updateSession(request) {
 
   // Modo local sin login (ver libs/dev-mode.js): nada de redirecciones.
   if (DEV_NO_LOGIN) {
+    return NextResponse.next({ request });
+  }
+
+  // En demo el panel se deja ver sin sesión: enseñarlo es parte de la venta.
+  // No escribe nada —acciones.js lo corta— ni consulta pedidos reales.
+  if (esDemo() && pathname.startsWith("/admin")) {
+    return NextResponse.next({ request });
+  }
+
+  // Sin Supabase no hay sesión que refrescar y createServerClient revienta.
+  // La tienda tiene que seguir en pie: el catálogo no necesita base de datos.
+  // Las rutas privadas se defienden solas (app/admin/layout.js avisa de que
+  // falta conectar Supabase), así que aquí basta con dejar pasar.
+  const hayCredenciales =
+    process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!hayCredenciales) {
     return NextResponse.next({ request });
   }
 

@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { cambiarEstadoPedido } from "@/app/admin/acciones";
 import EtiquetaEstado from "@/components/admin/EtiquetaEstado";
+import { esDemo } from "@/libs/demo";
 import { enDolares, enBolivares, fechaLarga } from "@/libs/formato";
 import config from "@/config";
 
@@ -11,6 +12,7 @@ const ESTADOS = ["nuevo", "confirmado", "entregado", "cancelado"];
 export default function FichaPedido({ pedido }) {
   const [abierto, setAbierto] = useState(false);
   const [resultado, cambiar, cambiando] = useActionState(cambiarEstadoPedido, null);
+  const demo = esDemo();
 
   const pago = config.pagos[pedido.metodo_pago];
   const entrega = config.entregas[pedido.entrega];
@@ -80,7 +82,7 @@ export default function FichaPedido({ pedido }) {
                 {pedido.nota && <Fila termino="Nota" valor={pedido.nota} />}
               </dl>
 
-              {telefono && (
+              {telefono && !demo && (
                 <a
                   href={`https://wa.me/${telefono.startsWith("58") ? telefono : `58${telefono.replace(/^0/, "")}`}?text=${encodeURIComponent(
                     `Hola ${pedido.nombre}, te escribimos de Hardcore por tu pedido ${pedido.codigo}.`
@@ -95,6 +97,12 @@ export default function FichaPedido({ pedido }) {
             </div>
           </div>
 
+          {demo ? (
+            <p className="mt-6 border-t border-base-content/10 pt-4 text-xs text-base-content/45">
+              En el sistema instalado, desde aquí se marca el pedido como confirmado, entregado
+              o cancelado.
+            </p>
+          ) : (
           <form action={cambiar} className="mt-6 flex flex-wrap items-center gap-2 border-t border-base-content/10 pt-4">
             <input type="hidden" name="codigo" value={pedido.codigo} />
             <span className="mr-1 text-xs text-base-content/45">Marcar como:</span>
@@ -115,6 +123,7 @@ export default function FichaPedido({ pedido }) {
               <span className="text-xs text-error">{resultado.error}</span>
             )}
           </form>
+          )}
         </div>
       )}
     </li>

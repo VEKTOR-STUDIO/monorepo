@@ -3,7 +3,9 @@
 import { useActionState, useState } from "react";
 import Image from "next/image";
 import { guardarProducto } from "@/app/admin/acciones";
+import AvisoBloqueado from "@/components/demo/AvisoBloqueado";
 import { enDolares } from "@/libs/formato";
+import { esDemo } from "@/libs/demo";
 
 /**
  * Una fila de la tabla de productos que se despliega para editarse.
@@ -15,6 +17,7 @@ import { enDolares } from "@/libs/formato";
 export default function EditorProducto({ producto }) {
   const [abierto, setAbierto] = useState(false);
   const [resultado, guardar, guardando] = useActionState(guardarProducto, null);
+  const demo = esDemo();
 
   return (
     <li className="border-b border-base-content/8 last:border-0">
@@ -100,15 +103,22 @@ export default function EditorProducto({ producto }) {
             <Casilla nombre="destacado" defecto={producto.destacado} texto="Destacado" />
           </div>
 
-          <div className="flex items-center gap-3">
-            <button type="submit" disabled={guardando} className="btn btn-primary btn-sm">
-              {guardando ? "Guardando…" : "Guardar"}
-            </button>
-            {resultado?.ok && <span className="text-xs text-success">{resultado.mensaje}</span>}
-            {resultado && !resultado.ok && (
-              <span className="text-xs text-error">{resultado.error}</span>
-            )}
-          </div>
+          {demo ? (
+            <AvisoBloqueado titulo="No se guarda" className="sm:col-span-2 lg:col-span-4">
+              En la demo los campos se pueden tocar para ver cómo es, pero el botón de guardar
+              no existe. El sistema instalado sí escribe el cambio en la tienda al instante.
+            </AvisoBloqueado>
+          ) : (
+            <div className="flex items-center gap-3">
+              <button type="submit" disabled={guardando} className="btn btn-primary btn-sm">
+                {guardando ? "Guardando…" : "Guardar"}
+              </button>
+              {resultado?.ok && <span className="text-xs text-success">{resultado.mensaje}</span>}
+              {resultado && !resultado.ok && (
+                <span className="text-xs text-error">{resultado.error}</span>
+              )}
+            </div>
+          )}
         </form>
       )}
     </li>

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import FichaPedido from "@/components/admin/FichaPedido";
 import { createAdminClient, haySupabase } from "@/libs/supabase/admin";
+import { leerCatalogo } from "@/libs/catalogo";
 import { enDolares } from "@/libs/formato";
+import { esDemo, pedidosDeEjemplo } from "@/libs/demo";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +18,15 @@ const ESTADOS = [
 export default async function Pedidos({ searchParams }) {
   const p = (await searchParams) || {};
   const estado = p.estado || "todos";
+
+  // En demo nunca se consulta la tabla de pedidos: se enseñan ejemplos.
+  if (esDemo()) {
+    const { productos } = await leerCatalogo();
+    const ejemplos = pedidosDeEjemplo(productos).filter(
+      (p) => estado === "todos" || p.estado === estado
+    );
+    return <Listado estado={estado} pedidos={ejemplos} esEjemplo />;
+  }
 
   if (!haySupabase()) {
     return (
@@ -50,13 +61,24 @@ export default async function Pedidos({ searchParams }) {
     );
   }
 
-  const total = (pedidos || [])
+  return <Listado estado={estado} pedidos={pedidos || []} />;
+}
+
+function Listado({ estado, pedidos, esEjemplo = false }) {
+  const total = pedidos
     .filter((x) => x.estado !== "cancelado")
     .reduce((suma, x) => suma + Number(x.subtotal || 0), 0);
 
   return (
     <div>
       <h1 className="display text-3xl">PEDIDOS</h1>
+
+      {esEjemplo && (
+        <p className="mt-4 rounded-lg border border-base-content/15 bg-base-200/50 px-4 py-2.5 text-xs text-base-content/55">
+          Pedidos de ejemplo, inventados para que se vea cómo funciona la pantalla. Los reales
+          aparecen aquí en cuanto alguien compra.
+        </p>
+      )}
 
       <div className="mt-5 flex flex-wrap gap-1.5">
         {ESTADOS.map(([id, texto]) => (
@@ -73,11 +95,11 @@ export default async function Pedidos({ searchParams }) {
       </div>
 
       <p className="cifra mt-5 text-sm text-base-content/45">
-        {(pedidos || []).length} {(pedidos || []).length === 1 ? "pedido" : "pedidos"} ·{" "}
-        {enDolares(total)} sin contar cancelados
+        {pedidos.length} {pedidos.length === 1 ? "pedido" : "pedidos"} · {enDolares(total)} sin
+        contar cancelados
       </p>
 
-      {(pedidos || []).length === 0 ? (
+      {pedidos.length === 0 ? (
         <div className="ficha mt-4 px-6 py-16 text-center">
           <p className="display text-xl text-base-content/30">NADA POR AQUÍ</p>
           <p className="mt-3 text-sm text-base-content/50">

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import EditorProducto from "@/components/admin/EditorProducto";
 import { createAdminClient, haySupabase } from "@/libs/supabase/admin";
+import { leerCatalogo } from "@/libs/catalogo";
 import { quitarAcentos } from "@/libs/catalogo-normalizar.mjs";
+import { esDemo } from "@/libs/demo";
 
 export const dynamic = "force-dynamic";
 
@@ -13,30 +15,31 @@ export default async function Productos({ searchParams }) {
   const filtro = p.filtro || "todos";
   const pagina = Math.max(1, Number(p.pagina) || 1);
 
-  if (!haySupabase()) {
-    return (
-      <Vacio
-        titulo="SIN BASE DE DATOS"
-        texto="Conecta Supabase y corre la migración para poder editar el catálogo desde aquí."
-      />
-    );
-  }
+  // En demo (o antes de conectar Supabase) la lista sale del mismo catálogo
+  // que sirve la tienda, para que la pantalla se vea llena y funcional. Lo que
+  // no se puede es guardar: eso lo corta acciones.js.
+  let data;
+  if (esDemo() || !haySupabase()) {
+    const { productos } = await leerCatalogo();
+    data = productos.map(comoFila);
+  } else {
+    const supabase = createAdminClient();
+    const { data: filas, error } = await supabase
+      .from("productos")
+      .select(
+        "slug, nombre, marca, categoria_original, estado, precio_bcv, precio_contado, precio_pago_movil, oferta_flash, destacado, activo, imagen"
+      )
+      .order("nombre");
 
-  const supabase = createAdminClient();
-  const { data, error } = await supabase
-    .from("productos")
-    .select(
-      "slug, nombre, marca, categoria_original, estado, precio_bcv, precio_contado, precio_pago_movil, oferta_flash, destacado, activo, imagen"
-    )
-    .order("nombre");
-
-  if (error || !data) {
-    return (
-      <Vacio
-        titulo="NO SE PUDO LEER EL CATÁLOGO"
-        texto="Revisa que la migración esté aplicada y que la service role key sea la correcta."
-      />
-    );
+    if (error || !filas) {
+      return (
+        <Vacio
+          titulo="NO SE PUDO LEER EL CATÁLOGO"
+          texto="Revisa que la migración esté aplicada y que la service role key sea la correcta."
+        />
+      );
+    }
+    data = filas;
   }
 
   const normalizar = (t) => quitarAcentos(String(t || "")).toLowerCase();
@@ -157,6 +160,24 @@ export default async function Productos({ searchParams }) {
       )}
     </div>
   );
+}
+
+/** El catálogo de la tienda con los nombres de columna que usa esta pantalla. */
+function comoFila(producto) {
+  return {
+    slug: producto.slug,
+    nombre: producto.nombre,
+    marca: producto.marca,
+    categoria_original: producto.categoria,
+    estado: producto.estado,
+    precio_bcv: producto.precioBcv,
+    precio_contado: producto.precioContado,
+    precio_pago_movil: producto.precioPagoMovil,
+    oferta_flash: producto.ofertaFlash,
+    destacado: Boolean(producto.destacado),
+    activo: true,
+    imagen: producto.imagen,
+  };
 }
 
 function Vacio({ titulo, texto }) {

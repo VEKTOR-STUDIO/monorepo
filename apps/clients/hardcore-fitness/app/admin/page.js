@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { createAdminClient, haySupabase } from "@/libs/supabase/admin";
-import { leerCatalogo } from "@/libs/catalogo";
-import { leerTasaVigente } from "@/libs/bcv";
-import { createClient } from "@/libs/supabase/server";
-import { enDolares, enBolivares, fechaLarga, fechaCorta } from "@/libs/formato";
+import { leerCatalogo, leerTasa } from "@/libs/catalogo";
+import { enDolares, enBolivares, fechaCorta } from "@/libs/formato";
+import { esDemo, pedidosDeEjemplo } from "@/libs/demo";
 import EtiquetaEstado from "@/components/admin/EtiquetaEstado";
 
 export const dynamic = "force-dynamic";
@@ -21,15 +20,30 @@ async function leerPanel() {
     ultimaImportacion: null,
   };
 
+  // La tasa no depende de Supabase: se consulta a una API.
+  vacio.tasa = await leerTasa();
+
+  // En demo, pedidos de mentira y ni una consulta a la tabla real: si algún
+  // día hay base de datos conectada con la demo encendida, no se escapa nada.
+  if (esDemo()) {
+    const ejemplos = pedidosDeEjemplo(productos);
+    return {
+      ...vacio,
+      pedidos: ejemplos,
+      pedidosNuevos: ejemplos.filter((p) => p.estado === "nuevo").length,
+      ventasMes: ejemplos
+        .filter((p) => p.estado !== "cancelado")
+        .reduce((suma, p) => suma + p.subtotal, 0),
+    };
+  }
+
   if (!haySupabase()) return vacio;
 
   try {
     const admin = createAdminClient();
-    const publico = await createClient();
     const inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
 
-    const [tasa, pedidos, delMes, importacion] = await Promise.all([
-      leerTasaVigente(publico),
+    const [pedidos, delMes, importacion] = await Promise.all([
       admin
         .from("pedidos")
         .select("codigo, nombre, telefono, subtotal, metodo_pago, estado, creado_en")
@@ -48,7 +62,6 @@ async function leerPanel() {
 
     return {
       ...vacio,
-      tasa,
       pedidos: pedidos.data || [],
       pedidosNuevos: (pedidos.data || []).filter((p) => p.estado === "nuevo").length,
       ventasMes: filas
@@ -73,7 +86,7 @@ export default async function Panel() {
     <div>
       <h1 className="display text-3xl">RESUMEN</h1>
 
-      {datos.origen === "json" && (
+      {datos.origen === "json" && !esDemo() && (
         <p className="mt-5 rounded-lg border border-warning/30 bg-warning/8 px-4 py-3 text-sm text-warning">
           La tienda está leyendo el catálogo del archivo <code className="cifra">data/catalogo.json</code>,
           no de Supabase. Corre la migración y carga{" "}
@@ -104,7 +117,7 @@ export default async function Panel() {
         <Tarjeta
           valor={datos.tasa ? enBolivares(datos.tasa.valor) : "—"}
           etiqueta="tasa BCV"
-          pie={datos.tasa ? `Del ${datos.tasa.fechaValor}` : "Sin registrar todavía"}
+          pie={datos.tasa ? `Del ${datos.tasa.fechaValor}` : "No se pudo consultar"}
           acento={!datos.tasa}
           href="/admin/tasa"
         />
@@ -178,7 +191,7 @@ export default async function Panel() {
                 Fecha valor {datos.tasa.fechaValor}
               </p>
               <p className="mt-0.5 text-xs text-base-content/35">
-                Leída {fechaLarga(datos.tasa.obtenidaEn)}
+                Fuente: {datos.tasa.fuente}
               </p>
               <Link href="/admin/tasa" className="btn btn-sm btn-outline mt-4 w-full">
                 Ver y actualizar

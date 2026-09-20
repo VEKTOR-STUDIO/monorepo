@@ -4,6 +4,8 @@ import { createClient } from "@/libs/supabase/server";
 import { haySupabase } from "@/libs/supabase/admin";
 import { DEV_NO_LOGIN } from "@/libs/dev-mode";
 import SignOutButton from "@/components/SignOutButton";
+import BotonComprar from "@/components/demo/BotonComprar";
+import { esDemo } from "@/libs/demo";
 
 export const dynamic = "force-dynamic";
 
@@ -23,9 +25,13 @@ const SECCIONES = [
  * cliente registrado del equipo de Hardcore.
  */
 export default async function AdminLayout({ children }) {
-  let correo = "modo local";
+  const demo = esDemo();
+  let correo = demo ? "solo lectura" : "modo local";
 
-  if (!DEV_NO_LOGIN) {
+  // En demo el panel está abierto a propósito: es la mitad de lo que se vende.
+  // Lo que no puede hacer nadie es escribir; eso se corta en acciones.js, y las
+  // pantallas no consultan pedidos reales (ver libs/demo.js).
+  if (!DEV_NO_LOGIN && !demo) {
     if (!haySupabase()) {
       return <SinSupabase />;
     }
@@ -78,7 +84,7 @@ export default async function AdminLayout({ children }) {
             <Link href="/" className="btn btn-sm btn-ghost">
               Ver tienda
             </Link>
-            {!DEV_NO_LOGIN && <SignOutButton />}
+            {!DEV_NO_LOGIN && !demo && <SignOutButton />}
           </div>
         </div>
 
@@ -95,7 +101,22 @@ export default async function AdminLayout({ children }) {
         </nav>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+        {demo && (
+          <div className="mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-primary/35 bg-primary/8 px-5 py-4">
+            <div className="min-w-0 flex-1">
+              <p className="rotulo">Panel en modo demo</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-base-content/70">
+                Puedes recorrerlo entero, pero no guarda nada. Los pedidos que ves son de
+                ejemplo; los reales solo aparecen en el sistema instalado.
+              </p>
+            </div>
+            <BotonComprar className="btn btn-primary btn-sm shrink-0" />
+          </div>
+        )}
+
+        {children}
+      </main>
     </div>
   );
 }

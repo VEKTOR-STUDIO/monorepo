@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import BotonComprar from "@/components/demo/BotonComprar";
 import config from "@/config";
 
@@ -16,6 +17,10 @@ const LLAVE = "hardcore.demo.aviso-cerrado";
 export default function AvisoFlotante() {
   const [visible, setVisible] = useState(false);
   const [cerrado, setCerrado] = useState(true); // hasta saber, no se enseña
+  const ruta = usePathname();
+
+  // El panel ya lleva su propio aviso arriba; dos a la vez cansan.
+  const fuera = ruta?.startsWith("/admin");
 
   useEffect(() => {
     try {
@@ -26,7 +31,7 @@ export default function AvisoFlotante() {
   }, []);
 
   useEffect(() => {
-    if (cerrado) return;
+    if (cerrado || fuera) return;
 
     const alScrollear = () => {
       const alto = document.documentElement.scrollHeight - window.innerHeight;
@@ -42,7 +47,7 @@ export default function AvisoFlotante() {
       window.removeEventListener("scroll", alScrollear);
       window.removeEventListener("resize", alScrollear);
     };
-  }, [cerrado]);
+  }, [cerrado, fuera]);
 
   const cerrar = () => {
     setCerrado(true);
@@ -53,7 +58,7 @@ export default function AvisoFlotante() {
     }
   };
 
-  if (cerrado) return null;
+  if (cerrado || fuera) return null;
 
   return (
     <div

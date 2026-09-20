@@ -18,15 +18,20 @@ daisyUI 5 · Supabase.
 |---|---|
 | Catálogo (231 productos, 231 fotos, del PDF de septiembre) | ✅ listo |
 | Tienda, filtros, ficha, carrito, checkout | ✅ listo |
-| Panel de administración e importador de PDF | ✅ listo, **necesita Supabase** |
+| Panel de administración e importador de PDF | ✅ listo, **necesita Supabase para guardar** |
+| Modo demo (muro, precio, bloqueos) | ✅ activo por defecto |
 | Pedidos guardados | ⏳ **necesita Supabase** |
-| Tasa del BCV automática | ⏳ **necesita Supabase + `CRON_SECRET`** |
+| Tasa del BCV del día | ✅ listo, sin configurar nada |
 | Login con Google | ⏳ **lo configuras tú en Supabase** |
 | Dominio propio | ⏳ pendiente |
 
 Sin Supabase la tienda **funciona igual**: lee el catálogo de
-`data/catalogo.json` y el checkout abre WhatsApp con el pedido, solo que no lo
-guarda.
+`data/catalogo.json` y la tasa del BCV de una API pública. Lo único que falta es
+guardar los pedidos.
+
+> **Ahora mismo está en modo demo.** Ver [Modo demo](#modo-demo) más abajo: el
+> catálogo se corta, los pedidos no se envían y el panel no escribe. Se apaga
+> con `NEXT_PUBLIC_DEMO=false`.
 
 ---
 
@@ -79,21 +84,11 @@ https://<tu-proyecto>.supabase.co/auth/v1/callback
 Y en *Authentication → URL Configuration* añade tu dominio a las *Redirect URLs*.
 El código ya está: `/signin` ofrece Google y enlace mágico por correo.
 
-### 5. El cron de la tasa BCV
+### 5. La tasa del BCV
 
-```bash
-CRON_SECRET=$(openssl rand -hex 32)
-```
-
-Ponlo en `.env.local` y en las variables de entorno de Vercel. El cron está
-declarado en `vercel.json` y corre a las **5:05 a.m. hora de Venezuela**
-(`5 9 * * *` en UTC), que es cuando el BCV ya publicó la tasa del día.
-
-> El plan Hobby de Vercel solo permite un cron diario. Con Pro puedes añadir una
-> segunda pasada por la tarde.
-
-Mientras tanto, en `/admin/tasa` hay un botón **Actualizar ahora** que hace lo
-mismo a mano.
+Nada que configurar. Se consulta a una API pública en el momento en que hace
+falta y Next guarda la respuesta una hora. Ver [De dónde sale la
+tasa](#de-dónde-sale-la-tasa).
 
 ### 6. Dominio
 
@@ -152,7 +147,7 @@ El catálogo trae tres precios por producto y la tienda los muestra los tres:
 | Precio PM | **Pago Móvil** | En Bs. a la tasa del BCV. Sin Cashea. |
 
 Los dos que se cobran en bolívares muestran también el equivalente en Bs.,
-calculado con la tasa guardada en `tasas_cambio`.
+calculado con la tasa del día.
 
 > **Supuesto a confirmar con Hardcore:** se interpretó que "Precio" (BCV) y
 > "Precio PM" se pagan en bolívares a la tasa, y que "Precio Oferta" es contado
@@ -161,12 +156,71 @@ calculado con la tasa guardada en `tasas_cambio`.
 
 ### De dónde sale la tasa
 
-`libs/bcv.js` lee la página del Banco Central (`bcv.org.ve`), que es la fuente.
-Ese sitio sirve su certificado sin el intermedio, así que la descarga tolera la
-cadena incompleta **pero comprueba a mano que el certificado sea el de
-bcv.org.ve** antes de leer nada. Si el BCV no responde, se usan espejos
-(`bcv.today`, `ve.dolarapi.com`), que van un día por detrás y quedan anotados en
-el historial.
+`libs/bcv.js` la pide a una API en el momento en que hace falta. **No hay cron ni
+tabla**: el caché de `fetch` de Next guarda la respuesta una hora y la comparte
+entre todas las visitas, así que una tienda con mil visitas hace una consulta por
+hora, no mil.
+
+Se prueban en orden `ve.dolarapi.com` y `bcv.today`, y se usa la primera que
+conteste con una cifra razonable. Si fallan las dos, la tienda no se rompe: deja
+de mostrar los bolívares y avisa de que el monto se confirma al cerrar el pedido.
+
+La tasa que se aplicó a cada pedido queda guardada **en el propio pedido**, así
+que una tasa que cambie mañana no altera lo que ya se cobró.
+
+En `/admin/tasa` se ve la vigente, de qué fuente salió, y hay un botón para
+forzar una lectura nueva sin esperar a que caduque el caché.
+
+---
+
+## Modo demo
+
+Esta misma tienda se le enseña a posibles clientes antes de venderla. Con el modo
+demo activo **se ve casi todo, pero no se puede usar**.
+
+Se apaga con una variable:
+
+```bash
+NEXT_PUBLIC_DEMO=false   # tienda real
+```
+
+Todo lo demás —precio, enlace de compra, cuántos productos se ven— está en
+`config.js`, bloque `demo`:
+
+```js
+demo: {
+  precio: "$490",
+  precioNota: "Pago único · instalación y catálogo cargado incluidos",
+  urlCompra: "",          // ← PENDIENTE: poner el enlace de compra
+  productosVisibles: 12,
+  incluye: [ ... ],       // la lista de "qué te llevas"
+}
+```
+
+> **Pendiente antes de enseñarla:** `urlCompra` está vacío, así que los botones
+> llevan a `/contacto`. Pon ahí tu enlace (web, Calendly, lo que uses) y todos
+> los botones del sitio apuntan solos. Revisa también que `precio` sea el que
+> quieres cobrar.
+
+### Qué corta la demo
+
+| Sitio | Qué pasa |
+|---|---|
+| Franja superior | "Demo · el sistema está a la venta · $490" + botón, en todas las páginas |
+| `/tienda` | 12 productos nítidos, el resto difuminado detrás de la oferta |
+| Al bajar media página | Asoma una tarjeta con el precio. Si la cierras, no vuelve en la sesión |
+| Final de portada, ficha, tienda y contacto | Bloque de venta con qué incluye y el precio |
+| `/checkout` | El botón de confirmar se cambia por un aviso. **`/api/checkout` devuelve 403**, así que tampoco se puede forzar desde fuera |
+| `/admin` | Abierto sin login a propósito: enseñarlo vende. No escribe nada |
+| Acciones del panel | Todas cortadas en el servidor, en `exigirAdmin()` |
+| `/admin/pedidos` | Tres pedidos de ejemplo, marcados como tales. **Nunca consulta la tabla real** |
+| `/admin/importar` | Analizar el PDF **sí funciona** (solo lee y compara). Aplicar, no |
+
+Lo de dejar analizar el PDF es a propósito: es lo que de verdad diferencia al
+sistema, y se puede enseñar sin riesgo porque no escribe nada.
+
+Los cortes que importan están **en el servidor**, no solo en pantalla: un botón
+deshabilitado no impide llamar al endpoint a mano.
 
 ---
 
@@ -182,6 +236,8 @@ el historial.
 **Los precios los pone el servidor, nunca el navegador.** `/api/checkout`
 ignora lo que le manden y recalcula todo contra el catálogo; también descarta
 variaciones que el producto no tiene y topa las cantidades.
+
+En modo demo los pasos 3 y 4 no ocurren: ver [Modo demo](#modo-demo).
 
 ---
 
@@ -207,16 +263,16 @@ app/
   contacto/                cómo comprar y preguntas frecuentes
   cuenta/                  pedidos del cliente que inició sesión
   admin/                   panel (resumen, importar, productos, pedidos, tasa)
-    acciones.js            server actions; todas comprueban el rol admin
+    acciones.js            server actions; comprueban rol admin y modo demo
   api/
     checkout/              crea el pedido y arma el mensaje de WhatsApp
-    cron/tasa-bcv/         lo llama Vercel una vez al día
 
 libs/
   pdf-catalog.mjs          lector del PDF (texto + imágenes, por coordenadas)
   catalogo-normalizar.mjs  taxonomía, marcas y slugs
   catalogo.js              acceso a datos: Supabase y, si no, catalogo.json
-  bcv.js                   tasa del Banco Central
+  bcv.js                   tasa del BCV, pedida a una API y cacheada
+  demo.js                  el modo demo: qué se corta y qué se bloquea
   formato.js               dinero, fechas y estados
 
 data/catalogo.json         el catálogo importado

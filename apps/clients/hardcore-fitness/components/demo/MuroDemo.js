@@ -13,8 +13,10 @@ import config from "@/config";
 export default function MuroDemo({ ocultos, children }) {
   return (
     <div className="relative mt-3">
+      {/* El alto está recortado a propósito: se asoma lo justo para que se vea
+          que la tienda sigue, sin dejar medio metro de negro debajo. */}
       <div
-        className="pointer-events-none select-none blur-[7px] saturate-50 opacity-45"
+        className="pointer-events-none max-h-104 select-none overflow-hidden blur-[7px] saturate-50 opacity-45"
         aria-hidden="true"
       >
         {children}
@@ -22,11 +24,11 @@ export default function MuroDemo({ ocultos, children }) {
 
       {/* Degradado que funde lo difuminado con el fondo de la página. */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 top-1/4 bg-linear-to-b from-transparent via-base-100/80 to-base-100"
+        className="pointer-events-none absolute inset-x-0 bottom-0 top-0 bg-linear-to-b from-transparent via-base-100/75 to-base-100"
         aria-hidden="true"
       />
 
-      <div className="absolute inset-x-0 top-16 flex justify-center px-4">
+      <div className="absolute inset-x-0 top-6 flex justify-center px-4">
         <div className="ficha w-full max-w-md p-7 text-center backdrop-blur-xl">
           <p className="rotulo">Hasta aquí llega la demo</p>
 
