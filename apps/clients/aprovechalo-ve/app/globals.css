@@ -8,49 +8,57 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Tema "hardcore" — tienda nocturna.
+ * Tema "aprovechalo".
  *
- * Negro y rojo, que son los colores de la marca, pero tratados como neón:
- * fondos casi negros con capas de humo rojo, bordes que se encienden al pasar
- * por encima y tipografía geométrica (nada de condensadas de póster).
+ * Dos referencias, cada una en su sitio:
  *
- * Para mover el rojo de marca: --color-primary aquí y config.colors.main.
+ *   · La ESTRUCTURA es de escaparate de coches moderno: fondo claro, secciones
+ *     que ocupan la pantalla entera, una sola idea por pantalla, el titular
+ *     arriba, los botones abajo y nada de bordes ni cajas que estorben.
+ *   · La GRÁFICA es de ingeniería automotriz alemana: azul técnico y rojo
+ *     sobre gris claro, titulares en mayúsculas muy apretados, cifras que se
+ *     leen como una hoja de especificaciones y franjas diagonales de acento.
+ *
+ * Nada de esto copia activos de ninguna marca: la paleta, las franjas y las
+ * siluetas de los vehículos son propias.
+ *
+ * Para mover el azul de marca: --color-primary aquí y config.colors.main.
  * ------------------------------------------------------------------------- */
 @plugin "daisyui/theme" {
-  name: "hardcore";
+  name: "aprovechalo";
   default: true;
-  color-scheme: dark;
+  color-scheme: light;
 
-  --color-base-100: oklch(13% 0.008 20);
-  --color-base-200: oklch(17% 0.012 20);
-  --color-base-300: oklch(23% 0.016 20);
-  --color-base-content: oklch(97% 0.003 20);
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(97% 0.002 250);
+  --color-base-300: oklch(93% 0.004 250);
+  --color-base-content: oklch(21% 0.012 250);
 
-  --color-primary: oklch(62% 0.245 22);
+  --color-primary: oklch(47% 0.155 253);
   --color-primary-content: oklch(99% 0 0);
 
-  --color-secondary: oklch(97% 0.003 20);
-  --color-secondary-content: oklch(13% 0.008 20);
+  --color-secondary: oklch(21% 0.012 250);
+  --color-secondary-content: oklch(99% 0 0);
 
-  --color-accent: oklch(70% 0.19 35);
-  --color-accent-content: oklch(13% 0.008 20);
+  --color-accent: oklch(56% 0.21 27);
+  --color-accent-content: oklch(99% 0 0);
 
-  --color-neutral: oklch(20% 0.012 20);
-  --color-neutral-content: oklch(97% 0.003 20);
+  --color-neutral: oklch(27% 0.012 250);
+  --color-neutral-content: oklch(97% 0.002 250);
 
-  --color-info: oklch(72% 0.14 235);
-  --color-info-content: oklch(13% 0.008 20);
-  --color-success: oklch(76% 0.18 155);
-  --color-success-content: oklch(13% 0.008 20);
-  --color-warning: oklch(80% 0.16 75);
-  --color-warning-content: oklch(13% 0.008 20);
-  --color-error: oklch(62% 0.245 22);
+  --color-info: oklch(62% 0.13 240);
+  --color-info-content: oklch(99% 0 0);
+  --color-success: oklch(62% 0.15 155);
+  --color-success-content: oklch(99% 0 0);
+  --color-warning: oklch(74% 0.16 70);
+  --color-warning-content: oklch(21% 0.012 250);
+  --color-error: oklch(56% 0.21 27);
   --color-error-content: oklch(99% 0 0);
 
-  /* Esquinas suaves: es una tienda, no un cartel de combate. */
-  --radius-selector: 0.75rem;
-  --radius-field: 0.625rem;
-  --radius-box: 1rem;
+  /* Botones de cápsula: la forma manda en toda la página. */
+  --radius-selector: 999px;
+  --radius-field: 999px;
+  --radius-box: 0.5rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -59,24 +67,23 @@
 }
 
 @theme {
-  /* Geométricas. Sora manda en los titulares, Outfit en el cuerpo y
-     JetBrains Mono en precios y códigos, que así quedan alineados. */
   --font-display: var(--font-sora), "Segoe UI", system-ui, sans-serif;
   --font-sans: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
 
-  --color-rojo: oklch(62% 0.245 22);
-  --color-humo: oklch(17% 0.012 20);
+  --color-azul: oklch(47% 0.155 253);
+  --color-azul-claro: oklch(72% 0.1 240);
+  --color-rojo: oklch(56% 0.21 27);
+  --color-asfalto: oklch(21% 0.012 250);
 
-  --animate-subir: subir 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-latido: latido 3.5s ease-in-out infinite;
+  --animate-subir: subir 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-flecha: flecha 2.2s ease-in-out infinite;
   --animate-cinta: cinta 42s linear infinite;
-  --animate-brillo: brillo 2.2s ease-in-out infinite;
 
   @keyframes subir {
     from {
       opacity: 0;
-      transform: translateY(1.25rem);
+      transform: translateY(1.5rem);
     }
     to {
       opacity: 1;
@@ -84,15 +91,16 @@
     }
   }
 
-  @keyframes latido {
+  /* La flecha de "sigue bajando" del final de cada pantalla. */
+  @keyframes flecha {
     0%,
     100% {
+      transform: translateY(0);
       opacity: 0.45;
-      transform: scale(1);
     }
     50% {
-      opacity: 0.8;
-      transform: scale(1.06);
+      transform: translateY(0.4rem);
+      opacity: 1;
     }
   }
 
@@ -105,19 +113,9 @@
     }
   }
 
-  @keyframes brillo {
-    0%,
-    100% {
-      opacity: 0.55;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-
   /* ---------------- Pantalla de acceso ---------------- */
 
-  /* El logo entra desenfocado y se enfoca, como si se encendiera un rótulo. */
+  /* El logotipo entra desenfocado y se enfoca, como un faro al encenderse. */
   @keyframes encender {
     0% {
       opacity: 0;
@@ -126,7 +124,7 @@
     }
     60% {
       opacity: 1;
-      filter: blur(0) brightness(1.5);
+      filter: blur(0) brightness(1.4);
     }
     100% {
       opacity: 1;
@@ -135,14 +133,13 @@
     }
   }
 
-  /* El halo rojo que crece detrás del logo. */
   @keyframes halo {
     0% {
       opacity: 0;
       transform: scale(0.4);
     }
     100% {
-      opacity: 0.75;
+      opacity: 0.7;
       transform: scale(1);
     }
   }
@@ -153,7 +150,7 @@
     }
   }
 
-  /* Línea de luz que repasa el logo de arriba abajo. */
+  /* Línea de luz que repasa el logotipo, como el reflejo sobre una chapa. */
   @keyframes barrer {
     0% {
       transform: translateY(-120%);
@@ -172,7 +169,6 @@
     }
   }
 
-  /* Cada pieza del formulario sube a su turno. */
   @keyframes surgir {
     from {
       opacity: 0;
@@ -184,7 +180,6 @@
     }
   }
 
-  /* Contraseña incorrecta. */
   @keyframes negar {
     0%,
     100% {
@@ -200,7 +195,6 @@
     }
   }
 
-  /* Al acertar, la pantalla se abre y deja paso a la tienda. */
   @keyframes abrir-paso {
     0% {
       opacity: 1;
@@ -224,8 +218,7 @@ html {
      del todo; con demo, la cabecera se pega justo debajo de la franja. */
   --alto-barra-demo: 0px;
 
-  /* Alto del crédito de autoría del final (components/FooterFoot.js). Lo usan
-     las pantallas que ocupan el alto completo, para no dejar un scroll tonto. */
+  /* Alto del crédito de autoría del final (components/FooterFoot.js). */
   --alto-credito: 1.9rem;
 }
 
@@ -234,8 +227,7 @@ html[data-demo="true"] {
 }
 
 /* En demo, la tarjeta flotante de venta se posa abajo. En pantalla estrecha
-   ocupa todo el ancho y taparía el crédito, así que se le da aire; a partir
-   de `sm` la tarjeta se va a la derecha y el crédito, centrado, se ve igual. */
+   ocupa todo el ancho y taparía el crédito, así que se le da aire. */
 html[data-demo="true"] .footer-foot {
   padding-bottom: 9.5rem;
 }
@@ -251,33 +243,43 @@ body {
   background-color: var(--color-base-100);
 }
 
-/* Con la franja y la cabecera pegadas arriba, un ancla no puede quedar debajo
-   de las dos. */
 :target {
   scroll-margin-top: calc(var(--alto-barra-demo) + 5rem);
 }
 
 /* --------------------------------------------------------------------------
- * Titulares
+ * Tipografía
  * ------------------------------------------------------------------------ */
 
+/* Titulares: mayúsculas, peso alto y muy apretados. Es lo que da el aire de
+   catálogo técnico y no de tienda genérica. */
 .display {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.035em;
   line-height: 0.95;
+  text-transform: uppercase;
 }
 
-/* Etiquetas pequeñas de sección: mono, espaciadas, en rojo. */
+/* Variante ligera para las pantallas grandes del escaparate, donde el titular
+   respira en vez de gritar. */
+.display-fino {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+/* Etiquetas pequeñas de sección: mono, muy espaciadas, en azul. */
 .rotulo {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-primary);
 }
 
-/* Cifras que se comparan entre sí (precios, totales). */
+/* Cifras que se comparan entre sí: precios, kilómetros, años. */
 .cifra {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
@@ -285,306 +287,204 @@ body {
 }
 
 /* --------------------------------------------------------------------------
- * Neón
+ * Pantallas
+ *
+ * Cada sección de la portada ocupa la pantalla entera y se encaja sola al
+ * soltar el scroll. `proximity` en vez de `mandatory` a propósito: con
+ * `mandatory` el scroll se siente secuestrado y en pantallas cortas atrapa.
  * ------------------------------------------------------------------------ */
 
-/* Humo rojo detrás de un bloque. El padre necesita position/overflow. */
-.humo::before {
-  content: "";
-  position: absolute;
-  inset: -20% -10% auto -10%;
-  height: 70%;
-  background: radial-gradient(
-    ellipse at 50% 0%,
-    color-mix(in oklab, var(--color-primary) 32%, transparent),
-    transparent 68%
+.escaparate {
+  scroll-snap-type: y proximity;
+}
+
+.pantalla {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+
+/* En pantallas bajas (portátiles, móviles apaisados) el encaje estorba más de
+   lo que ayuda: el contenido no cabe y se queda a medias. */
+@media (max-height: 640px) {
+  .escaparate {
+    scroll-snap-type: none;
+  }
+  .pantalla {
+    min-height: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * Gráfica de marca
+ * ------------------------------------------------------------------------ */
+
+/* Las tres franjas diagonales: azul claro, azul, rojo. Es el acento de la
+   casa —propio, no el de ninguna marca de coches— y aparece en la cabecera,
+   bajo los titulares y en el pie. */
+.banda {
+  --grosor: 0.1875rem;
+  height: var(--grosor);
+  width: 3.5rem;
+  background: linear-gradient(
+    to right,
+    var(--color-azul-claro) 0 33.33%,
+    var(--color-azul) 33.33% 66.66%,
+    var(--color-rojo) 66.66% 100%
   );
-  filter: blur(60px);
-  pointer-events: none;
-  z-index: 0;
+  transform: skewX(-22deg);
 }
 
-.texto-glow {
-  text-shadow: 0 0 28px color-mix(in oklab, var(--color-primary) 55%, transparent);
+.banda-ancha {
+  width: 100%;
+  --grosor: 0.25rem;
+  transform: none;
 }
 
-/* Rejilla técnica de fondo, muy tenue. */
+/* Fondo de estudio para las fotos: luz cenital y suelo claro, como una sala de
+   exposición. Debajo del vehículo va su sombra, en .sombra-piso. */
+.estudio {
+  background:
+    radial-gradient(
+      ellipse 70% 55% at 50% 38%,
+      oklch(100% 0 0) 0%,
+      oklch(96% 0.003 250) 45%,
+      oklch(91% 0.006 250) 100%
+    );
+}
+
+.estudio-oscuro {
+  background:
+    radial-gradient(
+      ellipse 75% 60% at 50% 42%,
+      oklch(32% 0.02 250) 0%,
+      oklch(24% 0.016 250) 48%,
+      oklch(17% 0.012 250) 100%
+    );
+}
+
+/* La sombra elíptica bajo el vehículo. Sin esto las siluetas flotan. */
+.sombra-piso {
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    oklch(21% 0.012 250 / 0.28),
+    transparent 70%
+  );
+  filter: blur(6px);
+}
+
+/* Rejilla técnica muy tenue, para los fondos que piden textura. */
 .malla {
   background-image:
-    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 5%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 5%, transparent) 1px, transparent 1px);
-  background-size: 64px 64px;
-  mask-image: radial-gradient(ellipse at 50% 0%, #000 20%, transparent 75%);
+    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 6%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
 }
 
-/* Variante centrada, para pantallas sin cabecera (la puerta de acceso).
-   Va después de .malla a propósito: las dos definen mask-image y, con la
-   misma especificidad, manda la última. */
 .malla-centro {
-  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 55%);
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
 }
 
 /* --------------------------------------------------------------------------
- * Gráfica de envase
+ * Tarjetas
  *
- * Lo que hace que un bote de MuscleTech se reconozca de lejos no es el cristal:
- * son cuatro cosas muy concretas —letras cromadas, panal de fondo, ráfagas
- * detrás del nombre y bandas diagonales— sobre negro. Aquí están las cuatro.
+ * Nada de cristal ni de sombras pesadas: una línea finísima y una sombra que
+ * solo se nota al pasar por encima. El peso visual lo tiene la foto.
  * ------------------------------------------------------------------------ */
 
-/* Letras cromadas. El degradado va sobre el texto y se recorta contra él; el
-   corte brusco en la mitad es lo que lee como metal pulido y no como un
-   degradado gris cualquiera. */
-.cromo {
-  /* Respiro arriba y abajo.
-     Hace falta porque `.display` usa line-height 0.95 y `background-clip:
-     text` solo pinta dentro de la caja del elemento: sin este hueco las
-     tildes se salen de la caja, se quedan sin degradado y desaparecen
-     ("POR CATEGORÍA" salía "POR CATEGORIA").
-     Se compensa con padding y NO con margen negativo: estas reglas van sin
-     capa y ganarían a las utilidades mt-* de Tailwind, dejando los titulares
-     pegados a lo de arriba. */
-  display: inline-block;
-  padding-top: 0.3em;
-  padding-bottom: 0.14em;
-
-  background-image: linear-gradient(
-    180deg,
-    #ffffff 0%,
-    #eef2f7 26%,
-    #aab3c0 47%,
-    #6f7885 51%,
-    #c9d2de 58%,
-    #ffffff 86%,
-    #dfe5ec 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  /* El bisel: una sombra dura pegada debajo, como el relieve de una etiqueta. */
-  filter:
-    drop-shadow(0 2px 0 rgba(0, 0, 0, 0.55))
-    drop-shadow(0 0 22px color-mix(in oklab, var(--color-base-content) 18%, transparent));
-}
-
-/* Panal de fondo. Es el patrón de la serie Cell-Tech; sustituye a la rejilla
-   cuadrada donde queremos que se note la marca. */
-.panal {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.07' stroke-width='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5z'/%3E%3Cpath d='M13.99 -15.75l13 7.5v15l-13 7.5L1 6.75v-15l12.99-7.5z'/%3E%3Cpath d='M13.99 34.25l13 7.5v15l-13 7.5L1 56.75v-15l12.99-7.5z'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 56px 98px;
-}
-
-/* Ráfaga: los rayos que salen de detrás del producto. */
-.rayos {
-  background: repeating-conic-gradient(
-    from 0deg at 50% 50%,
-    color-mix(in oklab, var(--color-primary) 26%, transparent) 0deg 3deg,
-    transparent 3deg 11deg
-  );
-  mask-image: radial-gradient(circle at 50% 50%, transparent 12%, #000 26%, transparent 62%);
-  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 12%, #000 26%, transparent 62%);
-}
-
-/* Insignia sesgada, de filo duro: nada de píldoras redondas. El contenido se
-   contra-sesga para que el texto salga recto. */
-.insignia {
-  display: inline-block;
-  transform: skewX(-12deg);
-  border-radius: 2px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 6px 16px -8px rgba(0, 0, 0, 0.9);
-}
-
-.insignia > * {
-  display: inline-block;
-  transform: skewX(12deg);
-}
-
-/* Tajo: la banda diagonal que separa secciones. */
-.tajo {
-  position: relative;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in oklab, var(--color-primary) 70%, transparent) 20%,
-    color-mix(in oklab, var(--color-base-content) 35%, transparent) 50%,
-    color-mix(in oklab, var(--color-primary) 70%, transparent) 80%,
-    transparent
-  );
-  transform: skewY(-0.6deg);
-}
-
-/* --------------------------------------------------------------------------
- * Cristal
- *
- * El acabado de un bote de suplementos: superficie translúcida, un filo
- * metálico arriba donde pega la luz y sombra profunda debajo. El desenfoque
- * de fondo necesita que haya ALGO detrás; de eso se encarga <Ambiente />, que
- * pinta manchas de color por toda la página.
- * ------------------------------------------------------------------------ */
-
-/* `.ficha` es la tarjeta de producto y `.cristal` el panel genérico: mismo
-   acabado, así que comparten declaración. */
-.cristal,
 .ficha {
   position: relative;
   isolation: isolate;
   border-radius: var(--radius-box);
-  /* Un degradado, no un color plano: el cristal tiene que verse más claro
-     arriba, como si la luz entrara por ahí. */
-  background-image: linear-gradient(
-    160deg,
-    color-mix(in oklab, var(--color-base-content) 9%, transparent),
-    color-mix(in oklab, var(--color-base-200) 62%, transparent) 42%,
-    color-mix(in oklab, var(--color-base-100) 72%, transparent)
-  );
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  box-shadow:
-    /* filo interior claro arriba, oscuro abajo: relieve */
-    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 16%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, #000 40%, transparent),
-    0 18px 40px -24px color-mix(in oklab, #000 90%, transparent);
-}
-
-/* El borde va en un ::before con máscara en vez de en `border`, porque un
-   borde normal no admite degradados: así el filo puede ir de blanco a rojo,
-   que es lo que da el aire metálico. */
-.cristal::before,
-.ficha::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, var(--color-base-content) 26%, transparent),
-    transparent 38%,
-    transparent 62%,
-    color-mix(in oklab, var(--color-primary) 22%, transparent)
-  );
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  pointer-events: none;
-  z-index: 2;
-  transition: background 0.4s ease;
-}
-
-/* Barras a todo lo ancho (cabecera, franja de demo, pie). Llevan el mismo
-   acabado pero sin esquinas redondeadas ni borde en caja: solo el filo de
-   luz arriba y la línea de sombra abajo. */
-.barra-cristal {
-  background-image: linear-gradient(
-    to bottom,
-    color-mix(in oklab, var(--color-base-100) 72%, transparent),
-    color-mix(in oklab, var(--color-base-100) 88%, transparent)
-  );
-  backdrop-filter: blur(20px) saturate(155%);
-  -webkit-backdrop-filter: blur(20px) saturate(155%);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 12%, transparent),
-    0 1px 0 color-mix(in oklab, #000 55%, transparent);
-}
-
-/* Versión más sólida, para lo que se queda pegado en pantalla y tiene que
-   dejar leer lo que lleva encima. */
-.cristal-solido {
-  background-image: linear-gradient(
-    160deg,
-    color-mix(in oklab, var(--color-base-content) 7%, transparent),
-    color-mix(in oklab, var(--color-base-100) 88%, transparent)
-  );
-  backdrop-filter: blur(22px) saturate(160%);
-  -webkit-backdrop-filter: blur(22px) saturate(160%);
-}
-
-/* --------------------------------------------------------------------------
- * Tarjetas de producto
- * ------------------------------------------------------------------------ */
-
-.ficha {
+  background-color: var(--color-base-100);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 9%, transparent);
   transition:
-    box-shadow 0.35s ease,
-    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
 }
 
 .ficha:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 24%, transparent),
-    inset 0 -1px 0 color-mix(in oklab, #000 40%, transparent),
-    0 26px 60px -26px color-mix(in oklab, var(--color-primary) 55%, transparent);
+  transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--color-primary) 35%, transparent);
+  box-shadow: 0 22px 50px -28px color-mix(in oklab, var(--color-asfalto) 65%, transparent);
 }
 
-/* Al pasar por encima, el filo se enciende en rojo. */
-.ficha:hover::before {
-  background: linear-gradient(
-    150deg,
-    color-mix(in oklab, var(--color-base-content) 38%, transparent),
-    color-mix(in oklab, var(--color-primary) 30%, transparent) 45%,
-    color-mix(in oklab, var(--color-primary) 70%, transparent)
-  );
+/* Panel claro sin interacción: avisos, bloques de datos. */
+.panel {
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 7%, transparent);
 }
 
-/* Reflejo que cruza la tarjeta al pasar por encima, como la luz sobre un
-   envase brillante. Va en un pseudoelemento y se mueve con transform, que es
-   lo único que el navegador anima sin repintar. */
-.reflejo {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
+/* Barra translúcida de la cabecera y del pie de página. */
+.barra-vidrio {
+  background-color: color-mix(in oklab, var(--color-base-100) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* --------------------------------------------------------------------------
+ * Hoja de especificaciones
+ *
+ * Los datos duros del vehículo, en fila, separados por líneas finas. Se lee de
+ * un vistazo y es lo primero que busca quien compra.
+ * ------------------------------------------------------------------------ */
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  border-radius: var(--radius-box);
   overflow: hidden;
-  pointer-events: none;
-  z-index: 3;
 }
 
-.reflejo::after {
-  content: "";
-  position: absolute;
-  top: -60%;
-  bottom: -60%;
-  left: 0;
-  width: 40%;
-  background: linear-gradient(
-    to right,
-    transparent,
-    color-mix(in oklab, var(--color-base-content) 16%, transparent),
-    transparent
-  );
-  transform: translateX(-180%) rotate(18deg);
-  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+@media (min-width: 640px) {
+  .specs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
-.ficha:hover .reflejo::after {
-  transform: translateX(380%) rotate(18deg);
+.specs > * {
+  background-color: var(--color-base-100);
+  padding: 1rem 1.15rem;
 }
 
-/* Las fotos del catálogo vienen recortadas sobre blanco y son pequeñas.
-   El cuadro es blanco puro a propósito: así el fondo del JPEG se funde con él
-   y no se ve el recuadro de la foto dentro de la tarjeta. */
-.foto-producto {
-  /* Opaco y blanco puro: es lo único que funde el fondo del JPEG con el
-     cuadro. Nada de cristal aquí, por mucho que el resto de la tarjeta lo
-     sea; el degradado se vería a través del recuadro de la foto. */
-  background: #ffffff;
-  background-image: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+/* --------------------------------------------------------------------------
+ * Botones
+ *
+ * Cápsulas anchas, en minúscula-mayúscula pequeña y muy espaciadas. El primario
+ * es sólido; el secundario, translúcido sobre la foto.
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  border: none;
 }
 
-/* Se ven mejor sin suavizado al ampliarlas: son ~90×126 px. */
-.foto-producto img {
-  image-rendering: -webkit-optimize-contrast;
+.btn-primary {
+  box-shadow: 0 12px 30px -16px color-mix(in oklab, var(--color-primary) 90%, transparent);
+}
+
+/* El botón que va encima de una foto: fondo lavado que deja ver el vehículo. */
+.btn-sobre-foto {
+  background-color: color-mix(in oklab, var(--color-base-100) 78%, transparent);
+  color: var(--color-base-content);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-sobre-foto:hover {
+  background-color: color-mix(in oklab, var(--color-base-100) 94%, transparent);
 }
 
 /* --------------------------------------------------------------------------
@@ -594,43 +494,29 @@ body {
 .entrada {
   width: 100%;
   border-radius: var(--radius-field);
-  border: 1px solid color-mix(in oklab, var(--color-base-content) 14%, transparent);
-  background-color: color-mix(in oklab, var(--color-base-200) 45%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 8%, transparent);
-  padding: 0.625rem 0.875rem;
-  font-size: 0.875rem;
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 15%, transparent);
+  background-color: var(--color-base-100);
+  padding: 0.7rem 1.1rem;
+  font-size: 0.9375rem;
   color: var(--color-base-content);
   outline: none;
   transition:
     border-color 0.2s ease,
-    background-color 0.2s ease;
+    box-shadow 0.2s ease;
 }
 
 .entrada::placeholder {
-  color: color-mix(in oklab, var(--color-base-content) 35%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 40%, transparent);
 }
 
 .entrada:focus {
-  border-color: color-mix(in oklab, var(--color-primary) 60%, transparent);
-  background-color: color-mix(in oklab, var(--color-base-200) 75%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 10%, transparent),
-    0 0 0 3px color-mix(in oklab, var(--color-primary) 14%, transparent);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 16%, transparent);
 }
 
-/* --------------------------------------------------------------------------
- * Botones
- * ------------------------------------------------------------------------ */
-
-.btn {
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-.btn-primary {
-  box-shadow: 0 10px 34px -14px color-mix(in oklab, var(--color-primary) 85%, transparent);
+/* Campo de área de texto: la cápsula no le sienta bien. */
+textarea.entrada {
+  border-radius: 0.75rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -644,7 +530,6 @@ body {
   opacity: 0;
 }
 
-/* Quien pide menos movimiento lo ve directamente, sin esperar a nada. */
 @media (prefers-reduced-motion: reduce) {
   [data-anima] {
     opacity: 1;
@@ -657,20 +542,23 @@ body {
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-base-100);
+  background: var(--color-base-200);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-base-300);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in oklab, var(--color-primary) 60%, var(--color-base-300));
+  background: color-mix(in oklab, var(--color-primary) 55%, var(--color-base-300));
 }
 
 /* Quien pide menos movimiento, no lo tiene. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .escaparate {
+    scroll-snap-type: none;
   }
   *,
   *::before,

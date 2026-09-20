@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#000000"/>
+  <rect width="32" height="32" fill="#0B5FB0"/>
   <text
     x="50%"
-    y="50%"
+    y="46%"
     dominant-baseline="central"
     text-anchor="middle"
     font-family="system-ui, sans-serif"
-    font-weight="700"
+    font-weight="800"
     font-size="19"
     fill="#FFFFFF"
-  >C</text>
+  >A</text>
+  <g>
+    <rect x="0" y="26" width="10.666666666666666" height="3" fill="#5B9BD5"/>
+    <rect x="10.666666666666666" y="26" width="10.666666666666666" height="3" fill="#FFFFFF"/>
+    <rect x="21.333333333333332" y="26" width="10.666666666666666" height="3" fill="#D0303A"/>
+  </g>
 </svg>

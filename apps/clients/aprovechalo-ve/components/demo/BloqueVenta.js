@@ -5,8 +5,8 @@ import config from "@/config";
 
 /**
  * El cierre de las páginas en modo demo: qué es esto, qué incluye y cuánto
- * cuesta. Va al final, cuando el visitante ya ha visto funcionar la tienda y
- * sabe de qué le están hablando.
+ * cuesta. Va al final, cuando el visitante ya ha recorrido la página y sabe de
+ * qué le están hablando.
  */
 export default function BloqueVenta() {
   if (!esDemo()) return null;
@@ -14,25 +14,23 @@ export default function BloqueVenta() {
   const { precio, precioNota, incluye } = config.demo;
 
   return (
-    <section className="relative overflow-hidden border-t border-base-content/10">
-      <div className="humo absolute inset-0" aria-hidden="true" />
-
+    <section className="relative overflow-hidden border-t border-base-content/10 bg-base-200">
       <div className="relative mx-auto max-w-5xl px-4 py-20 sm:px-6">
         <Revelar className="text-center">
           <p className="rotulo">Lo que acabas de ver</p>
           <h2 className="display mt-4 text-3xl sm:text-4xl">
-            ESTA TIENDA
+            Esta página
             <br />
-            <span className="text-primary texto-glow">PUEDE SER LA TUYA</span>
+            <span className="text-primary">puede ser la tuya</span>
           </h2>
           <p className="mx-auto mt-5 max-w-lg text-base-content/60">
-            Es un sistema real funcionando, no una maqueta. Se adapta a tu marca,
-            a tus productos y a tu forma de cobrar.
+            Es una página real funcionando, no una maqueta. Se adapta a tu marca,
+            a tu inventario y a tu forma de vender.
           </p>
         </Revelar>
 
         <Revelar retraso={100}>
-          <div className="ficha mx-auto mt-10 max-w-3xl p-7 sm:p-9">
+          <div className="ficha mx-auto mt-10 max-w-3xl bg-base-100 p-7 sm:p-9">
             <ul className="grid gap-3.5 sm:grid-cols-2">
               {incluye.map((cosa) => (
                 <li key={cosa} className="flex gap-3 text-sm leading-snug">
@@ -57,8 +55,8 @@ export default function BloqueVenta() {
 
         <Revelar retraso={180}>
           <p className="mx-auto mt-6 max-w-lg text-center text-xs text-base-content/35">
-            Los productos y precios que ves son el catálogo real de Hardcore, cargado
-            desde su propia lista en PDF. En tu tienda irían los tuyos.
+            Los vehículos que ves son de muestra, para poder enseñar la página. En
+            la tuya van tus publicaciones, con tus fotos y tus precios.
           </p>
         </Revelar>
       </div>

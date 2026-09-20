@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
-import config from "@/config";
 
 export default function Error({ error, reset }) {
   useEffect(() => {
@@ -11,39 +10,29 @@ export default function Error({ error, reset }) {
   }, [error]);
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
-      <div className="humo absolute inset-0" aria-hidden="true" />
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-base-200 px-6 text-center">
+      <div className="malla absolute inset-0" aria-hidden="true" />
 
       <div className="relative">
-        <h1 className="display text-3xl sm:text-4xl">
-          ALGO SE <span className="text-primary texto-glow">ROMPIÓ</span>
+        <span className="banda mx-auto" aria-hidden="true" />
+
+        <h1 className="display mt-6 text-3xl sm:text-4xl">
+          Algo se <span className="text-primary">rompió</span>
         </h1>
 
         <p className="mx-auto mt-5 max-w-sm text-base-content/60">
-          No pudimos cargar esta página. Vuelve a intentarlo; si sigue igual, escríbenos y lo
-          resolvemos por WhatsApp.
+          No pudimos cargar esta página. Vuelve a intentarlo; si sigue igual,
+          escríbenos y lo resolvemos.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <button type="button" onClick={reset} className="btn btn-primary">
             Reintentar
           </button>
-          <Link href="/" className="btn btn-outline">
-            Ir al inicio
+          <Link href="/" className="btn btn-ghost border border-base-content/15">
+            Volver al inicio
           </Link>
-          <a
-            href={`https://wa.me/${config.business.whatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-ghost"
-          >
-            WhatsApp
-          </a>
         </div>
-
-        {error?.digest && (
-          <p className="cifra mt-8 text-xs text-base-content/30">Ref. {error.digest}</p>
-        )}
       </div>
     </main>
   );

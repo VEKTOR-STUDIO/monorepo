@@ -3,8 +3,6 @@ import localFont from "next/font/local";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import FooterFoot from "@/components/FooterFoot";
-import { CarritoProvider } from "@/components/CarritoContext";
-import Ambiente from "@/components/Ambiente";
 import BarraDemo from "@/components/demo/BarraDemo";
 import AvisoFlotante from "@/components/demo/AvisoFlotante";
 import { esDemo } from "@/libs/demo";
@@ -12,7 +10,7 @@ import config from "@/config";
 import "./globals.css";
 
 // Geométricas: titulares con Sora, cuerpo con Outfit y cifras con JetBrains
-// Mono, que alinea los precios en columna.
+// Mono, que alinea precios, años y kilometrajes en columna.
 const sora = Sora({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
@@ -35,8 +33,8 @@ const jetbrains = JetBrains_Mono({
 });
 
 // Microgramma: la tipografía de la firma de Alessandrovaru. No es del tema de
-// la tienda, solo se usa en el crédito de autoría (components/FooterFoot.js),
-// igual que en RollPrep y en los demás proyectos.
+// la página, solo se usa en el crédito de autoría (components/FooterFoot.js),
+// igual que en el resto de proyectos del monorepo.
 const microgramma = localFont({
   src: "../public/fonts/microgramma.otf",
   variable: "--microgramma-font",
@@ -76,11 +74,8 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="font-sans antialiased bg-base-100 text-base-content">
-        <Ambiente />
         <BarraDemo />
-        <CarritoProvider>
-          <ClientLayout>{children}</ClientLayout>
-        </CarritoProvider>
+        <ClientLayout>{children}</ClientLayout>
         <FooterFoot />
         {demo && <AvisoFlotante />}
       </body>

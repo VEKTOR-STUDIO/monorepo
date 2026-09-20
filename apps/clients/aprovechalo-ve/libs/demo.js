@@ -1,17 +1,17 @@
 // -----------------------------------------------------------------------------
 // Modo demo.
 //
-// La tienda se enseña a posibles clientes antes de venderla. En demo se ve casi
-// todo —así se entiende qué se compra— pero no se puede usar de verdad:
+// Esta página se le enseña al dueño de @aprovechalo.ve antes de vendérsela. En
+// demo se ve casi todo —así se entiende qué se compra— pero no se puede usar
+// de verdad:
 //
-//   · el catálogo se corta al duodécimo producto y el resto queda difuminado,
-//   · el pedido no sale hacia el WhatsApp real de Hardcore,
-//   · el panel se puede recorrer pero no escribe nada,
-//   · el panel nunca consulta pedidos reales, por si algún día hay base de
-//     datos conectada con la demo todavía encendida.
+//   · antes de ver nada hay que pasar una puerta con contraseña,
+//   · el listado se corta al sexto vehículo y el resto queda difuminado,
+//   · el formulario de contacto no manda nada a ningún teléfono real,
+//   · los botones de WhatsApp no abren conversación con el negocio.
 //
 // Todo pasa por aquí para que apagarlo sea una variable de entorno y no una
-// cacería por el código.
+// cacería por el código: NEXT_PUBLIC_DEMO=false.
 // -----------------------------------------------------------------------------
 
 import config from "@/config";
@@ -36,58 +36,24 @@ export const MENSAJE_BLOQUEADO =
   "Esto es una demo: la acción está desactivada. El sistema completo sí la hace.";
 
 /**
- * Pedidos de ejemplo para que el panel no se vea vacío en la demo.
+ * El enlace para escribirle al negocio por un vehículo.
  *
- * Son inventados a propósito y se marcan como tales en la interfaz: el nombre
- * del cliente lo dice y la pantalla lleva un aviso. Los productos sí salen del
- * catálogo real, para que se vea cómo queda un pedido de verdad.
+ * En demo devuelve null y quien lo use enseña el cartel de bloqueado en vez
+ * del botón: un desconocido probando la demo no puede hacerle llegar mensajes
+ * al cliente real.
  *
- * Nunca se mezclan con datos reales: en demo el panel ni siquiera consulta la
- * tabla de pedidos.
+ * Fuera de demo, si todavía no hay número de WhatsApp configurado, cae al DM
+ * de Instagram, que es por donde hoy entra todo el mundo.
  */
-export function pedidosDeEjemplo(productos) {
-  if (!productos?.length) return [];
+export function enlaceDeWhatsapp(vehiculo) {
+  if (esDemo()) return null;
 
-  const elegir = (cuantos, desde) =>
-    productos.filter((p) => p.precioContado).slice(desde, desde + cuantos);
+  const { whatsapp, instagramUrl } = config.business;
+  if (!whatsapp) return instagramUrl;
 
-  const armar = (codigo, nombre, telefono, metodo, entrega, estado, horasAtras, elegidos) => {
-    const items = elegidos.map((producto, i) => {
-      const cantidad = i === 0 ? 2 : 1;
-      return {
-        id: `${codigo}-${i}`,
-        nombre: producto.nombre,
-        variacion: producto.variaciones?.[0] || null,
-        cantidad,
-        precio_unitario: producto.precioContado,
-        subtotal: Number((producto.precioContado * cantidad).toFixed(2)),
-      };
-    });
+  const texto = vehiculo
+    ? `Hola, me interesa el ${vehiculo.tituloLargo || vehiculo.titulo} ${vehiculo.anio}. ¿Sigue disponible?`
+    : "Hola, vi la página y quiero información sobre los vehículos.";
 
-    const subtotal = Number(items.reduce((suma, l) => suma + l.subtotal, 0).toFixed(2));
-
-    return {
-      codigo,
-      nombre,
-      telefono,
-      email: null,
-      direccion: entrega === "retiro" ? null : "Dirección de ejemplo, Caracas",
-      nota: null,
-      metodo_pago: metodo,
-      entrega,
-      subtotal,
-      tasa_bcv: null,
-      total_bs: null,
-      estado,
-      creado_en: new Date(Date.now() - horasAtras * 3600 * 1000).toISOString(),
-      pedido_items: items,
-      esEjemplo: true,
-    };
-  };
-
-  return [
-    armar("HC-0000-DEMO", "Pedido de ejemplo", "0412 000 0000", "contado", "retiro", "nuevo", 3, elegir(2, 0)),
-    armar("HC-0001-DEMO", "Pedido de ejemplo", "0414 000 0000", "pago_movil", "delivery", "confirmado", 26, elegir(2, 5)),
-    armar("HC-0002-DEMO", "Pedido de ejemplo", "0424 000 0000", "bcv", "envio", "entregado", 70, elegir(1, 12)),
-  ];
+  return `https://wa.me/${whatsapp}?text=${encodeURIComponent(texto)}`;
 }

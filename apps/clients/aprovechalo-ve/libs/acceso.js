@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // La puerta de la demo.
 //
-// La tienda de muestra no es para todo el mundo: antes de ver nada hay que
+// La página de muestra no es para todo el mundo: antes de ver nada hay que
 // escribir una contraseña. Quien acierta se lleva una cookie firmada y ya no
 // se le vuelve a pedir en una semana.
 //
@@ -9,20 +9,20 @@
 // conocer la contraseña, que es exactamente lo que queremos.
 //
 // Esto vive aparte de Supabase a propósito: es un candado para enseñar el
-// trabajo, no el sistema de cuentas de la tienda. El día que se entregue, con
+// trabajo, no el sistema de cuentas del sitio. El día que se entregue, con
 // NEXT_PUBLIC_DEMO=false el candado desaparece entero.
 // -----------------------------------------------------------------------------
 
 import { esDemo } from "@/libs/demo";
 
-export const COOKIE_ACCESO = "hc_acceso";
+export const COOKIE_ACCESO = "av_acceso";
 export const DIAS_DE_ACCESO = 7;
 
 /**
  * Contraseña de reserva, por si falta DEMO_PASSWORD en el entorno.
  *
  * Existe para que la demo nazca CERRADA: si el valor por defecto fuera vacío y
- * alguien olvidara la variable al desplegar, la tienda quedaría abierta a
+ * alguien olvidara la variable al desplegar, la página quedaría abierta a
  * cualquiera, que es justo lo que no queremos. Cámbiala por DEMO_PASSWORD
  * antes de repartir el enlace.
  *
@@ -30,7 +30,7 @@ export const DIAS_DE_ACCESO = 7;
  * /api/entrar y app/entrar/page.js, todos servidor—, así que la contraseña no
  * viaja en el bundle. Por eso no está en config.js.
  */
-const CLAVE_POR_DEFECTO = "hardcore2026";
+const CLAVE_POR_DEFECTO = "aprovechalo2026";
 
 /** La contraseña configurada. El entorno manda. */
 export function claveDeAcceso() {
@@ -49,7 +49,7 @@ export function hayCandado() {
  * que va sobre el runtime edge.
  */
 export async function huellaDe(clave) {
-  const datos = new TextEncoder().encode(`hardcore::acceso::${clave}`);
+  const datos = new TextEncoder().encode(`aprovechalo::acceso::${clave}`);
   const resumen = await crypto.subtle.digest("SHA-256", datos);
   return [...new Uint8Array(resumen)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
@@ -90,7 +90,7 @@ export function rutaLibre(pathname) {
   );
 }
 
-/** A dónde mandar a alguien después de abrir. Solo rutas de esta tienda. */
+/** A dónde mandar a alguien después de abrir. Solo rutas de este sitio. */
 export function destinoSeguro(destino) {
   if (typeof destino !== "string") return "/";
   // Sin "//" ni esquemas: si no, esto sería un redirector abierto a otro sitio.

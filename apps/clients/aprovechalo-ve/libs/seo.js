@@ -10,17 +10,17 @@ export const getSEOTags = ({
 } = {}) => {
   const defaultKeywords = [
     config.appName,
-    "suplementos deportivos Caracas",
-    "proteína whey Venezuela",
-    "creatina",
-    "pre-entreno",
-    "tienda fitness Caracas",
-    "accesorios de gimnasio",
-    "vitaminas deportivas",
+    "venta de carros Venezuela",
+    "camionetas en venta Venezuela",
+    "carros usados Caracas",
+    "motos en venta Venezuela",
+    "pick-up 4x4 Venezuela",
+    "comprar carro en dólares",
+    "consultor inmobiliario Venezuela",
   ];
 
   return {
-    title: title || `${config.appName} — Suplementación y equipo deportivo en Caracas`,
+    title: title || `${config.appName} — Venta de vehículos en Venezuela`,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,

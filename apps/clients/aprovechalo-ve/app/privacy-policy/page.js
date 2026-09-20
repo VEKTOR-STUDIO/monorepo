@@ -3,65 +3,72 @@ import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
 
 export const metadata = getSEOTags({
-  title: `Privacy Policy | ${config.appName}`,
+  title: `Política de privacidad | ${config.appName}`,
   canonicalUrlRelative: "/privacy-policy",
 });
 
-const PrivacyPolicy = () => {
+// PENDIENTE: repasar con el cliente cuando se decida a dónde llegan los
+// mensajes del formulario (hoy no se reenvían a ningún sitio).
+export default function Privacidad() {
+  const hoy = new Date().toLocaleDateString("es-VE", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
-    <main className="max-w-xl mx-auto">
-      <div className="p-5">
-        <Link href="/" className="btn btn-ghost">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="w-5 h-5"
-          >
-            <path
-              fillRule="evenodd"
-              d="M15 10a.75.75 0 01-.75.75H7.612l2.158 1.96a.75.75 0 11-1.04 1.08l-3.5-3.25a.75.75 0 010-1.08l3.5-3.25a.75.75 0 111.04 1.08L7.612 9.25h6.638A.75.75 0 0115 10z"
-              clipRule="evenodd"
-            />
-          </svg>{" "}
-          Back
-        </Link>
-        <h1 className="text-3xl font-extrabold pb-6">Política de Privacidad de {config.appName}</h1>
+    <main className="mx-auto max-w-2xl px-5 py-12">
+      <Link href="/" className="btn btn-ghost btn-sm">
+        ← Volver
+      </Link>
 
-        <pre className="leading-relaxed whitespace-pre-wrap" style={{ fontFamily: "sans-serif" }}>
-          {`Última actualización: ${new Date().toLocaleDateString("es-MX", { year: "numeric", month: "long", day: "numeric" })}
+      <h1 className="display mt-8 text-3xl">Política de privacidad</h1>
+      <p className="mt-2 text-sm text-base-content/50">Última actualización: {hoy}</p>
 
-Plantilla deportiva. ${config.appName} (${config.domainName}) — texto de reemplazo.
+      <div className="mt-10 space-y-8 leading-relaxed text-base-content/75">
+        <section>
+          <h2 className="display text-lg text-base-content">Qué datos recogemos</h2>
+          <p className="mt-3">
+            Solo los que escribes tú en el formulario de contacto: nombre,
+            teléfono y el mensaje. No hay cuentas, no hay registro y no se pide
+            ningún dato más.
+          </p>
+        </section>
 
-1. Datos que podemos recopilar
+        <section>
+          <h2 className="display text-lg text-base-content">Para qué los usamos</h2>
+          <p className="mt-3">
+            Únicamente para responderte sobre el vehículo o el inmueble por el
+            que preguntas. No se venden ni se ceden a terceros, y no se usan para
+            mandarte publicidad que no hayas pedido.
+          </p>
+        </section>
 
-Nombre, email, datos de aplicación a programas deportivos y autenticación según configures Supabase y políticas RLS.
+        <section>
+          <h2 className="display text-lg text-base-content">Cookies</h2>
+          <p className="mt-3">
+            El sitio no usa cookies de publicidad ni de seguimiento. Mientras la
+            página esté en modo demostración, guarda una única cookie técnica
+            para recordar que ya pasaste la pantalla de acceso.
+          </p>
+        </section>
 
-2. Finalidad
-
-Prestar el servicio, soporte (${config.resend.supportEmail}) y mejoras del producto.
-
-3. Cookies y sesión
-
-Uso de cookies/sesión según implementación (Supabase Auth, preferencias).
-
-4. Menores
-
-Placeholder: ajusta edad mínima y política según tu mercado.
-
-5. Cambios
-
-Podrás publicar actualizaciones en esta página.
-
-6. Contacto
-
-${config.resend.supportEmail}
-
-Desarrollo: WADOOM (crédito de plantilla).`}
-        </pre>
+        <section>
+          <h2 className="display text-lg text-base-content">Tus derechos</h2>
+          <p className="mt-3">
+            Puedes pedirnos que borremos tus datos cuando quieras, escribiendo a{" "}
+            <a
+              href={config.business.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              @{config.business.instagram}
+            </a>
+            .
+          </p>
+        </section>
       </div>
     </main>
   );
-};
-
-export default PrivacyPolicy;
+}

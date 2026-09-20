@@ -1,190 +1,129 @@
-import { Suspense } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BloqueVenta from "@/components/demo/BloqueVenta";
 import Revelar from "@/components/Revelar";
-import ComoComprar from "@/components/ComoComprar";
+import FormularioContacto from "@/components/FormularioContacto";
+import BotonContacto from "@/components/BotonContacto";
+import BloqueVenta from "@/components/demo/BloqueVenta";
+import { esDemo } from "@/libs/demo";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
 
 const { business } = config;
 
 export const metadata = getSEOTags({
-  title: "Contacto y cómo comprar · Hardcore",
-  description: `Hardcore en ${business.direccion}, ${business.ciudad}. Pedidos por WhatsApp, retiro en tienda, delivery en Caracas y envío nacional.`,
+  title: `Contacto · ${config.appName}`,
+  description: `Escríbenos por WhatsApp o Instagram para comprar, vender o tasar tu vehículo en ${business.ciudad}.`,
   canonicalUrlRelative: "/contacto",
 });
 
 export default function Contacto() {
+  const demo = esDemo();
+
   return (
     <>
-      <Suspense>
-        <Header />
-      </Suspense>
+      <Header />
 
       <main>
-        <section className="relative overflow-hidden">
-          <div className="humo absolute inset-0" aria-hidden="true" />
-
-          <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
+        <section className="border-b border-base-content/10 bg-base-200 px-4 py-16 sm:px-6">
+          <div className="mx-auto max-w-7xl">
             <Revelar>
-              <p className="rotulo">Estamos aquí</p>
-              <h1 className="display mt-4 text-4xl sm:text-5xl">HABLEMOS</h1>
-              <p className="mt-5 max-w-lg text-lg text-base-content/60">
-                Lo más rápido es WhatsApp. Si prefieres, pásate por la tienda.
+              <span className="banda" aria-hidden="true" />
+              <h1 className="display mt-5 text-4xl sm:text-5xl">Hablemos</h1>
+              <p className="mt-4 max-w-lg text-lg text-base-content/60">
+                Lo más rápido es WhatsApp. Si prefieres, déjanos qué buscas y te
+                escribimos nosotros.
               </p>
             </Revelar>
+          </div>
+        </section>
 
-            <div className="mt-12 grid gap-4 md:grid-cols-3">
-              <Revelar>
-                <a
-                  href={`https://wa.me/${business.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ficha group block h-full p-6"
-                >
-                  <p className="rotulo">WhatsApp</p>
-                  <p className="cifra mt-3 text-xl font-bold transition-colors group-hover:text-primary">
-                    {business.whatsappVisible}
-                  </p>
-                  <p className="mt-2 text-sm text-base-content/55">{business.horario}</p>
-                </a>
-              </Revelar>
+        <section className="px-4 py-16 sm:px-6">
+          <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
+            {/* Canales */}
+            <div>
+              <div className="space-y-4">
+                <Revelar>
+                  <div className="ficha p-6">
+                    <p className="rotulo">WhatsApp</p>
+                    {business.whatsappVisible ? (
+                      <p className="cifra mt-3 text-xl font-bold">{business.whatsappVisible}</p>
+                    ) : (
+                      <p className="mt-3 text-base text-base-content/60">
+                        Atención directa, todos los días.
+                      </p>
+                    )}
+                    <p className="mt-2 text-sm text-base-content/55">{business.horario}</p>
+                    <BotonContacto demo={demo} className="btn btn-primary btn-sm mt-5">
+                      Escribir ahora
+                    </BotonContacto>
+                  </div>
+                </Revelar>
 
-              <Revelar retraso={70}>
-                <div className="ficha h-full p-6">
-                  <p className="rotulo">La tienda</p>
-                  <p className="mt-3 text-lg font-semibold">{business.direccion}</p>
-                  <p className="mt-1 text-sm text-base-content/55">{business.ciudad}</p>
+                <Revelar retraso={80}>
                   <a
-                    href="https://maps.google.com/?q=Centro+Lido+El+Rosal+Caracas"
+                    href={business.instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 inline-block text-sm text-primary underline-offset-4 hover:underline"
+                    className="ficha group block p-6"
                   >
-                    Ver en el mapa
+                    <p className="rotulo">Instagram</p>
+                    <p className="mt-3 text-xl font-semibold transition-colors group-hover:text-primary">
+                      @{business.instagram}
+                    </p>
+                    <p className="cifra mt-2 text-sm text-base-content/55">
+                      {business.seguidores} seguidores
+                    </p>
                   </a>
-                </div>
-              </Revelar>
+                </Revelar>
 
-              <Revelar retraso={140}>
-                <div className="ficha h-full p-6">
-                  <p className="rotulo">También estamos en</p>
-                  <ul className="mt-3 space-y-2.5 text-sm">
-                    <li>
-                      <a
-                        href={business.instagramUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-colors hover:text-primary"
-                      >
-                        Instagram · @{business.instagram}
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href={business.mercadoLibre}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-colors hover:text-primary"
-                      >
-                        Mercado Libre · Tienda oficial
-                      </a>
-                    </li>
-                    <li>
-                      <a
-                        href={business.linktree}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="transition-colors hover:text-primary"
-                      >
-                        Todos nuestros enlaces
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </Revelar>
+                <Revelar retraso={160}>
+                  <div className="ficha p-6">
+                    <p className="rotulo">Qué hacemos</p>
+                    <ul className="mt-3 space-y-2 text-sm text-base-content/70">
+                      {business.servicios.map((servicio) => (
+                        <li key={servicio} className="flex gap-2.5">
+                          <span className="text-primary" aria-hidden="true">
+                            ·
+                          </span>
+                          {servicio}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Revelar>
+              </div>
             </div>
+
+            {/* Formulario */}
+            <Revelar retraso={120}>
+              <div className="ficha p-7 sm:p-9">
+                <p className="rotulo">Déjanos tus datos</p>
+                <h2 className="display mt-3 text-2xl">Cuéntanos qué buscas</h2>
+                <p className="mt-3 text-sm leading-relaxed text-base-content/55">
+                  Si no ves lo que quieres en el inventario, dilo aquí: se consigue.
+                  También tasamos el vehículo que quieras vender.
+                </p>
+
+                <div className="mt-7">
+                  <FormularioContacto />
+                </div>
+              </div>
+            </Revelar>
           </div>
         </section>
 
-        <ComoComprar />
-
-        <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6">
-          <Revelar>
-            <p className="rotulo">Dudas frecuentes</p>
-            <h2 className="display mt-3 text-3xl">LO QUE SIEMPRE PREGUNTAN</h2>
-          </Revelar>
-
-          <div className="mt-8 space-y-3">
-            {PREGUNTAS.map((pregunta, i) => (
-              <Revelar key={pregunta.titulo} retraso={i * 50}>
-                <details className="ficha group px-5 py-4">
-                  <summary className="cursor-pointer list-none text-sm font-medium marker:hidden">
-                    <span className="flex items-center justify-between gap-4">
-                      {pregunta.titulo}
-                      <span
-                        className="shrink-0 text-primary transition-transform group-open:rotate-45"
-                        aria-hidden="true"
-                      >
-                        +
-                      </span>
-                    </span>
-                  </summary>
-                  <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-                    {pregunta.respuesta}
-                  </p>
-                </details>
-              </Revelar>
-            ))}
-          </div>
-
-          <Revelar retraso={200}>
-            <div className="mt-10 text-center">
-              <Link href="/tienda" className="btn btn-primary">
-                Ir al catálogo
-              </Link>
-            </div>
-          </Revelar>
+        <section className="border-t border-base-content/10 px-4 py-16 text-center sm:px-6">
+          <p className="text-base-content/55">¿Prefieres mirar primero?</p>
+          <Link href="/vehiculos" className="btn btn-ghost mt-4 border border-base-content/15">
+            Ver el inventario
+          </Link>
         </section>
+
+        <BloqueVenta />
       </main>
 
-      <BloqueVenta />
       <Footer />
     </>
   );
 }
-
-const PREGUNTAS = [
-  {
-    titulo: "¿Por qué hay tres precios distintos?",
-    respuesta:
-      "Porque el precio depende de cómo pagues: contado en divisas es el más bajo, y transferencia en bolívares y Pago Móvil se cobran a la tasa del BCV del día. En cada producto ves los tres.",
-  },
-  {
-    titulo: "¿Qué significa que un producto esté «en tránsito»?",
-    respuesta:
-      "Que viene en camino pero todavía no está en la tienda. Se puede reservar: al confirmar el pedido te decimos por WhatsApp la fecha estimada de llegada.",
-  },
-  {
-    titulo: "¿La tasa BCV que muestran es la de hoy?",
-    respuesta:
-      "Sí. La tienda consulta la tasa oficial del día y la muestra junto a cada precio con su fecha. Al cerrar el pedido se confirma el monto exacto en bolívares.",
-  },
-  {
-    titulo: "¿Hacen envíos fuera de Caracas?",
-    respuesta:
-      "Sí, por encomienda a todo el país. El costo del envío se cotiza aparte por WhatsApp según el destino y el peso del pedido.",
-  },
-  {
-    titulo: "¿Tengo que crear una cuenta para comprar?",
-    respuesta:
-      "No. Armas el carrito, confirmas y se abre WhatsApp con el resumen. La cuenta solo sirve para tener el historial de tus pedidos.",
-  },
-  {
-    titulo: "¿Los precios del catálogo están siempre al día?",
-    respuesta:
-      "Se actualizan cada vez que sale una lista nueva. Cada ficha muestra la disponibilidad real; si algo cambió, te lo decimos al confirmar.",
-  },
-];

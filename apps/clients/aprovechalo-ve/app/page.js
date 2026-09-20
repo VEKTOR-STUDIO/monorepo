@@ -1,109 +1,269 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BloqueVenta from "@/components/demo/BloqueVenta";
-import HeroTienda from "@/components/HeroTienda";
-import CintaMarcas from "@/components/CintaMarcas";
-import RejillaFamilias from "@/components/RejillaFamilias";
-import ComoComprar from "@/components/ComoComprar";
-import FichaProducto from "@/components/FichaProducto";
-import RejillaProductos from "@/components/RejillaProductos";
 import Revelar from "@/components/Revelar";
-import { leerCatalogo, facetasDe, leerTasa, filtrar } from "@/libs/catalogo";
+import Silueta from "@/components/Silueta";
+import PantallaVehiculo from "@/components/PantallaVehiculo";
+import RejillaVehiculos from "@/components/RejillaVehiculos";
+import BotonContacto from "@/components/BotonContacto";
+import BloqueVenta from "@/components/demo/BloqueVenta";
+import { leerVehiculos, facetasDe, filtrar, hayMuestra } from "@/libs/vehiculos";
+import { esDemo } from "@/libs/demo";
+import { enDolares } from "@/libs/formato";
+import config from "@/config";
 
-// El catálogo cambia cuando Hardcore importa una lista nueva, no a cada
-// visita: se rehace la portada cada media hora.
+// El inventario se toca a mano y cambia un par de veces por semana: media hora
+// de caché es de sobra y ahorra leer el JSON en cada visita.
 export const revalidate = 1800;
 
-export default async function Inicio() {
-  const [{ productos }, tasa] = await Promise.all([leerCatalogo(), leerTasa()]);
-  const facetas = facetasDe(productos);
+export default function Inicio() {
+  const vehiculos = leerVehiculos();
+  const facetas = facetasDe(vehiculos);
+  const demo = esDemo();
 
-  const ofertas = filtrar(productos, { soloOfertas: true, orden: "precio-asc" }).slice(0, 8);
-
-  // Para el collage de la portada mandan los botes grandes, no las tobilleras:
-  // se eligen productos de suplementación, disponibles y de precio alto, que
-  // son los que enseñan de un vistazo a qué se dedica la tienda.
-  const FAMILIAS_ESCAPARATE = ["proteinas", "ganadores", "creatina", "preentreno"];
-  const destacados = productos
-    .filter(
-      (p) =>
-        p.imagen && p.estado === "disponible" && FAMILIAS_ESCAPARATE.includes(p.familia)
-    )
-    .sort((a, b) => (b.precioContado ?? 0) - (a.precioContado ?? 0))
-    .slice(0, 4);
-
-  // Una foto por familia, para el mosaico de categorías.
-  const familias = facetas.familias.map((familia) => ({
-    ...familia,
-    imagen: productos.find((p) => p.familia === familia.slug && p.imagen)?.imagen || null,
-  }));
+  // El escaparate: los marcados como destacados, y si no hay, los más nuevos.
+  const escaparate = vehiculos.filter((v) => v.destacado && v.disponible).slice(0, 4);
+  const recientes = filtrar(vehiculos, { orden: "anio-desc" }).slice(0, 6);
+  const desde = Math.min(...vehiculos.map((v) => v.precio));
 
   return (
     <>
-      <Suspense>
-        <Header />
-      </Suspense>
+      <Header />
 
-      <main>
-        <HeroTienda
-          total={productos.length}
-          marcas={facetas.marcas.length}
-          categorias={facetas.categorias.length}
-          tasa={tasa}
-          destacados={destacados}
-        />
+      <main className="escaparate">
+        {/* ------------------------------------------------------------------
+            Portada. Una sola idea, a pantalla completa: esto vende vehículos
+            y hay tantos disponibles.
+           ---------------------------------------------------------------- */}
+        <section className="pantalla items-center justify-center overflow-hidden bg-base-200">
+          <div className="malla absolute inset-0" aria-hidden="true" />
 
-        <CintaMarcas marcas={facetas.marcas.slice(0, 22).map((m) => m.nombre)} />
+          {/* La silueta grande de fondo, muy lavada: da escala sin competir
+              con el texto. */}
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-[12%] flex justify-center opacity-[0.07]"
+            aria-hidden="true"
+          >
+            <Silueta tipo="camioneta" className="w-[130%] max-w-5xl text-base-content" />
+          </div>
 
-        {ofertas.length > 0 && (
-          <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+          <div className="relative z-10 mx-auto flex max-w-3xl flex-1 flex-col items-center justify-center px-4 py-24 text-center">
+            <span className="banda mb-7" aria-hidden="true" />
+
+            <p className="rotulo">Venta de vehículos · {config.business.ciudad}</p>
+
+            <h1 className="display mt-5 text-5xl sm:text-6xl lg:text-7xl">
+              Cumpliendo
+              <br />
+              <span className="text-primary">sueños</span>
+            </h1>
+
+            <p className="mt-6 max-w-lg text-base leading-relaxed text-base-content/60 sm:text-lg">
+              Carros, camionetas y motos verificados, con su ficha completa y su
+              precio a la vista. Lo que ves publicado es lo que hay.
+            </p>
+
+            <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:flex-row">
+              <Link href="/vehiculos" className="btn btn-primary flex-1">
+                Ver inventario
+              </Link>
+              <BotonContacto
+                demo={demo}
+                className="btn btn-ghost flex-1 border border-base-content/15"
+              >
+                Escribir por WhatsApp
+              </BotonContacto>
+            </div>
+
+            {/* Las cifras que dan confianza de entrada. */}
+            <dl className="mt-14 grid w-full max-w-lg grid-cols-3 gap-4">
+              {[
+                { valor: vehiculos.length, etiqueta: "en inventario" },
+                { valor: enDolares(desde), etiqueta: "desde" },
+                { valor: config.business.seguidores, etiqueta: "en Instagram" },
+              ].map((dato) => (
+                <div key={dato.etiqueta}>
+                  <dt className="cifra text-2xl font-bold text-base-content">{dato.valor}</dt>
+                  <dd className="mt-1 text-[0.7rem] uppercase tracking-wider text-base-content/45">
+                    {dato.etiqueta}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          {/* La flecha de "sigue bajando". */}
+          <div className="relative z-10 flex justify-center pb-8" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              className="animate-[flecha_2.2s_ease-in-out_infinite] text-base-content/50"
+            >
+              <path d="M12 5v14M6 13l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            El escaparate: un vehículo por pantalla, alternando fondo.
+           ---------------------------------------------------------------- */}
+        {escaparate.map((vehiculo, i) => (
+          <PantallaVehiculo
+            key={vehiculo.slug}
+            vehiculo={vehiculo}
+            tono={i % 2 === 0 ? "oscuro" : "claro"}
+            prioridad={i === 0}
+            demo={demo}
+          />
+        ))}
+
+        {/* ------------------------------------------------------------------
+            Por tipo de vehículo.
+           ---------------------------------------------------------------- */}
+        <section className="border-t border-base-content/10 px-4 py-24 sm:px-6">
+          <div className="mx-auto max-w-7xl">
+            <Revelar className="text-center">
+              <p className="rotulo">Qué buscas</p>
+              <h2 className="display mt-4 text-3xl sm:text-4xl">Elige por tipo</h2>
+            </Revelar>
+
+            <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {facetas.tipos.map((tipo, i) => (
+                <Revelar key={tipo.slug} retraso={i * 80}>
+                  <Link
+                    href={`/vehiculos?tipo=${tipo.slug}`}
+                    className="ficha group flex h-full flex-col items-center p-7 text-center"
+                  >
+                    <Silueta
+                      tipo={tipo.slug}
+                      className="h-20 w-full text-base-content/30 transition-colors group-hover:text-primary"
+                    />
+                    <h3 className="display mt-5 text-lg">{tipo.nombre}</h3>
+                    <p className="cifra mt-1.5 text-sm text-base-content/45">
+                      {tipo.total} {tipo.total === 1 ? "disponible" : "disponibles"}
+                    </p>
+                  </Link>
+                </Revelar>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            Los últimos que entraron.
+           ---------------------------------------------------------------- */}
+        <section className="bg-base-200 px-4 py-24 sm:px-6">
+          <div className="mx-auto max-w-7xl">
             <Revelar className="flex flex-wrap items-end justify-between gap-4">
               <div>
-                <p className="rotulo">Precio marcado</p>
-                <h2 className="cromo display mt-3 text-3xl sm:text-4xl">OFERTAS FLASH</h2>
+                <p className="rotulo">Recién publicados</p>
+                <h2 className="display mt-4 text-3xl sm:text-4xl">Lo último que entró</h2>
               </div>
-              <Link href="/tienda?ofertas=1" className="btn btn-sm btn-outline">
-                Ver todas
+              <Link href="/vehiculos" className="btn btn-ghost btn-sm border border-base-content/15">
+                Ver todo
               </Link>
             </Revelar>
 
-            <RejillaProductos className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-              {ofertas.slice(0, 4).map((producto) => (
-                <FichaProducto key={producto.slug} producto={producto} />
+            <Revelar retraso={100}>
+              <RejillaVehiculos vehiculos={recientes} className="mt-12" />
+            </Revelar>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            Cómo se compra. Es el recorrido que hoy se hace por WhatsApp,
+            puesto por escrito para que el comprador sepa a qué atenerse.
+           ---------------------------------------------------------------- */}
+        <section id="como-comprar" className="px-4 py-24 sm:px-6">
+          <div className="mx-auto max-w-5xl">
+            <Revelar className="text-center">
+              <p className="rotulo">Cómo comprar</p>
+              <h2 className="display mt-4 text-3xl sm:text-4xl">Tres pasos, sin vueltas</h2>
+            </Revelar>
+
+            <div className="mt-14 grid gap-10 sm:grid-cols-3">
+              {config.compra.pasos.map((paso, i) => (
+                <Revelar key={paso.titulo} retraso={i * 110}>
+                  <p className="cifra text-4xl font-bold text-primary/25">0{i + 1}</p>
+                  <span className="banda mt-4" aria-hidden="true" />
+                  <h3 className="display mt-5 text-lg">{paso.titulo}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-base-content/60">
+                    {paso.detalle}
+                  </p>
+                </Revelar>
               ))}
-            </RejillaProductos>
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            La otra pata del negocio. La cuenta es, antes que nada, de
+            consultoría inmobiliaria: ignorarlo sería enseñar medio negocio.
+           ---------------------------------------------------------------- */}
+        <section
+          id="inmuebles"
+          className="border-y border-base-content/10 bg-base-content px-4 py-24 text-base-100 sm:px-6"
+        >
+          <div className="mx-auto max-w-4xl text-center">
+            <Revelar>
+              <p className="cifra text-xs uppercase tracking-[0.24em] text-base-100/55">
+                También
+              </p>
+              <h2 className="display mt-4 text-3xl sm:text-4xl">
+                Consultoría inmobiliaria
+              </h2>
+              <p className="mx-auto mt-5 max-w-xl leading-relaxed text-base-100/65">
+                Compra, venta, alquiler e inversiones. La misma asesoría que con los
+                vehículos, aplicada a inmuebles: se busca, se negocia y se acompaña
+                el papeleo hasta la firma.
+              </p>
+
+              <div className="mt-9 flex flex-wrap justify-center gap-3">
+                <BotonContacto demo={demo} className="btn btn-primary">
+                  Consultar por un inmueble
+                </BotonContacto>
+                <a
+                  href={config.business.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-sobre-foto"
+                >
+                  Ver @{config.business.instagram}
+                </a>
+              </div>
+            </Revelar>
+          </div>
+        </section>
+
+        {/* Aviso honesto mientras el catálogo lleve datos inventados. */}
+        {hayMuestra() && (
+          <section className="px-4 py-12 sm:px-6">
+            <div className="panel mx-auto max-w-3xl p-6 text-center">
+              <p className="rotulo">Catálogo de muestra</p>
+              <p className="mt-3 text-sm leading-relaxed text-base-content/60">
+                Los vehículos que ves son de ejemplo, para poder enseñar cómo queda
+                la página. Al cargar las publicaciones reales de{" "}
+                <a
+                  href={config.business.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-primary hover:underline"
+                >
+                  @{config.business.instagram}
+                </a>{" "}
+                —con sus fotos, precios y kilometrajes— todo esto se sustituye solo.
+              </p>
+            </div>
           </section>
         )}
 
-        <RejillaFamilias familias={familias} />
-
-        <ComoComprar />
-
-        <section className="mx-auto max-w-7xl px-4 py-20 text-center sm:px-6">
-          <Revelar>
-            <h2 className="display text-3xl sm:text-4xl">
-              ¿NO CONSIGUES
-              <br />
-              <span className="text-primary texto-glow">LO QUE BUSCAS?</span>
-            </h2>
-            <p className="mx-auto mt-5 max-w-md text-base-content/60">
-              Escríbenos y te decimos si lo tenemos en camino o cuándo llega.
-            </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href="/tienda" className="btn btn-primary">
-                Buscar en el catálogo
-              </Link>
-              <Link href="/contacto" className="btn btn-outline">
-                Contacto
-              </Link>
-            </div>
-          </Revelar>
-        </section>
+        <BloqueVenta />
       </main>
 
-      <BloqueVenta />
       <Footer />
     </>
   );

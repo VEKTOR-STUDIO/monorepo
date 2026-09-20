@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
-import { updateSession } from "@/libs/supabase/middleware";
 import { COOKIE_ACCESO, cookieEsValida, hayCandado, rutaLibre } from "@/libs/acceso";
 
 export async function middleware(request) {
   const { pathname, search } = request.nextUrl;
 
-  // La puerta de la demo va antes que nada: si no se ha pasado, no se sirve
-  // ni una página de la tienda. Se comprueba aquí, en el servidor, y no en el
-  // navegador: una pantalla de bloqueo pintada con CSS se quita con F12.
+  // La puerta de la demo. Si no se ha pasado, no se sirve ni una página del
+  // sitio. Se comprueba aquí, en el servidor, y no en el navegador: una
+  // pantalla de bloqueo pintada con CSS se quita con F12 en diez segundos.
   if (hayCandado() && !rutaLibre(pathname)) {
     const cookie = request.cookies.get(COOKIE_ACCESO)?.value;
 
@@ -21,7 +20,7 @@ export async function middleware(request) {
     }
   }
 
-  return await updateSession(request);
+  return NextResponse.next();
 }
 
 export const config = {

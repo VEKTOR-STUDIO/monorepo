@@ -1,133 +1,95 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import config from "@/config";
-import { FAMILIAS } from "@/libs/catalogo-normalizar.mjs";
 
-const { business } = config;
-
+/**
+ * El pie: la marca, por dónde se contacta y los enlaces legales.
+ *
+ * El teléfono solo sale si hay uno configurado; mientras no lo haya, el canal
+ * que se enseña es Instagram, que es por donde hoy escribe todo el mundo.
+ */
 export default function Footer() {
-  return (
-    <footer className="barra-cristal relative mt-24 border-t border-base-content/10">
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr]">
-          <div>
-            <Logo ancho={168} />
-            <p className="mt-3 max-w-sm text-sm leading-relaxed text-base-content/60">
-              {business.tagline} Suplementación deportiva, equipo de entrenamiento y accesorios
-              en {business.ciudad}.
-            </p>
+  const { business } = config;
+  const anio = new Date().getFullYear();
 
-            <div className="mt-6 flex flex-wrap gap-2">
-              <a
-                href={`https://wa.me/${business.whatsapp}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-primary btn-sm"
-              >
-                Escribir por WhatsApp
-              </a>
-              <a
-                href={business.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-sm btn-outline"
-              >
-                @{business.instagram}
-              </a>
-            </div>
+  return (
+    <footer className="border-t border-base-content/10 bg-base-200">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="lg:col-span-2">
+            <Logo />
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-base-content/60">
+              {business.tagline}. Compra y venta de vehículos en {business.ciudad},
+              con asesoría inmobiliaria e inversiones.
+            </p>
+            <p className="mt-4 text-sm text-base-content/50">{business.horario}</p>
           </div>
 
-          <nav aria-label="Categorías">
-            <p className="rotulo mb-3.5">Catálogo</p>
-            <ul className="space-y-2 text-sm">
-              {FAMILIAS.filter(([slug]) => slug !== "otros")
-                .slice(0, 8)
-                .map(([slug, nombre]) => (
-                  <li key={slug}>
-                    <Link
-                      href={`/tienda?familia=${slug}`}
-                      className="text-base-content/60 transition-colors hover:text-primary"
-                    >
-                      {nombre}
-                    </Link>
-                  </li>
-                ))}
+          <div>
+            <p className="rotulo">Vehículos</p>
+            <ul className="mt-4 space-y-2.5 text-sm">
               <li>
-                <Link href="/tienda" className="text-base-content/60 transition-colors hover:text-primary">
-                  Ver todo
+                <Link href="/vehiculos" className="text-base-content/65 transition-colors hover:text-primary">
+                  Todo el inventario
+                </Link>
+              </li>
+              <li>
+                <Link href="/vehiculos?tipo=camioneta" className="text-base-content/65 transition-colors hover:text-primary">
+                  Camionetas
+                </Link>
+              </li>
+              <li>
+                <Link href="/vehiculos?tipo=sedan" className="text-base-content/65 transition-colors hover:text-primary">
+                  Carros
+                </Link>
+              </li>
+              <li>
+                <Link href="/vehiculos?tipo=moto" className="text-base-content/65 transition-colors hover:text-primary">
+                  Motos
                 </Link>
               </li>
             </ul>
-          </nav>
+          </div>
 
           <div>
-            <p className="rotulo mb-3.5">La tienda</p>
-            <address className="space-y-2 text-sm not-italic text-base-content/60">
-              <p>{business.direccion}</p>
-              <p>{business.ciudad}</p>
-              <p>
-                <a
-                  href={`https://wa.me/${business.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cifra transition-colors hover:text-primary"
-                >
-                  {business.whatsappVisible}
-                </a>
-              </p>
-              <p className="text-base-content/45">{business.horario}</p>
-            </address>
-
-            <ul className="mt-5 space-y-2 text-sm">
+            <p className="rotulo">Contacto</p>
+            <ul className="mt-4 space-y-2.5 text-sm">
               <li>
                 <a
-                  href={business.mercadoLibre}
+                  href={business.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base-content/60 transition-colors hover:text-primary"
+                  className="text-base-content/65 transition-colors hover:text-primary"
                 >
-                  Tienda en Mercado Libre
+                  @{business.instagram}
                 </a>
               </li>
+              {business.whatsappVisible && (
+                <li className="cifra text-base-content/65">{business.whatsappVisible}</li>
+              )}
               <li>
-                <Link href="/contacto" className="text-base-content/60 transition-colors hover:text-primary">
-                  Cómo comprar
+                <Link href="/contacto" className="text-base-content/65 transition-colors hover:text-primary">
+                  Escribir
                 </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-3 border-t border-base-content/10 pt-6 text-xs text-base-content/40 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1.5">
-            <p>
-              © {new Date().getFullYear()} {business.razonSocial}. Precios sujetos a cambio sin
-              previo aviso.
-            </p>
-            <p>
-              Tienda hecha por{" "}
-              <a
-                href="https://alessandrovaru.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="uppercase transition-colors hover:text-primary"
-                style={{
-                  fontFamily: "var(--microgramma-font)",
-                  letterSpacing: "0.1em",
-                }}
-              >
-                Alessandrovaru
-              </a>
-            </p>
-          </div>
-          <nav className="flex gap-5" aria-label="Legal">
-            <Link href="/tos" className="transition-colors hover:text-base-content/70">
+        <div className="banda banda-ancha mt-12 opacity-70" aria-hidden="true" />
+
+        <div className="mt-6 flex flex-col gap-3 text-xs text-base-content/45 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {anio} {business.razonSocial}
+          </p>
+          <div className="flex gap-5">
+            <Link href="/tos" className="transition-colors hover:text-primary">
               Términos
             </Link>
-            <Link href="/privacy-policy" className="transition-colors hover:text-base-content/70">
+            <Link href="/privacy-policy" className="transition-colors hover:text-primary">
               Privacidad
             </Link>
-          </nav>
+          </div>
         </div>
       </div>
     </footer>

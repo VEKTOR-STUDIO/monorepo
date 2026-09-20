@@ -1,26 +1,22 @@
-/** Mapa del sitio. Las 231 fichas de producto entran solas: next-sitemap
- *  recorre la salida del build, que ya las pregenera. */
+/** Mapa del sitio. Las fichas de vehículo entran solas: next-sitemap recorre
+ *  la salida del build, que ya las pregenera una por una. */
 module.exports = {
-  siteUrl: process.env.SITE_URL || "https://hardcorestore.ve",
+  siteUrl: process.env.SITE_URL || "https://aprovechalo.ve",
   generateRobotsTxt: true,
   exclude: [
     "/twitter-image.*",
     "/opengraph-image.*",
     "/icon.*",
     "/apple-icon.*",
-    "/admin",
-    "/admin/*",
-    "/cuenta",
-    "/carrito",
-    "/checkout",
-    "/pedido/*",
+    // La puerta de la demo no se indexa: no lleva a ningún sitio sin clave.
+    "/entrar",
   ],
   robotsTxtOptions: {
     policies: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/cuenta", "/carrito", "/checkout", "/pedido", "/api"],
+        disallow: ["/entrar", "/api"],
       },
     ],
   },

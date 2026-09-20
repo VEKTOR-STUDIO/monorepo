@@ -5,12 +5,12 @@ import { usePathname } from "next/navigation";
 import BotonComprar from "@/components/demo/BotonComprar";
 import config from "@/config";
 
-const LLAVE = "hardcore.demo.aviso-cerrado";
+const LLAVE = "aprovechalo.demo.aviso-cerrado";
 
 /**
  * Tarjeta que asoma por abajo cuando el visitante lleva media página bajada.
  *
- * La idea es no interrumpir: mientras mira la tienda no molesta, y cuando ya ha
+ * La idea es no interrumpir: mientras mira los vehículos no molesta, y cuando ya ha
  * visto lo suficiente aparece la oferta. Si la cierra, no vuelve en toda la
  * sesión —insistir después de un "no" solo estorba.
  */
@@ -19,9 +19,8 @@ export default function AvisoFlotante() {
   const [cerrado, setCerrado] = useState(true); // hasta saber, no se enseña
   const ruta = usePathname();
 
-  // El panel ya lleva su propio aviso arriba, y en la puerta todavía no hay a
-  // quién venderle nada.
-  const fuera = ruta?.startsWith("/admin") || ruta === "/entrar";
+  // En la puerta todavía no hay a quién venderle nada: primero se entra.
+  const fuera = ruta === "/entrar";
 
   useEffect(() => {
     try {
@@ -68,11 +67,11 @@ export default function AvisoFlotante() {
       }`}
       aria-hidden={!visible}
     >
-      <div className="ficha pointer-events-auto w-full max-w-sm p-5 shadow-2xl shadow-black/70">
+      <div className="ficha pointer-events-auto w-full max-w-sm p-5 shadow-2xl shadow-base-content/15">
         <button
           type="button"
           onClick={cerrar}
-          className="absolute right-2.5 top-2.5 rounded-md p-1.5 text-base-content/35 transition-colors hover:bg-base-300 hover:text-base-content"
+          className="absolute right-2.5 top-2.5 rounded-md p-1.5 text-base-content/35 transition-colors hover:bg-base-200 hover:text-base-content"
           aria-label="Cerrar aviso"
           tabIndex={visible ? 0 : -1}
         >
@@ -84,8 +83,8 @@ export default function AvisoFlotante() {
         <p className="rotulo">Estás viendo una demo</p>
 
         <p className="mt-2.5 pr-5 text-sm leading-relaxed text-base-content/70">
-          Tienda, panel e importador de catálogo. Todo esto funcionando, con tu
-          marca y tus productos.
+          Inventario, ficha por vehículo y contacto directo por WhatsApp. Todo
+          esto funcionando, con tu marca y tus vehículos.
         </p>
 
         <div className="mt-4 flex items-center justify-between gap-3">

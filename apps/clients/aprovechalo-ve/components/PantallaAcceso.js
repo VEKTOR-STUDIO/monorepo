@@ -1,24 +1,23 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LogoCuadrado } from "@/components/Logo";
+import { LogoGrande } from "@/components/Logo";
 import { contexto, usarGsap } from "@/libs/animaciones";
 
 /**
  * La puerta de la demo.
  *
- * Primero se enciende el logo, después aparece el formulario. La animación no
- * bloquea nada: quien ya sabe la contraseña puede escribirla desde el primer
- * momento, solo que el campo llega solo a los 1,7 s.
+ * Va sobre fondo oscuro, al revés que el resto del sitio: esta pantalla no
+ * vende nada, corta el paso, y el contraste lo deja claro antes de leer una
+ * palabra.
  *
- * Toda la secuencia es una línea de tiempo de GSAP. Frente a los @keyframes de
- * antes gana en que los tres momentos —entrada, error y salida— comparten los
- * mismos elementos y se pueden encadenar o interrumpir entre sí.
+ * Primero se enciende el logotipo, después aparece el formulario. La animación
+ * no bloquea nada: quien ya sabe la contraseña puede escribirla desde el primer
+ * momento, solo que el campo se enfoca solo a los 1,7 s.
  *
- * Esto es la cara del candado; el candado de verdad está en el middleware.
- * Sin la cookie correcta el servidor no sirve ni una página de la tienda, así
- * que saltarse esta pantalla con las herramientas del navegador no lleva a
- * ningún sitio.
+ * Esto es la cara del candado; el candado de verdad está en el middleware. Sin
+ * la cookie correcta el servidor no sirve ni una página, así que saltarse esta
+ * pantalla con las herramientas del navegador no lleva a ningún sitio.
  */
 export default function PantallaAcceso({ destino = "/" }) {
   const [clave, setClave] = useState("");
@@ -36,52 +35,23 @@ export default function PantallaAcceso({ destino = "/" }) {
 
         linea
           .from("[data-puerta='halo']", { opacity: 0, scale: 0.4, duration: 1.4 }, 0)
-          // El logo llega desenfocado y sobreexpuesto, y se asienta: da la
+          // El logotipo llega desenfocado y sobreexpuesto, y se asienta: da la
           // sensación de un rótulo que se enciende.
           .from(
             "[data-puerta='logo']",
             {
               opacity: 0,
-              scale: 0.72,
-              filter: "blur(16px) brightness(2.4)",
+              scale: 0.78,
+              filter: "blur(14px) brightness(2.2)",
               duration: 1.1,
-              // Al acabar hay que borrar filter Y transform. Cualquiera de
-              // los dos crea un contexto de apilado, y dentro de él el
-              // `mix-blend-screen` del logo deja de fundirse con el fondo de
-              // la página: en vez de solo las letras se ve el recuadro negro
-              // del JPEG.
               clearProps: "filter,transform",
             },
             0
           )
-          .from("[data-puerta='anillo']", { opacity: 0, duration: 0.8 }, 0.5)
-          .from("[data-puerta='rotulo']", { opacity: 0, y: 14 }, 1.05)
-          .from("[data-puerta='titulo']", { opacity: 0, y: 16 }, 1.2)
-          .from("[data-puerta='forma']", { opacity: 0, y: 16 }, 1.4)
-          .from("[data-puerta='pie']", { opacity: 0, y: 12 }, 1.6);
-
-        // El anillo gira mientras la pantalla esté viva.
-        g.to("[data-puerta='anillo']", {
-          rotation: 360,
-          duration: 4.5,
-          ease: "none",
-          repeat: -1,
-        });
-
-        // La luz que repasa el logo, cada pocos segundos.
-        g.fromTo(
-          "[data-puerta='barrido']",
-          { yPercent: -160, opacity: 0 },
-          {
-            yPercent: 160,
-            opacity: 1,
-            duration: 1.6,
-            ease: "power1.inOut",
-            repeat: -1,
-            repeatDelay: 2.4,
-            delay: 1,
-          }
-        );
+          .from("[data-puerta='rotulo']", { opacity: 0, y: 14 }, 1.0)
+          .from("[data-puerta='titulo']", { opacity: 0, y: 16 }, 1.15)
+          .from("[data-puerta='forma']", { opacity: 0, y: 16 }, 1.35)
+          .from("[data-puerta='pie']", { opacity: 0, y: 12 }, 1.55);
       }, raiz),
     []
   );
@@ -132,8 +102,8 @@ export default function PantallaAcceso({ destino = "/" }) {
       const { gsap } = usarGsap();
       gsap
         .timeline({ onComplete: () => (window.location.href = destino) })
-        .to("[data-puerta='logo']", { scale: 1.08, duration: 0.25, ease: "power2.in" })
-        .to(raiz.current, { opacity: 0, scale: 1.12, duration: 0.45, ease: "power2.in" }, "-=0.1");
+        .to("[data-puerta='logo']", { scale: 1.06, duration: 0.25, ease: "power2.in" })
+        .to(raiz.current, { opacity: 0, scale: 1.1, duration: 0.45, ease: "power2.in" }, "-=0.1");
     } catch {
       setError("No se pudo comprobar. Inténtalo otra vez.");
       setEnviando(false);
@@ -145,70 +115,47 @@ export default function PantallaAcceso({ destino = "/" }) {
       ref={raiz}
       // Se le descuenta el crédito del pie para que no quede un scroll de dos
       // dedos en una pantalla que debería caber justa.
-      className="relative flex min-h-[calc(100svh-var(--alto-credito))] flex-col items-center justify-center overflow-hidden px-6"
+      className="relative flex min-h-[calc(100svh-var(--alto-credito))] flex-col items-center justify-center overflow-hidden bg-base-content px-6"
     >
-      <div className="malla malla-centro absolute inset-0" aria-hidden="true" />
+      <div className="malla malla-centro absolute inset-0 opacity-40" aria-hidden="true" />
 
-      {/* Halo rojo detrás del logo */}
+      {/* Halo azul detrás del logotipo. */}
       <div
         data-puerta="halo"
-        className="pointer-events-none absolute left-1/2 top-1/2 size-[32rem] -translate-x-1/2 -translate-y-1/2 opacity-75"
+        className="pointer-events-none absolute left-1/2 top-1/2 size-[32rem] -translate-x-1/2 -translate-y-1/2 opacity-70"
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--color-primary) 34%, transparent), transparent 62%)",
-          filter: "blur(70px)",
+            "radial-gradient(circle, color-mix(in oklab, var(--color-primary) 55%, transparent), transparent 62%)",
+          filter: "blur(80px)",
         }}
       />
 
       <div className="relative flex w-full max-w-sm flex-col items-center">
-        {/* Logo con su anillo */}
-        <div data-puerta="logo" className="relative">
-          <div
-            data-puerta="anillo"
-            className="absolute -inset-5 rounded-full opacity-60"
-            aria-hidden="true"
-            style={{
-              background:
-                "conic-gradient(from 0deg, transparent 0deg, color-mix(in oklab, var(--color-primary) 85%, transparent) 55deg, transparent 130deg)",
-              mask: "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-              WebkitMask:
-                "radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 2px))",
-            }}
-          />
-
-          <div className="relative overflow-hidden rounded-2xl">
-            <LogoCuadrado lado={232} prioridad />
-
-            {/* Barrido de luz sobre el logo */}
-            <div
-              data-puerta="barrido"
-              className="pointer-events-none absolute inset-x-0 h-1/3"
-              aria-hidden="true"
-              style={{
-                background:
-                  "linear-gradient(to bottom, transparent, color-mix(in oklab, var(--color-primary) 24%, transparent), transparent)",
-              }}
-            />
-          </div>
+        <div data-puerta="logo">
+          <LogoGrande tono="oscuro" />
         </div>
 
-        <p data-puerta="rotulo" className="rotulo mt-8">
+        <p data-puerta="rotulo" className="rotulo mt-9 text-primary">
           Acceso privado
         </p>
 
-        <h1 data-puerta="titulo" className="display mt-3 text-center text-2xl">
-          ESTA DEMO ES CON INVITACIÓN
+        <h1 data-puerta="titulo" className="display mt-3 text-center text-2xl text-base-100">
+          Esta demo es con invitación
         </h1>
 
-        <form data-puerta="forma" onSubmit={enviar} className="cristal mt-8 w-full p-5">
+        <form
+          data-puerta="forma"
+          onSubmit={enviar}
+          className="mt-8 w-full rounded-lg border border-base-100/15 bg-base-100/6 p-5 backdrop-blur-sm"
+        >
           {/* Campo de usuario oculto: aquí no hay usuarios, pero sin él los
               gestores de contraseñas no saben a qué cuenta asociar la clave y
-              Chrome se queja. Va oculto y fuera del recorrido del tabulador. */}
+              el navegador se queja. Va oculto y fuera del tabulador. */}
           <input
             type="text"
             name="username"
-            value="hardcore-demo"
+            value="aprovechalo-demo"
             autoComplete="username"
             readOnly
             tabIndex={-1}
@@ -235,7 +182,9 @@ export default function PantallaAcceso({ destino = "/" }) {
               placeholder="Contraseña"
               aria-invalid={Boolean(error)}
               aria-describedby={error ? "error-clave" : undefined}
-              className={`entrada text-center tracking-[0.3em] ${error ? "border-error!" : ""}`}
+              className={`entrada border-base-100/20 bg-base-100/10 text-center tracking-[0.3em] text-base-100 placeholder:text-base-100/35 ${
+                error ? "border-error!" : ""
+              }`}
             />
           </div>
 
@@ -254,15 +203,15 @@ export default function PantallaAcceso({ destino = "/" }) {
               error ? "opacity-100" : "opacity-0"
             }`}
           >
-            {error || " "}
+            {error || " "}
           </p>
         </form>
 
         <p
           data-puerta="pie"
-          className="mt-4 text-center text-xs leading-relaxed text-base-content/35"
+          className="mt-4 text-center text-xs leading-relaxed text-base-100/40"
         >
-          Tienda de demostración. Si llegaste aquí sin contraseña, escríbenos y
+          Página de demostración. Si llegaste aquí sin contraseña, escríbenos y
           te damos acceso.
         </p>
       </div>

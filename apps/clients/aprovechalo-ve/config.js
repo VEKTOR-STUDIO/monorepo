@@ -1,23 +1,30 @@
 // -----------------------------------------------------------------------------
-// Configuración de la tienda.
+// Configuración de Aprovéchalo.
 //
-// Los datos de contacto salen del Linktree y el Instagram de Hardcore
-// (linktr.ee/Hardcorestore.ve · @hardcore.fitshop). Si alguno cambia, se
-// cambia aquí y se propaga a la cabecera, el pie, el checkout y el SEO.
+// Los datos salen del Instagram del negocio (@aprovechalo.ve): consultoría
+// inmobiliaria y venta de vehículos. La bio dice, literalmente:
 //
-// PENDIENTE: `domainName` y `siteUrl` llevan un dominio de ejemplo. Cuando
-// esté el definitivo, cambiarlo aquí y en SITE_URL del entorno.
+//   "Consultor Inmobiliario | Inversiones | Compra | Venta | Alquiler 🏡
+//    Cumpliendo sueños 🍾 VENTA DE VEHICULOS 🚘🏍"
+//
+// Esta página cubre la pata de vehículos, que es la que se pidió. La parte
+// inmobiliaria se reconoce al final de la portada y lleva al mismo contacto.
+//
+// PENDIENTE (antes de enseñarla al cliente):
+//   · `whatsapp` — hoy está vacío y los botones caen al DM de Instagram.
+//   · `domainName` / `siteUrl` — el dominio de la bio (aprovechalo.com) está
+//     aparcado y a la venta en GoDaddy, no es suyo. Aquí hay uno de trabajo.
 // -----------------------------------------------------------------------------
 
 const config = {
-  appName: "Hardcore",
+  appName: "Aprovéchalo",
   appDescription:
-    "Tienda de suplementación deportiva y equipo de entrenamiento en Caracas. Proteínas, creatina, pre-entreno, vitaminas, accesorios de gimnasio, natación y bolsos.",
-  domainName: "hardcorestore.ve",
+    "Venta de vehículos en Venezuela: carros, camionetas y motos verificados, con precio en dólares y atención directa por WhatsApp. Compra, venta y asesoría.",
+  domainName: "aprovechalo.ve",
   siteUrl:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.SITE_URL || "https://hardcorestore.ve",
+      : process.env.SITE_URL || "https://aprovechalo.ve",
 
   crisp: {
     id: "",
@@ -25,76 +32,68 @@ const config = {
   },
 
   resend: {
-    fromNoReply: `Hardcore <noreply@hardcorestore.ve>`,
-    fromAdmin: `Hardcore <pedidos@hardcorestore.ve>`,
+    fromNoReply: `Aprovéchalo <noreply@aprovechalo.ve>`,
+    fromAdmin: `Aprovéchalo <contacto@aprovechalo.ve>`,
     supportEmail: "",
   },
 
   colors: {
-    // Tema único oscuro, definido en app/globals.css.
-    theme: "hardcore",
-    // Rojo de marca. Cambiarlo también en --color-primary de globals.css.
-    main: "#F5253C",
+    // Tema único claro, definido en app/globals.css.
+    theme: "aprovechalo",
+    // Azul de marca. Cambiarlo también en --color-primary de globals.css.
+    main: "#0B5FB0",
   },
 
   business: {
-    nombre: "Hardcore",
-    razonSocial: "Hardcore Fit Shop",
-    // Número al que llegan los pedidos. Sale de wa.link/cmpxhx.
-    whatsapp: "584127076624",
-    whatsappVisible: "+58 412-7076624",
-    instagram: "hardcore.fitshop",
-    instagramUrl: "https://instagram.com/hardcore.fitshop/",
-    linktree: "https://linktr.ee/Hardcorestore.ve",
-    mercadoLibre: "https://tienda.mercadolibre.com.ve/hardcore",
-    direccion: "Centro Lido, El Rosal",
-    ciudad: "Caracas, Venezuela",
-    horario: "Atención por WhatsApp 24/7",
-    tagline: "Suplementación y equipo, de verdad y en stock.",
+    nombre: "Aprovéchalo",
+    razonSocial: "Aprovéchalo VE",
+    // PENDIENTE: número real. Vacío → los botones llevan al DM de Instagram.
+    whatsapp: "",
+    whatsappVisible: "",
+    instagram: "aprovechalo.ve",
+    instagramUrl: "https://instagram.com/aprovechalo.ve/",
+    seguidores: "42,7 K",
+    ciudad: "Venezuela",
+    horario: "Atención por WhatsApp e Instagram",
+    tagline: "Cumpliendo sueños",
+    // Las dos patas del negocio, tal como las anuncia la cuenta.
+    servicios: ["Venta de vehículos", "Consultoría inmobiliaria", "Inversiones"],
   },
 
-  // Cómo se paga. Son las tres columnas del catálogo en PDF.
-  pagos: {
-    bcv: {
-      id: "bcv",
-      nombre: "Transferencia en bolívares",
-      detalle: "Se cobra en bolívares a la tasa del BCV del día.",
-      enBolivares: true,
-      campoPrecio: "precio_bcv",
-    },
-    contado: {
-      id: "contado",
-      nombre: "Contado en divisas",
-      detalle: "Efectivo o Zelle. Es el precio más bajo de los tres.",
-      enBolivares: false,
-      campoPrecio: "precio_contado",
-    },
-    pago_movil: {
-      id: "pago_movil",
-      nombre: "Pago Móvil",
-      detalle: "En bolívares a la tasa del BCV del día. Sin Cashea.",
-      enBolivares: true,
-      campoPrecio: "precio_pago_movil",
-    },
-  },
-
-  entregas: {
-    retiro: { id: "retiro", nombre: "Retiro en tienda", detalle: "Centro Lido, El Rosal, Caracas." },
-    delivery: { id: "delivery", nombre: "Delivery en Caracas", detalle: "Se coordina el costo por WhatsApp." },
-    envio: { id: "envio", nombre: "Envío nacional", detalle: "Por encomienda, se cotiza por WhatsApp." },
+  // Cómo se cierra una compra. Es el recorrido que hoy hace la cuenta por
+  // WhatsApp, puesto por escrito para que el comprador sepa a qué atenerse.
+  compra: {
+    pasos: [
+      {
+        titulo: "Eliges el vehículo",
+        detalle:
+          "Cada ficha lleva año, kilometraje, motor y estado de documentos. Sin llamadas para preguntar lo básico.",
+      },
+      {
+        titulo: "Lo revisas en persona",
+        detalle:
+          "Se coordina la cita para verlo, probarlo y llevarlo a un taller de tu confianza.",
+      },
+      {
+        titulo: "Se cierra el trato",
+        detalle:
+          "Acompañamiento en el traspaso, el notariado y los documentos hasta que el vehículo quede a tu nombre.",
+      },
+    ],
   },
 
   auth: {
-    loginUrl: "/signin",
-    callbackUrl: "/cuenta",
+    loginUrl: "/entrar",
+    callbackUrl: "/",
   },
 
   // ---------------------------------------------------------------------------
   // Modo demo
   //
-  // Esta misma tienda se enseña a posibles clientes antes de venderla. Con el
-  // modo demo activo se ve casi todo, pero no se puede USAR: el catálogo se
-  // corta a mitad, el pedido no llega a WhatsApp y el panel no escribe nada.
+  // Esta página se le enseña al dueño de @aprovechalo.ve antes de vendérsela.
+  // Con el modo demo activo se ve casi todo, pero no se puede USAR: hay que
+  // pasar una puerta con contraseña, el listado se corta a mitad y el contacto
+  // no sale hacia ningún teléfono real.
   //
   // Se apaga con NEXT_PUBLIC_DEMO=false en el entorno, que es lo que hay que
   // hacer el día que el sistema se entregue.
@@ -106,25 +105,25 @@ const config = {
     // componentes del navegador y acabaría en el bundle, a la vista de
     // cualquiera. Vive en libs/acceso.js, que solo corre en el servidor.
 
-    // PENDIENTE: poner el precio real y el enlace de compra antes de enseñarla.
-    precio: "$490",
-    precioNota: "Pago único · instalación y catálogo cargado incluidos",
+    // PENDIENTE: confirmar precio y poner el enlace de compra.
+    precio: "$690",
+    precioNota: "Pago único · dominio, montaje y carga del catálogo incluidos",
     // A dónde va el botón de comprar. Mientras esté vacío, los botones llevan
     // a /contacto en vez de a un enlace roto.
     urlCompra: "",
-    textoBoton: "Quiero el sistema",
+    textoBoton: "Quiero esta página",
 
-    // Cuántos productos se ven nítidos en /tienda antes del muro.
-    productosVisibles: 12,
+    // Cuántos vehículos se ven nítidos en /vehiculos antes del muro.
+    elementosVisibles: 6,
 
     // Lo que se lleva quien lo compre. Sale en el bloque de venta.
     incluye: [
-      "Tienda completa con los 231 productos y sus fotos",
-      "Importador: subes el PDF de tu lista y el catálogo se actualiza solo",
-      "Panel de administración con pedidos, precios y disponibilidad",
-      "Carrito y pedidos que se cierran por WhatsApp",
-      "Tasa del BCV del día, automática, en cada precio",
-      "Diseño propio, dominio propio y código tuyo",
+      "Página completa de vehículos, con ficha propia para cada uno",
+      "Buscador con filtros por tipo, marca, año y precio",
+      "Cada vehículo se comparte con su enlace directo, listo para el post",
+      "Botón de WhatsApp que llega con el vehículo ya escrito en el mensaje",
+      "Precio en dólares con su equivalente en bolívares a la tasa del BCV del día",
+      "Diseño propio, dominio propio y el código es tuyo",
     ],
   },
 };

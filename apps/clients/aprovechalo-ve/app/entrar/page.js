@@ -7,8 +7,8 @@ import { getSEOTags } from "@/libs/seo";
 export const dynamic = "force-dynamic";
 
 export const metadata = getSEOTags({
-  title: "Acceso · Hardcore",
-  description: "Tienda de demostración con acceso restringido.",
+  title: "Acceso · Aprovéchalo",
+  description: "Página de demostración con acceso restringido.",
   extraTags: { robots: { index: false, follow: false } },
 });
 

@@ -8,7 +8,7 @@ import config from "@/config";
 /**
  * La franja de arriba del todo: esto es una demo y se vende.
  *
- * Va pegada al borde superior y la cabecera de la tienda se coloca justo
+ * Va pegada al borde superior y la cabecera del sitio se coloca justo
  * debajo, desplazada por la variable --alto-barra-demo que pone el layout.
  * Si el modo demo está apagado, no existe y la cabecera vuelve a top: 0.
  *
@@ -21,7 +21,7 @@ export default function BarraDemo() {
   if (!esDemo() || ruta === "/entrar") return null;
 
   return (
-    <div className="barra-cristal sticky top-0 z-60 h-10 border-b border-primary/25">
+    <div className="barra-vidrio sticky top-0 z-60 h-10 border-b border-primary/25">
       <div className="mx-auto flex h-full max-w-7xl items-center gap-3 px-4 sm:px-6">
         <span className="flex items-center gap-2">
           <span
@@ -33,7 +33,7 @@ export default function BarraDemo() {
 
         <p className="min-w-0 truncate text-xs text-base-content/70">
           <span className="hidden sm:inline">
-            Tienda de demostración. El sistema completo está a la venta ·{" "}
+            Página de demostración. El sistema completo está a la venta ·{" "}
           </span>
           <span className="cifra font-bold text-base-content">{config.demo.precio}</span>
         </p>

@@ -2,19 +2,19 @@ import BotonComprar from "@/components/demo/BotonComprar";
 import config from "@/config";
 
 /**
- * El corte del catálogo.
+ * El corte del inventario.
  *
- * Los primeros productos se ven nítidos; a partir de ahí el resto se difumina y
+ * Los primeros vehículos se ven nítidos; a partir de ahí el resto se difumina y
  * encima aparece la oferta. Lo difuminado sigue en el HTML a propósito —se ve
- * que hay más tienda detrás— pero no se puede leer ni pulsar: `select-none` y
- * `pointer-events-none` lo dejan como decorado, y `aria-hidden` lo saca del
- * lector de pantalla para no leer productos ilegibles.
+ * que hay más inventario detrás— pero no se puede leer ni pulsar: `select-none`
+ * y `pointer-events-none` lo dejan como decorado, y `aria-hidden` lo saca del
+ * lector de pantalla para no leer fichas ilegibles.
  */
 export default function MuroDemo({ ocultos, children }) {
   return (
-    <div className="relative mt-3">
+    <div className="relative mt-5">
       {/* El alto está recortado a propósito: se asoma lo justo para que se vea
-          que la tienda sigue, sin dejar medio metro de negro debajo. */}
+          que el inventario sigue, sin dejar medio metro de gris debajo. */}
       <div
         className="pointer-events-none max-h-104 select-none overflow-hidden blur-[7px] saturate-50 opacity-45"
         aria-hidden="true"
@@ -29,16 +29,17 @@ export default function MuroDemo({ ocultos, children }) {
       />
 
       <div className="absolute inset-x-0 top-6 flex justify-center px-4">
-        <div className="ficha w-full max-w-md p-7 text-center">
+        <div className="ficha w-full max-w-md p-7 text-center shadow-xl shadow-base-content/5">
           <p className="rotulo">Hasta aquí llega la demo</p>
 
           <p className="display mt-4 text-2xl">
-            <span className="cifra text-primary">+{ocultos}</span> productos más
+            <span className="cifra text-primary">+{ocultos}</span>{" "}
+            {ocultos === 1 ? "vehículo más" : "vehículos más"}
           </p>
 
           <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-            La tienda completa lleva el catálogo entero, el panel para
-            administrarlo y el importador que lo actualiza desde tu PDF.
+            La página completa lleva todo el inventario, la ficha de cada vehículo
+            y el botón de WhatsApp que llega con el modelo ya escrito.
           </p>
 
           <p className="cifra mt-5 text-3xl font-bold text-primary">{config.demo.precio}</p>

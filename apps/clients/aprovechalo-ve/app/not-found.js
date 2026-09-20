@@ -1,33 +1,35 @@
 import Link from "next/link";
-import config from "@/config";
+import Silueta from "@/components/Silueta";
 
 export default function NoEncontrado() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center">
-      <div className="humo absolute inset-0" aria-hidden="true" />
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-base-200 px-6 text-center">
       <div className="malla absolute inset-0" aria-hidden="true" />
+
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-[18%] flex justify-center opacity-[0.06]"
+        aria-hidden="true"
+      >
+        <Silueta tipo="sedan" className="w-[120%] max-w-3xl text-base-content" />
+      </div>
 
       <div className="relative">
         <p className="cifra text-7xl font-bold text-primary/25 sm:text-8xl">404</p>
 
-        <h1 className="display mt-4 text-3xl sm:text-4xl">ESTO NO ESTÁ EN LA LISTA</h1>
+        <h1 className="display mt-4 text-3xl sm:text-4xl">Aquí no hay nada</h1>
 
         <p className="mx-auto mt-5 max-w-sm text-base-content/60">
-          La página que buscas no existe o el producto ya no viene en el catálogo.
+          La página que buscas no existe, o el vehículo que venías a ver ya se
+          vendió y salió del inventario.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/tienda" className="btn btn-primary">
-            Ver catálogo
+          <Link href="/vehiculos" className="btn btn-primary">
+            Ver inventario
           </Link>
-          <a
-            href={`https://wa.me/${config.business.whatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn btn-outline"
-          >
-            Preguntar por WhatsApp
-          </a>
+          <Link href="/contacto" className="btn btn-ghost border border-base-content/15">
+            Escribirnos
+          </Link>
         </div>
 
         <Link
