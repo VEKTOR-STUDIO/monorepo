@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo";
+import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
 const ENLACES = [
@@ -12,6 +13,10 @@ const ENLACES = [
   { href: "/#inmuebles", texto: "Inmuebles" },
   { href: "/contacto", texto: "Contacto" },
 ];
+
+// Atajo a la comparación con Linktree. Solo existe mientras se está vendiendo
+// la página: es un argumento para el dueño, no para quien viene a ver carros.
+const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no un Linktree?" };
 
 /**
  * La cabecera: una línea de enlaces en texto, sin cajas ni bordes, translúcida
@@ -49,7 +54,7 @@ export default function Header() {
         </Link>
 
         <div className="ml-auto hidden items-center gap-7 md:flex">
-          {ENLACES.map((enlace) => (
+          {(esDemo() ? [...ENLACES, ENLACE_DEMO] : ENLACES).map((enlace) => (
             <Link
               key={enlace.href}
               href={enlace.href}
@@ -83,7 +88,7 @@ export default function Header() {
       {abierto && (
         <div className="border-t border-base-content/8 px-4 pb-5 pt-3 md:hidden">
           <div className="flex flex-col gap-1">
-            {ENLACES.map((enlace) => (
+            {(esDemo() ? [...ENLACES, ENLACE_DEMO] : ENLACES).map((enlace) => (
               <Link
                 key={enlace.href}
                 href={enlace.href}

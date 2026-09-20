@@ -8,6 +8,7 @@ import RejillaVehiculos from "@/components/RejillaVehiculos";
 import BotonContacto from "@/components/BotonContacto";
 import SeccionPanel from "@/components/SeccionPanel";
 import Cintillo from "@/components/Cintillo";
+import SeccionLinktree from "@/components/SeccionLinktree";
 import BloqueVenta from "@/components/demo/BloqueVenta";
 import { leerVehiculos, facetasDe, filtrar, hayMuestra } from "@/libs/vehiculos";
 import { esDemo } from "@/libs/demo";
@@ -241,9 +242,14 @@ export default function Inicio() {
             primero se explica cómo se compra y enseguida por qué lo que se
             acaba de ver está al día.
            ---------------------------------------------------------------- */}
-        <Cintillo variante="venta" />
+        {/* El panel se queda aunque se apague la demo: al comprador le explica
+            por qué el inventario está al día. Lo que sí desaparece con la demo
+            son los cintillos y la comparación, que le hablan a quien todavía
+            está decidiendo si compra la página. */}
+        {demo && <Cintillo variante="venta" />}
         <SeccionPanel />
-        <Cintillo variante="cliente" />
+        {demo && <SeccionLinktree />}
+        {demo && <Cintillo variante="cliente" />}
 
         {/* ------------------------------------------------------------------
             La otra pata del negocio. La cuenta es, antes que nada, de

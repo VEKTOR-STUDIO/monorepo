@@ -23,6 +23,8 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
 | Precio en $ con equivalente en Bs. (tasa BCV del día) | ✅ listo, sin configurar nada |
 | Contacto y formulario | ✅ listo, **no reenvía a ningún sitio todavía** |
 | Modo demo (puerta, muro, precio, bloqueos) | ✅ activo por defecto |
+| Imágenes del landing (hero, categorías, inmuebles…) | ✅ de stock, en `public/landing/` |
+| Cintillos de venta y comparación con Linktree | ✅ solo visibles en demo |
 | **Vehículos reales del Instagram** | ⏳ **pendiente — hoy son de muestra, con fotos de stock** |
 | Panel para publicar vehículos | ⏳ **anunciado en la portada, sin construir** |
 | Número de WhatsApp | ⏳ **pendiente** |
@@ -42,8 +44,9 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
 3. **Poner el WhatsApp** en `config.js` → `business.whatsapp` (formato
    internacional sin `+`, p. ej. `58412XXXXXXX`). Mientras esté vacío, todos
    los botones de contacto caen al DM de Instagram.
-4. **Confirmar el precio de venta** en `config.js` → `demo.precio` y poner
-   `demo.urlCompra` si hay enlace de pago.
+4. **Poner `demo.urlCompra`** si hay enlace de pago. El precio ya está en
+   `config.js`: `demo.precio` es **$399** y `demo.precioAnterior` el **$690**
+   que sale tachado al lado. Vaciando `precioAnterior` desaparece la rebaja.
 
 ---
 
@@ -152,6 +155,34 @@ hay que **volver a construir**, no solo reiniciar el servidor.
 
 Con eso desaparecen la puerta, el muro, la franja, el aviso flotante y el
 bloque de precio, y el contacto empieza a funcionar de verdad.
+
+---
+
+## Las dos voces de la página
+
+La portada le habla a dos personas distintas y conviene no mezclarlas:
+
+- **El escaparate** (hero, vehículos, categorías, cómo comprar, inmuebles) le
+  habla a quien viene a comprar un carro. Va con la tipografía de la casa.
+- **La oferta** (el panel, la comparación con Linktree, el precio) le habla al
+  dueño de @aprovechalo.ve sobre el sistema que se le está vendiendo. Va en
+  **Microgramma**, la tipografía de la firma, con la clase `.microgramma`.
+
+Entre una y otra se cruza un **cintillo animado** (`components/Cintillo.js`),
+que se pausa al pasar el ratón y se detiene entero con `prefers-reduced-motion`.
+
+Todo lo de la segunda voz **desaparece con `NEXT_PUBLIC_DEMO=false`**: los
+cintillos, la comparación con Linktree y el bloque de precio. La única que se
+queda es la sección del panel, porque al comprador de un carro también le sirve
+saber que el inventario lo actualizan ellos mismos.
+
+### La comparación con Linktree
+
+`components/SeccionLinktree.js` responde de frente la objeción real de quien
+hoy resuelve su Instagram con una lista de enlaces. Está escrita reconociendo
+que un Linktree hace bien lo que promete —eso da credibilidad al resto— y las
+siete filas son comprobables en esta misma página, no promesas vagas. El cierre
+propone convivir con él, no sustituirlo: la página entra como primer enlace.
 
 ---
 
