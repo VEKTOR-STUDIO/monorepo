@@ -1,8 +1,9 @@
-# DealerNauta Cars — reglas del proyecto
+# Kings Cars — reglas del proyecto
 
-Inventario web de DealerNauta Cars (@dealernautacars y @dealernautacarsccs),
-concesionario con dos sedes: vehículos 0 km y usados en Los Chaguaramos,
-Caracas, y camiones nuevos y usados en San Antonio de los Altos, Miranda.
+Inventario web de Kings Cars (@kingscars.ccct), concesionario de vehículos
+dentro del C.C.C.T., en Caracas. Compra y venta de carros usados y 0 km, y
+—esto es lo que de verdad lo distingue— **publicación gratuita del vehículo de
+cualquiera**: avalúo, fotos, promoción y seguimiento, sin cobrar.
 Léete el README antes de tocar nada: explica de dónde sale cada decisión de
 diseño, y sobre todo **qué material del cliente NO se pudo conseguir**.
 
@@ -22,6 +23,21 @@ diseño, y sobre todo **qué material del cliente NO se pudo conseguir**.
 - Nada de `any`, nada de abstracciones a futuro: se escribe lo que hace falta
   hoy.
 
+## La identidad, en corto (lo largo está en app/globals.css)
+- **La marca es monocroma**: corona blanca sobre losa de piedra. No se le
+  inventa un color.
+- **El rojo señala y nada más**: precio, condición 0 km y la llamada a vender.
+  El botón principal es **blanco**, no rojo. Si aparece rojo en un sitio nuevo,
+  hay que poder decir qué está señalando.
+- **Nada va en itálica.** En su logotipo no hay una sola inclinación. La única
+  que existe es `--angulo-kc` (−16°), el rombo de la base de la corona, y se
+  reserva para piezas pequeñas.
+- **`--angulo-kc` tiene un gemelo**: `ANGULO` en `libs/animaciones.js`. Se usan
+  esas variables, no un número suelto, y se cambian las dos a la vez.
+- **Las tres tarjetas blancas** de `PlantillaPublicacion` (Kilometraje ·
+  Transmisión · Precio $) son SU pieza, copiada de sus posts. No se les cambia
+  el orden, ni las etiquetas, ni los formatos.
+
 ## Lo que no se toca sin pensarlo
 - **El candado de la demo vive en el servidor** (`middleware.js`, las rutas de
   API). Bloquear algo solo en pantalla no es bloquearlo.
@@ -29,25 +45,35 @@ diseño, y sobre todo **qué material del cliente NO se pudo conseguir**.
   componentes de cliente y acabaría en el bundle. Va en `libs/acceso.js`.
 - **GSAP: `fromTo`, nunca `from`** para lo que entra en escena. El CSS deja
   `[data-anima]` en `opacity: 0` y `from` animaría de 0 a 0.
-- **El corte principal es `segmento` (vehículo / camión)**, no la condición ni
-  la carrocería. Es lo que decide a qué sede y a qué WhatsApp escribe cada
-  ficha (`sedeDe()` en `libs/demo.js`).
+- **El corte principal es `condicion` (usado / 0 km)**, no la carrocería. Es el
+  corte que hace su propio post fijado, con las columnas "VIEJOS" y "NUEVOS".
+  Aquí **no existe `segmento` ni `sedes`**: hay un solo local y se vende una
+  sola cosa. Si algo los reintroduce, está copiado de otro cliente.
+- **No hay número de teléfono del cliente.** `business.whatsapp` está vacío a
+  propósito y todo cae al DM de Instagram (`libs/demo.js`). No se inventa un
+  número ni se deja uno de otro proyecto.
+- **Se atiende con cita previa.** No se publica horario de apertura y los
+  mensajes de contacto piden la cita en la misma línea.
 - **No hay ni una foto del cliente**, y no se inventa ninguna: lo que se dibuja
   es la plantilla de sus posts (`components/PlantillaPublicacion.js`). Meter
   fotos de banco de imágenes como si fueran suyas está prohibido aquí.
 - Cuando haya fotos, **se enseñan enteras** y no se les superpone nada: sus
-  posts ya llevan el modelo y la pastilla rotulados.
-- El ángulo de la marca es `--angulo-dn` (−11°) y su gemelo `ANGULO` en
-  `libs/animaciones.js`. Se usan esas variables, no un número suelto, y se
-  cambian las dos a la vez.
+  posts ya llevan el rótulo y las tarjetas impresos.
 - **El emblema se recorta con el filtro `marca-alfa`**, nunca con
   `mix-blend-mode`: el blend se apaga en cuanto un ancestro abre un contexto de
-  apilamiento.
+  apilamiento. Y el umbral de ese filtro está calculado **para este archivo**,
+  cuyo fondo es piedra gris y no negro.
+- **`MarcaCorona` recorta con `evenodd` sobre un solo trazado.** Los huecos
+  tienen que ser transparentes de verdad: la corona se pinta sobre la losa,
+  sobre tarjetas y sobre fotos.
 
 ## Comprobar antes de dar algo por hecho
 ```bash
 npx next build && npx next lint
-NEXT_PUBLIC_DEMO=false npm run dev   # ¿sigue siendo el sistema entero?
+NEXT_PUBLIC_DEMO=false npx next dev   # ¿sigue siendo el sistema entero?
+grep -rl "<la-clave>" .next/static/   # no debe devolver nada
 ```
 Y mirar la pantalla entera, de arriba abajo: los fallos de esta capa son
-secciones que no aparecen, y esas no dan error en consola.
+secciones que no aparecen, y esas no dan error en consola. La puerta además se
+**mide** en 390×844, 360×800, 360×640 y 1440×800, con el desbordamiento a cero
+en los cuatro.
