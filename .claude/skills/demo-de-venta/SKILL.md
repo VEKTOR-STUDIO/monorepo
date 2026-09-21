@@ -132,8 +132,11 @@ En `config.js` del cliente, un bloque `demo`:
 ```js
 demo: {
   activa: process.env.NEXT_PUBLIC_DEMO !== "false",
-  precio: "$490",
-  precioAnterior: "$690",     // vacío → sin precio tachado ni sello de rebaja
+  // El par es el mismo en todas las demos del monorepo. No se sube porque el
+  // cliente sea más grande: un precio por cliente es una discusión que no
+  // toca tener y se nota cuando alguien compara dos enlaces.
+  precio: "$449",
+  precioAnterior: "$740",     // vacío → sin precio tachado ni sello de rebaja
   precioNota: "Pago único · instalación incluida",
   // Fecha REAL de fin de oferta, no una cuenta atrás que se reinicia en cada
   // visita: eso es truco de tienda barata y quien evalúa comprar un sistema lo
@@ -189,7 +192,7 @@ Lee `references/puerta.md`. Lo que no se puede improvisar:
   primero, Next puede servir la puerta cacheada a quien ya tiene cookie; sin lo
   segundo, la demo del cliente acaba en Google.
 
-Y dos cosas de forma que no son decoración:
+Y tres cosas de forma que no son decoración:
 
 - **Cabe en una pantalla, sin scroll.** Es la única pantalla que se ve seguro;
   lo que quede bajo el pliegue no lo lee nadie. El armazón (`h-svh`, columna
@@ -199,6 +202,19 @@ Y dos cosas de forma que no son decoración:
   botón queda debajo de la cinta". El método que funciona —Chromium de la
   caché de Playwright, `prefers-reduced-motion` emulado y cuatro tamaños— está
   en `references/trampas.md`.
+- **El esfuerzo va en la animación de entrada, no en el fondo.** Una capa más
+  de textura no la nota nadie; una línea de tiempo escalonada —halo, logo,
+  marca, título, caja, sello, lista, firma— es lo que hace que quien abre el
+  enlace se quede mirando. Está en `references/puerta.md`, con la regla de que
+  nunca puede bloquear a quien ya sabe la clave.
+
+Lo que ya no se hace: **nada de plástico.** Hubo una capa `.plastico`
+—`/plasticTexture.jpg` en `mix-blend-mode: screen` encima de todo el fondo— y
+se retiró de las once demos que la llevaban, porque hacía que once clientes
+distintos se parecieran entre sí. No la montes ni la arrastres al copiar un
+cliente. Una textura encima solo entra si **es de ese cliente** —su papel, su
+fibra de carbono, el grano de sus fotos—; si no se te ocurre cuál es la suya,
+el fondo limpio no falla nunca.
 
 Y lo que cambió de raíz: **la puerta no es un login, es el escaparate.** Quien
 recibe el enlace puede no pasar de ahí —no tiene la clave a mano, la pierde,

@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://lm2006.com/vehiculo/toyota-corolla-cross-elite-20-2026</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/toyota-corolla-cross-elite-18-2026</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/toyota-corolla-hev-2026</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/toyota-fortuner-sw4-srx-2025</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/mitsubishi-l200-glx-2026</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/suzuki-baleno-2026</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/toyota-agya-g-2026</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/sinotruk-howo-15t-2025</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://lm2006.com/vehiculo/cyclone-rx600-2026</loc><lastmod>2026-09-21T02:53:14.026Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com</loc><lastmod>2026-09-21T03:31:59.678Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/contacto</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/tos</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/privacy-policy</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/cyclone-rx600-2026</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/mitsubishi-l200-glx-2026</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/sinotruk-howo-15t-2025</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/suzuki-baleno-2026</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/toyota-agya-g-2026</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/toyota-corolla-cross-elite-18-2026</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/toyota-corolla-cross-elite-20-2026</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/toyota-corolla-hev-2026</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://lm2006.com/vehiculo/toyota-fortuner-sw4-srx-2025</loc><lastmod>2026-09-21T03:31:59.679Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

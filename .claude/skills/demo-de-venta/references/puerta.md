@@ -244,7 +244,7 @@ Cómo se consigue, más abajo.
 Lo que se monta encima de `config.demo`:
 
 ```js
-// "$690" y "$399" → 42. Null si no hay rebaja que anunciar.
+// "$740" y "$449" → 39. Null si no hay rebaja que anunciar.
 function calcularDescuento(antes, ahora) {
   const limpiar = (v) => Number(String(v ?? "").replace(/[^\d.]/g, ""));
   const a = limpiar(antes), b = limpiar(ahora);
@@ -262,47 +262,103 @@ Detalles que se olvidan y cuestan:
 - **Campo de usuario oculto.** Un formulario de contraseña sin `username` hace
   que los gestores no sepan a qué cuenta asociarla y Chrome se queja en
   consola. Uno `readOnly`, `tabIndex={-1}`, `aria-hidden` y `sr-only` resuelve.
-- **La animación no puede bloquear.** Quien ya sabe la clave tiene que poder
-  escribirla desde el primer momento; el foco automático llega al final de la
-  entrada, no al principio.
 - **El hueco del error se reserva siempre**, con `opacity-0` cuando no hay
   error. Si el párrafo aparece y desaparece, el botón salta bajo el cursor.
-- **Al fallar, se vacía el campo y vuelve el foco**, más una sacudida corta
-  (`elastic.out`) sobre el contenedor. El error se limpia al primer tecleo.
+- **El error se limpia al primer tecleo**, no al reenviar.
 - **Accesibilidad del formulario**: `aria-invalid` en el campo,
   `aria-describedby` apuntando al párrafo y `role="alert"` en él.
-- **Al acertar**, la pantalla se cierra con una animación y se navega con
-  `window.location.href`, no con el router del cliente: la cookie acaba de
-  ponerse y hace falta que el servidor la lea de nuevo. Bloquea el envío
-  mientras tanto (`abierto`), o un doble clic dispara dos navegaciones.
 
-### El fondo: capas, y el plástico encima
+### El fondo: capas, y ninguna de plástico
 
 El fondo de la puerta se monta como una pila de `absolute inset-0` dentro del
-`<main>`, en este orden: foto (`opacity-25`), velo del color base, malla,
-textura de ruido, la textura propia de la marca, el halo difuminado y, encima
-de todo, el plástico.
+`<main>`, en este orden: la foto o las barras de la marca (`opacity-25`), el
+velo del color base, la malla, la textura de ruido y el halo difuminado. El
+contenido se queda por encima porque sube con `z-10`.
 
-```css
-/* Foto casi negra con los pliegues en blanco → va en `screen`: el negro se
-   cae y solo quedan los brillos de las arrugas, que es lo que hace que la
-   portada parezca metida en una bolsa. En `multiply` pasaría lo contrario:
-   se comería el fondo y quedaría una mancha negra. */
-.plastico {
-  pointer-events: none;
-  opacity: 0.4;
-  mix-blend-mode: screen;
-  background-image: url("/plasticTexture.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+**El plástico está retirado.** Hubo una capa `.plastico` —una foto de bolsa
+arrugada tirada en `mix-blend-mode: screen` sobre todo el fondo— y se quitó de
+las once demos que la tenían. Ensuciaba igual en todas y hacía que once
+clientes distintos se parecieran entre sí, que es exactamente lo contrario de
+lo que la puerta tiene que conseguir. No la vuelvas a montar ni la arrastres al
+copiar un cliente viejo; si aparece un `plasticTexture.jpg` en `public/`, es
+resto de antes.
+
+Una textura encima sí puede sumar, pero entonces **tiene que ser de ese
+cliente**: el papel sucio de un taller, la fibra de carbono de un concesionario
+deportivo, el grano de la foto de un gimnasio, el tramado de su propia marca.
+Sale de su material, no de un archivo que se arrastra de proyecto en proyecto,
+y se prueba contra su fondo real antes de dejarla. Si no se te ocurre cuál es
+la suya, no pongas ninguna: el fondo limpio no falla nunca, y una textura
+genérica se nota.
+
+Cuando pongas una, el modo de fusión lo decide la textura y no el gusto:
+**oscura con detalle claro → `screen`; clara con detalle oscuro → `multiply`**.
+Va como última capa del fondo, después del halo, para que toque también el
+resplandor, y siempre con `pointer-events: none`. Cuidado con los contextos de
+apilamiento, que apagan `mix-blend-mode` (trampa 3 de `references/trampas.md`).
+
+Y antes de ponerte a apilar capas, lee lo que viene: si solo hay tiempo para
+una cosa, no es esta.
+
+### Lo que de verdad paga: la animación de entrada
+
+Lo que hace que la puerta parezca cara no es la textura del fondo, es cómo
+entra. Una capa más son cinco minutos y no la nota nadie; una línea de tiempo
+bien escalonada es lo que hace que quien abre el enlace se quede mirando en vez
+de buscar el campo y salir. **Si hay que repartir el esfuerzo, va aquí.**
+
+Es una sola `gsap.timeline()` dentro del contexto del `<main>`, con posiciones
+absolutas en segundos —no encadenadas— para poder afinar una pieza sin mover
+las demás:
+
+```js
+useEffect(
+  () =>
+    contexto((g) => {
+      const linea = g.timeline();
+
+      linea
+        .from("[data-puerta='halo']", { opacity: 0, scale: 0.4, duration: 1.4 }, 0)
+        .from("[data-puerta='logo']", {
+          opacity: 0, scale: 0.82,
+          filter: "blur(14px) brightness(2.2)",
+          duration: 1, clearProps: "filter,transform",
+        }, 0)
+        .from("[data-puerta='marca']",    { opacity: 0, y: -12 }, 0.6)
+        .from("[data-puerta='insignia']", { opacity: 0, xPercent: -30, duration: 0.7 }, 0.85)
+        .from("[data-puerta='titulo']",   { opacity: 0, y: 16 }, 1.0)
+        .from("[data-puerta='caja']",     { opacity: 0, y: 24, duration: 0.9 }, 1.1)
+        .from("[data-puerta='dlc'] > *",  { opacity: 0, x: -18, duration: 0.5, stagger: 0.07 }, 1.3)
+        .from("[data-puerta='sello']",    { opacity: 0, scale: 0.4, rotate: -40, duration: 0.6 }, 1.5)
+        .from("[data-puerta='pie']",      { opacity: 0, y: 12 }, 1.8);
+    }, raiz),
+  []
+);
 ```
 
-La regla para elegir el modo es la textura, no el gusto: **textura oscura con
-detalle claro → `screen`; textura clara con detalle oscuro → `multiply`**. Y va
-como última capa del fondo, después del halo, para que arrugue también el
-resplandor; el contenido se queda por encima porque sube con `z-10`.
+El orden no es decorativo, cuenta el argumento de venta: primero el halo y el
+logo —de quién es esto—, después la marca y la insignia de edición, luego el
+título y la caja donde va a escribir, y al final el sello de rebaja, la lista
+de lo que incluye y la firma. Cada pieza se marca con su `data-puerta` en vez
+de seleccionar por clase, para que retocar el estilo no rompa la animación.
+
+Las reglas que no se negocian:
+
+- **Nunca bloquea.** Quien ya sabe la clave escribe desde el primer fotograma;
+  el foco automático llega al final (`setTimeout` de ~1.7 s), no al principio.
+- **`prefers-reduced-motion`.** `libs/animaciones.js` lo atiende y deja todo en
+  su estado final. Se comprueba emulándolo, no confiando.
+- **Lo animado se oculta desde CSS** con `[data-anima] { opacity: 0 }` para que
+  no salte al hidratar —y entonces `gsap.from()` anima de 0 a 0. Cómo se
+  resuelve: trampa 1 de `references/trampas.md`.
+- **El fallo también se anima**: sacudida corta sobre el contenedor del campo
+  (`gsap.fromTo(..., { x: -9 }, { x: 0, ease: "elastic.out(1, 0.35)" })`), se
+  vacía el campo y vuelve el foco.
+- **El acierto se cierra, no se corta**: el logo crece un punto, la pantalla se
+  va en ~0.45 s y solo entonces `window.location.href = destino` —navegación
+  completa y no el router del cliente, porque la cookie acaba de ponerse y hace
+  falta que el servidor la lea de nuevo. Con `abierto` bloqueando el envío, o
+  un doble clic dispara dos navegaciones.
 
 ### Una sola pantalla
 
@@ -452,8 +508,8 @@ Y lo que alimenta la carátula, en `config.js`:
 
 ```js
 demo: {
-  precio: "$399",
-  precioAnterior: "$690",          // vacío → sin sello de rebaja
+  precio: "$449",
+  precioAnterior: "$740",          // vacío → sin sello de rebaja
   ofertaHasta: "2026-10-15T23:59:59-04:00",  // fecha real; vacía → sin contador
   precioNota: "Pago único · dominio, montaje y carga del catálogo incluidos",
   incluye: ["...", "..."],         // sale en la puerta y en el bloque de venta
