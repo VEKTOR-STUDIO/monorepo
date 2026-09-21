@@ -15,7 +15,7 @@
 
 import { esDemo } from "@/libs/demo";
 
-export const COOKIE_ACCESO = "hb_acceso";
+export const COOKIE_ACCESO = "susu_acceso";
 export const DIAS_DE_ACCESO = 7;
 
 /**
@@ -30,7 +30,7 @@ export const DIAS_DE_ACCESO = 7;
  * /api/entrar y app/entrar/page.js, todos servidor—, así que la contraseña no
  * viaja en el bundle. Por eso no está en config.js.
  */
-const CLAVE_POR_DEFECTO = "hbinversiones2026";
+const CLAVE_POR_DEFECTO = "susucars2026";
 
 /** La contraseña configurada. El entorno manda. */
 export function claveDeAcceso() {
@@ -49,7 +49,7 @@ export function hayCandado() {
  * que va sobre el runtime edge.
  */
 export async function huellaDe(clave) {
-  const datos = new TextEncoder().encode(`hb-inversiones::acceso::${clave}`);
+  const datos = new TextEncoder().encode(`susu-cars::acceso::${clave}`);
   const resumen = await crypto.subtle.digest("SHA-256", datos);
   return [...new Uint8Array(resumen)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }

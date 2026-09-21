@@ -2,21 +2,22 @@ import Image from "next/image";
 import Silueta from "@/components/Silueta";
 
 /**
- * El cuadro donde va el vehículo.
+ * El cuadro donde va la unidad.
  *
- * Las fotos de esta página son las trece páginas del catálogo de HB tal cual:
- * el vehículo recortado sobre el corte diagonal de la marca, con el modelo
- * arriba, las viñetas abajo a la derecha y la dirección del local abajo a la
- * izquierda. Vienen en 4:5 y se enseñan ENTERAS, sin recortar: la gráfica es
- * del cliente y recortarla sería tirar a la basura lo mejor que tiene.
+ * Las fotos de esta página son las publicaciones de @lm2006.ccs tal cual: la
+ * unidad en el galpón, con el logotipo arriba a la izquierda, el modelo y la
+ * línea técnica debajo y las tres barras de remate al pie. Vienen en 4:5 —el
+ * formato de su feed— y se enseñan ENTERAS, sin recortar: la gráfica es del
+ * cliente y recortarla sería tirar a la basura lo mejor que tiene.
  *
  * De ahí que el `object-fit` por defecto sea `contain` y no `cover`. El hueco
- * que queda alrededor lo tapa el fondo de estudio, que es negro como el de la
- * ficha, así que no se nota que haya hueco.
+ * que queda alrededor lo tapa el fondo de estudio, que es el mismo grafito de
+ * la ficha, así que no se nota que haya hueco.
  *
- * Sin foto —que es lo que pasaría con un vehículo cargado desde el panel y
- * todavía sin fotografiar— dibuja la silueta del tipo, que mantiene la página
- * presentable en vez de dejar un rectángulo vacío.
+ * MIENTRAS NO HAYA FOTO dibuja la silueta del tipo. Hoy es lo que se ve en las
+ * nueve fichas: las fotos se bajan de su Instagram con tools/instagram y
+ * todavía no están. Una silueta dice la verdad; una foto de banco de imágenes
+ * en el inventario de un concesionario, no.
  */
 export default function FotoVehiculo({
   vehiculo,
@@ -39,19 +40,24 @@ export default function FotoVehiculo({
           className={encajar === "cover" ? "object-cover" : "object-contain"}
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center p-[8%]">
-          <div className="relative w-full max-w-2xl">
-            <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content/25" />
-            {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
-            <div className="sombra-piso absolute inset-x-[6%] bottom-[3%] h-3" aria-hidden="true" />
+        <>
+          <div className="absolute inset-0 flex items-center justify-center p-[8%]">
+            <div className="relative w-full max-w-2xl">
+              <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content/25" />
+              {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
+              <div className="sombra-piso absolute inset-x-[6%] bottom-[3%] h-3" aria-hidden="true" />
+            </div>
           </div>
-        </div>
+          {/* Las tres barras al pie, como en sus publicaciones: aunque falte la
+              foto, el cuadro sigue siendo suyo. */}
+          <div className="banda-ancha absolute inset-x-0 bottom-0 h-1 opacity-70" aria-hidden="true" />
+        </>
       )}
     </div>
   );
 }
 
-/** El cartelito de "aquí falta la foto real", para el modo muestra. */
+/** El cartelito de "aquí falta la foto real". */
 export function AvisoSinFoto({ className = "" }) {
   return (
     <span
@@ -65,11 +71,11 @@ export function AvisoSinFoto({ className = "" }) {
 /**
  * "Este precio todavía no es el suyo".
  *
- * El catálogo en PDF que mandó HB no publica ni un precio: trae el modelo, el
- * año, el kilometraje y poco más. Los precios de esta demo son de referencia
- * de mercado, puestos para que la página se pueda enseñar funcionando, y decir
- * eso en voz alta es la diferencia entre una demo honesta y una que se inventa
- * el inventario de otro.
+ * En sus publicaciones el precio casi nunca sale: el único que han puesto es el
+ * del Corolla HEV (36.500 $). Los demás son de referencia de mercado, puestos
+ * para que la página se pueda enseñar funcionando, y decir eso en voz alta es
+ * la diferencia entre una demo honesta y una que se inventa el inventario de
+ * otro.
  *
  * Desaparece solo en cuanto la ficha deja de llevar `precioProvisional`.
  */
@@ -90,7 +96,7 @@ export function AvisoPrecioProvisional({ className = "" }) {
         <circle cx="12" cy="12" r="10" />
         <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
       </svg>
-      Precio de referencia: el catálogo de HB no publica precios
+      Precio de referencia: sus publicaciones no lo traen
     </span>
   );
 }

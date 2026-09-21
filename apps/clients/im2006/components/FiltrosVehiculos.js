@@ -7,13 +7,18 @@ import { useCallback } from "react";
  * Los filtros del inventario.
  *
  * Todo vive en la URL y no en el estado del componente: así una búsqueda
- * —"camionetas 0 km hasta 30.000"— se copia y se manda por WhatsApp, que es
+ * —"camionetas hasta 40.000"— se copia y se manda por WhatsApp, que es
  * exactamente lo que hace un vendedor con un cliente. Y al volver atrás, el
  * navegador recupera el filtro.
  *
- * El primer corte es la CONDICIÓN, en una fila propia y más grande que el
- * resto: en este negocio nadie busca "un sedán", busca "un 0 km" o "un usado
- * bueno", y son dos compradores con dos presupuestos distintos.
+ * El primer corte es el SEGMENTO —vehículos o camiones—, en una fila propia y
+ * más grande que el resto. Es la primera línea de su bio y son dos compradores
+ * que no tienen nada que ver: quien viene por un Corolla no va a mirar un
+ * chasis de quince toneladas ni al revés.
+ *
+ * La condición (0 km / usado) es una fila más abajo y SOLO SALE SI HAY DE LAS
+ * DOS. Hoy todo el catálogo es 0 km, así que un filtro con una sola opción
+ * sería un botón que no hace nada; en cuanto entre un usado aparece solo.
  */
 export default function FiltrosVehiculos({ facetas, total, mostrados }) {
   const router = useRouter();
@@ -31,28 +36,31 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
     [params, router, ruta]
   );
 
+  const segmento = params.get("segmento") || "";
   const condicion = params.get("condicion") || "";
   const tipo = params.get("tipo") || "";
   const marca = params.get("marca") || "";
   const orden = params.get("orden") || "";
-  const hayFiltro = Boolean(condicion || tipo || marca || orden || params.get("q"));
+  const hayFiltro = Boolean(
+    segmento || condicion || tipo || marca || orden || params.get("q")
+  );
 
   return (
     <div className="space-y-5">
       {/* El corte principal. */}
       <div className="flex flex-wrap gap-2">
-        <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")} grande>
+        <BotonFiltro activo={segmento === ""} onClick={() => cambiar("segmento", "")} grande>
           Todo
         </BotonFiltro>
-        {facetas.condiciones.map((c) => (
+        {facetas.segmentos.map((s) => (
           <BotonFiltro
-            key={c.slug}
-            activo={condicion === c.slug}
-            onClick={() => cambiar("condicion", c.slug)}
+            key={s.slug}
+            activo={segmento === s.slug}
+            onClick={() => cambiar("segmento", s.slug)}
             grande
           >
-            {c.nombre}
-            <span className="cifra ml-2 opacity-55">{c.total}</span>
+            {s.nombre}
+            <span className="cifra ml-2 opacity-55">{s.total}</span>
           </BotonFiltro>
         ))}
       </div>
@@ -69,6 +77,25 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
           </BotonFiltro>
         ))}
       </div>
+
+      {/* La condición, solo cuando hay de las dos. */}
+      {facetas.condiciones.length > 1 && (
+        <div className="flex flex-wrap gap-2">
+          <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")}>
+            Nuevas y usadas
+          </BotonFiltro>
+          {facetas.condiciones.map((c) => (
+            <BotonFiltro
+              key={c.slug}
+              activo={condicion === c.slug}
+              onClick={() => cambiar("condicion", c.slug)}
+            >
+              {c.nombre}
+              <span className="cifra ml-1.5 opacity-55">{c.total}</span>
+            </BotonFiltro>
+          ))}
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-3">
         <select
@@ -109,7 +136,7 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
         )}
 
         <p className="cifra ml-auto text-sm text-base-content/45">
-          {mostrados === total ? `${total} vehículos` : `${mostrados} de ${total}`}
+          {mostrados === total ? `${total} unidades` : `${mostrados} de ${total}`}
         </p>
       </div>
     </div>
@@ -117,10 +144,10 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
 }
 
 /**
- * Una pestaña de filtro, con el filo sesgado de la casa.
+ * Una pestaña de filtro, con el filo inclinado de la casa.
  *
  * El sesgo va en el botón y el contenido se endereza con `.bisel`, así que el
- * texto sale recto aunque la caja esté inclinada.
+ * texto sale recto aunque la caja esté inclinada −12°, como el logotipo.
  */
 function BotonFiltro({ activo, onClick, children, grande = false }) {
   return (

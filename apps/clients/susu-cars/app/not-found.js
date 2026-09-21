@@ -16,7 +16,7 @@ export default function NoEncontrado() {
       <div className="relative">
         <p className="cifra text-7xl font-bold text-primary/25 sm:text-8xl">404</p>
 
-        <h1 className="display mt-4 text-3xl sm:text-4xl">Aquí no hay nada</h1>
+        <h1 className="display mt-4 text-2xl sm:text-3xl">Aquí no hay nada</h1>
 
         <p className="mx-auto mt-5 max-w-sm text-base-content/60">
           La página que buscas no existe, o el vehículo que venías a ver ya se
@@ -25,7 +25,7 @@ export default function NoEncontrado() {
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Link href="/vehiculos" className="btn btn-primary">
-            Ver inventario
+            Ver el catálogo
           </Link>
           <Link href="/contacto" className="btn btn-filo">
             Escribirnos

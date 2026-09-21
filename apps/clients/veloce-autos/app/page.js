@@ -100,7 +100,11 @@ export default function Inicio() {
               </Revelar>
 
               <Revelar retraso={520}>
-                <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:flex-row">
+                {/* `max-w-xl` y no `max-w-md`: con el tracking de esta
+                    tipografía, "COTIZAR POR WHATSAPP" no cabe en la mitad de
+                    448 px y el segundo botón salía a dos líneas, más alto que
+                    el primero. */}
+                <div className="mt-9 flex w-full max-w-xl flex-col gap-3 sm:flex-row">
                   <Link href="/vehiculos" className="btn btn-primary flex-1">
                     Ver el inventario
                   </Link>

@@ -30,7 +30,7 @@ export async function generateMetadata({ params }) {
   const vehiculo = vehiculoPorSlug(slug);
   if (!vehiculo) return getSEOTags();
 
-  const condicion = vehiculo.esNuevo ? "0 km importado" : kilometrajeDe(vehiculo);
+  const condicion = vehiculo.esNuevo ? "0 km" : kilometrajeDe(vehiculo);
 
   return getSEOTags({
     title: `${vehiculo.tituloLargo} ${vehiculo.anio} | ${config.appName}`,
@@ -52,17 +52,17 @@ export default async function Vehiculo({ params }) {
   const estado = ESTADOS[vehiculo.estado] || ESTADOS.disponible;
   const demo = esDemo();
 
-  // Parecidos: primero los de la misma condición y carrocería, que es lo que
-  // de verdad ayuda a quien todavía no se ha decidido; si no salen tres, se
-  // completa con los de la misma condición.
+  // Parecidos: primero los de la misma carrocería dentro del mismo segmento,
+  // que es lo que de verdad ayuda a quien todavía no se ha decidido; si no
+  // salen tres, se completa con el resto del segmento.
+  //
+  // El filtro de segmento no es opcional: ofrecerle un Corolla a quien está
+  // mirando un chasis de quince toneladas no es una sugerencia, es ruido.
   const resto = leerVehiculos().filter((v) => v.slug !== vehiculo.slug);
+  const mismoSegmento = resto.filter((v) => v.segmento === vehiculo.segmento);
   const parecidos = [
-    ...resto.filter(
-      (v) => v.carroceria === vehiculo.carroceria && v.condicion === vehiculo.condicion
-    ),
-    ...resto.filter(
-      (v) => v.condicion === vehiculo.condicion && v.carroceria !== vehiculo.carroceria
-    ),
+    ...mismoSegmento.filter((v) => v.carroceria === vehiculo.carroceria),
+    ...mismoSegmento.filter((v) => v.carroceria !== vehiculo.carroceria),
   ].slice(0, 3);
 
   return (
@@ -85,8 +85,8 @@ export default async function Vehiculo({ params }) {
 
           <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">
             <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
-              {/* La foto, lo primero y lo más grande. Es la página del catálogo
-                  de HB entera, así que no se recorta. */}
+              {/* La foto, lo primero y lo más grande. Es su publicación de
+                  Instagram entera, así que no se recorta. */}
               <div>
                 <Revelar desde="corte">
                   <FotoVehiculo
@@ -185,7 +185,7 @@ export default async function Vehiculo({ params }) {
                         En la página entregada, este botón abre WhatsApp con el mensaje
                         ya escrito —«me interesa el {vehiculo.tituloLargo} {vehiculo.anio},
                         ¿sigue disponible?»— para que el comprador no tenga que explicar
-                        nada y en HB sepan de entrada por cuál unidad preguntan.
+                        nada y en LM 2006 sepan de entrada por cuál unidad preguntan.
                       </AvisoBloqueado>
                     ) : (
                       <BotonContacto
@@ -193,7 +193,7 @@ export default async function Vehiculo({ params }) {
                         demo={false}
                         className="btn btn-primary btn-lg w-full"
                       >
-                        Me interesa este vehículo
+                        Me interesa esta unidad
                       </BotonContacto>
                     )}
                   </div>
@@ -204,7 +204,7 @@ export default async function Vehiculo({ params }) {
                         <li key={detalle} className="flex gap-3 text-sm leading-snug">
                           <span
                             className="mt-1 h-3 w-2 shrink-0 bg-primary"
-                            style={{ transform: "skewX(var(--angulo-hb))" }}
+                            style={{ transform: "skewX(var(--angulo-lm))" }}
                             aria-hidden="true"
                           />
                           <span className="display-recto tracking-wide text-base-content/80">
@@ -227,7 +227,7 @@ export default async function Vehiculo({ params }) {
             {/* Debajo del pliegue: el texto largo y la tabla completa. */}
             <div className="mt-20 grid gap-12 border-t border-base-content/10 pt-12 lg:grid-cols-2 lg:gap-20">
               <Revelar>
-                <p className="rotulo">Sobre este vehículo</p>
+                <p className="rotulo">Sobre esta unidad</p>
                 <p className="mt-5 text-lg leading-relaxed text-base-content/70">
                   {vehiculo.descripcion}
                 </p>
@@ -252,7 +252,7 @@ export default async function Vehiculo({ params }) {
                 <p className="rotulo">También te puede servir</p>
               </Revelar>
               <TituloAnimado as="h2" className="display mt-4 text-3xl sm:text-4xl">
-                {vehiculo.esNuevo ? "Otros 0 km del catálogo" : "Otros usados del catálogo"}
+                {vehiculo.esCamion ? "Otros camiones del local" : "Otras unidades del local"}
               </TituloAnimado>
               <RejillaVehiculos vehiculos={parecidos} className="mt-10" />
             </div>

@@ -5,7 +5,7 @@ import config from "@/config";
 /**
  * El corte del inventario.
  *
- * Los primeros vehículos se ven nítidos; a partir de ahí el resto se difumina y
+ * Las primeras unidades se ven nítidas; a partir de ahí el resto se difumina y
  * encima aparece la oferta. Lo difuminado sigue en el HTML a propósito —se ve
  * que hay más inventario detrás— pero no se puede leer ni pulsar: `select-none`
  * y `pointer-events-none` lo dejan como decorado, y `aria-hidden` lo saca del
@@ -33,15 +33,19 @@ export default function MuroDemo({ ocultos, children }) {
         <div className="ficha w-full max-w-md p-7 text-center shadow-2xl shadow-black/50">
           <p className="microgramma text-[0.65rem] text-primary">Hasta aquí llega la demo</p>
 
+          {/* "Unidades" y no "vehículos": detrás del muro puede haber un
+              camión o una moto, y llamarlos vehículos delante de alguien que
+              vende chasis de quince toneladas es el tipo de descuido que se
+              nota. */}
           <p className="display mt-4 text-2xl">
             <span className="cifra text-primary">+{ocultos}</span>{" "}
-            {ocultos === 1 ? "vehículo más" : "vehículos más"}
+            {ocultos === 1 ? "unidad más" : "unidades más"}
           </p>
 
           <p className="mt-3 text-sm leading-relaxed text-base-content/60">
             La página completa lleva todo el catálogo, la ficha de cada unidad, el
-            corte entre 0 km y usados, y el botón de WhatsApp que llega con el
-            modelo ya escrito.
+            corte entre vehículos y camiones, y el botón de WhatsApp que llega con
+            el modelo ya escrito.
           </p>
 
           <p className="mt-5 flex items-baseline justify-center gap-2.5">

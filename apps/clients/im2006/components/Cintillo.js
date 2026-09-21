@@ -5,8 +5,8 @@
 // derecho a saber cuál está leyendo:
 //
 //   · el ESCAPARATE, que le habla al comprador de un carro;
-//   · la OFERTA, que le habla al dueño de HB Inversiones sobre el sistema
-//     que se le está vendiendo.
+//   · la OFERTA, que le habla al dueño de LM 2006 sobre el sistema que se le
+//     está vendiendo.
 //
 // Entre una y otra pasa esta cinta, en Microgramma —la tipografía de la firma
 // de Alessandrovaru— para que se lea como una voz ajena a la marca del
@@ -18,7 +18,7 @@
 
 const MENSAJES = {
   venta: [
-    "Esto es para ti, dueño de HB Inversiones",
+    "Esto es para ti, dueño de LM 2006",
     "Así se administra por dentro",
     "Lo que sigue es la oferta",
     "Tu página, tu dominio, tu código",
@@ -44,7 +44,7 @@ const MENSAJES = {
     "Dominio propio",
     "Inventario ilimitado",
     "Panel incluido",
-    "0 km y usados separados",
+    "Vehículos y camiones separados",
     "Entrega en 7 días",
   ],
 };

@@ -22,7 +22,7 @@ export default function Privacidad() {
         ← Volver
       </Link>
 
-      <h1 className="display mt-8 text-3xl">Política de privacidad</h1>
+      <h1 className="display mt-8 text-2xl">Política de privacidad</h1>
       <p className="mt-2 text-sm text-base-content/50">Última actualización: {hoy}</p>
 
       <div className="mt-10 space-y-8 leading-relaxed text-base-content/75">

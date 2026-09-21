@@ -4,19 +4,16 @@ import Silueta from "@/components/Silueta";
 /**
  * El cuadro donde va el vehículo.
  *
- * Las fotos de esta página son las trece páginas del catálogo de HB tal cual:
- * el vehículo recortado sobre el corte diagonal de la marca, con el modelo
- * arriba, las viñetas abajo a la derecha y la dirección del local abajo a la
- * izquierda. Vienen en 4:5 y se enseñan ENTERAS, sin recortar: la gráfica es
- * del cliente y recortarla sería tirar a la basura lo mejor que tiene.
+ * Las fotos que vengan de @susucars son publicaciones de Instagram, casi
+ * siempre en 4:5, y se enseñan ENTERAS: son suyas, están compuestas, y
+ * recortarlas a un apaisado le corta la cabeza al vehículo. De ahí que el
+ * `object-fit` por defecto sea `contain` y no `cover`; el hueco que queda
+ * alrededor lo tapa el fondo de estudio, que es negro como el de la ficha, así
+ * que no se nota que haya hueco.
  *
- * De ahí que el `object-fit` por defecto sea `contain` y no `cover`. El hueco
- * que queda alrededor lo tapa el fondo de estudio, que es negro como el de la
- * ficha, así que no se nota que haya hueco.
- *
- * Sin foto —que es lo que pasaría con un vehículo cargado desde el panel y
- * todavía sin fotografiar— dibuja la silueta del tipo, que mantiene la página
- * presentable en vez de dejar un rectángulo vacío.
+ * Sin foto —que es hoy el caso de todo el catálogo de muestra— dibuja la
+ * silueta del tipo, que mantiene la página presentable en vez de dejar un
+ * rectángulo vacío.
  */
 export default function FotoVehiculo({
   vehiculo,
@@ -39,12 +36,15 @@ export default function FotoVehiculo({
           className={encajar === "cover" ? "object-cover" : "object-contain"}
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center p-[8%]">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 p-[8%]">
           <div className="relative w-full max-w-2xl">
             <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content/25" />
             {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
             <div className="sombra-piso absolute inset-x-[6%] bottom-[3%] h-3" aria-hidden="true" />
           </div>
+          {/* Sin esto, el hueco se lee como una foto que no cargó. Con el
+              cartel se lee como lo que es: el sitio de la foto real. */}
+          <AvisoSinFoto />
         </div>
       )}
     </div>
@@ -63,17 +63,16 @@ export function AvisoSinFoto({ className = "" }) {
 }
 
 /**
- * "Este precio todavía no es el suyo".
+ * "Este vehículo no es suyo todavía".
  *
- * El catálogo en PDF que mandó HB no publica ni un precio: trae el modelo, el
- * año, el kilometraje y poco más. Los precios de esta demo son de referencia
- * de mercado, puestos para que la página se pueda enseñar funcionando, y decir
- * eso en voz alta es la diferencia entre una demo honesta y una que se inventa
- * el inventario de otro.
+ * Mientras no se carguen las publicaciones reales de @susucars, las fichas son
+ * inventadas para poder enseñar la página funcionando. Decirlo en voz alta, en
+ * la propia tarjeta, es la diferencia entre una demo honesta y una que se
+ * inventa el inventario de un negocio delante de su dueño.
  *
- * Desaparece solo en cuanto la ficha deja de llevar `precioProvisional`.
+ * Desaparece solo en cuanto la ficha deja de llevar `muestra`.
  */
-export function AvisoPrecioProvisional({ className = "" }) {
+export function AvisoDeMuestra({ className = "" }) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 border border-base-content/15 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
@@ -90,7 +89,7 @@ export function AvisoPrecioProvisional({ className = "" }) {
         <circle cx="12" cy="12" r="10" />
         <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
       </svg>
-      Precio de referencia: el catálogo de HB no publica precios
+      Ficha de muestra: aquí va tu inventario real
     </span>
   );
 }

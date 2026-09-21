@@ -6,7 +6,7 @@ import TituloAnimado from "@/components/TituloAnimado";
 import Diagonales from "@/components/Diagonales";
 import Parallax from "@/components/Parallax";
 import Cifra from "@/components/Cifra";
-import MarcaHB from "@/components/MarcaHB";
+import MarcaLM from "@/components/MarcaLM";
 import FotoVehiculo from "@/components/FotoVehiculo";
 import PantallaVehiculo from "@/components/PantallaVehiculo";
 import CarruselCatalogo from "@/components/CarruselCatalogo";
@@ -20,7 +20,8 @@ import {
   facetasDe,
   filtrar,
   hayPreciosProvisionales,
-  CONDICIONES,
+  hayFotosPendientes,
+  SEGMENTOS,
 } from "@/libs/vehiculos";
 import { esDemo } from "@/libs/demo";
 import { enDolares } from "@/libs/formato";
@@ -40,11 +41,21 @@ export default function Inicio() {
   const portada = escaparate[0] || vehiculos[0];
   const desde = Math.min(...vehiculos.map((v) => v.precio));
 
-  // Para los dos caminos de la sección de condición: cuántos hay de cada uno y
-  // desde cuánto arranca cada lado.
-  const caminos = CONDICIONES.map((condicion) => {
-    const lista = filtrar(vehiculos, { condicion: condicion.slug, orden: "precio-asc" });
-    return { ...condicion, total: lista.length, desde: lista[0]?.precio, muestra: lista[0] };
+  // Los dos caminos de la sección de segmento: cuántos hay de cada uno y desde
+  // cuánto arranca cada lado. Son los dos de su bio —vehículos y camiones— y
+  // no una división inventada aquí.
+  const caminos = SEGMENTOS.map((segmento) => {
+    const lista = filtrar(vehiculos, { segmento: segmento.slug, orden: "precio-asc" });
+    return {
+      ...segmento,
+      total: lista.length,
+      desde: lista[0]?.precio,
+      // La foto que ilustra el segmento es la de un DESTACADO, no la de la
+      // unidad más barata: ordenado por precio, "Vehículos" salía ilustrado
+      // con la moto, que es lo más barato que venden y lo que menos representa
+      // al segmento. El precio "desde" sí sigue siendo el más bajo.
+      muestra: lista.find((v) => v.destacado) || lista[0],
+    };
   }).filter((c) => c.total > 0);
 
   return (
@@ -54,10 +65,9 @@ export default function Inicio() {
       <main>
         {/* ------------------------------------------------------------------
             Portada.
-            La retícula es la de sus fichas de catálogo: el texto a la
-            izquierda, el vehículo a la derecha y las diagonales cruzando por
-            detrás. Lo único que cambia es que aquí el titular es la frase con
-            la que se presentan en Instagram.
+            La retícula es la de sus publicaciones: el texto a la izquierda,
+            la unidad a la derecha y las tres barras cruzando por detrás. El
+            titular es, literalmente, la primera línea de su bio.
            ---------------------------------------------------------------- */}
         <section className="relative flex min-h-svh items-center overflow-hidden px-4 pb-16 pt-10 sm:px-6">
           <Diagonales variante="portada" />
@@ -68,7 +78,7 @@ export default function Inicio() {
             <div>
               <Revelar desde="izquierda">
                 <div className="flex items-center gap-3">
-                  <MarcaHB className="h-7 w-24 text-base-content" />
+                  <MarcaLM className="h-6 w-auto text-base-content" />
                   <span className="cifra text-[0.65rem] tracking-[0.3em] text-base-content/45">
                     {config.business.ciudad.toUpperCase()} · {config.business.estado.toUpperCase()}
                   </span>
@@ -80,14 +90,15 @@ export default function Inicio() {
                 retraso={150}
                 className="display mt-7 text-5xl leading-[0.88] sm:text-6xl lg:text-7xl xl:text-8xl"
               >
-                Importamos y vendemos el auto{" "}
-                <span className="text-primary">de tus sueños</span>
+                Concesionario de vehículos{" "}
+                <span className="text-primary">y camiones</span>
               </TituloAnimado>
 
               <Revelar retraso={420}>
                 <p className="mt-7 max-w-lg text-base leading-relaxed text-base-content/60 sm:text-lg">
-                  {config.business.lema}. Unidades 0 km traídas por nosotros y usados
-                  revisados uno a uno, con su ficha completa y su precio a la vista.
+                  {config.business.lema}. Desde un compacto 0 km hasta un chasis de
+                  quince toneladas, cada unidad con su ficha técnica completa y su
+                  precio a la vista.
                 </p>
               </Revelar>
 
@@ -122,11 +133,14 @@ export default function Inicio() {
                     </dd>
                   </div>
                   <div className="min-w-0">
+                    {/* El "$" va FUERA del <Cifra>: ese nodo lo reescribe GSAP
+                        sesenta veces por segundo mientras la cifra sube, y se
+                        llevaría por delante cualquier cosa que tuviera dentro. */}
                     <dt className="cifra text-2xl font-bold text-primary sm:text-3xl">
-                      <Cifra valor={desde} formato="dolaresRedondos" />
+                      $<Cifra valor={desde} formato="milesRedondos" />
                     </dt>
                     <dd className="mt-1.5 text-[0.6rem] uppercase tracking-wider text-base-content/40 sm:text-[0.7rem]">
-                      desde
+                      desde · USD
                     </dd>
                   </div>
                   <div className="min-w-0">
@@ -191,9 +205,9 @@ export default function Inicio() {
         <CarruselCatalogo vehiculos={vehiculos} />
 
         {/* ------------------------------------------------------------------
-            Los dos caminos: 0 km importado o usado verificado. Es el corte que
-            de verdad hace este negocio, y la primera pregunta de cualquiera
-            que llega.
+            Los dos caminos: vehículos o camiones. Es el corte que de verdad
+            hace este negocio —lo dice la primera línea de su bio— y la primera
+            pregunta de cualquiera que llega.
            ---------------------------------------------------------------- */}
         <section className="relative overflow-hidden border-t border-base-content/8 px-4 py-24 sm:px-6">
           <Diagonales variante="seccion" />
@@ -206,7 +220,7 @@ export default function Inicio() {
             </Revelar>
 
             <TituloAnimado as="h2" className="display mt-4 text-4xl sm:text-5xl">
-              Dos formas de comprar aquí
+              Dos catálogos en un local
             </TituloAnimado>
 
             <div className="mt-14 grid gap-6 lg:grid-cols-2">
@@ -223,10 +237,10 @@ export default function Inicio() {
                         encajar="cover"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
-                      {/* La foto es una página de catálogo en 4:5 recortada a
+                      {/* La foto es una publicación en 4:5 recortada a
                           apaisado, así que aquí sí va `cover`: de lo que se
-                          trata es de enseñar el corte diagonal y el vehículo,
-                          no la ficha completa, que ya está en su tarjeta. */}
+                          trata es de enseñar la unidad, no la ficha completa,
+                          que ya está en su tarjeta. */}
                       <div
                         className="absolute inset-0 bg-linear-to-t from-base-200 via-base-200/20 to-transparent"
                         aria-hidden="true"
@@ -235,13 +249,13 @@ export default function Inicio() {
 
                     <div className="flex flex-1 flex-col p-6 sm:p-7">
                       <p className="display text-3xl sm:text-4xl">
-                        {camino.slug === "nuevo" ? (
+                        {camino.slug === "vehiculos" ? (
                           <>
-                            <span className="text-primary">0 km</span> importados
+                            <span className="text-primary">Vehículos</span> 0 km
                           </>
                         ) : (
                           <>
-                            Usados <span className="text-primary">verificados</span>
+                            <span className="text-primary">Camiones</span> de carga
                           </>
                         )}
                       </p>
@@ -365,11 +379,11 @@ export default function Inicio() {
 
               <Revelar retraso={200}>
                 <p className="cifra mt-5 text-lg text-primary">
-                  {config.business.ciudad}, estado {config.business.estado}
+                  {config.business.ciudad}, {config.business.estado}
                 </p>
                 <p className="mt-6 max-w-md leading-relaxed text-base-content/60">
-                  Aquí se ven los vehículos, se prueban y se cierra el trato. Puedes
-                  venir a verlos sin compromiso o escribirnos antes para apartar una
+                  Aquí se ven las unidades, se prueban y se cierra el trato. Puedes
+                  venir a verlas sin compromiso o escribirnos antes para apartar una
                   cita.
                 </p>
                 <p className="mt-4 text-sm text-base-content/45">{config.business.horario}</p>
@@ -426,8 +440,8 @@ export default function Inicio() {
         </section>
 
         {/* ------------------------------------------------------------------
-            Aquí cambia el interlocutor: lo que viene le habla al dueño de HB,
-            no a quien vino a comprar un carro. El cintillo lo avisa.
+            Aquí cambia el interlocutor: lo que viene le habla al dueño de
+            LM 2006, no a quien vino a comprar un carro. El cintillo lo avisa.
            ---------------------------------------------------------------- */}
         {/* El panel se queda aunque se apague la demo: al comprador le explica
             por qué el inventario está al día. Lo que sí desaparece con la demo
@@ -437,13 +451,19 @@ export default function Inicio() {
         {demo && <SeccionPorQue />}
         {demo && <Cintillo variante="cliente" />}
 
-        {/* Aviso honesto mientras los precios sean de referencia. */}
-        {hayPreciosProvisionales() && (
+        {/* ------------------------------------------------------------------
+            Aviso honesto sobre de dónde sale y de dónde no sale cada cosa.
+
+            Va aunque la demo esté apagada: mientras haya un precio de
+            referencia o una ficha sin su foto, decirlo en voz alta es la
+            diferencia entre enseñar el catálogo de alguien y inventárselo.
+           ---------------------------------------------------------------- */}
+        {(hayPreciosProvisionales() || hayFotosPendientes()) && (
           <section className="border-t border-base-content/8 px-4 py-14 sm:px-6">
             <div className="panel mx-auto max-w-3xl p-7 text-center">
-              <p className="rotulo">Sobre los precios</p>
+              <p className="rotulo">De dónde sale esto</p>
               <p className="mt-4 text-sm leading-relaxed text-base-content/60">
-                Los {vehiculos.length} vehículos y sus fotos salen del catálogo en PDF de{" "}
+                Las {vehiculos.length} unidades salen del feed de{" "}
                 <a
                   href={config.business.instagramUrl}
                   target="_blank"
@@ -452,9 +472,24 @@ export default function Inicio() {
                 >
                   @{config.business.instagram}
                 </a>
-                : son sus unidades y sus fotos. Lo único que no sale de ahí son los
-                precios, porque el catálogo no publica ninguno; los que ves son de
-                referencia de mercado y se sustituyen por los reales desde el panel.
+                : marca, modelo, año y ficha técnica están copiados de sus propias
+                publicaciones.
+                {hayPreciosProvisionales() && (
+                  <>
+                    {" "}
+                    Los precios no, porque casi nunca los publican; los que ves son de
+                    referencia de mercado y se sustituyen por los reales desde el
+                    panel.
+                  </>
+                )}
+                {hayFotosPendientes() && (
+                  <>
+                    {" "}
+                    Y donde ves una silueta en vez de una foto es porque esa foto
+                    todavía está en su Instagram y no aquí: antes que enseñar la
+                    imagen de otro carro, esta página no enseña ninguna.
+                  </>
+                )}
               </p>
             </div>
           </section>

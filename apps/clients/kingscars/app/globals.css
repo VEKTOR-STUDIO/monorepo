@@ -1,0 +1,1112 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tema "kingscars".
+ *
+ * No se inventó una paleta: se copió la suya, y la suya es CASI NINGUNA. Su
+ * emblema —una corona geométrica sobre "KING CARS"— está calado en blanco puro
+ * sobre una piedra oscura veteada, sin un solo color. Sus publicaciones son lo
+ * mismo: fondo oscuro, rótulos blancos, tarjetas blancas de datos y, muy de
+ * vez en cuando, un rojo.
+ *
+ * Cinco decisiones que vienen de ahí y no de un gusto:
+ *
+ *   · BLANCO SOBRE PIZARRA. El blanco no es "el color del texto": es EL color
+ *     de la marca. Los botones, las tarjetas de datos y el rótulo de cada
+ *     unidad van en blanco macizo sobre oscuro, igual que en sus piezas.
+ *   · EL FONDO NO ES NEGRO, ES PIEDRA. Su foto de perfil está sobre una losa
+ *     gris oscuro con vetas. Un negro plano habría sido más barato y menos
+ *     suyo; de ahí `.piedra`, que es la textura de esa losa.
+ *   · EL ROJO SEÑALA Y NADA MÁS. En 902 publicaciones el rojo aparece contado:
+ *     la palabra "CARRO" del post de "¿vas a vender tu carro?", la aguja del
+ *     velocímetro de la tarjeta de kilometraje. Aquí hace exactamente eso:
+ *     precio, condición y llamada a la acción. En cuanto se usara de relleno
+ *     dejaría de significar nada.
+ *   · ESQUINAS CORTADAS, NO REDONDEADAS. Las letras de "KING CARS" tienen los
+ *     vértices biselados y la corona está hecha de triángulos y rombos. Por eso
+ *     aquí el gesto es el CHAFLÁN (`.faceta`, `.corte`) y el rombo de su base
+ *     (`.bisel`, `.filo`), no el arco.
+ *   · LAS TARJETAS DE DATOS SÍ SE REDONDEAN. Es la única excepción y es suya:
+ *     el pie de cada post lleva tres tarjetas blancas de esquinas francamente
+ *     redondas con Kilometraje, Transmisión y Precio. Esa fila es la pieza que
+ *     más se repite en toda la cuenta, así que se hereda tal cual.
+ *
+ * Para mover el rojo de acento: --color-primary aquí y config.colors.main.
+ * ------------------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "kingscars";
+  default: true;
+  color-scheme: dark;
+
+  /* La losa de su foto de perfil: gris muy oscuro, no negro puro. */
+  --color-base-100: oklch(15% 0 0);
+  --color-base-200: oklch(19.5% 0 0);
+  --color-base-300: oklch(26% 0 0);
+  --color-base-content: oklch(98% 0 0);
+
+  /* El rojo que señala (#E11B2C). */
+  --color-primary: oklch(57% 0.215 27);
+  --color-primary-content: oklch(99% 0 0);
+
+  /* El blanco de la marca. Es `secondary` por sitio en la tabla de daisyUI,
+     pero en esta casa es EL color: la corona, los rótulos y las tarjetas de
+     datos son blancos. */
+  --color-secondary: oklch(99% 0 0);
+  --color-secondary-content: oklch(14% 0 0);
+
+  --color-accent: oklch(66% 0.19 28);
+  --color-accent-content: oklch(99% 0 0);
+
+  --color-neutral: oklch(23% 0 0);
+  --color-neutral-content: oklch(96% 0 0);
+
+  --color-info: oklch(70% 0.11 240);
+  --color-info-content: oklch(13% 0 0);
+  --color-success: oklch(72% 0.16 155);
+  --color-success-content: oklch(13% 0 0);
+  --color-warning: oklch(82% 0.15 80);
+  --color-warning-content: oklch(13% 0 0);
+  --color-error: oklch(57% 0.215 27);
+  --color-error-content: oklch(99% 0 0);
+
+  /* Redondeo mínimo. Lo que de verdad define esta marca es el chaflán, y un
+     radio grande se lo comería. Lo redondo se reserva para las tarjetas de
+     datos (.tarjeta-dato) y las pastillas, que es donde su gráfica lo pide. */
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  /* Chakra Petch es lo más cerca que se llega de "KING CARS" sin licenciar su
+     tipografía: cuadrada, ancha, recta y con los VÉRTICES CORTADOS, que es
+     justo lo que tienen sus letras. Va SIEMPRE derecha: en su logotipo no hay
+     una sola inclinación, al revés que en media competencia. */
+  --font-display: var(--font-chakra), "Arial Narrow", system-ui, sans-serif;
+  --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* -------------------------------------------------------------------------
+   * Un solo radio en toda la web.
+   *
+   * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
+   * mismo valor a propósito: así da igual cuál escriba cada componente, el
+   * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
+   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos y
+   * pastillas de verdad, y esos sí deben seguir siendo redondos.
+   * ----------------------------------------------------------------------- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.25rem;
+  --radius-2xl: 0.25rem;
+  --radius-3xl: 0.25rem;
+
+  --color-tinta: oklch(15% 0 0);
+  --color-humo: oklch(63% 0 0);
+  --color-acero: oklch(32% 0 0);
+  --color-rojo: oklch(57% 0.215 27);
+  --color-rojo-claro: oklch(66% 0.19 28);
+  --color-rojo-hondo: oklch(45% 0.185 27);
+  --color-hueso: oklch(99% 0 0);
+  --color-piedra: oklch(24% 0 0);
+
+  --animate-flecha: flecha 2.2s ease-in-out infinite;
+  --animate-cinta: cinta 42s linear infinite;
+
+  /* La flecha de "sigue bajando" del final de la portada. */
+  @keyframes flecha {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateY(0.4rem);
+      opacity: 1;
+    }
+  }
+
+  @keyframes cinta {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+  }
+
+  /* El latido del punto de "en directo" de la puerta. */
+  @keyframes pulso {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.82);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+
+  /* Alto de la franja de demo. Sin demo vale 0 y la cabecera vuelve arriba
+     del todo; con demo, la cabecera se pega justo debajo de la franja. */
+  --alto-barra-demo: 0px;
+
+  /* Alto del crédito de autoría del final (components/FooterFoot.js). */
+  --alto-credito: 1.9rem;
+
+  /* EL ROMBO. En la base de su corona hay dos rombos huecos, y esa
+     inclinación es la única que existe en toda la marca. Se reserva para
+     piezas pequeñas —chips, insignias, filetes—; lo grande va recto, como sus
+     letras. Tiene que ir a la par con ANGULO en libs/animaciones.js. */
+  --angulo-kc: -16deg;
+
+  /* EL CHAFLÁN. La esquina cortada de sus letras. Es la otra mitad del gesto y
+     la que se usa en las cajas grandes (.faceta, .corte). */
+  --bisel-kc: 0.6rem;
+
+  background-color: var(--color-base-100);
+}
+
+html[data-demo="true"] {
+  --alto-barra-demo: 2.5rem;
+}
+
+/* En demo, la tarjeta flotante de venta se posa abajo. En pantalla estrecha
+   ocupa todo el ancho y taparía el crédito, así que se le da aire. */
+html[data-demo="true"] .footer-foot {
+  padding-bottom: 9.5rem;
+}
+
+@media (min-width: 640px) {
+  html[data-demo="true"] .footer-foot {
+    padding-bottom: 0.25rem;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-base-100);
+}
+
+:target {
+  scroll-margin-top: calc(var(--alto-barra-demo) + 5rem);
+}
+
+::selection {
+  background-color: var(--color-rojo);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+ * Tipografía
+ * ------------------------------------------------------------------------ */
+
+/* El rótulo de la casa: cuadrado, ancho, derecho y en mayúsculas, con los
+   vértices cortados de sus letras. Es lo que hace que un bloque de texto se
+   lea como una pieza de Kings Cars y no como una web de plantilla.
+
+   NO LLEVA ITÁLICA, y es una decisión, no un olvido: en su logotipo y en el
+   rótulo de cada post todo va a plomo. Inclinarlo lo convertiría en cualquier
+   otro concesionario. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+/* Variante espaciada, para lo corto: nombres de sección, etiquetas grandes.
+   En el emblema "KING CARS" va abierto, no apretado. */
+.display-abierto {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Etiquetas pequeñas de sección. */
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
+}
+
+/* Cifras que se comparan entre sí: precios, kilómetros, años. */
+.cifra {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+ * Los titulares que entran línea a línea
+ *
+ * SplitText envuelve cada línea en una caja con `overflow: clip` para que el
+ * texto ASOME en vez de aparecer. El recorte es exactamente a ras de la caja
+ * de la línea, así que en español se comería las tildes de las mayúsculas:
+ * "ÚNICO", "CONSIGNACIÓN", "AVALÚO".
+ *
+ * Se le da hueco con padding y se recupera con un margen negativo igual, que
+ * en un elemento generado por GSAP no compite con ninguna utilidad de
+ * Tailwind.
+ * ------------------------------------------------------------------------ */
+.linea-titulo-mask {
+  padding-top: 0.24em;
+  margin-top: -0.24em;
+  padding-right: 0.08em;
+  margin-right: -0.08em;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+/* --------------------------------------------------------------------------
+ * Microgramma y los cintillos
+ *
+ * Esta página tiene DOS voces y conviene no confundirlas:
+ *
+ *   · Lo que ve el comprador —vehículos, cómo se compra, cómo se vende,
+ *     contacto— va con la tipografía de la casa.
+ *   · Lo que le habla a KINGS CARS —cómo se publica, qué incluye, cuánto
+ *     cuesta— va en Microgramma, que es la tipografía de la firma de
+ *     Alessandrovaru, la misma del crédito del pie.
+ *
+ * Entre una voz y otra se cruza un cintillo animado, para que se vea de un
+ * golpe dónde termina el escaparate y dónde empieza la oferta.
+ * ------------------------------------------------------------------------ */
+
+.microgramma {
+  font-family: var(--microgramma-font), var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cintillo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-block: 0.7rem;
+  user-select: none;
+  /* Se difumina por los bordes: el texto nace y muere, no se corta en seco. */
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* La pista lleva el contenido DOS veces y se desplaza media pista: al llegar
+   al -50 % la segunda copia está exactamente donde empezó la primera, así que
+   el salto al reiniciar no se ve. */
+.cintillo-pista {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  animation: cinta 38s linear infinite;
+}
+
+.cintillo:hover .cintillo-pista {
+  animation-play-state: paused;
+}
+
+/* La voz de venta: el rojo de la casa, que aquí sí llena. Es el único sitio de
+   toda la web donde el rojo cubre una banda entera, y por eso funciona como
+   aviso de que cambia el interlocutor. */
+.cintillo-venta {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-rojo-hondo),
+    var(--color-rojo) 45%,
+    var(--color-rojo-claro)
+  );
+  color: oklch(99% 0 0);
+}
+
+/* La vuelta al escaparate: oscura y discreta, que no compita. */
+.cintillo-cliente {
+  background-color: var(--color-base-200);
+  color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+  border-block: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+.cintillo-texto {
+  font-size: 0.7rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+/* La separación entre una frase y la siguiente: el rombo de la base de su
+   corona, no un punto cualquiera. */
+.cintillo-punto {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: currentColor;
+  opacity: 0.55;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cintillo-pista {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * La gráfica de la casa: la piedra, la corona y el chaflán
+ *
+ * Su foto de perfil no está sobre negro plano: está sobre una LOSA gris oscuro
+ * con vetas, y esa losa es el suelo de toda la marca. Las capas van por
+ * separado para que cada sección use las que le hagan falta.
+ * ------------------------------------------------------------------------ */
+
+/* 1. La piedra. Vetas anchas y grano, en gris sobre gris: se nota que hay
+      superficie sin que se lea ningún dibujo. `--piedra-fuerza` gradúa cuánto
+      pesa sin tocar la receta. */
+.piedra {
+  --piedra-fuerza: 1;
+  pointer-events: none;
+  background-color: var(--color-base-100);
+  background-image:
+    radial-gradient(
+      ellipse 90% 70% at 50% 0%,
+      color-mix(in oklab, var(--color-piedra) calc(70% * var(--piedra-fuerza)), transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 60% at 18% 86%,
+      color-mix(in oklab, var(--color-piedra) calc(48% * var(--piedra-fuerza)), transparent) 0%,
+      transparent 68%
+    ),
+    radial-gradient(
+      ellipse 60% 55% at 86% 62%,
+      color-mix(in oklab, var(--color-piedra) calc(40% * var(--piedra-fuerza)), transparent) 0%,
+      transparent 66%
+    );
+}
+
+/* Las vetas de la losa: rayas larguísimas, muy tenues y en diagonal suave, que
+   es lo que se ve en su foto de perfil cuando se mira de cerca. Va aparte de
+   `.piedra` porque en una tarjeta pequeña las vetas se convierten en rayas
+   visibles y ahí sobran. */
+.piedra-vetas {
+  pointer-events: none;
+  opacity: 0.34;
+  mix-blend-mode: soft-light;
+  background-image:
+    repeating-linear-gradient(
+      98deg,
+      transparent 0 7px,
+      rgb(255 255 255 / 0.5) 7px 8px,
+      transparent 8px 23px
+    ),
+    repeating-linear-gradient(
+      93deg,
+      transparent 0 41px,
+      rgb(0 0 0 / 0.6) 41px 44px,
+      transparent 44px 97px
+    );
+}
+
+/* 2. El chaflán, que es el gesto de sus letras: la esquina cortada en recto.
+      `.faceta` corta las dos esquinas opuestas, que es como se leen la "K" y
+      la "G" del emblema. */
+.faceta {
+  clip-path: polygon(
+    var(--bisel-kc) 0,
+    100% 0,
+    100% calc(100% - var(--bisel-kc)),
+    calc(100% - var(--bisel-kc)) 100%,
+    0 100%,
+    0 var(--bisel-kc)
+  );
+}
+
+/* Para fotos y bloques enteros: una sola esquina rebajada, más grande. */
+.corte {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.6rem), calc(100% - 1.6rem) 100%, 0 100%);
+}
+
+/* 3. El rombo, para piezas pequeñas: la caja va sesgada y el contenido se
+      contra-sesga para que el texto salga recto. Es el rombo hueco de la base
+      de su corona, y es la ÚNICA inclinación de toda la marca. */
+.bisel {
+  display: inline-block;
+  transform: skewX(var(--angulo-kc));
+}
+
+.bisel > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-kc) * -1));
+}
+
+/* El filete bajo un rótulo: una barra corta con los dos extremos cortados en
+   el ángulo del rombo. Va en rojo porque es una de las tres cosas que en esta
+   casa tienen permiso para serlo. */
+.filo {
+  height: 0.3rem;
+  width: 3.5rem;
+  background-color: var(--color-rojo);
+  clip-path: polygon(12% 0, 100% 0, 88% 100%, 0 100%);
+}
+
+.filo-ancho {
+  width: 100%;
+  background-image: linear-gradient(
+    to right,
+    var(--color-rojo),
+    color-mix(in oklab, var(--color-rojo) 12%, transparent)
+  );
+}
+
+.filo-blanco {
+  background-color: var(--color-hueso);
+  background-image: none;
+}
+
+/* --------------------------------------------------------------------------
+ * La tarjeta de datos: LA pieza de la casa
+ *
+ * El pie de cada publicación suya lleva tres tarjetas blancas de esquinas
+ * redondeadas, cada una con una etiqueta pequeña arriba —Kilometraje,
+ * Transmisión, Precio $— y el dato debajo en negro y muy gordo. Es lo que más
+ * se repite en las 902 publicaciones de la cuenta, así que aquí es un
+ * componente de estilo y no un adorno.
+ *
+ * El BLANCO MACIZO es el punto: sobre la losa oscura, esas tres tarjetas son
+ * lo único que brilla, y por eso el ojo va al dato y no a la decoración.
+ * ------------------------------------------------------------------------ */
+.tarjeta-dato {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  border-radius: 0.9rem;
+  background-color: var(--color-hueso);
+  color: oklch(14% 0 0);
+  padding: 0.6rem 0.9rem;
+  box-shadow: 0 10px 28px -16px #000;
+}
+
+.tarjeta-dato-etiqueta {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: oklch(42% 0 0);
+}
+
+.tarjeta-dato-valor {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: oklch(12% 0 0);
+}
+
+/* La tarjeta del precio es la que manda, y en sus piezas se nota. */
+.tarjeta-dato-fuerte .tarjeta-dato-valor {
+  font-size: 1.2rem;
+}
+
+/* El rótulo blanco del modelo, el que va encima de las tres tarjetas:
+   "TOYOTA COROLLA GLI / 2006". Blanco, gordo, en mayúsculas y centrado. */
+.rotulo-post {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  line-height: 1;
+  color: var(--color-hueso);
+}
+
+/* El marco de sus posts: un filete claro que envuelve la pieza entera y se
+   redondea, como el borde que llevan impreso todas sus publicaciones. */
+.marco-post {
+  border-radius: 1.1rem;
+  box-shadow: inset 0 0 0 2px color-mix(in oklab, var(--color-hueso) 70%, transparent);
+}
+
+/* La pastilla: el chip blanco de sus etiquetas, con el texto en negro. */
+.pastilla {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-hueso);
+  color: oklch(13% 0 0);
+  font-weight: 700;
+  box-shadow: 0 10px 26px -16px #000;
+}
+
+.pastilla-apagada {
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 75%, transparent);
+  box-shadow: none;
+}
+
+/* La pastilla que señala: roja. Se reserva para lo que de verdad es un aviso
+   —"0 km", "reservado", una rebaja—, no para etiquetar cualquier cosa. */
+.pastilla-roja {
+  background-color: var(--color-rojo);
+  color: oklch(99% 0 0);
+  box-shadow: 0 10px 26px -16px color-mix(in oklab, var(--color-rojo) 90%, transparent);
+}
+
+/* El fondo donde se posan las unidades: la losa con una insinuación de foco,
+   como el suelo de un salón de exposición. */
+.estudio {
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 50% 42%,
+      oklch(28% 0 0) 0%,
+      oklch(20% 0 0) 48%,
+      oklch(14% 0 0) 100%
+    );
+}
+
+/* La sombra elíptica bajo el vehículo. Sin esto las siluetas flotan. */
+.sombra-piso {
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, oklch(0% 0 0 / 0.55), transparent 70%);
+  filter: blur(6px);
+}
+
+/* --------------------------------------------------------------------------
+ * Texturas
+ *
+ * Kilómetros de gris liso se ven baratos en una pantalla grande. Estas capas
+ * le dan superficie sin llamar la atención, y van como CAPA —un div absoluto
+ * dentro de la sección— y no como pseudoelemento: con un z-index negativo
+ * acabarían por detrás del propio fondo y no se verían nunca.
+ *
+ *   <div className="textura absolute inset-0" aria-hidden="true" />
+ * ------------------------------------------------------------------------ */
+
+/* Grano fino. Es ruido que genera el navegador (feTurbulence), así que no hay
+   que servir ninguna imagen. Sobre la losa tiene que ACLARAR. */
+.textura {
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* La retícula de rombos: la base de su corona, repetida. Sustituye a la trama
+   genérica que traía la plantilla y se reserva para las secciones que hablan
+   del negocio; en todas dejaría de significar nada.
+
+   Los rombos van con las CUATRO ESQUINAS ESCRITAS A MANO y no con un
+   `transform="skewX()"` sobre un rectángulo: el sesgo empuja la figura fuera
+   del cuadro del patrón, el mosaico la recorta por los lados y lo que se repite
+   deja de ser un rombo para ser una retícula de cuadrados. Se vio en pantalla,
+   no en el código. */
+.textura-rombos {
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='44' viewBox='0 0 72 44'%3E%3Cpath d='M24 6 L58 6 L48 38 L14 38 Z' fill='none' stroke='%23ffffff' stroke-width='2'/%3E%3C/svg%3E");
+  background-size: 72px 44px;
+}
+
+/* El plástico que envuelve la puerta.
+   La foto es casi negra con los pliegues en blanco, así que va en `screen`:
+   el negro se cae y solo quedan los brillos de las arrugas, que es lo que hace
+   que la portada parezca metida en una bolsa. En `multiply` pasaría lo
+   contrario —se comería el fondo y quedaría una mancha negra—, y por eso no se
+   usa aquí. Va encima de todo el fondo, pero siempre por debajo del contenido,
+   que sube con `z-10`. */
+.plastico {
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  background-image: url("/plasticTexture.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* -----------------------------------------------------------------------------
+ * La puerta, de una sola pantalla.
+ *
+ * Es lo primero —y muchas veces lo único— que ve quien recibe el enlace, así
+ * que aquí no se hace scroll: la carátula, la caja de acceso y las dos cintas
+ * caben en `100svh` y ahí se quedan. `svh` y no `vh` porque en el móvil `vh`
+ * mide como si la barra del navegador no existiera y dejaría el pie fuera.
+ *
+ * Para que eso aguante igual en un portátil de 720 px que en un monitor, el
+ * ritmo vertical no va en `rem` fijos: estas medidas se calculan en `vh`, así
+ * que la página se encoge con la pantalla en vez de desbordarla. El mínimo de
+ * cada `clamp()` es el suelo por debajo del cual dejaría de respirar.
+ * -------------------------------------------------------------------------- */
+.puerta {
+  --puerta-v1: clamp(0.3rem, 0.9vh, 0.75rem); /* una etiqueta y su dato */
+  --puerta-v2: clamp(0.5rem, 1.6vh, 1.25rem); /* piezas de un mismo bloque */
+  --puerta-v3: clamp(0.7rem, 2.4vh, 1.75rem); /* de un bloque al siguiente */
+  /* Entre las dos columnas. Solo pesa cuando la puerta va APILADA —en
+     escritorio las columnas van una al lado de la otra y quien manda es el
+     `gap-x`—, así que apretarlo no le cuesta nada al portátil y es lo primero
+     que se toca cuando el móvil no cuadra por unos píxeles. Está en 2,6vh y no
+     en 3,2 porque a 360×800 la puerta se pasaba 2 px: 735 pedidos en 733
+     disponibles. Medido, no estimado. */
+  --puerta-v4: clamp(0.9rem, 2.6vh, 3.5rem);
+
+  /* El emblema se pide en píxeles porque el mismo componente sirve en la
+     cabecera; aquí se le pasa esta medida para que encoja con el alto. */
+  --puerta-logo: clamp(3.25rem, 8.5vh, 5.25rem);
+}
+
+/* El crédito de autoría se monta en el layout raíz, así que también cae debajo
+   de la puerta. Ahí sobra: la puerta lleva su propia firma, y con el aire que
+   el modo demo le da al crédito son 171 px que rompen la pantalla única. */
+body:has(main.puerta) .footer-foot {
+  display: none;
+}
+
+/* El párrafo de presentación solo sale cuando hay sitio de sobra: en el móvil
+   la columna es estrecha y lo que se vende ya lo cuentan la insignia, el
+   carrusel y las cintas; en un portátil bajo es lo primero que estorba.
+
+   El corte está en 52rem de alto y no en 46 porque está MEDIDO: con las nueve
+   líneas de `demo.incluye`, a 1440×800 la columna izquierda pedía 741 px en
+   733 disponibles y el párrafo eran justo los 110 px que sobraban. Si algún día
+   crece la lista, este número se vuelve a medir; no se adivina. */
+.puerta-presentacion {
+  display: none;
+}
+
+@media (width >= 64rem) and (height >= 52rem) {
+  .puerta-presentacion {
+    display: block;
+  }
+}
+
+/* Lo que trae la edición.
+ *
+ * Son ocho o nueve renglones que en un móvil no caben en vertical junto a la
+ * caja de acceso, así que ahí la lista se tumba: una fila que se arrastra de
+ * lado, con los puntos enganchados, y que se sale del margen para que se vea
+ * que hay más a la derecha. De `lg` en adelante vuelve a ser la lista de
+ * siempre, que es como se lee mejor. */
+.puerta-incluye {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+
+.puerta-incluye::-webkit-scrollbar {
+  display: none;
+}
+
+.puerta-incluye > li {
+  flex: 0 0 14rem;
+  scroll-snap-align: start;
+}
+
+/* Por debajo de 45rem de alto —un Android de gama baja, un iPhone SE, un
+   portátil de 13 pulgadas con muchas barras— no cabe todo, y hay que elegir
+   qué se va. Primero los adornos; después la lista de lo que trae la edición,
+   que es lo único que se cuenta dos veces: las dos cintas llevan girando esas
+   mismas ventajas sin parar. Lo que no se toca es el emblema, el precio y el
+   formulario, que es a lo que se viene. */
+@media (height < 45rem) {
+  .puerta-cortesia,
+  .puerta-incluido {
+    display: none;
+  }
+}
+
+@media (width >= 64rem) {
+  .puerta-incluye {
+    display: grid;
+    gap: var(--puerta-v1);
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .puerta-incluye > li {
+    flex: initial;
+  }
+}
+
+/* Rejilla técnica muy tenue, para los fondos que piden textura sin gráfica:
+   el 404, la pantalla de error y el fondo de la puerta. Se desvanece hacia los
+   bordes con una máscara para que no se vea dónde termina. */
+.malla {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+}
+
+.malla-centro {
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+}
+
+/* --------------------------------------------------------------------------
+ * Portada de edición  (solo la puerta de la demo)
+ *
+ * La puerta no es una pantalla de login: es el escaparate donde se vende el
+ * sistema. De ahí el lenguaje de carátula de edición especial —insignia,
+ * lista de lo que trae, sello de rebaja, cuenta atrás—, que todo el mundo
+ * sabe leer de un vistazo y que aquí además es verdad: hay un precio, hay una
+ * fecha y hay una lista de lo que se lleva quien compre.
+ *
+ * Nada de esto entra en el escaparate del cliente: ahí vende él, no nosotros.
+ * ------------------------------------------------------------------------ */
+
+.insignia-edicion {
+  display: inline-block;
+  transform: skewX(var(--angulo-kc));
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 30%, transparent);
+  background-image: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    color-mix(in oklab, var(--color-base-content) 4%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 22%, transparent),
+    0 12px 30px -16px #000;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.insignia-edicion > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-kc) * -1));
+}
+
+/* El sello de rebaja. Va girado, como el adhesivo de una caja. */
+.sello-descuento {
+  transform: rotate(-9deg);
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    140deg,
+    var(--color-rojo-claro),
+    var(--color-rojo) 55%,
+    var(--color-rojo-hondo)
+  );
+  color: oklch(99% 0 0);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-rojo) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-rojo) 70%, transparent);
+}
+
+/* Cada cosa que trae la edición, como una línea de contenido descargable. */
+.linea-dlc {
+  border-radius: var(--radius-box);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 4%, transparent);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linea-dlc:hover {
+  transform: translateX(4px);
+  border-color: color-mix(in oklab, var(--color-rojo) 55%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* Resplandor detrás de lo que tiene que mirarse primero. */
+.resplandor {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    0 0 70px -14px color-mix(in oklab, var(--color-hueso) 30%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Tarjetas
+ *
+ * Nada de cristal ni de sombras pesadas: una línea finísima sobre la losa y un
+ * filo rojo que aparece al pasar por encima. El peso visual lo tiene la unidad,
+ * que ya viene con la gráfica de la casa impresa.
+ * ------------------------------------------------------------------------ */
+
+.ficha {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  transition:
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+.ficha:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--color-hueso) 45%, transparent);
+  box-shadow: 0 26px 60px -30px #000;
+}
+
+/* El filo rojo del borde inferior, que solo crece al pasar por encima. */
+.ficha::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background-color: var(--color-rojo);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ficha:hover::after {
+  transform: scaleX(1);
+}
+
+/* Panel sin interacción: avisos, bloques de datos. */
+.panel {
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* La cabecera cuando ya se ha bajado un poco. La clase la pone y la quita
+   GSAP desde components/Header.js, en vez de un estado de React: así el fondo
+   cambia en el mismo fotograma que el scroll y no en el siguiente render. */
+header.con-fondo {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+/* Barra translúcida de la cabecera. */
+.barra-vidrio {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* --------------------------------------------------------------------------
+ * Hoja de especificaciones
+ * ------------------------------------------------------------------------ */
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border-radius: var(--radius-box);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .specs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.specs > * {
+  background-color: var(--color-base-100);
+  padding: 1rem 1.15rem;
+}
+
+/* --------------------------------------------------------------------------
+ * Botones
+ *
+ * EL BOTÓN PRINCIPAL ES BLANCO CON EL TEXTO EN NEGRO, y no rojo. Es la misma
+ * pieza que las tarjetas de datos de sus posts —blanco macizo sobre la losa—,
+ * que es lo que en su gráfica significa "esto es lo importante". Dejar el rojo
+ * para el botón habría sido lo obvio y habría gastado en un botón el único
+ * color que esta marca usa para señalar.
+ *
+ * Y no van sesgados: en su logotipo no hay una sola inclinación.
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  font-size: 0.9375rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-hueso);
+  background-image: none;
+  color: oklch(13% 0 0);
+  box-shadow: 0 14px 34px -20px #000;
+}
+
+.btn-primary:hover {
+  background-color: color-mix(in oklab, var(--color-hueso) 88%, var(--color-base-100));
+  color: oklch(13% 0 0);
+}
+
+/* El botón que señala. Se usa donde de verdad hay urgencia —vender tu carro,
+   agendar la cita— y no en cualquier enlace. */
+.btn-rojo {
+  background-color: var(--color-rojo);
+  color: oklch(99% 0 0);
+  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-rojo) 95%, transparent);
+}
+
+.btn-rojo:hover {
+  background-color: var(--color-rojo-claro);
+  color: oklch(99% 0 0);
+}
+
+/* El botón secundario sobre la losa: solo un filo blanco. */
+.btn-filo {
+  background-color: transparent;
+  color: var(--color-base-content);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-hueso) 32%, transparent);
+}
+
+.btn-filo:hover {
+  background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-hueso) 65%, transparent);
+}
+
+/* El botón que va encima de una foto. */
+.btn-sobre-foto {
+  background-color: color-mix(in oklab, var(--color-base-100) 72%, transparent);
+  color: var(--color-base-content);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-sobre-foto:hover {
+  background-color: color-mix(in oklab, var(--color-base-100) 92%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Formularios
+ * ------------------------------------------------------------------------ */
+
+.entrada {
+  width: 100%;
+  border-radius: var(--radius-field);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 18%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 5%, transparent);
+  padding: 0.75rem 1.1rem;
+  font-size: 0.9375rem;
+  color: var(--color-base-content);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.entrada::placeholder {
+  color: color-mix(in oklab, var(--color-base-content) 35%, transparent);
+}
+
+.entrada:focus {
+  border-color: var(--color-rojo);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-rojo) 22%, transparent);
+}
+
+/* Los desplegables nativos heredan el fondo del sistema en sus opciones, que
+   en un tema oscuro sale blanco sobre blanco en varios navegadores. */
+.entrada option {
+  background-color: var(--color-base-200);
+  color: var(--color-base-content);
+}
+
+/* --------------------------------------------------------------------------
+ * Entrada en escena por scroll (ver components/Revelar.js)
+ * ------------------------------------------------------------------------ */
+
+/* Lo que va a entrar animado se oculta ya en el HTML, para que no dé un salto
+   entre que el servidor lo pinta y GSAP toma el control. Quien no tenga
+   JavaScript lo recupera con el <noscript> del layout. */
+[data-anima] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anima] {
+    opacity: 1;
+  }
+}
+
+/* La barra de progreso de lectura, arriba del todo. */
+.progreso {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* Barra de scroll discreta. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-300);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-rojo);
+}
+
+/* Quien pide menos movimiento, no lo tiene. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

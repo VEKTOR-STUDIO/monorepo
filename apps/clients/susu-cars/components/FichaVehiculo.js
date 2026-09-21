@@ -6,7 +6,7 @@ import { ESTADOS } from "@/libs/vehiculos";
 /**
  * La tarjeta del inventario.
  *
- * La foto es la página entera del catálogo de HB, así que la tarjeta no repite
+ * La foto es la publicación entera tal como la subieron, así que la tarjeta no repite
  * lo que ya dice la imagen: debajo solo van la condición, el modelo, el precio
  * y el kilometraje. El nombre del modelo se escribe aunque esté impreso en la
  * foto porque una imagen no la lee ni Google ni un lector de pantalla.

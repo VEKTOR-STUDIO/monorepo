@@ -59,7 +59,7 @@ export default function Contacto() {
                     {business.direccion}
                   </address>
                   <p className="cifra mt-2 text-sm text-primary">
-                    {business.ciudad}, estado {business.estado}
+                    {business.ciudad}, {business.estado}
                   </p>
                   <p className="mt-4 text-sm text-base-content/55">{business.horario}</p>
                 </div>
@@ -106,7 +106,7 @@ export default function Contacto() {
                       <li key={servicio} className="flex gap-3">
                         <span
                           className="mt-1.5 h-2.5 w-1.5 shrink-0 bg-primary"
-                          style={{ transform: "skewX(var(--angulo-hb))" }}
+                          style={{ transform: "skewX(var(--angulo-lm))" }}
                           aria-hidden="true"
                         />
                         {servicio}
@@ -123,9 +123,9 @@ export default function Contacto() {
                 <p className="rotulo">Déjanos tus datos</p>
                 <h2 className="display mt-3 text-3xl">Cuéntanos qué buscas</h2>
                 <p className="mt-4 text-sm leading-relaxed text-base-content/55">
-                  Si no ves lo que quieres en el inventario, dilo aquí: se importa. Y si
-                  quieres saber por el financiamiento de un 0 km, también se explica por
-                  aquí.
+                  Si no ves lo que quieres en el inventario, dilo aquí: se consigue. Y
+                  si lo que quieres es dejar tu vehículo en consignación o venderlo,
+                  este es el sitio para escribirlo.
                 </p>
 
                 <div className="mt-7">

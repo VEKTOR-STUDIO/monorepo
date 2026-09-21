@@ -2,13 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FotoVehiculo, { AvisoSinFoto, AvisoPrecioProvisional } from "@/components/FotoVehiculo";
+import FotoVehiculo, { AvisoDeMuestra } from "@/components/FotoVehiculo";
 import BotonContacto from "@/components/BotonContacto";
 import Especificaciones, { EspecificacionesCompletas } from "@/components/Especificaciones";
 import RejillaVehiculos from "@/components/RejillaVehiculos";
 import Revelar from "@/components/Revelar";
 import TituloAnimado from "@/components/TituloAnimado";
-import Diagonales from "@/components/Diagonales";
+import Filetes from "@/components/Filetes";
 import AvisoBloqueado from "@/components/demo/AvisoBloqueado";
 import BloqueVenta from "@/components/demo/BloqueVenta";
 import { leerVehiculos, vehiculoPorSlug, ESTADOS } from "@/libs/vehiculos";
@@ -76,17 +76,17 @@ export default async function Vehiculo({ params }) {
             href="/vehiculos"
             className="display-recto text-xs tracking-widest text-base-content/50 transition-colors hover:text-primary"
           >
-            ← Volver al inventario
+            ← Volver al catálogo
           </Link>
         </div>
 
         <article className="relative overflow-hidden">
-          <Diagonales variante="sutil" />
+          <Filetes variante="sutil" />
 
           <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">
             <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
               {/* La foto, lo primero y lo más grande. Es la página del catálogo
-                  de HB entera, así que no se recorta. */}
+                  de su publicación entera, así que no se recorta. */}
               <div>
                 <Revelar desde="corte">
                   <FotoVehiculo
@@ -110,11 +110,6 @@ export default async function Vehiculo({ params }) {
                   </div>
                 )}
 
-                {!vehiculo.fotos?.length && (
-                  <div className="mt-3 flex justify-center">
-                    <AvisoSinFoto />
-                  </div>
-                )}
               </div>
 
               {/* La columna de decisión: qué es, cuánto cuesta y cómo se pregunta. */}
@@ -145,7 +140,7 @@ export default async function Vehiculo({ params }) {
                 <TituloAnimado
                   as="h1"
                   retraso={100}
-                  className="display mt-5 text-5xl sm:text-6xl"
+                  className="display mt-5 text-4xl"
                 >
                   {vehiculo.marca} <span className="text-primary">{vehiculo.modelo}</span>
                 </TituloAnimado>
@@ -185,7 +180,7 @@ export default async function Vehiculo({ params }) {
                         En la página entregada, este botón abre WhatsApp con el mensaje
                         ya escrito —«me interesa el {vehiculo.tituloLargo} {vehiculo.anio},
                         ¿sigue disponible?»— para que el comprador no tenga que explicar
-                        nada y en HB sepan de entrada por cuál unidad preguntan.
+                        nada y en SUSU sepan de entrada por cuál unidad preguntan.
                       </AvisoBloqueado>
                     ) : (
                       <BotonContacto
@@ -202,11 +197,9 @@ export default async function Vehiculo({ params }) {
                     <ul className="mt-8 space-y-3">
                       {vehiculo.detalles.map((detalle) => (
                         <li key={detalle} className="flex gap-3 text-sm leading-snug">
-                          <span
-                            className="mt-1 h-3 w-2 shrink-0 bg-primary"
-                            style={{ transform: "skewX(var(--angulo-hb))" }}
-                            aria-hidden="true"
-                          />
+                          {/* Un filete, no un cuadrado sesgado: la gráfica de
+                              esta casa es la línea del logotipo. */}
+                          <span className="mt-2.5 h-px w-4 shrink-0 bg-primary" aria-hidden="true" />
                           <span className="display-recto tracking-wide text-base-content/80">
                             {detalle}
                           </span>
@@ -215,9 +208,9 @@ export default async function Vehiculo({ params }) {
                     </ul>
                   )}
 
-                  {vehiculo.precioProvisional && (
+                  {vehiculo.muestra && (
                     <div className="mt-7">
-                      <AvisoPrecioProvisional />
+                      <AvisoDeMuestra />
                     </div>
                   )}
                 </Revelar>
@@ -251,7 +244,7 @@ export default async function Vehiculo({ params }) {
               <Revelar>
                 <p className="rotulo">También te puede servir</p>
               </Revelar>
-              <TituloAnimado as="h2" className="display mt-4 text-3xl sm:text-4xl">
+              <TituloAnimado as="h2" className="display mt-4 text-2xl sm:text-3xl">
                 {vehiculo.esNuevo ? "Otros 0 km del catálogo" : "Otros usados del catálogo"}
               </TituloAnimado>
               <RejillaVehiculos vehiculos={parecidos} className="mt-10" />

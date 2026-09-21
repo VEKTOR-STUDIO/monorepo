@@ -4,9 +4,10 @@
 // Arriba de esta página conviven dos cosas distintas y el visitante tiene
 // derecho a saber cuál está leyendo:
 //
-//   · el ESCAPARATE, que le habla al comprador de un carro;
-//   · la OFERTA, que le habla al dueño de HB Inversiones sobre el sistema
-//     que se le está vendiendo.
+//   · el ESCAPARATE, que le habla al comprador de un carro y a quien viene a
+//     consignar el suyo;
+//   · la OFERTA, que le habla al dueño de SUSU CARS sobre el sistema que se le
+//     está vendiendo.
 //
 // Entre una y otra pasa esta cinta, en Microgramma —la tipografía de la firma
 // de Alessandrovaru— para que se lea como una voz ajena a la marca del
@@ -18,7 +19,7 @@
 
 const MENSAJES = {
   venta: [
-    "Esto es para ti, dueño de HB Inversiones",
+    "Esto es para ti, dueño de SUSU CARS",
     "Así se administra por dentro",
     "Lo que sigue es la oferta",
     "Tu página, tu dominio, tu código",
@@ -36,15 +37,15 @@ const MENSAJES = {
     "Precio de lanzamiento",
     "Todo incluido · sin mensualidad",
     "El código es tuyo",
-    "Hecha con tu catálogo",
+    "Hecha con tu logotipo",
   ],
 
   // La de abajo, girando al revés para que las dos no vayan en paralelo.
   puertaInversa: [
     "Dominio propio",
-    "Inventario ilimitado",
+    "Catálogo ilimitado",
     "Panel incluido",
-    "0 km y usados separados",
+    "Formulario de consignación",
     "Entrega en 7 días",
   ],
 };

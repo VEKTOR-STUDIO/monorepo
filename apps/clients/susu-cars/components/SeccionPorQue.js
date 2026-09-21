@@ -1,60 +1,76 @@
 import Revelar from "@/components/Revelar";
 import TituloAnimado from "@/components/TituloAnimado";
 import BotonComprar from "@/components/demo/BotonComprar";
+import config from "@/config";
 
 // -----------------------------------------------------------------------------
-// "¿Y esto por qué no es el PDF de siempre?"
+// "¿Y esto por qué, si ya tengo Instagram?"
 //
-// Es la objeción real de ESTE cliente, y no una genérica. HB ya tiene un
-// sistema que le funciona: un catálogo en PDF de trece páginas, maquetado con
-// cuidado, que manda por WhatsApp. Esta página se construyó a partir de ese
-// mismo PDF, así que la comparación no es teórica: cada fila se puede
-// comprobar mirando las dos cosas.
+// Es la objeción real de ESTE cliente, y no una genérica. SUSU ya tiene un
+// sistema que le funciona: dos cuentas, publicaciones cuidadas, un número de
+// WhatsApp y una sede en Av. Casanova. No está empezando de cero y no hay que
+// hablarle como si lo estuviera.
 //
-// El argumento NO es que el PDF sea malo. Es bueno —por eso la web le copió
-// la gráfica entera— y decirlo da credibilidad a todo lo demás. El argumento
-// es que un PDF no se busca, no se actualiza sin rehacerlo y no lo encuentra
-// nadie en Google.
+// El argumento NO es que Instagram sea malo. Es lo que le trae los clientes
+// —por eso la web se diseñó a partir de su logotipo y su discurso, y por eso
+// el enlace a su perfil está en todas las pantallas—, y decirlo en voz alta da
+// credibilidad a todo lo demás. El argumento es que un feed no se filtra, no
+// se ordena por precio, no dice qué sigue disponible y no lo encuentra nadie
+// en Google.
 //
-// Habla el vendedor del sistema, no HB: por eso va en la zona marcada por el
+// Cada fila se puede comprobar abriendo su perfil al lado, que es exactamente
+// lo que hay que hacer en la reunión.
+//
+// Habla el vendedor del sistema, no SUSU: por eso va en la zona marcada por el
 // cintillo y con Microgramma.
 // -----------------------------------------------------------------------------
 
 const COMPARACION = [
   {
-    tema: "Cuando entra una unidad nueva",
-    pdf: "Hay que rehacer la página en el editor, exportar el PDF otra vez y volver a mandárselo a todo el mundo.",
-    pagina: "Se carga desde el panel en dos minutos y ya está arriba. El enlace que mandaste ayer enseña el inventario de hoy.",
+    tema: "Cuando entra un vehículo en consignación",
+    hoy: "Se arma el arte, se publica y a las dos horas ya lo tapó el siguiente post. Quien entró ayer no lo ve.",
+    pagina:
+      "Se carga desde el panel en dos minutos y se queda arriba mientras esté disponible, con su ficha y su enlace propio.",
   },
   {
     tema: "Cuando algo se vende",
-    pdf: "Sigue en el PDF que ya circula. Te escriben por un carro que ya no está y hay que explicarlo cada vez.",
-    pagina: "Se marca vendido y deja de ofrecerse solo. Se puede dejar a la vista, atenuado, que también vende.",
+    hoy: "La publicación sigue ahí. Te escriben por un carro que ya no está y hay que explicarlo cada vez.",
+    pagina:
+      "Se marca vendido y deja de ofrecerse solo. Se puede dejar a la vista, atenuado, que también vende: enseña qué se mueve aquí.",
   },
   {
     tema: "Buscar algo concreto",
-    pdf: "Trece páginas que se pasan una a una. Si alguien quiere un 0 km de menos de 25.000, lo tiene que ir mirando.",
-    pagina: "Filtros por condición, tipo, marca, año y precio. Y la búsqueda hecha se copia y se manda como enlace.",
+    hoy: "Bajar por el feed hasta encontrarlo. Si alguien quiere una camioneta 4x4 de menos de $25.000, no hay forma de pedirla.",
+    pagina:
+      "Filtros por tipo, marca, año y precio. Y la búsqueda hecha se copia y se manda como enlace.",
   },
   {
     tema: "Mandar un vehículo por WhatsApp",
-    pdf: "Se manda el PDF entero, de dos megas, y el cliente busca la página. O se manda una captura suelta, sin datos.",
-    pagina: "Un enlace por vehículo, con su foto, su precio y su ficha. Se abre al instante y se ve igual en cualquier teléfono.",
+    hoy: "Se manda una captura, o el enlace de un post donde el precio está en el pie y el kilometraje en el comentario tres.",
+    pagina:
+      "Un enlace por vehículo, con su foto, su precio, su kilometraje y sus papeles. Se abre al instante y se ve igual en cualquier teléfono.",
+  },
+  {
+    tema: "Quien quiere consignar el suyo",
+    hoy: "Escribe al DM y hay que preguntarle marca, año y kilometraje una por una, muchas veces en días distintos.",
+    pagina:
+      "Llena el formulario de consignación y llega con los tres datos escritos. La primera respuesta ya puede ser un precio.",
   },
   {
     tema: "Quien busca en Google",
-    pdf: "No te encuentra. Un PDF que viaja por WhatsApp no está en ningún buscador.",
-    pagina: "Cada ficha se indexa con su marca, modelo, año y ciudad: «Corolla Cross 2024 Barquisimeto» te encuentra a ti.",
+    hoy: "No te encuentra. Un perfil de Instagram no aparece cuando alguien escribe lo que quiere comprar.",
+    pagina:
+      "Cada ficha se indexa con su marca, modelo, año y ciudad: «Toyota 4Runner 2018 Caracas» te encuentra a ti.",
   },
   {
     tema: "El precio en bolívares",
-    pdf: "Se repite en cada conversación, y cambia todos los días.",
+    hoy: "Se repite en cada conversación, y cambia todos los días.",
     pagina: "Sale solo, a la tasa del BCV del día, debajo del precio en dólares.",
   },
   {
-    tema: "El enlace del perfil de Instagram",
-    pdf: "Hoy no hay ninguno: quien ve una publicación y quiere el resto tiene que escribir y pedir el catálogo.",
-    pagina: "Tu dominio en la bio. Quien entra ve las trece unidades sin escribirle a nadie.",
+    tema: "El enlace de la bio",
+    hoy: "Hoy lleva al DM. Quien ve una publicación y quiere ver el resto tiene que escribir y esperar.",
+    pagina: "Tu dominio en la bio. Quien entra ve el catálogo entero sin escribirle a nadie.",
   },
 ];
 
@@ -68,16 +84,17 @@ export default function SeccionPorQue() {
           <p className="microgramma text-xs text-primary">La pregunta de siempre</p>
         </Revelar>
 
-        <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
-          ¿Y esto por qué no es el PDF de siempre?
+        <TituloAnimado as="h2" className="display mt-4 text-center text-2xl sm:text-3xl">
+          ¿Y esto por qué, si ya tengo Instagram?
         </TituloAnimado>
 
         <Revelar retraso={160}>
           <p className="mx-auto mt-6 max-w-2xl text-center leading-relaxed text-base-content/60">
-            Tu catálogo en PDF está bien hecho: tan bien que esta página le copió la
-            gráfica entera —el negro, el rojo, las diagonales, la itálica—. El
-            problema no es ese. Es que un PDF no se busca, no se actualiza sin
-            rehacerlo y no lo encuentra nadie en Google.
+            Tu Instagram está bien llevado: tan bien que esta página salió de ahí
+            —el oro, el negro, el trazo del logotipo y hasta el titular de la
+            portada, que es tu frase—. El problema no es ese. Es que un feed no
+            se filtra, no dice qué sigue disponible y no lo encuentra nadie en
+            Google.
           </p>
         </Revelar>
 
@@ -85,7 +102,9 @@ export default function SeccionPorQue() {
             fila lleva su propia etiqueta encima. */}
         <Revelar retraso={80}>
           <div className="mt-14 hidden gap-5 sm:grid sm:grid-cols-2">
-            <p className="microgramma text-[0.7rem] text-base-content/45">Con el PDF</p>
+            <p className="microgramma text-[0.7rem] text-base-content/45">
+              Solo con @{config.business.instagram}
+            </p>
             <p className="microgramma text-[0.7rem] text-primary">Con tu propia página</p>
           </div>
         </Revelar>
@@ -107,8 +126,8 @@ export default function SeccionPorQue() {
                       </svg>
                     </span>
                     <p className="text-sm leading-relaxed text-base-content/45">
-                      <span className="microgramma mr-2 text-[0.6rem] sm:hidden">PDF:</span>
-                      {fila.pdf}
+                      <span className="microgramma mr-2 text-[0.6rem] sm:hidden">Hoy:</span>
+                      {fila.hoy}
                     </p>
                   </div>
 
@@ -138,9 +157,10 @@ export default function SeccionPorQue() {
               <span className="font-semibold text-base-content">
                 No hay que elegir entre las dos.
               </span>{" "}
-              El PDF se sigue mandando igual; lo que cambia es que ahora tiene un sitio
-              a dónde apuntar. Y la página se alimenta de las mismas fichas que ya
-              maquetas: no hay trabajo nuevo.
+              Instagram se sigue trabajando igual; lo que cambia es que ahora
+              tiene un sitio a dónde mandar a la gente. Y la página se alimenta
+              de las mismas fotos y los mismos datos que ya publicas: no hay
+              trabajo nuevo.
             </p>
             <BotonComprar className="btn btn-primary shrink-0" />
           </div>

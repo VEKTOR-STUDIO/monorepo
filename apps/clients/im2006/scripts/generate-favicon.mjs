@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 /**
- * Genera los iconos de HB Inversiones.
+ * Genera los iconos de LM 2006.
  * Uso: npm run generate-favicon  (o: node scripts/generate-favicon.mjs)
  *
- * El dibujo es la marca reducida a lo mínimo que sigue siendo reconocible: el
- * negro, la cuña roja en diagonal y las dos letras en itálica. A 16 px no cabe
- * nada más, y con eso basta para distinguirla en una pestaña.
+ * El dibujo es su logotipo reducido a lo mínimo que sigue siendo reconocible:
+ * el grafito de fondo, las tres barras inclinadas —plata, roja y el bloque
+ * azul— y las dos letras dentro del bloque. A 16 px no cabe nada más, y con
+ * eso basta: el trío de colores ya se distingue en una pestaña aunque las
+ * letras se empasten.
  *
- * No hay ningún archivo de imagen que mantener a mano: si cambia el rojo, se
+ * El "2006" NO entra. Se probó y a 32 px las cuatro cifras se convierten en
+ * una mancha gris que además le roba sitio al bloque azul, que es lo único que
+ * de verdad identifica la marca a ese tamaño.
+ *
+ * No hay ningún archivo de imagen que mantener a mano: si cambia el azul, se
  * cambia aquí y se vuelve a correr.
  */
 
@@ -19,24 +25,36 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, "..", "public");
 const appDir = join(__dirname, "..", "app");
 
-const NEGRO = "#0D0D0D";
-const ROJO = "#E11019";
+// Medidos sobre docs/fuentes/lm2006-foto-perfil.jpg.
+const GRAFITO = "#15181D";
+const PLATA = "#AABAD4";
+const ROJO = "#FF1F1F";
+const AZUL = "#0059FF";
 const BLANCO = "#FFFFFF";
 
-const tamaños = [16, 32, 64, 180];
+// Lo que se corre la base respecto al techo con 64 px de alto y −12°:
+// 64 · tan(12°) = 13,6. Es la misma inclinación que --angulo-lm.
+const SESGO = 13.6;
+
+/** Un paralelogramo de borde a borde, con el sesgo de la marca. */
+function barra(x, ancho, relleno) {
+  const d = `M${x} -2 L${x + ancho} -2 L${(x + ancho - SESGO).toFixed(1)} 66 L${(x - SESGO).toFixed(1)} 66 Z`;
+  return `<path d="${d}" fill="${relleno}"/>`;
+}
 
 function construir(lado) {
   const u = lado / 64; // todo está medido sobre una rejilla de 64
-  const fuente = Math.round(34 * u);
+  const fuente = Math.round(30 * u);
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${lado}" height="${lado}" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="${NEGRO}"/>
-  <path d="M-8 44 L34 44 L22 72 L-20 72 Z" fill="${ROJO}"/>
-  <path d="M40 -8 L82 -8 L60 44 L18 44 Z" fill="${ROJO}" opacity="0.18"/>
+  <rect width="64" height="64" fill="${GRAFITO}"/>
+  ${barra(8, 5, PLATA)}
+  ${barra(16, 7, ROJO)}
+  ${barra(27, 36, AZUL)}
   <text
-    x="50%"
-    y="46%"
+    x="38"
+    y="34"
     dominant-baseline="central"
     text-anchor="middle"
     font-family="Arial Narrow, Arial, system-ui, sans-serif"
@@ -44,7 +62,7 @@ function construir(lado) {
     font-style="italic"
     font-size="${fuente}"
     fill="${BLANCO}"
-  >HB</text>
+  >LM</text>
 </svg>
 `;
 }

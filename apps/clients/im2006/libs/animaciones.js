@@ -8,10 +8,10 @@
 // una ficha que entra en la portada y otra que entra en el inventario tienen
 // que sentirse iguales.
 //
-// El movimiento de esta página no es decorativo. La gráfica de HB es un corte
-// diagonal en rojo y negro, así que casi todo entra CORTADO: barridos en
-// diagonal, líneas de titular que suben desde detrás de una máscara y fotos
-// que se abren con el mismo ángulo. Es la misma idea del catálogo, pero en
+// El movimiento de esta página no es decorativo. La gráfica de LM 2006 son
+// tres barras inclinadas −12°, así que casi todo entra CORTADO con ese mismo
+// ángulo: barridos en diagonal, líneas de titular que suben desde detrás de
+// una máscara y fotos que se abren en sesgo. Es el logotipo, pero en
 // movimiento.
 //
 // Todo pasa por gsap.matchMedia(), que además de separar móvil y escritorio
@@ -36,8 +36,9 @@ export const TIEMPOS = {
   escalonado: 0.07,
 };
 
-/** El ángulo de las diagonales de la marca, en grados. */
-export const ANGULO = -18;
+/** El ángulo de las barras de la marca, en grados. El mismo que --angulo-lm
+ *  en app/globals.css, medido sobre el bloque azul de su logotipo. */
+export const ANGULO = -12;
 
 /** Punto de disparo estándar: cuando al elemento le falta poco para entrar. */
 export const DISPARO = "top 85%";
@@ -125,8 +126,8 @@ export function entrar(g, objetivo, opciones = {}) {
  * El titular, línea a línea, saliendo de detrás de una máscara.
  *
  * `mask: "lines"` envuelve cada línea en una caja recortada, así que la línea
- * no aparece: ASOMA. Es el movimiento que mejor traduce el corte diagonal del
- * catálogo impreso.
+ * no aparece: ASOMA. Es el movimiento que mejor traduce el corte inclinado de
+ * sus publicaciones.
  *
  * `autoSplit` vuelve a partir el texto cuando terminan de cargar las
  * tipografías y cuando cambia el ancho: sin eso, un titular partido con la

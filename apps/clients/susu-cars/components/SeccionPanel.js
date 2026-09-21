@@ -71,16 +71,17 @@ export default function SeccionPanel() {
           <p className="rotulo">Sin intermediarios</p>
         </Revelar>
 
-        <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
+        <TituloAnimado as="h2" className="display mt-4 text-center text-3xl sm:text-4xl">
           El inventario lo suben ellos
         </TituloAnimado>
 
         <Revelar retraso={160}>
           <p className="mx-auto mt-6 max-w-2xl text-center leading-relaxed text-base-content/60">
-            Cada vehículo de esta página lo publica el propio equipo de HB desde su
-            panel, en un par de minutos. Nadie tiene que llamar a un programador para
-            subir un carro, cambiar un precio o marcar algo como vendido: por eso lo
-            que ves aquí es lo que hay hoy en el local.
+            Cada vehículo de esta página lo publica el propio equipo de SUSU desde
+            su panel, en un par de minutos. Nadie tiene que llamar a un programador
+            para subir un carro que entró en consignación, cambiar un precio o
+            marcar algo como vendido: por eso lo que ves aquí es lo que hay hoy en
+            la sede.
           </p>
         </Revelar>
 

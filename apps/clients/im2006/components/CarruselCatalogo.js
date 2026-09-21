@@ -9,11 +9,11 @@ import { enDolares, kilometrajeDe } from "@/libs/formato";
 // -----------------------------------------------------------------------------
 // El catálogo, de lado.
 //
-// Su catálogo es un PDF que se pasa página a página, y esta sección es eso
-// mismo: la página se queda quieta y las trece fichas desfilan de derecha a
-// izquierda mientras bajas. Es el movimiento más fuerte del sitio y está
-// puesto justo donde hace falta —arriba, después de la portada— porque es lo
-// que contesta de un golpe la pregunta "¿qué tienen?".
+// Su catálogo hoy es una cuadrícula de Instagram que se recorre con el dedo, y
+// esta sección es eso mismo: la página se queda quieta y las fichas desfilan
+// de derecha a izquierda mientras bajas. Es el movimiento más fuerte del sitio
+// y está puesto justo donde hace falta —arriba, después de la portada— porque
+// es lo que contesta de un golpe la pregunta "¿qué tienen?".
 //
 // Dos decisiones que no son de gusto:
 //
@@ -114,7 +114,7 @@ export default function CarruselCatalogo({ vehiculos }) {
             <span className="text-primary"> completo</span>
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-base-content/55 lg:text-base">
-            Las {vehiculos.length} unidades del catálogo de HB, una por una.{" "}
+            Las {vehiculos.length} unidades del local, una por una.{" "}
             <span className="hidden lg:inline">Sigue bajando y desfilan solas.</span>
             <span className="lg:hidden">Arrastra para verlas.</span>
           </p>

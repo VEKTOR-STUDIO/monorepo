@@ -1,10 +1,15 @@
-# HB Inversiones · venta e importación de vehículos
+# SUSU CARS · compra, venta y consignación de vehículos
 
-Página de catálogo para **HB Inversiones C.A.**
-([@hb_inversiones_12](https://www.instagram.com/hb_inversiones_12/) · 10,2 K
-seguidores, 423 publicaciones), un concesionario de **Barquisimeto** que en su
-bio se presenta como *"Importamos y vendemos el auto de tus sueños 📍
-«Visítanos para encontrar la mejor opción para ti»"*.
+Página de catálogo y consignación para **SUSU CARS**
+([@susucars](https://www.instagram.com/susucars/) · también
+[@susucarsoficial](https://www.instagram.com/susucarsoficial/)), en **Caracas,
+Av. Casanova**, que en sus publicaciones se presenta así:
+
+> **Vende tu vehículo en tiempo récord y con seguridad.**
+> ¡Olvídate de complicaciones!
+> · Consignaciones *(Sede Caracas, Av. Casanova)*
+> · Seguridad garantizada *(máxima exposición y contacto)*
+> · Venta rápida *(conectamos con el comprador ideal)*
 
 Base: plantilla Shipfast del monorepo · Next.js 15 (App Router) · Tailwind 4 +
 daisyUI 5 · GSAP 3. Sin base de datos: el catálogo es un JSON.
@@ -13,20 +18,24 @@ daisyUI 5 · GSAP 3. Sin base de datos: el catálogo es un JSON.
 
 ## De dónde sale todo
 
-Esta página no se diseñó de cero: se calcó del material que mandó el cliente,
-que está guardado en `docs/fuentes/` (fuera de `public/`, para que no se sirva
-en la web):
+Esta página no se diseñó de cero: se calcó de su material.
 
-| Archivo | Qué aportó |
+| Fuente | Qué aportó |
 |---|---|
-| `CATALOGO DE VEHICULOS HB.pdf` | Las **13 unidades**, sus **13 fotos** y sus viñetas, palabra por palabra. También la dirección del local. |
-| `instagram-perfil.png` | El **logotipo** (recortado a `public/marca/hb-logo.png`), la bio, la ciudad y las cifras de seguidores. |
+| `public/marca/susu-logo.jpg` (su foto de perfil, 320 px) | **La identidad entera**: el negro, el oro, el trazo del deportivo y las capitales romanas. |
+| Su publicación de consignación | El **titular de la portada**, el lema, los **tres pilares**, la sede y las dos cuentas. |
 
-El PDF son trece páginas con la misma retícula: negro, rojo y blanco cortados
-en diagonal, el modelo en itálica condensada arriba a la izquierda, el logo de
-la marca arriba a la derecha, las viñetas abajo a la derecha y la dirección
-abajo a la izquierda. **Esa retícula es la identidad**, y la web la hereda
-entera. Ver el comentario de cabecera de `app/globals.css`.
+Dos cosas que **no** salieron de ahí y hay que cerrar antes de entregarla: el
+catálogo (hoy es de muestra, ver abajo) y el número de WhatsApp.
+
+### El eje del negocio no es el catálogo
+
+Un concesionario cualquiera pone su inventario y ya. SUSU vende otra cosa:
+**vender el tuyo sin complicaciones**. Por eso la web tiene dos entradas y no
+una —comprar y consignar—, la sección de consignación va **antes** que el
+catálogo, y el primer botón de la portada es "Consignar mi vehículo". Quien
+llega desde su Instagram muchas veces no viene a comprar: viene a preguntar
+cuánto le cobran por vender el suyo.
 
 ---
 
@@ -34,41 +43,97 @@ entera. Ver el comentario de cabecera de `app/globals.css`.
 
 | Pieza | Estado |
 |---|---|
-| Portada con las diagonales de la casa | ✅ listo |
-| Catálogo completo desfilando de lado (GSAP, con `pin`) | ✅ listo |
-| Corte 0 km importados / usados verificados | ✅ listo, es el filtro principal |
-| Inventario con filtros (condición, tipo, marca, orden) | ✅ listo |
+| Portada con su frase y su gráfica | ✅ listo |
+| Sección de consignación con sus tres pilares | ✅ listo |
+| Formulario que separa comprar / consignar | ✅ listo |
+| Catálogo desfilando de lado (GSAP, con `pin`) | ✅ listo |
+| Catálogo con filtros (condición, tipo, marca, orden) | ✅ listo |
 | Ficha por vehículo, con URL propia | ✅ listo |
 | Precio en $ con equivalente en Bs. (tasa BCV del día) | ✅ listo, sin configurar nada |
 | Contacto y formulario | ✅ listo, **no reenvía a ningún sitio todavía** |
 | Modo demo (puerta, muro, precio, bloqueos) | ✅ activo por defecto |
-| Logotipo, paleta y tipografía | ✅ sacados de su material |
+| Paleta, tipografía y logotipo | ✅ sacados de su logo |
 | Contador de oferta limitada | ✅ con fecha real, **revísala antes de enseñarla** |
-| **Precios reales** | ⏳ **pendiente — hoy son de referencia** |
-| **Número de WhatsApp** | ⏳ pendiente — los botones caen al DM de Instagram |
-| **Dominio** | ⏳ pendiente — hoy `hbinversiones.com` es de trabajo |
+| **El catálogo** | ⏳ **de muestra — 13 fichas inventadas, sin una sola foto suya** |
+| **Número de WhatsApp** | ⏳ pendiente de confirmar — los botones caen al DM de Instagram |
+| **Cifras de Instagram** | ⏳ sin leer; la portada las omite sola |
+| **Dominio** | ⏳ pendiente — hoy `susucars.com` es de trabajo |
 | **Panel de administración** | ⏳ no existe; la portada lo anuncia como parte de lo que se vende |
 
-### Los precios son de referencia
+### El catálogo es de muestra, y se nota a propósito
 
-El catálogo en PDF **no publica ni un precio**: trae el modelo, el año, el
-kilometraje y poco más. Los precios de `data/vehiculos.json` son de referencia
-de mercado, puestos para que la página se pueda enseñar funcionando, y cada
-vehículo lo dice con `"precioProvisional": true`.
+Las 13 fichas de `data/vehiculos.json` están **inventadas**. Llevan
+`"muestra": true`, que enciende el aviso «Ficha de muestra» en la tarjeta, en
+la ficha y en la portada, y desaparece solo al quitar el campo
+(`hayVehiculosDeMuestra()` en `libs/vehiculos.js`).
 
-Eso enciende el aviso «Precio de referencia» en la ficha, en el inventario y en
-la portada. **Al cargar los precios reales se quita ese campo de cada vehículo
-y los avisos desaparecen solos** (`hayPreciosProvisionales()` en
-`libs/vehiculos.js`).
+**Y no hay ni una foto.** Las que traía la plantilla eran las trece páginas del
+catálogo en PDF de *otro* concesionario, con su logotipo y su rojo impresos
+encima: enseñar el inventario ajeno en la web de SUSU es justo el detalle que
+hunde una reunión que iba bien, así que se borraron. En su lugar, cada ficha
+dibuja la silueta de su tipo de vehículo con el cartel «Foto pendiente».
 
-Los vehículos y las fotos **sí son los suyos**, así que no hay nada de muestra
-que sustituir ahí.
+No es un apaño: es lo honesto mientras no haya material suyo, y se arregla en
+diez minutos en cuanto Instagram deje leer el perfil.
+
+### El número de WhatsApp está sin confirmar
+
+En su publicación se lee **0412 133 5486** → `584121335486`. No está puesto en
+`config.js` a propósito: la captura de la que salió tiene 283 px de ancho, y un
+dígito mal transcrito manda a un desconocido al teléfono de otra persona.
+Mientras `business.whatsapp` siga vacío, todos los botones caen al DM de
+Instagram, que es por donde hoy escribe todo el mundo. Se rellena en cuanto el
+cliente lo diga en voz alta.
+
+---
+
+## Cargar el catálogo real
+
+El día que Instagram deje de limitar:
+
+```bash
+# Desde la raíz del monorepo. Necesita el sessionid de tools/instagram/.env.local
+node tools/instagram/leer-perfil.mjs susucars --max 80
+node tools/instagram/bajar-fotos.mjs tools/instagram/salida/susucars.json \
+     --destino apps/clients/susu-cars/public/vehiculos
+```
+
+Y después, a mano: leer los `caption` y pasarlos a fichas. El script deja el
+texto **crudo a propósito**; traducir «4Runner 2018 full equipo 39mil
+negociable» a una ficha lo hace quien lo lee, no un regex. Un año mal adivinado
+se descubre en la primera pregunta de la reunión.
+
+Campos que importan en `data/vehiculos.json`:
+
+```jsonc
+{
+  "slug": "toyota-4runner-2018",   // la URL: /vehiculo/<slug>
+  "muestra": true,                  // QUITAR cuando la ficha sea real
+  "precio": 39500,                  // en dólares
+  "condicion": "usado",             // "nuevo" (0 km) | "usado"
+  "consignado": true,               // false = unidad de la casa, no de un tercero
+  "carroceria": "suv",              // "suv" | "sedan" | "pickup"
+  "km": 74000,                      // null si no se sabe → "Km por confirmar"
+  "estado": "disponible",           // "disponible" | "reservado" | "vendido"
+  "destacado": true,                // sale en el escaparate de la portada
+  "detalles": ["Un solo dueño", "Cauchos nuevos"],
+  "fotos": ["/vehiculos/toyota-4runner-2018.jpg"]
+}
+```
+
+Ojo con `km`: **`null` no es cero**. Un 0 km lleva `0`; un usado cuyo
+kilometraje no se sabe lleva `null` y la página escribe "Km por confirmar" en
+vez de inventarse un dato.
+
+Y `consignado` por defecto es `true`: en esta casa lo normal es la
+consignación, así que una ficha que se olvide el campo dice la verdad más
+probable.
 
 ---
 
 ## Modo demo
 
-Esta página se le enseña al dueño de HB antes de vendérsela. Con el modo demo
+Esta página se le enseña al dueño de SUSU antes de vendérsela. Con el modo demo
 activo se ve casi todo, pero no se puede **usar**.
 
 **El candado está en el servidor, no en la pantalla.** Una portada tapada con
@@ -79,14 +144,14 @@ es quien sabe abrir las herramientas del navegador.
 |---|---|---|
 | Ver cualquier página | `middleware.js` | Sin la cookie de acceso, **307 a `/entrar`**. No se sirve ni una página. |
 | Entrar | `app/api/entrar/route.js` | Compara huellas SHA-256, espera 600 ms por fallo y deja una cookie `httpOnly`. |
-| El inventario completo | `app/vehiculos/page.js` | Se ven `config.demo.elementosVisibles` (6) nítidos; el resto, difuminado tras `MuroDemo`. |
+| El catálogo completo | `app/vehiculos/page.js` | Se ven `config.demo.elementosVisibles` (6) nítidos; el resto, difuminado tras `MuroDemo`. |
 | Enviar el formulario | `app/api/contacto/route.js` | **403**, aunque se llame a mano con `curl`. |
 | Escribir por un vehículo | `components/BotonContacto.js` | No abre WhatsApp: explica qué haría el sistema entregado. |
 
 La contraseña **no está en `config.js`** —ese archivo lo importan componentes
 de cliente y acabaría en el bundle—: vive en `libs/acceso.js`, que solo corre
 en servidor, y la pisa `DEMO_PASSWORD`. Si la variable falta, se usa la de
-reserva (`hbinversiones2026`), para que la demo **nunca quede abierta por un
+reserva (`susucars2026`), para que la demo **nunca quede abierta por un
 olvido**.
 
 Comprobarlo, no suponerlo:
@@ -101,10 +166,13 @@ grep -rl "<la-clave>" .next/static/   # no debe devolver nada
 NEXT_PUBLIC_DEMO=false
 ```
 
-Eso solo: desaparecen la puerta, la franja de arriba, el muro del inventario,
-el aviso flotante, los cintillos, el bloque de venta y la comparación con el
-PDF; y el formulario y los botones de WhatsApp empiezan a funcionar. No hay
-nada más que tocar en el código.
+Eso solo: desaparecen la puerta, la franja de arriba, el muro del catálogo, el
+aviso flotante, los cintillos, el bloque de venta y la comparación con
+Instagram; y el formulario y los botones de WhatsApp empiezan a funcionar. No
+hay nada más que tocar en el código.
+
+**Antes de apagarla, vacía el catálogo de muestra.** Con la puerta puesta y
+`noindex`, lo que hay dentro no acaba en Google; sin puerta, sí.
 
 ---
 
@@ -112,9 +180,9 @@ nada más que tocar en el código.
 
 Aquí conviven dos cosas y el visitante tiene derecho a saber cuál está leyendo:
 
-- **El escaparate**, que le habla a quien viene a comprar un carro. Va con la
-  tipografía de la casa (Barlow Condensed itálica, Archivo).
-- **La oferta**, que le habla al dueño de HB sobre el sistema que se le está
+- **El escaparate**, que le habla a quien viene a comprar un carro o a dejar el
+  suyo. Va con la tipografía de la casa (Cinzel, Archivo).
+- **La oferta**, que le habla al dueño de SUSU sobre el sistema que se le está
   vendiendo. Va en **Microgramma**, la tipografía de la firma de
   Alessandrovaru, la misma del crédito del pie.
 
@@ -122,8 +190,8 @@ Entre una y otra se cruza un `Cintillo`, que no es decoración: es el aviso de
 que cambia el interlocutor.
 
 En **la puerta** (`/entrar`) la jerarquía se invierte y manda la firma de
-Alessandrovaru: quien llega todavía no es cliente de HB, es alguien a quien se
-le está enseñando un trabajo. Al entrar, vuelve a mandar la marca de HB.
+Alessandrovaru: quien llega todavía no es cliente de SUSU, es alguien a quien
+se le está enseñando un trabajo. Al entrar, vuelve a mandar la marca de SUSU.
 
 ---
 
@@ -131,35 +199,40 @@ le está enseñando un trabajo. Al entrar, vuelve a mandar la marca de HB.
 
 Todo está comentado en `app/globals.css`, pero en corto:
 
-- **Fondo negro.** Su catálogo es negro; una web blanca hubiera sido otra
-  marca. Y los vehículos que venden son casi todos claros, así que sobre negro
-  recortan solos.
-- **El corte en diagonal manda**, a −18° (`--angulo-hb`). Está en los fondos
-  (`components/Diagonales.js`), en las etiquetas (`.bisel`), en las franjas
-  (`.banda`) y en cómo entran las cosas al hacer scroll.
-- **El rojo no decora, señala.** Es el precio, el botón y la condición "0 km".
-  Si se usara de relleno dejaría de significar nada.
-- **Las fotos se enseñan enteras**, sin recortar: son las páginas de su
-  catálogo y la gráfica es suya. De ahí que `FotoVehiculo` use `object-contain`
-  por defecto.
-- **Nada se le superpone a la foto.** Las cuatro esquinas de esas fichas están
-  ocupadas —modelo, logo de la marca, viñetas y dirección—, así que la etiqueta
-  de condición va **debajo** de la imagen, no encima.
+- **Fondo negro.** Su logotipo vive sobre negro y el oro solo brilla sobre
+  oscuro: sobre blanco se apaga y se vuelve mostaza.
+- **El oro no decora, señala.** Es el precio, el botón y el filete que separa.
+  Usado de relleno dejaría de parecer oro y parecería amarillo. El único sitio
+  donde llena es el cintillo de venta, que tiene que verse de lejos.
+- **La línea manda, no el bloque.** El logotipo es un trazo fino, así que la
+  gráfica de fondo son filetes de 1 px (`components/Filetes.js`), no bandas de
+  color. Ninguno pasa de 2 px, y esa es la regla que lo mantiene en su sitio.
+- **Capitales romanas en los titulares.** Cinzel es la letra de "SUSU" y es
+  libre. De ahí que `.display` **no** lleve itálica: el logotipo está recto.
+- **Casi nada se inclina.** `--angulo-susu` es −8°, y solo lo usan el sello de
+  rebaja y los rombos de las cintas.
 
-Los botones **no van sesgados** aunque todo lo demás sí: un `skewX` sobre el
-botón inclina también su texto, que ya viene inclinado por la itálica, y salían
-dos pendientes peleándose.
+### Cuidado al cambiar la tipografía
+
+Cinzel en caja alta ocupa **mucho más ancho** que una condensada. El titular de
+la portada venía en `text-7xl` y se iba a cinco líneas; toda la escala de
+`.display` está bajada dos escalones respecto a la plantilla original. Si se
+cambia la letra, hay que volver a mirar los titulares, no solo el CSS.
+
+Y las tildes: `line-height` está en 1.1 porque con 1.02 la tilde de "VEHÍCULO"
+chocaba con la línea de encima. El hueco del recorte de SplitText lo da
+`.linea-titulo-mask`.
 
 ### El logotipo
 
-- `public/marca/hb-logo.png` es su foto de perfil recortada en círculo, a
-  116 px, que es la resolución que hay. **No se usa más grande que eso**; sobre
-  el negro de la página el círculo de mármol funciona como una chapa y no hace
-  falta fundirlo con ningún `mix-blend-mode`.
-- `components/MarcaHB.js` redibuja en vector el trazo del deportivo que su
-  logotipo lleva encima de las letras, para cuando hace falta grande. Si se
-  toca, hay que mirarlo **al tamaño en que se usa**: la primera versión tenía
-  el techo abombado y a tamaño de cabecera se leía como una mancha.
+- `public/marca/susu-logo.jpg` es su foto de perfil, 320 px. Se usa **solo en
+  la puerta**, donde va grande: en la cabecera, a 34 px, el logotipo completo
+  —carro, "SUSU" y "CARS" uno encima de otro— es una mancha.
+- `components/MarcaSusu.js` redibuja en vector el trazo del deportivo, que es
+  lo que se reconoce a distancia. Ese es el que va en la cabecera, en el pie y
+  en la portada. Si se toca, hay que mirarlo **al tamaño en que se usa**.
+- Va en `stroke` y nunca en `fill`: el logotipo es una línea, y una silueta
+  maciza sería otra marca.
 
 ---
 
@@ -171,12 +244,12 @@ los tiempos y curvas de la casa. Las piezas:
 | Componente | Qué hace |
 |---|---|
 | `TituloAnimado` | El titular asoma **línea a línea** desde detrás de una máscara (SplitText con `mask: "lines"`). |
-| `Revelar` | Las entradas por scroll. Seis variantes; `corte` entra recortado en diagonal. |
-| `Diagonales` | Las bandas llegan disparadas y luego se deslizan a distinta velocidad. |
-| `CarruselCatalogo` | Las 13 fichas desfilan de lado con la sección **anclada** (`pin` + `scrub`). |
+| `Revelar` | Las entradas por scroll. Seis variantes; `corte` entra recortado. |
+| `Filetes` | Los trazos de oro se **dibujan** de lado a lado y luego se deslizan a distinta velocidad. |
+| `CarruselCatalogo` | Las fichas desfilan de lado con la sección **anclada** (`pin` + `scrub`). |
 | `Parallax` | Las fotos se mueven más despacio que el texto. |
 | `Cifra` | Los números de la portada suben contando. |
-| `BarraProgreso` | El hilo rojo de arriba. |
+| `BarraProgreso` | El hilo de oro de arriba. |
 | `Header` | Se esconde al bajar, vuelve al subir. |
 
 Tres cosas que **no** son negociables y están puestas a propósito:
@@ -191,36 +264,6 @@ Tres cosas que **no** son negociables y están puestas a propósito:
    teléfono es de las peores cosas que se le pueden hacer a alguien que entró a
    ver carros; en móvil la misma lista se arrastra con el dedo.
 
-Cuidado con el recorte de líneas y **las tildes**: `mask: "lines"` recorta a ras
-de la caja de la línea y en español se comería la tilde de "ÚNICO" o de
-"CATÁLOGO". El hueco se lo da `.linea-titulo-mask` en `app/globals.css`.
-
----
-
-## Cargar los precios reales
-
-`data/vehiculos.json`, un objeto por vehículo. Campos que importan:
-
-```jsonc
-{
-  "slug": "toyota-corolla-cross-2024",  // la URL: /vehiculo/<slug>
-  "precio": 38900,                       // en dólares
-  "precioProvisional": true,             // QUITAR al poner el precio real
-  "condicion": "nuevo",                  // "nuevo" (0 km) | "usado"
-  "carroceria": "suv",                   // "suv" | "sedan"
-  "km": 0,                               // null si no se sabe → "Km por confirmar"
-  "financiado": true,
-  "estado": "disponible",                // "disponible" | "reservado" | "vendido"
-  "destacado": true,                      // sale en el escaparate de la portada
-  "detalles": ["Nuevo 0 km", "Automático", "Financiado"],  // las viñetas del PDF
-  "fotos": ["/vehiculos/toyota-corolla-cross-2024.jpg"]
-}
-```
-
-Ojo con `km`: **`null` no es cero**. Un 0 km importado lleva `0`; un usado del
-que el catálogo no dice el kilometraje lleva `null` y la página escribe "Km por
-confirmar" en vez de inventarse un dato.
-
 ---
 
 ## Antes de entregar
@@ -232,8 +275,9 @@ npx next build && npx next lint      # ¿sigue compilando?
 
 Y la lista corta:
 
-- [ ] `business.whatsapp` en `config.js` (hoy vacío → DM de Instagram)
-- [ ] Precios reales y quitar `precioProvisional` de cada vehículo
+- [ ] Confirmar el WhatsApp con el cliente y ponerlo en `business.whatsapp`
+- [ ] Cargar el catálogo real y quitar `"muestra"` de cada ficha
+- [ ] Rellenar `business.seguidores` / `publicaciones` al leer el perfil
 - [ ] `domainName` / `SITE_URL` con el dominio de verdad
 - [ ] `DEMO_PASSWORD` propia antes de repartir el enlace
 - [ ] `demo.urlCompra` (hoy vacío → los botones llevan a `/contacto`)
@@ -241,15 +285,20 @@ Y la lista corta:
 - [ ] Enganchar `app/api/contacto/route.js` al canal que elija el cliente
 - [ ] Repasar `/tos` y `/privacy-policy` con el cliente
 
+La puerta, además, **se mide**: 390×844, 360×800, 360×640 y 1440×800, con
+`scrollHeight - clientHeight` a cero en los cuatro. Trece píxeles de desborde
+no se ven a ojo y dejan el botón debajo de la cinta; los dos umbrales de
+`@media (height < …)` de `globals.css` están puestos con esa medida en la mano.
+
 ---
 
 ## Desarrollo
 
 ```bash
 pnpm install
-pnpm --filter hb-inversiones dev     # http://localhost:3000
-pnpm --filter hb-inversiones build
-pnpm --filter hb-inversiones generate-favicon   # rehace los iconos
+pnpm --filter susu-cars dev     # http://localhost:3000
+pnpm --filter susu-cars build
+pnpm --filter susu-cars generate-favicon   # rehace los iconos
 ```
 
 Variables de entorno (`.env.local`, y hay un `.env.example` al lado):

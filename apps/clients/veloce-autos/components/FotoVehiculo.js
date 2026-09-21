@@ -24,7 +24,7 @@ export default function FotoVehiculo({
   const foto = vehiculo.fotos?.[0] || null;
 
   return (
-    <div className={`relative overflow-hidden estudio ${className}`}>
+    <div className={`@container relative overflow-hidden estudio ${className}`}>
       {foto ? (
         <Image
           src={foto}
@@ -36,17 +36,24 @@ export default function FotoVehiculo({
         />
       ) : (
         <>
-          {/* La marca de agua, grande y al 4 %: se intuye, no se lee. */}
+          {/* La marca de agua va en la ESQUINA, no detrás de la silueta.
+              Centrada y grande quedaba justo debajo del vehículo: las alas
+              asomaban por encima del techo y la punta de la V salía por debajo
+              del piso, y las dos formas se leían como una sola mancha. En la
+              esquina hace lo que tiene que hacer —decir de quién es el cuadro—
+              sin pelearse con lo que hay dentro. */}
           <div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+            className="pointer-events-none absolute bottom-[7%] right-[5%]"
             aria-hidden="true"
           >
-            <MarcaVeloce className="h-[62%] w-auto text-base-content/[0.045]" />
+            <MarcaVeloce className="h-[clamp(0.9rem,3.5cqw,1.6rem)] w-auto text-base-content/15" />
           </div>
 
           <div className="absolute inset-0 flex items-center justify-center p-[9%]">
             <div className="relative w-full max-w-2xl">
-              <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content/30" />
+              {/* El color va opaco: el rebaje lo pone Silueta por dentro, en un solo
+                  grupo, para que la rueda no se sume al guardabarros. */}
+              <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content" />
               {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
               <div className="sombra-piso absolute inset-x-[8%] bottom-[4%] h-3" aria-hidden="true" />
             </div>

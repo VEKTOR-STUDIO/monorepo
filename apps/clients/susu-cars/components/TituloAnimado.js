@@ -7,12 +7,12 @@ import { contexto, revelarTexto } from "@/libs/animaciones";
  * Un titular que asoma línea a línea desde detrás de una máscara.
  *
  * Es el movimiento principal de la página, y no es un adorno: el catálogo de
- * HB tiene el modelo cortado en diagonal contra el fondo, y esto es lo mismo
+ * El logotipo de SUSU se dibuja de un trazo, y esto es lo mismo
  * en movimiento —el texto no aparece, SALE de detrás de algo—.
  *
  * Se usa donde iría el `<h1>`/`<h2>` y se le pasa la etiqueta:
  *
- *   <TituloAnimado as="h2" className="display text-4xl">
+ *   <TituloAnimado as="h2" className="display text-3xl">
  *     Lo último que entró
  *   </TituloAnimado>
  *

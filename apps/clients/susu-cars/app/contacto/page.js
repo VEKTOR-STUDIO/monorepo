@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Revelar from "@/components/Revelar";
 import TituloAnimado from "@/components/TituloAnimado";
-import Diagonales from "@/components/Diagonales";
+import Filetes from "@/components/Filetes";
 import FormularioContacto from "@/components/FormularioContacto";
 import BotonContacto from "@/components/BotonContacto";
 import BloqueVenta from "@/components/demo/BloqueVenta";
@@ -15,12 +15,18 @@ const { business } = config;
 
 export const metadata = getSEOTags({
   title: `Contacto · ${config.appName}`,
-  description: `Escríbenos por WhatsApp o Instagram, o pásate por el local en ${business.direccion}, ${business.ciudad}.`,
+  description: `Escríbenos por WhatsApp o Instagram, o pásate por la sede en ${business.direccion}, ${business.ciudad}. También recibimos vehículos en consignación.`,
   canonicalUrlRelative: "/contacto",
 });
 
-export default function Contacto() {
+export default async function Contacto({ searchParams }) {
+  const params = await searchParams;
   const demo = esDemo();
+
+  // `?motivo=consignar` abre el formulario ya en la pestaña de consignación.
+  // Es lo que llevan los botones de la portada y de la cabecera: quien pulsa
+  // "consignar mi vehículo" no debería tener que volver a decirlo al llegar.
+  const consignando = params?.motivo === "consignar";
 
   return (
     <>
@@ -28,21 +34,31 @@ export default function Contacto() {
 
       <main>
         <section className="relative overflow-hidden border-b border-base-content/8 px-4 py-20 sm:px-6">
-          <Diagonales variante="seccion" />
+          <Filetes variante="seccion" />
           <div className="textura absolute inset-0" aria-hidden="true" />
 
           <div className="relative mx-auto max-w-7xl">
             <Revelar>
               <span className="banda" aria-hidden="true" />
             </Revelar>
-            <TituloAnimado as="h1" className="display mt-6 text-5xl sm:text-6xl lg:text-7xl">
-              Hablemos
+            <TituloAnimado as="h1" className="display mt-6 text-3xl sm:text-4xl">
+              {consignando ? "Vende el tuyo" : "Hablemos"}
             </TituloAnimado>
             <Revelar retraso={200}>
               <p className="mt-5 max-w-lg text-lg leading-relaxed text-base-content/60">
-                Lo más rápido es WhatsApp. Si prefieres, déjanos qué buscas y te
-                escribimos nosotros. Y si estás por {business.ciudad}, pásate por el
-                local a verlos.
+                {consignando ? (
+                  <>
+                    Dinos marca, año y kilometraje y te decimos en qué precio
+                    sale y cuánto suele tardar. El vehículo sigue siendo tuyo
+                    hasta que se venda.
+                  </>
+                ) : (
+                  <>
+                    Lo más rápido es WhatsApp. Si prefieres, déjanos qué buscas y
+                    te escribimos nosotros. Y si estás por {business.ciudad},
+                    pásate por la sede a verlos.
+                  </>
+                )}
               </p>
             </Revelar>
           </div>
@@ -54,12 +70,12 @@ export default function Contacto() {
             <div className="space-y-4">
               <Revelar>
                 <div className="ficha p-6">
-                  <p className="rotulo">El local</p>
+                  <p className="rotulo">La sede</p>
                   <address className="display mt-3 not-italic text-2xl leading-tight">
                     {business.direccion}
                   </address>
                   <p className="cifra mt-2 text-sm text-primary">
-                    {business.ciudad}, estado {business.estado}
+                    {business.ciudad}, {business.estado}
                   </p>
                   <p className="mt-4 text-sm text-base-content/55">{business.horario}</p>
                 </div>
@@ -92,8 +108,13 @@ export default function Contacto() {
                   <p className="display mt-3 text-2xl transition-colors group-hover:text-primary">
                     @{business.instagram}
                   </p>
+                  {/* Las cifras del perfil solo salen si están puestas. Sin
+                      ellas se enseña la segunda cuenta, que es un dato que sí
+                      tenemos y que además anuncian ellos mismos. */}
                   <p className="cifra mt-2 text-sm text-base-content/55">
-                    {business.seguidores} seguidores · {business.publicaciones} publicaciones
+                    {business.seguidores
+                      ? `${business.seguidores} seguidores · ${business.publicaciones} publicaciones`
+                      : `También en @${business.instagramSecundario}`}
                   </p>
                 </a>
               </Revelar>
@@ -105,8 +126,7 @@ export default function Contacto() {
                     {business.servicios.map((servicio) => (
                       <li key={servicio} className="flex gap-3">
                         <span
-                          className="mt-1.5 h-2.5 w-1.5 shrink-0 bg-primary"
-                          style={{ transform: "skewX(var(--angulo-hb))" }}
+                          className="mt-2 h-px w-4 shrink-0 bg-primary"
                           aria-hidden="true"
                         />
                         {servicio}
@@ -121,15 +141,17 @@ export default function Contacto() {
             <Revelar desde="corte" retraso={120}>
               <div className="ficha p-7 sm:p-9">
                 <p className="rotulo">Déjanos tus datos</p>
-                <h2 className="display mt-3 text-3xl">Cuéntanos qué buscas</h2>
+                <h2 className="display mt-3 text-2xl">
+                  {consignando ? "Cuéntanos del vehículo" : "Cuéntanos qué buscas"}
+                </h2>
                 <p className="mt-4 text-sm leading-relaxed text-base-content/55">
-                  Si no ves lo que quieres en el inventario, dilo aquí: se importa. Y si
-                  quieres saber por el financiamiento de un 0 km, también se explica por
-                  aquí.
+                  {consignando
+                    ? "Con la marca, el año y el kilometraje ya se puede hablar de precio. El resto —fotos, revisión y publicación— lo hacemos nosotros cuando traigas el vehículo a la sede."
+                    : "Si no ves lo que quieres en el catálogo, dilo aquí: entran unidades cada semana y te avisamos cuando llegue algo parecido."}
                 </p>
 
                 <div className="mt-7">
-                  <FormularioContacto />
+                  <FormularioContacto motivoInicial={consignando ? "consignar" : "comprar"} />
                 </div>
               </div>
             </Revelar>
@@ -139,7 +161,7 @@ export default function Contacto() {
         <section className="border-t border-base-content/8 px-4 py-16 text-center sm:px-6">
           <p className="text-base-content/55">¿Prefieres mirar primero?</p>
           <Link href="/vehiculos" className="btn btn-filo mt-5">
-            Ver el inventario
+            Ver el catálogo
           </Link>
         </section>
 

@@ -6,7 +6,7 @@ import BotonComprar from "@/components/demo/BotonComprar";
 import Contador from "@/components/demo/Contador";
 import config from "@/config";
 
-const LLAVE = "hb-inversiones.demo.aviso-cerrado";
+const LLAVE = "susu-cars.demo.aviso-cerrado";
 
 /**
  * Tarjeta que asoma por abajo cuando el visitante lleva media página bajada.
@@ -84,8 +84,8 @@ export default function AvisoFlotante() {
         <p className="microgramma text-[0.65rem] text-primary">Estás viendo una demo</p>
 
         <p className="mt-2.5 pr-5 text-sm leading-relaxed text-base-content/70">
-          Tu catálogo en PDF convertido en página: inventario, ficha por vehículo y
-          contacto directo por WhatsApp. Con tu rojo y tus diagonales.
+          Tu Instagram convertido en página: catálogo, ficha por vehículo,
+          consignación y contacto por WhatsApp. Con tu oro y tu trazo.
         </p>
 
         <div className="mt-4 flex items-center justify-between gap-3">

@@ -1,0 +1,1175 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tema "dss".
+ *
+ * No se inventó una paleta: se copió la suya. @somosdss publica siempre la
+ * misma pieza —cielo DORADO degradado, el perfil de la ciudad recortado
+ * detrás, el vehículo o la moto posados encima, el titular en condensada
+ * pesadísima y una pastilla de oro abajo con la cuota—, y el logotipo es un
+ * sello circular de pan de oro con el monograma S/D calado en negro. Esa
+ * retícula es la identidad y la web la hereda entera.
+ *
+ * Cuatro decisiones que vienen de ahí y no de un gusto:
+ *
+ *   · FONDO NEGRO. Su monograma está calado en negro sobre el oro, y sus
+ *     piezas usan el negro como respiro entre dorados. Una web clara habría
+ *     sido otra marca.
+ *   · EL ORO NO DECORA, SEÑALA. Es la cuota, el botón y el cielo de la
+ *     portada. Si se usara de relleno en todas partes dejaría de significar
+ *     nada, que es justo lo que le pasa a media Instagram.
+ *   · EL MARFIL ES EL TERCER COLOR, no un gris cualquiera. Su oro es pan de
+ *     oro, cálido, y al lado un gris azulado lo ensucia; aquí el marfil es el
+ *     de los bordes, los filetes y las cifras secundarias.
+ *   · CÍRCULOS, NO ESQUINAS. El logotipo es un sello redondo con el rótulo en
+ *     arco. Por eso aquí las cosas se redondean un poco y las pastillas se
+ *     redondean del todo, al revés que en una marca de catálogo cuadriculado.
+ *
+ * Para mover el oro de marca: --color-primary aquí y config.colors.main.
+ * ------------------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "dss";
+  default: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(12.5% 0 0);
+  --color-base-200: oklch(17% 0 0);
+  --color-base-300: oklch(23.5% 0 0);
+  --color-base-content: oklch(97% 0 0);
+
+  /* El oro del sello (#D9A72C). */
+  --color-primary: oklch(76% 0.132 82);
+  --color-primary-content: oklch(15% 0.02 80);
+
+  /* El marfil, que es el otro color de la marca: el blanco cálido de sus
+     titulares, no un gris frío. */
+  --color-secondary: oklch(90% 0.015 85);
+  --color-secondary-content: oklch(13% 0 0);
+
+  --color-accent: oklch(88% 0.09 92);
+  --color-accent-content: oklch(15% 0.02 80);
+
+  --color-neutral: oklch(21% 0 0);
+  --color-neutral-content: oklch(95% 0 0);
+
+  --color-info: oklch(70% 0.11 240);
+  --color-info-content: oklch(13% 0 0);
+  --color-success: oklch(72% 0.16 155);
+  --color-success-content: oklch(13% 0 0);
+  --color-warning: oklch(80% 0.14 62);
+  --color-warning-content: oklch(13% 0 0);
+  --color-error: oklch(62% 0.22 25);
+  --color-error-content: oklch(99% 0 0);
+
+  /* Un redondeo suave, del lado del sello circular. Lo redondo del todo se
+     reserva para las pastillas, que es donde su gráfica lo pide. */
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.375rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  /* Barlow Condensed en negrita itálica es lo más cerca que se llega del
+     titular de sus publicaciones sin licenciar su tipografía: condensada, muy
+     pesada, inclinada y con los remates cortados en recto. */
+  --font-display: var(--font-barlow), "Arial Narrow", system-ui, sans-serif;
+  --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* -------------------------------------------------------------------------
+   * Un solo radio en toda la web.
+   *
+   * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
+   * mismo valor a propósito: así da igual cuál escriba cada componente, el
+   * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
+   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos y
+   * pastillas de verdad —el emblema, las etiquetas de año y kilometraje— y
+   * esos sí deben seguir siendo redondos.
+   * ----------------------------------------------------------------------- */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.375rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.375rem;
+  --radius-3xl: 0.375rem;
+
+  --color-tinta: oklch(12.5% 0 0);
+  --color-humo: oklch(62% 0 0);
+  --color-acero: oklch(30% 0 0);
+  /* Los tres tonos del pan de oro de su sello: el medio, el brillo y la
+     sombra. Un degradado entre los tres es lo que hace que una superficie
+     parezca metal y no un amarillo plano. */
+  --color-oro: oklch(76% 0.132 82);
+  --color-oro-claro: oklch(88% 0.09 92);
+  --color-oro-hondo: oklch(58% 0.11 72);
+  --color-marfil: oklch(90% 0.015 85);
+
+  --animate-flecha: flecha 2.2s ease-in-out infinite;
+  --animate-cinta: cinta 42s linear infinite;
+  --animate-brillo: brillo 5.5s ease-in-out infinite;
+
+  /* La flecha de "sigue bajando" del final de la portada. */
+  @keyframes flecha {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateY(0.4rem);
+      opacity: 1;
+    }
+  }
+
+  @keyframes cinta {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* El destello que recorre una superficie dorada. Es lo que distingue el pan
+     de oro de un amarillo: el brillo se mueve. Se usa con moderación —el sello
+     de la puerta y poco más—, porque en todas partes sería una feria. */
+  @keyframes brillo {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+  }
+
+  /* El latido del punto de "en directo" de la puerta. */
+  @keyframes pulso {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.82);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+
+  /* Alto de la franja de demo. Sin demo vale 0 y la cabecera vuelve arriba
+     del todo; con demo, la cabecera se pega justo debajo de la franja. */
+  --alto-barra-demo: 0px;
+
+  /* Alto del crédito de autoría del final (components/FooterFoot.js). */
+  --alto-credito: 1.9rem;
+
+  /* El ángulo de la marca. En sus piezas el titular va en itálica y las
+     etiquetas llevan el filo inclinado, pero poco: el gesto dominante es el
+     círculo del sello, no la diagonal. Está arriba del todo para que cambiarlo
+     cambie la página entera de una vez. */
+  --angulo-dss: -9deg;
+
+  background-color: var(--color-base-100);
+}
+
+html[data-demo="true"] {
+  --alto-barra-demo: 2.5rem;
+}
+
+/* En demo, la tarjeta flotante de venta se posa abajo. En pantalla estrecha
+   ocupa todo el ancho y taparía el crédito, así que se le da aire. */
+html[data-demo="true"] .footer-foot {
+  padding-bottom: 9.5rem;
+}
+
+@media (min-width: 640px) {
+  html[data-demo="true"] .footer-foot {
+    padding-bottom: 0.25rem;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-base-100);
+}
+
+:target {
+  scroll-margin-top: calc(var(--alto-barra-demo) + 5rem);
+}
+
+::selection {
+  background-color: var(--color-oro);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+ * Tipografía
+ * ------------------------------------------------------------------------ */
+
+/* El titular de sus publicaciones: condensado, muy pesado, en itálica y en
+   mayúsculas. Es lo que hace que un bloque de texto se lea como una pieza de
+   DSS y no como una web de plantilla. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.005em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+/* Variante recta, para los sitios donde la itálica cansaría: tablas, fichas
+   técnicas, nombres largos de modelo. */
+.display-recto {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.005em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Etiquetas pequeñas de sección. */
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
+}
+
+/* Cifras que se comparan entre sí: precios, kilómetros, años. */
+.cifra {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+ * Los titulares que entran línea a línea
+ *
+ * SplitText envuelve cada línea en una caja con `overflow: clip` para que el
+ * texto ASOME en vez de aparecer. El recorte es exactamente a ras de la caja
+ * de la línea, así que en español se comería las tildes de las mayúsculas
+ * —"ÚNICO", "CRÉDITO"— y el rabo de la itálica por la derecha.
+ *
+ * Se le da hueco con padding y se recupera con un margen negativo igual, que
+ * en un elemento generado por GSAP no compite con ninguna utilidad de
+ * Tailwind.
+ * ------------------------------------------------------------------------ */
+.linea-titulo-mask {
+  padding-top: 0.24em;
+  margin-top: -0.24em;
+  padding-right: 0.18em;
+  margin-right: -0.18em;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+/* --------------------------------------------------------------------------
+ * Microgramma y los cintillos
+ *
+ * Esta página tiene DOS voces y conviene no confundirlas:
+ *
+ *   · Lo que ve el cliente —vehículos, motos, cómo se financia, contacto—
+ *     va con la tipografía de la casa.
+ *   · Lo que le habla a DSS —cómo se publica, qué incluye, cuánto cuesta—
+ *     va en Microgramma, que es la tipografía de la firma de Alessandrovaru,
+ *     la misma del crédito del pie.
+ *
+ * Entre una voz y otra se cruza un cintillo animado, para que se vea de un
+ * golpe dónde termina el escaparate y dónde empieza la oferta.
+ * ------------------------------------------------------------------------ */
+
+.microgramma {
+  font-family: var(--microgramma-font), var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cintillo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-block: 0.7rem;
+  user-select: none;
+  /* Se difumina por los bordes: el texto nace y muere, no se corta en seco. */
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* La pista lleva el contenido DOS veces y se desplaza media pista: al llegar
+   al -50 % la segunda copia está exactamente donde empezó la primera, así que
+   el salto al reiniciar no se ve. */
+.cintillo-pista {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  animation: cinta 38s linear infinite;
+}
+
+.cintillo:hover .cintillo-pista {
+  animation-play-state: paused;
+}
+
+/* La voz de venta: el oro de la casa, que aquí sí llena. */
+.cintillo-venta {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-oro-hondo),
+    var(--color-oro) 45%,
+    var(--color-oro-claro)
+  );
+  color: oklch(16% 0.02 80);
+}
+
+/* La vuelta al escaparate: oscura y discreta, que no compita. */
+.cintillo-cliente {
+  background-color: var(--color-base-200);
+  color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+  border-block: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+.cintillo-texto {
+  font-size: 0.7rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+/* La separación entre una frase y la siguiente: el sello en pequeño, no un
+   punto cualquiera. Es un anillo, que es lo que es su logotipo. */
+.cintillo-punto {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border: 2px solid currentColor;
+  border-radius: 9999px;
+  background-color: transparent;
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cintillo-pista {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * La gráfica de la casa: cielo dorado, ciudad y asfalto
+ *
+ * Es la receta exacta de sus publicaciones, de arriba abajo: un cielo dorado
+ * que va de oro pálido a ámbar hondo, el perfil de la ciudad recortado en
+ * negro sobre él, y el asfalto gris ocupando el tercio de abajo con la unidad
+ * posada encima.
+ *
+ * Las tres capas van por separado a propósito: cada sección usa las que le
+ * hagan falta y con la intensidad que aguante el texto que lleve encima.
+ * ------------------------------------------------------------------------ */
+
+/* 1. El cielo. `--cielo-fuerza` gradúa cuánto pesa sin tocar el degradado. */
+.cielo {
+  --cielo-fuerza: 1;
+  background-color: var(--color-base-100);
+  background-image:
+    radial-gradient(
+      ellipse 120% 85% at 50% 100%,
+      color-mix(in oklab, var(--color-oro-claro) calc(38% * var(--cielo-fuerza)), transparent) 0%,
+      color-mix(in oklab, var(--color-oro) calc(30% * var(--cielo-fuerza)), transparent) 32%,
+      color-mix(in oklab, var(--color-oro-hondo) calc(16% * var(--cielo-fuerza)), transparent) 58%,
+      transparent 82%
+    );
+}
+
+.cielo-suave {
+  --cielo-fuerza: 0.45;
+}
+
+/* El cielo de una PIEZA suelta —la tarjeta de una unidad—, que no es lo mismo
+   que el de una sección.
+
+   En una sección el cielo tiñe un fondo negro y tiene que dejar leer el texto
+   que lleva encima, así que va mezclado con transparente. En una tarjeta el
+   cielo ES la pieza: ahí su oro va a plena potencia, como en sus posts, y lo
+   único que se le pide es que la unidad recorte contra él.
+
+   Ojo al orden: en sus piezas lo OSCURO está arriba y el oro se enciende hacia
+   abajo, detrás del vehículo. Invertirlo deja el titular —que va arriba y en
+   blanco— sobre el punto más claro del degradado, y desaparece. */
+.cielo-pieza {
+  background-image: linear-gradient(
+    to bottom,
+    oklch(26% 0.05 70) 0%,
+    var(--color-oro-hondo) 36%,
+    var(--color-oro) 66%,
+    var(--color-oro-claro) 92%
+  );
+}
+
+/* 2. La ciudad. Es el perfil de una ciudad de torres recortado contra el oro,
+      que es exactamente el fondo de todas sus piezas. Va como capa absoluta,
+      anclada abajo, y se difumina por arriba para que no se vea dónde termina
+      el recorte. */
+/* `--horizonte-alto` es lo ALTO QUE SE DIBUJAN LOS EDIFICIOS, y no lo alto que
+   mide la capa. Son cosas distintas y confundirlas fue el primer error: con
+   `background-size: auto 100%` la ciudad se estiraba con la capa, así que en
+   una portada de 3.600 px salían torres de 1.600 px que ya no parecían una
+   ciudad, parecían un muro. Ahora los edificios miden siempre lo mismo y la
+   capa solo decide cuánto cielo queda por encima. */
+.horizonte {
+  --horizonte-alto: clamp(70px, 16vh, 190px);
+  pointer-events: none;
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: auto var(--horizonte-alto);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='240' viewBox='0 0 1200 240' preserveAspectRatio='none'%3E%3Cg fill='%23000000'%3E%3Cpath d='M0 240 L0 150 L60 96 L120 126 L190 70 L250 112 L320 60 L400 104 L470 74 L540 120 L620 66 L700 110 L780 80 L860 124 L940 88 L1020 130 L1100 100 L1200 140 L1200 240 Z' opacity='0.55'/%3E%3Cg%3E%3Crect x='28' y='168' width='46' height='72'/%3E%3Crect x='86' y='140' width='34' height='100'/%3E%3Crect x='132' y='186' width='54' height='54'/%3E%3Crect x='198' y='120' width='40' height='120'/%3E%3Crect x='250' y='160' width='30' height='80'/%3E%3Crect x='292' y='178' width='62' height='62'/%3E%3Crect x='366' y='132' width='38' height='108'/%3E%3Crect x='416' y='172' width='44' height='68'/%3E%3Crect x='472' y='150' width='28' height='90'/%3E%3Crect x='512' y='186' width='58' height='54'/%3E%3Crect x='582' y='126' width='42' height='114'/%3E%3Crect x='636' y='166' width='32' height='74'/%3E%3Crect x='680' y='182' width='60' height='58'/%3E%3Crect x='752' y='144' width='36' height='96'/%3E%3Crect x='800' y='176' width='48' height='64'/%3E%3Crect x='860' y='156' width='30' height='84'/%3E%3Crect x='902' y='188' width='56' height='52'/%3E%3Crect x='970' y='134' width='40' height='106'/%3E%3Crect x='1022' y='170' width='34' height='70'/%3E%3Crect x='1068' y='184' width='62' height='56'/%3E%3Crect x='1142' y='150' width='38' height='90'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  mask-image: linear-gradient(to top, #000 45%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 100%);
+}
+
+/* 3. El asfalto. Gris oscuro con grano y el filo de la vía cortado en el
+      ángulo de la casa, como en sus piezas. */
+.asfalto {
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      to top,
+      oklch(26% 0.004 250) 0%,
+      oklch(21% 0.004 250) 55%,
+      transparent 100%
+    );
+}
+
+.asfalto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23a)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* El filete de oro, para acentos cortos: bajo un titular, en un rótulo.
+   Es el filo dorado que subraya los titulares de sus piezas, con los tres
+   tonos del pan de oro para que se lea como metal y no como una raya amarilla.
+   Muere hacia la derecha, que es por donde respira el titular. */
+.filete {
+  height: 0.25rem;
+  width: 4rem;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    to right,
+    var(--color-oro-hondo),
+    var(--color-oro) 35%,
+    var(--color-oro-claro) 60%,
+    color-mix(in oklab, var(--color-oro) 20%, transparent)
+  );
+}
+
+.filete-ancho {
+  width: 100%;
+}
+
+/* El apagado, para cuando el oro ya está diciendo otra cosa cerca. */
+.filete-marfil {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--color-marfil) 70%, transparent),
+    transparent
+  );
+}
+
+/* --------------------------------------------------------------------------
+ * El sello
+ *
+ * Su logotipo es un disco de pan de oro, y el archivo que mandaron viene con
+ * las esquinas EN BLANCO. Por eso aquí no se usa el filtro de alfa por brillo
+ * con el que otras marcas del monorepo se comen un fondo negro: contra un
+ * fondo blanco ese filtro hace justo lo contrario —deja las esquinas opacas y
+ * calaría el monograma, que es lo único oscuro— y saldría un cuadro blanco con
+ * un agujero en medio.
+ *
+ * Lo que sí funciona con un logotipo redondo es recortarlo redondo:
+ * `border-radius: 50%` con `object-fit: cover`. Da igual qué haya en las
+ * esquinas, porque las esquinas no se pintan.
+ *
+ * El anillo es el canto del sello. Sin él, sobre el negro de la página el
+ * disco dorado parece recortado con tijera.
+ * ------------------------------------------------------------------------ */
+.sello {
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-oro) 55%, transparent),
+    0 8px 28px -12px color-mix(in oklab, var(--color-oro) 60%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * La cuota
+ *
+ * Este negocio no anuncia precios, anuncia cuotas: "DESDE 75 SEMANALES" es lo
+ * que va grande en todas sus piezas. Así que la cuota tiene tratamiento de
+ * cifra principal —dorada, condensada, con el periodo pequeño al lado— y el
+ * precio de contado queda debajo, en gris, como dato secundario.
+ *
+ * Es la inversión que hace falta para que la web se parezca al negocio: si el
+ * precio total fuera lo grande, sería la web de un concesionario, que es
+ * justo lo que DSS no es.
+ * ------------------------------------------------------------------------ */
+.cuota {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+  color: var(--color-oro);
+}
+
+.cuota-periodo {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+}
+
+/* El bisel, para botones y etiquetas: la caja va sesgada y el contenido se
+   contra-sesga para que el texto salga recto. */
+.bisel {
+  display: inline-block;
+  transform: skewX(var(--angulo-dss));
+}
+
+.bisel > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-dss) * -1));
+}
+
+/* La pastilla: el óvalo dorado con la cuota que llevan todas sus
+   publicaciones al pie de la pieza —"DESDE 75 SEMANALES"—. Es el elemento más
+   repetido de su gráfica, así que aquí hace de etiqueta en todas partes. */
+.pastilla {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    100deg,
+    var(--color-oro-hondo),
+    var(--color-oro) 55%,
+    var(--color-oro-claro)
+  );
+  color: oklch(16% 0.02 80);
+  font-weight: 700;
+  box-shadow: 0 10px 26px -14px color-mix(in oklab, var(--color-oro) 90%, transparent);
+}
+
+.pastilla-apagada {
+  background-image: none;
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 75%, transparent);
+  box-shadow: none;
+}
+
+/* El corte, para fotos y bloques enteros: una esquina rebajada, el mismo
+   gesto de sus etiquetas. */
+.corte {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.5rem), calc(100% - 1.5rem) 100%, 0 100%);
+}
+
+/* El fondo donde se posan las unidades: negro con una insinuación de foco,
+   como el suelo del salón. */
+.estudio {
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 50% 42%,
+      oklch(25% 0 0) 0%,
+      oklch(18% 0 0) 48%,
+      oklch(12% 0 0) 100%
+    );
+}
+
+/* La sombra elíptica bajo el vehículo. Sin esto las siluetas flotan. */
+.sombra-piso {
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, oklch(0% 0 0 / 0.55), transparent 70%);
+  filter: blur(6px);
+}
+
+/* --------------------------------------------------------------------------
+ * Texturas
+ *
+ * Kilómetros de negro liso se ven baratos en una pantalla grande. Estas capas
+ * le dan superficie sin llamar la atención, y van como CAPA —un div absoluto
+ * dentro de la sección— y no como pseudoelemento: con un z-index negativo
+ * acabarían por detrás del propio fondo y no se verían nunca.
+ *
+ *   <div className="textura absolute inset-0" aria-hidden="true" />
+ * ------------------------------------------------------------------------ */
+
+/* Grano fino. Es ruido que genera el navegador (feTurbulence), así que no hay
+   que servir ninguna imagen. Sobre negro tiene que ACLARAR. */
+.textura {
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* La vía: las rayas de la calzada, tenues, en diagonal. Sustituye al panal que
+   traía la plantilla —eso era el techo del local de otro cliente— y se reserva
+   para las secciones que hablan del negocio; en todas dejaría de significar
+   nada. */
+.textura-via {
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: repeating-linear-gradient(
+    101deg,
+    transparent 0 46px,
+    #fff 46px 50px,
+    transparent 50px 120px
+  );
+}
+
+/* El plástico que envuelve la puerta.
+   La foto es casi negra con los pliegues en blanco, así que va en `screen`:
+   el negro se cae y solo quedan los brillos de las arrugas, que es lo que hace
+   que la portada parezca metida en una bolsa. En `multiply` pasaría lo
+   contrario —se comería el fondo y quedaría una mancha negra—, y por eso no se
+   usa aquí. Va encima de todo el fondo, pero siempre por debajo del contenido,
+   que sube con `z-10`. */
+.plastico {
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: screen;
+  background-image: url("/plasticTexture.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* -----------------------------------------------------------------------------
+ * La puerta, de una sola pantalla.
+ *
+ * Es lo primero —y muchas veces lo único— que ve quien recibe el enlace, así
+ * que aquí no se hace scroll: la carátula, la caja de acceso y las dos cintas
+ * caben en `100svh` y ahí se quedan. `svh` y no `vh` porque en el móvil `vh`
+ * mide como si la barra del navegador no existiera y dejaría el pie fuera.
+ *
+ * Para que eso aguante igual en un portátil de 720 px que en un monitor, el
+ * ritmo vertical no va en `rem` fijos: estas medidas se calculan en `vh`, así
+ * que la página se encoge con la pantalla en vez de desbordarla. El mínimo de
+ * cada `clamp()` es el suelo por debajo del cual dejaría de respirar.
+ * -------------------------------------------------------------------------- */
+.puerta {
+  --puerta-v1: clamp(0.3rem, 0.9vh, 0.75rem); /* una etiqueta y su dato */
+  --puerta-v2: clamp(0.5rem, 1.6vh, 1.25rem); /* piezas de un mismo bloque */
+  --puerta-v3: clamp(0.7rem, 2.4vh, 1.75rem); /* de un bloque al siguiente */
+  --puerta-v4: clamp(0.9rem, 3.2vh, 3.5rem); /* entre las dos columnas */
+
+  /* El emblema se pide en píxeles porque el mismo componente sirve en la
+     cabecera; aquí se le pasa esta medida para que encoja con el alto. */
+  --puerta-logo: clamp(3.25rem, 8.5vh, 5.25rem);
+}
+
+/* El crédito de autoría se monta en el layout raíz, así que también cae debajo
+   de la puerta. Ahí sobra: la puerta lleva su propia firma, y con el aire que
+   el modo demo le da al crédito son 171 px que rompen la pantalla única. */
+body:has(main.puerta) .footer-foot {
+  display: none;
+}
+
+/* El párrafo de presentación solo sale cuando hay sitio de sobra: en el móvil
+   la columna es estrecha y lo que se vende ya lo cuentan la insignia, el
+   carrusel y las cintas; en un portátil bajo es lo primero que estorba.
+
+   El corte está en 52rem de alto y no en 46 porque está MEDIDO: con las nueve
+   líneas de `demo.incluye`, a 1440×800 la columna izquierda pedía 741 px en
+   733 disponibles y el párrafo eran justo los 110 px que sobraban. Si algún día
+   crece la lista, este número se vuelve a medir; no se adivina. */
+.puerta-presentacion {
+  display: none;
+}
+
+@media (width >= 64rem) and (height >= 52rem) {
+  .puerta-presentacion {
+    display: block;
+  }
+}
+
+/* Lo que trae la edición.
+ *
+ * Son ocho o nueve renglones que en un móvil no caben en vertical junto a la
+ * caja de acceso, así que ahí la lista se tumba: una fila que se arrastra de
+ * lado, con los puntos enganchados, y que se sale del margen para que se vea
+ * que hay más a la derecha. De `lg` en adelante vuelve a ser la lista de
+ * siempre, que es como se lee mejor. */
+.puerta-incluye {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+
+.puerta-incluye::-webkit-scrollbar {
+  display: none;
+}
+
+.puerta-incluye > li {
+  flex: 0 0 14rem;
+  scroll-snap-align: start;
+}
+
+/* Por debajo de 45rem de alto —un Android de gama baja, un iPhone SE, un
+   portátil de 13 pulgadas con muchas barras— no cabe todo, y hay que elegir
+   qué se va. Primero los adornos; después la lista de lo que trae la edición,
+   que es lo único que se cuenta dos veces: las dos cintas llevan girando esas
+   mismas ventajas sin parar. Lo que no se toca es el emblema, el precio y el
+   formulario, que es a lo que se viene. */
+@media (height < 45rem) {
+  .puerta-cortesia,
+  .puerta-incluido {
+    display: none;
+  }
+}
+
+@media (width >= 64rem) {
+  .puerta-incluye {
+    display: grid;
+    gap: var(--puerta-v1);
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .puerta-incluye > li {
+    flex: initial;
+  }
+}
+
+/* Rejilla técnica muy tenue, para los fondos que piden textura sin gráfica:
+   el 404, la pantalla de error y el fondo de la puerta. Se desvanece hacia los
+   bordes con una máscara para que no se vea dónde termina. */
+.malla {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+}
+
+.malla-centro {
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+}
+
+/* --------------------------------------------------------------------------
+ * Portada de edición  (solo la puerta de la demo)
+ *
+ * La puerta no es una pantalla de login: es el escaparate donde se vende el
+ * sistema. De ahí el lenguaje de carátula de edición especial —insignia,
+ * lista de lo que trae, sello de rebaja, cuenta atrás—, que todo el mundo
+ * sabe leer de un vistazo y que aquí además es verdad: hay un precio, hay una
+ * fecha y hay una lista de lo que se lleva quien compre.
+ *
+ * Nada de esto entra en el escaparate del cliente: ahí vende él, no nosotros.
+ * ------------------------------------------------------------------------ */
+
+.insignia-edicion {
+  display: inline-block;
+  transform: skewX(var(--angulo-dss));
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 30%, transparent);
+  background-image: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    color-mix(in oklab, var(--color-base-content) 4%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 22%, transparent),
+    0 12px 30px -16px #000;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.insignia-edicion > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-dss) * -1));
+}
+
+/* El sello de rebaja. Va girado, como el adhesivo de una caja. */
+.sello-descuento {
+  transform: rotate(-9deg);
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    140deg,
+    var(--color-oro-claro),
+    var(--color-oro) 55%,
+    var(--color-oro-hondo)
+  );
+  color: oklch(16% 0.02 80);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-oro) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-oro) 70%, transparent);
+}
+
+/* Cada cosa que trae la edición, como una línea de contenido descargable. */
+.linea-dlc {
+  border-radius: var(--radius-box);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 4%, transparent);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linea-dlc:hover {
+  transform: translateX(4px);
+  border-color: color-mix(in oklab, var(--color-oro) 55%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* Resplandor detrás de lo que tiene que mirarse primero. */
+.resplandor {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    0 0 70px -14px color-mix(in oklab, var(--color-oro) 55%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Tarjetas
+ *
+ * Nada de cristal ni de sombras pesadas: una línea finísima sobre el negro y
+ * un filo de oro que aparece al pasar por encima. El peso visual lo tiene la
+ * unidad, que ya viene con la gráfica de la casa impresa.
+ * ------------------------------------------------------------------------ */
+
+.ficha {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  transition:
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+.ficha:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--color-oro) 60%, transparent);
+  box-shadow: 0 26px 60px -30px #000;
+}
+
+/* El filo de oro del borde inferior, que solo crece al pasar por encima. */
+.ficha::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  border-bottom-left-radius: var(--radius-box);
+  border-bottom-right-radius: var(--radius-box);
+  background-image: linear-gradient(
+    to right,
+    var(--color-oro-hondo),
+    var(--color-oro) 50%,
+    var(--color-oro-claro)
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ficha:hover::after {
+  transform: scaleX(1);
+}
+
+/* Panel sin interacción: avisos, bloques de datos. */
+.panel {
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* La cabecera cuando ya se ha bajado un poco. La clase la pone y la quita
+   GSAP desde components/Header.js, en vez de un estado de React: así el fondo
+   cambia en el mismo fotograma que el scroll y no en el siguiente render. */
+header.con-fondo {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+/* Barra translúcida de la cabecera. */
+.barra-vidrio {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* --------------------------------------------------------------------------
+ * Hoja de especificaciones
+ * ------------------------------------------------------------------------ */
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border-radius: var(--radius-box);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .specs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.specs > * {
+  background-color: var(--color-base-100);
+  padding: 1rem 1.15rem;
+}
+
+/* --------------------------------------------------------------------------
+ * Botones
+ *
+ * En la itálica condensada de la casa, mayúsculas y muy espaciados. Se pensó
+ * en sesgarlos, y se descartó: un `skewX` sobre el botón inclina también su
+ * texto, que YA viene inclinado por la itálica, y el resultado eran dos
+ * pendientes distintas peleándose. El sesgo se queda donde se lee bien —las
+ * etiquetas— y el botón se gana la marca por la tipografía y por el degradado
+ * de pan de oro del sello.
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 0.9375rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+}
+
+.btn-primary {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-oro-hondo),
+    var(--color-oro) 55%,
+    var(--color-oro-claro)
+  );
+  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-oro) 95%, transparent);
+}
+
+.btn-primary:hover {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-oro),
+    var(--color-oro-claro) 60%,
+    var(--color-oro-claro)
+  );
+}
+
+/* El botón secundario sobre negro: solo un filo de marfil. */
+.btn-filo {
+  background-color: transparent;
+  color: var(--color-base-content);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-marfil) 30%, transparent);
+}
+
+.btn-filo:hover {
+  background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-marfil) 60%, transparent);
+}
+
+/* El botón que va encima de una foto. */
+.btn-sobre-foto {
+  background-color: color-mix(in oklab, var(--color-base-100) 72%, transparent);
+  color: var(--color-base-content);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-sobre-foto:hover {
+  background-color: color-mix(in oklab, var(--color-base-100) 92%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Formularios
+ * ------------------------------------------------------------------------ */
+
+.entrada {
+  width: 100%;
+  border-radius: var(--radius-field);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 18%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 5%, transparent);
+  padding: 0.75rem 1.1rem;
+  font-size: 0.9375rem;
+  color: var(--color-base-content);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.entrada::placeholder {
+  color: color-mix(in oklab, var(--color-base-content) 35%, transparent);
+}
+
+.entrada:focus {
+  border-color: var(--color-oro);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-oro) 22%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * El deslizador del simulador de cuota
+ *
+ * `input[type=range]` no hereda nada del tema: si no se le pinta la pista y el
+ * tirador a mano, sale el control azul del sistema, que sobre esta página se ve
+ * como un trozo de otra web pegado encima. Hay que hacerlo dos veces, una por
+ * motor, porque WebKit y Firefox no comparten ni un solo selector.
+ * ------------------------------------------------------------------------ */
+.deslizador {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 0.35rem;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    to right,
+    var(--color-oro-hondo),
+    var(--color-oro) 60%,
+    var(--color-oro-claro)
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+/* El tirador es un disco de oro con el canto oscuro: el sello, en pequeño. */
+.deslizador::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 9999px;
+  background-color: var(--color-oro-claro);
+  border: 2px solid var(--color-base-100);
+  box-shadow: 0 2px 10px -2px #000;
+  cursor: grab;
+}
+
+.deslizador::-moz-range-thumb {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 9999px;
+  background-color: var(--color-oro-claro);
+  border: 2px solid var(--color-base-100);
+  box-shadow: 0 2px 10px -2px #000;
+  cursor: grab;
+}
+
+.deslizador:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-oro) 45%, transparent);
+}
+
+.deslizador:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-oro) 45%, transparent);
+}
+
+/* Los desplegables nativos heredan el fondo del sistema en sus opciones, que
+   en un tema oscuro sale blanco sobre blanco en varios navegadores. */
+.entrada option {
+  background-color: var(--color-base-200);
+  color: var(--color-base-content);
+}
+
+/* --------------------------------------------------------------------------
+ * Entrada en escena por scroll (ver components/Revelar.js)
+ * ------------------------------------------------------------------------ */
+
+/* Lo que va a entrar animado se oculta ya en el HTML, para que no dé un salto
+   entre que el servidor lo pinta y GSAP toma el control. Quien no tenga
+   JavaScript lo recupera con el <noscript> del layout. */
+[data-anima] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anima] {
+    opacity: 1;
+  }
+}
+
+/* La barra de progreso de lectura, arriba del todo. */
+.progreso {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* Barra de scroll discreta. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-300);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-oro);
+}
+
+/* Quien pide menos movimiento, no lo tiene. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

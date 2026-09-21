@@ -1,23 +1,31 @@
 import { kilometrajeDe } from "@/libs/formato";
 
 /**
- * La hoja de datos del vehículo: cuatro cifras en fila, separadas por líneas
+ * La hoja de datos de la unidad: cuatro cifras en fila, separadas por líneas
  * finas. Es lo primero que mira quien compra y lo primero que pregunta quien
  * escribe, así que va antes que cualquier texto de venta.
  *
- * La primera casilla es la CONDICIÓN y no el año: en este catálogo la mitad de
- * las unidades entran 0 km importadas y la otra mitad son usadas, y esa es la
- * respuesta que todo el mundo busca antes que ninguna otra.
+ * LAS CUATRO CASILLAS CAMBIAN SEGÚN EL SEGMENTO, y no por elegancia: a quien
+ * mira un chasis de quince toneladas el kilometraje no le dice nada y la
+ * capacidad de carga se lo dice todo. Enseñar "0 km" en las dos es enseñar la
+ * casilla equivocada a la mitad del catálogo.
  *
  * La retícula y los separadores están en globals.css (.specs).
  */
 export default function Especificaciones({ vehiculo, className = "" }) {
-  const datos = [
-    { etiqueta: "Condición", valor: vehiculo.esNuevo ? "0 km" : "Usado" },
-    { etiqueta: "Año", valor: vehiculo.anio },
-    { etiqueta: "Kilometraje", valor: kilometrajeDe(vehiculo) },
-    { etiqueta: "Motor", valor: vehiculo.motor },
-  ];
+  const datos = vehiculo.esCamion
+    ? [
+        { etiqueta: "Capacidad", valor: vehiculo.capacidad || "Por confirmar" },
+        { etiqueta: "Año", valor: vehiculo.anio },
+        { etiqueta: "Motor", valor: vehiculo.motor },
+        { etiqueta: "Condición", valor: vehiculo.esNuevo ? "0 km" : "Usado" },
+      ]
+    : [
+        { etiqueta: "Condición", valor: vehiculo.esNuevo ? "0 km" : "Usado" },
+        { etiqueta: "Año", valor: vehiculo.anio },
+        { etiqueta: "Kilometraje", valor: kilometrajeDe(vehiculo) },
+        { etiqueta: "Motor", valor: vehiculo.motor },
+      ];
 
   return (
     <dl className={`specs ${className}`}>
@@ -33,9 +41,14 @@ export default function Especificaciones({ vehiculo, className = "" }) {
   );
 }
 
-/** La lista larga, para la ficha del vehículo. */
+/** La lista larga, para la ficha de la unidad. */
 export function EspecificacionesCompletas({ vehiculo, className = "" }) {
+  // Las filas sin dato se caen solas (el `.filter` del final). Eso no es un
+  // descuido: sus publicaciones no declaran color, puestos ni tracción, y
+  // rellenarlos a ojo sería meter datos falsos en el inventario de un cliente.
+  // En cuanto los carguen, las filas aparecen sin tocar nada.
   const datos = [
+    { etiqueta: "Segmento", valor: vehiculo.segmentoInfo?.nombre },
     { etiqueta: "Condición", valor: vehiculo.condicionInfo?.nombre },
     { etiqueta: "Marca", valor: vehiculo.marca },
     {
@@ -43,7 +56,8 @@ export function EspecificacionesCompletas({ vehiculo, className = "" }) {
       valor: [vehiculo.modelo, vehiculo.version].filter(Boolean).join(" "),
     },
     { etiqueta: "Año", valor: vehiculo.anio },
-    { etiqueta: "Kilometraje", valor: kilometrajeDe(vehiculo) },
+    { etiqueta: "Capacidad de carga", valor: vehiculo.capacidad },
+    { etiqueta: "Kilometraje", valor: vehiculo.esCamion ? null : kilometrajeDe(vehiculo) },
     { etiqueta: "Motor", valor: vehiculo.motor },
     { etiqueta: "Transmisión", valor: vehiculo.transmision },
     { etiqueta: "Tracción", valor: vehiculo.traccion },

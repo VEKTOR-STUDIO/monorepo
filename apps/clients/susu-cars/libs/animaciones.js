@@ -8,11 +8,11 @@
 // una ficha que entra en la portada y otra que entra en el inventario tienen
 // que sentirse iguales.
 //
-// El movimiento de esta página no es decorativo. La gráfica de HB es un corte
-// diagonal en rojo y negro, así que casi todo entra CORTADO: barridos en
-// diagonal, líneas de titular que suben desde detrás de una máscara y fotos
-// que se abren con el mismo ángulo. Es la misma idea del catálogo, pero en
-// movimiento.
+// El movimiento de esta página no es decorativo. El logotipo de SUSU es un
+// deportivo dibujado de un trazo, así que aquí casi todo entra TRAZÁNDOSE:
+// filetes que se dibujan de lado a lado, líneas de titular que suben desde
+// detrás de una máscara y fotos que se abren con la misma inclinación. Es la
+// misma idea del logotipo, pero en movimiento.
 //
 // Todo pasa por gsap.matchMedia(), que además de separar móvil y escritorio
 // atiende "prefers-reduced-motion": quien lo pida no ve ni un movimiento, y al
@@ -36,8 +36,16 @@ export const TIEMPOS = {
   escalonado: 0.07,
 };
 
-/** El ángulo de las diagonales de la marca, en grados. */
-export const ANGULO = -18;
+/**
+ * La inclinación de la casa, en grados.
+ *
+ * Es muy suave a propósito y tiene que seguir siéndolo: el logotipo de SUSU
+ * está recto, y un barrido a 18° —como el de la plantilla de la que salió esta
+ * página— le pone a la marca una diagonal que no tiene. Aquí basta con que la
+ * línea no sea del todo horizontal. El mismo valor vive en el CSS como
+ * --angulo-susu; si se mueve uno, se mueve el otro.
+ */
+export const ANGULO = -8;
 
 /** Punto de disparo estándar: cuando al elemento le falta poco para entrar. */
 export const DISPARO = "top 85%";

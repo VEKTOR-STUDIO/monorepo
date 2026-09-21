@@ -1,16 +1,17 @@
 // -----------------------------------------------------------------------------
 // El inventario.
 //
-// La fuente de verdad es data/vehiculos.json, que replica el «CATÁLOGO DE
-// VEHÍCULOS HB»: una página por vehículo, con su foto y sus viñetas. Se lee del
-// disco, no de una base de datos, porque un catálogo de una docena larga de
-// vehículos que cambia un par de veces por semana no necesita más, y así la
-// página funciona sin depender de nada externo.
+// La fuente de verdad es data/vehiculos.json: un objeto por vehículo, con su
+// ficha y sus fotos. Se lee del disco, no de una base de datos, porque un
+// catálogo de una docena larga de vehículos que cambia un par de veces por
+// semana no necesita más, y así la página funciona sin depender de nada
+// externo.
 //
-// El corte que de verdad usa este negocio no es la carrocería: es 0 KM
-// IMPORTADO contra USADO. La bio lo dice antes que nada —"importamos y
-// vendemos"— y son dos compradores distintos, así que la condición es un
-// filtro de primer nivel y no un dato escondido en la ficha.
+// Aquí casi todo entra EN CONSIGNACIÓN: el vehículo sigue siendo de su dueño y
+// SUSU lo expone, lo enseña y cierra la venta. Por eso `consignado` es un campo
+// de la ficha y no un detalle de la descripción: es la diferencia entre un
+// carro que la casa compró y uno que la casa está vendiendo por alguien, y el
+// comprador tiene derecho a saber cuál de los dos está mirando.
 //
 // Todo lo que pinta la web pasa por aquí: si mañana esto se muda a Supabase,
 // se cambia `leerVehiculos` y el resto del sitio ni se entera.
@@ -18,23 +19,31 @@
 
 import catalogo from "@/data/vehiculos.json";
 
-/** Las carrocerías del catálogo, en el orden en que se enseñan. */
+/**
+ * Las carrocerías del catálogo, en el orden en que se enseñan.
+ *
+ * Es el primer filtro porque es la primera pregunta que hace todo el que
+ * escribe: "¿tienen camionetas?". El slug `suv` se mantiene aunque el nombre
+ * visible sea "Camionetas" —que es como se dice aquí— porque es lo que ya
+ * escriben las fichas.
+ */
 export const TIPOS = [
   { slug: "suv", nombre: "Camionetas", singular: "camioneta", plural: "camionetas" },
   { slug: "sedan", nombre: "Sedanes", singular: "sedán", plural: "sedanes" },
+  { slug: "pickup", nombre: "Pick-ups", singular: "pick-up", plural: "pick-ups" },
 ];
 
-/** El corte principal: lo que entra importado y lo que entra usado. */
+/** Cómo entró el vehículo: 0 km o de segunda mano. */
 export const CONDICIONES = [
   {
     slug: "nuevo",
-    nombre: "0 km importados",
+    nombre: "0 km",
     corto: "0 km",
-    resumen: "Unidades nuevas, traídas por HB, con opción de financiamiento.",
+    resumen: "Unidades sin estrenar, con su garantía y sus papeles de primera mano.",
   },
   {
     slug: "usado",
-    nombre: "Usados verificados",
+    nombre: "Usados revisados",
     corto: "Usado",
     resumen: "Revisados uno a uno, con sus papeles y su kilometraje a la vista.",
   },
@@ -55,6 +64,9 @@ function normalizar(v) {
     tipo: TIPOS.find((t) => t.slug === v.carroceria) || TIPOS[1],
     condicionInfo: CONDICIONES.find((c) => c.slug === v.condicion) || CONDICIONES[1],
     esNuevo: v.condicion === "nuevo",
+    // Por defecto SÍ: en esta casa lo normal es la consignación, y una ficha
+    // que se olvide el campo debe decir la verdad más probable.
+    consignado: v.consignado !== false,
     disponible: v.estado === "disponible",
   };
 }
@@ -71,14 +83,17 @@ export function vehiculoPorSlug(slug) {
 }
 
 /**
- * ¿Queda algún precio sin confirmar?
+ * ¿Queda algo inventado en el catálogo?
  *
- * El catálogo en PDF no publica precios, así que los del JSON son de
- * referencia hasta que el cliente cargue los suyos. Lo usa el aviso de la
- * portada y el sello de las fichas.
+ * Mientras no se carguen las publicaciones reales de @susucars, las fichas son
+ * de muestra y lo dicen con `"muestra": true`. Lo usan el aviso de la portada
+ * y el sello de cada tarjeta.
+ *
+ * En cuanto se sustituya el JSON por el inventario real y se quite el campo,
+ * todos esos avisos desaparecen solos. No hay nada más que tocar.
  */
-export function hayPreciosProvisionales() {
-  return leerVehiculos().some((v) => v.precioProvisional);
+export function hayVehiculosDeMuestra() {
+  return leerVehiculos().some((v) => v.muestra);
 }
 
 export function actualizadoEn() {
@@ -143,8 +158,8 @@ export function filtrar(
     const palabras = q.toLowerCase().trim().split(/\s+/);
     lista = lista.filter((v) => {
       const heno = `${v.marca} ${v.modelo} ${v.version || ""} ${v.anio} ${v.carroceria} ${
-        v.esNuevo ? "0 km nuevo importado" : "usado"
-      }`.toLowerCase();
+        v.esNuevo ? "0 km nuevo" : "usado"
+      } ${v.consignado ? "consignación consignado" : ""}`.toLowerCase();
       return palabras.every((p) => heno.includes(p));
     });
   }

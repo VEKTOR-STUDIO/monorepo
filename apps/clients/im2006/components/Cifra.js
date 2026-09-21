@@ -48,4 +48,13 @@ const FORMATOS = {
   // Redondeado al millar, para los precios "desde": subir de uno en uno hasta
   // 7.500 se ve como una máquina tragamonedas y distrae de lo que dice.
   dolaresRedondos: (n) => enDolares(Math.round(n / 100) * 100),
+
+  // Lo mismo pero SIN la moneda, para que el "$" se pueda escribir fuera del
+  // nodo que anima.
+  //
+  // No es un capricho: `Intl` con es-VE devuelve "USD 8.900" con un espacio
+  // DURO en medio, así que no parte nunca de línea, y en un móvil de 390 px
+  // esa cifra se salía de su tercio de la rejilla y se montaba encima de la de
+  // al lado. Con el símbolo fuera son cuatro caracteres menos y cabe.
+  milesRedondos: (n) => (Math.round(n / 100) * 100).toLocaleString("es-VE"),
 };

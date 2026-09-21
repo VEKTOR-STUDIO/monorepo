@@ -1,7 +1,7 @@
 import Link from "next/link";
 import FotoVehiculo from "@/components/FotoVehiculo";
 import BotonContacto from "@/components/BotonContacto";
-import Diagonales from "@/components/Diagonales";
+import Filetes from "@/components/Filetes";
 import TituloAnimado from "@/components/TituloAnimado";
 import Revelar from "@/components/Revelar";
 import Parallax from "@/components/Parallax";
@@ -10,7 +10,7 @@ import { enDolares, kilometrajeDe } from "@/libs/formato";
 /**
  * Un vehículo del escaparate de la portada.
  *
- * Está montado como una página del catálogo de HB puesta de lado: el modelo
+ * Está montado como una ficha de su catálogo puesta de lado: el modelo
  * grande en itálica a un lado, la foto al otro, y las diagonales de la casa
  * cruzando por detrás. El año va enorme y translúcido detrás del titular, que
  * es el truco de cartel de toda la vida y aquí además informa.
@@ -31,7 +31,7 @@ export default function PantallaVehiculo({
 }) {
   return (
     <section className="relative overflow-hidden border-t border-base-content/8 px-4 py-20 sm:px-6 sm:py-28">
-      <Diagonales variante={invertido ? "sutil" : "seccion"} />
+      <Filetes variante={invertido ? "sutil" : "seccion"} />
       <div className="textura absolute inset-0" aria-hidden="true" />
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -76,7 +76,7 @@ export default function PantallaVehiculo({
             <TituloAnimado
               as="h2"
               retraso={120}
-              className="display mt-5 text-5xl text-base-content sm:text-6xl lg:text-7xl"
+              className="display mt-5 text-4xl text-base-content sm:text-4xl lg:text-5xl"
             >
               {vehiculo.marca}
               <br />

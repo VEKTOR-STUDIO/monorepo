@@ -1,8 +1,9 @@
-# HB Inversiones — reglas del proyecto
+# SUSU CARS — reglas del proyecto
 
-Catálogo web de HB Inversiones C.A. (@hb_inversiones_12), concesionario de
-Barquisimeto que importa 0 km y vende usados. Léete el README antes de tocar
-nada: explica de dónde sale cada decisión de diseño.
+Página de SUSU CARS (@susucars), en Caracas, Av. Casanova. Compra, venta y
+sobre todo **consignación**: ellos no te venden un carro, te venden el vender
+el tuyo sin complicaciones. Léete el README antes de tocar nada: explica de
+dónde sale cada decisión de diseño.
 
 ## Pila
 - Next.js 15 (App Router) + React 19, Turbopack en dev
@@ -18,6 +19,8 @@ nada: explica de dónde sale cada decisión de diseño.
   repetir el código, sobra.
 - Nada de `any`, nada de abstracciones a futuro: se escribe lo que hace falta
   hoy.
+- Lo que lee el visitante dice **catálogo**, no "inventario". "Inventario" es
+  lenguaje de dentro y se queda en los comentarios.
 
 ## Lo que no se toca sin pensarlo
 - **El candado de la demo vive en el servidor** (`middleware.js`, las rutas de
@@ -26,10 +29,20 @@ nada: explica de dónde sale cada decisión de diseño.
   componentes de cliente y acabaría en el bundle. Va en `libs/acceso.js`.
 - **GSAP: `fromTo`, nunca `from`** para lo que entra en escena. El CSS deja
   `[data-anima]` en `opacity: 0` y `from` animaría de 0 a 0.
-- **Las fotos son páginas del catálogo del cliente**: se enseñan enteras y no
-  se les superpone nada.
-- El ángulo de la marca es `--angulo-hb` (−18°). Se usa esa variable, no un
-  número suelto.
+- **El oro es una línea, no una mancha.** Ningún filete pasa de 2 px y el oro
+  no se usa de relleno; en cuanto engorda, deja de parecer metal. El único
+  sitio donde llena es el cintillo de venta.
+- **El logotipo va en `stroke`, nunca en `fill`** (`components/MarcaSusu.js`).
+  Una silueta maciza sería otra marca.
+- **La foto de perfil solo en la puerta.** A 34 px el logotipo completo es una
+  mancha; en cabecera y pie va el trazo en vector.
+- **Cinzel ocupa mucho más que una condensada.** Si tocas un titular, míralo
+  renderizado: la escala de `.display` está bajada dos escalones respecto a la
+  plantilla de la que salió esto, y no por gusto.
+- **El catálogo de hoy es de muestra** y cada ficha lo dice con `"muestra"`. No
+  quites ese campo hasta que la ficha sea real, y **no metas fotos de otro
+  negocio**: las que traía la plantilla eran de otro concesionario, con su
+  logotipo impreso encima, y por eso se borraron.
 
 ## Comprobar antes de dar algo por hecho
 ```bash
@@ -38,3 +51,6 @@ NEXT_PUBLIC_DEMO=false npm run dev   # ¿sigue siendo el sistema entero?
 ```
 Y mirar la pantalla entera, de arriba abajo: los fallos de esta capa son
 secciones que no aparecen, y esas no dan error en consola.
+
+La puerta (`/entrar`) además **se mide**, no se mira: 390×844, 360×800,
+360×640 y 1440×800, con `scrollHeight - clientHeight` a cero en los cuatro.

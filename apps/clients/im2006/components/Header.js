@@ -8,17 +8,20 @@ import { usarGsap } from "@/libs/animaciones";
 import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
+// El orden es el de su bio: primero vehículos, después camiones. No es
+// alfabético ni por cantidad, es el que ellos mismos usan para presentarse.
 const ENLACES = [
-  { href: "/vehiculos?condicion=nuevo", texto: "0 km" },
-  { href: "/vehiculos?condicion=usado", texto: "Usados" },
+  { href: "/vehiculos?segmento=vehiculos", texto: "Vehículos" },
+  { href: "/vehiculos?segmento=camiones", texto: "Camiones" },
   { href: "/vehiculos", texto: "Todo el inventario" },
   { href: "/#donde-estamos", texto: "Dónde estamos" },
   { href: "/contacto", texto: "Contacto" },
 ];
 
-// Atajo a la comparación con Linktree. Solo existe mientras se está vendiendo
-// la página: es un argumento para el dueño, no para quien viene a ver carros.
-const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no el PDF?" };
+// Atajo a la comparación con el Instagram. Solo existe mientras se está
+// vendiendo la página: es un argumento para el dueño, no para quien viene a
+// ver carros.
+const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no basta el IG?" };
 
 /**
  * La cabecera.

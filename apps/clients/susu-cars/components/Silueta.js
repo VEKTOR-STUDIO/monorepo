@@ -5,13 +5,17 @@
 // dibuja la silueta del tipo de vehículo sobre el fondo de estudio y sigue
 // viéndose como un escaparate.
 //
-// Hoy las trece fichas del catálogo traen su foto, así que esto no llega a
-// salir; existe para el día que el cliente cargue un vehículo desde el panel y
-// todavía no le haya subido las fotos.
+// Hoy esto SALE EN TODAS LAS FICHAS, y no es un accidente: el catálogo de
+// muestra va sin fotos a propósito. Las que traía la plantilla eran las trece
+// páginas del catálogo de otro concesionario —con su logotipo y su rojo
+// impresos encima—, y enseñar el inventario ajeno en la web de SUSU es
+// exactamente lo que hunde una reunión que iba bien. En cuanto se lean las
+// publicaciones de @susucars, cada ficha estrena su foto y estas siluetas
+// vuelven a ser lo que deben ser: el hueco de un vehículo recién cargado y
+// todavía sin fotografiar.
 //
-// Son formas genéricas dibujadas aquí —una SUV y un sedán de perfil—, no el
-// contorno de ningún modelo concreto ni de ninguna marca. Solo hay dos porque
-// el catálogo de HB solo tiene dos carrocerías.
+// Son formas genéricas dibujadas aquí —una camioneta, un sedán y una pick-up
+// de perfil—, no el contorno de ningún modelo concreto ni de ninguna marca.
 // -----------------------------------------------------------------------------
 
 /** Las ruedas, que son iguales en los dos dibujos salvo el tamaño. */
@@ -45,6 +49,25 @@ const DIBUJOS = {
     </>
   ),
 
+  // Pick-up: cabina adelante, batea atrás y la caída del techo a la pared de
+  // la batea, que es lo que la distingue de una camioneta a primera vista.
+  pickup: (
+    <>
+      <path
+        d="M18 104 L18 64 L172 64 L182 34 C186 28 192 25 200 25 L252 25 C262 25 270 29 276 36 L300 66 L356 72 C374 75 384 84 385 96 L386 104 Z"
+        fill="currentColor"
+        opacity="0.82"
+      />
+      <path
+        d="M196 60 L204 34 C206 31 210 30 215 30 L250 30 C256 30 260 32 263 37 L277 60 Z"
+        fill="#ffffff"
+        opacity="0.22"
+      />
+      <Rueda cx={100} cy={104} r={27} />
+      <Rueda cx={312} cy={104} r={27} />
+    </>
+  ),
+
   // Sedán: capó largo y bajo, techo corto, maletero marcado.
   sedan: (
     <>
@@ -65,7 +88,7 @@ const DIBUJOS = {
 };
 
 /**
- * @param {string} tipo  suv | sedan
+ * @param {string} tipo  suv | sedan | pickup
  */
 export default function Silueta({ tipo = "sedan", className = "" }) {
   const dibujo = DIBUJOS[tipo] || DIBUJOS.sedan;

@@ -8,17 +8,19 @@ import { usarGsap } from "@/libs/animaciones";
 import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
+// "Consignar" va el primero a propósito: es lo que esta casa vende de verdad
+// y lo que trae a la mitad de la gente que llega por su Instagram.
 const ENLACES = [
-  { href: "/vehiculos?condicion=nuevo", texto: "0 km" },
-  { href: "/vehiculos?condicion=usado", texto: "Usados" },
-  { href: "/vehiculos", texto: "Todo el inventario" },
+  { href: "/#consignar", texto: "Consignar" },
+  { href: "/vehiculos", texto: "Catálogo" },
   { href: "/#donde-estamos", texto: "Dónde estamos" },
   { href: "/contacto", texto: "Contacto" },
 ];
 
-// Atajo a la comparación con Linktree. Solo existe mientras se está vendiendo
-// la página: es un argumento para el dueño, no para quien viene a ver carros.
-const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no el PDF?" };
+// Atajo a la comparación con su Instagram. Solo existe mientras se está
+// vendiendo la página: es un argumento para el dueño, no para quien viene a
+// ver carros.
+const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué, si tengo Instagram?" };
 
 /**
  * La cabecera.
@@ -110,8 +112,8 @@ export default function Header() {
               {enlace.texto}
             </Link>
           ))}
-          <Link href="/contacto" className="btn btn-primary btn-sm px-5">
-            Escríbenos
+          <Link href="/contacto?motivo=consignar" className="btn btn-primary btn-sm px-5">
+            Vende el tuyo
           </Link>
         </div>
 
@@ -145,8 +147,8 @@ export default function Header() {
               </Link>
             ))}
           </div>
-          <Link href="/contacto" className="btn btn-primary mt-4 w-full">
-            Escríbenos
+          <Link href="/contacto?motivo=consignar" className="btn btn-primary mt-4 w-full">
+            Vende el tuyo
           </Link>
         </div>
       )}

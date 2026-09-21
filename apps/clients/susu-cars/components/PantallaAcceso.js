@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LogoChapa } from "@/components/Logo";
-import MarcaHB from "@/components/MarcaHB";
-import Diagonales from "@/components/Diagonales";
+import { LogoPlaca } from "@/components/Logo";
+import MarcaSusu from "@/components/MarcaSusu";
+import Filetes from "@/components/Filetes";
 import Cintillo from "@/components/Cintillo";
 import Contador from "@/components/demo/Contador";
 import { contexto, usarGsap } from "@/libs/animaciones";
@@ -22,8 +22,8 @@ import config from "@/config";
  * de antes, la fecha en que se acaba y la lista de lo que se lleva quien
  * compre. Si se vacía `precioAnterior`, el sello de rebaja desaparece solo.
  *
- * Aquí manda la firma de Alessandrovaru y no la marca de HB: quien llega
- * todavía no es cliente de HB, es alguien a quien se le está enseñando un
+ * Aquí manda la firma de Alessandrovaru y no la marca de SUSU: quien llega
+ * todavía no es cliente de SUSU, es alguien a quien se le está enseñando un
  * trabajo. Al entrar, la jerarquía se invierte.
  *
  * Esto es la cara del candado; el candado de verdad está en el middleware.
@@ -138,12 +138,12 @@ export default function PantallaAcceso({ destino = "/" }) {
   return (
     <main ref={raiz} className="puerta relative flex h-svh flex-col overflow-hidden bg-base-100">
       {/* ---------------- Fondo ---------------- */}
-      <Diagonales variante="portada" deslizar={false} />
+      <Filetes variante="portada" deslizar={false} />
 
-      {/* Velo. Sin él, "INVERSIONES" —que va en rojo— cae justo encima de la
-          banda roja de las diagonales y desaparece: rojo sobre rojo. El velo
-          baja las bandas lo justo para que sigan viéndose de fondo y el texto
-          se lea encima. */}
+      {/* Velo. El nombre de la casa va en oro y los filetes del fondo también,
+          así que sin esto el titular cae encima de un trazo dorado y se pierde:
+          oro sobre oro. El velo baja el fondo lo justo para que los filetes
+          sigan viéndose y el texto se lea encima. */}
       <div className="absolute inset-0 bg-base-100/72" aria-hidden="true" />
 
       <div className="malla malla-centro absolute inset-0 opacity-50" aria-hidden="true" />
@@ -154,7 +154,7 @@ export default function PantallaAcceso({ destino = "/" }) {
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--color-rojo) 35%, transparent), transparent 62%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--color-oro) 30%, transparent), transparent 62%)",
           filter: "blur(90px)",
         }}
       />
@@ -211,18 +211,19 @@ export default function PantallaAcceso({ destino = "/" }) {
             <div data-puerta="logo" className="mt-[var(--puerta-v3)] flex flex-col items-center lg:items-start">
               <p className="puerta-cortesia microgramma text-[0.6rem] text-base-content/40">Demo privada de</p>
               <div className="mt-[var(--puerta-v1)] flex items-center gap-4">
-                <LogoChapa lado="var(--puerta-logo)" prioridad />
-                <MarcaHB className="h-10 w-32 text-base-content" />
+                <LogoPlaca lado="var(--puerta-logo)" prioridad />
+                <MarcaSusu className="h-10 w-32 text-primary" />
               </div>
-              <h1 className="display mt-[var(--puerta-v2)] text-[clamp(1.6rem,4.4vh,3rem)]">
-                HB <span className="text-primary">Inversiones</span>
+              <h1 className="display mt-[var(--puerta-v2)] text-[clamp(1.4rem,3.9vh,2.5rem)]">
+                Susu <span className="tinta-oro">Cars</span>
               </h1>
             </div>
 
             <p data-puerta="titulo" className="puerta-presentacion mt-[var(--puerta-v3)] max-w-md leading-relaxed text-sm text-base-content/65">
-              Tu catálogo de vehículos hecho página web, entero y funcionando: las trece
-              unidades del PDF, con su gráfica, su corte diagonal y su rojo. Entra con tu
-              contraseña y recórrela.
+              Tu catálogo y tus consignaciones hechos página web, enteros y
+              funcionando: tu oro, tu negro y el trazo de tu logotipo, con la
+              frase de tus publicaciones en la portada. Entra con tu contraseña
+              y recórrela.
             </p>
 
             {/* Lo que trae la edición. */}
@@ -312,7 +313,7 @@ export default function PantallaAcceso({ destino = "/" }) {
                 <input
                   type="text"
                   name="username"
-                  value="hb-inversiones-demo"
+                  value="susu-cars-demo"
                   autoComplete="username"
                   readOnly
                   tabIndex={-1}

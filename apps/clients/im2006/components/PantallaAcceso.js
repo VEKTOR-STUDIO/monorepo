@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { LogoChapa } from "@/components/Logo";
-import MarcaHB from "@/components/MarcaHB";
+import MarcaLM from "@/components/MarcaLM";
 import Diagonales from "@/components/Diagonales";
 import Cintillo from "@/components/Cintillo";
 import Contador from "@/components/demo/Contador";
@@ -22,9 +22,9 @@ import config from "@/config";
  * de antes, la fecha en que se acaba y la lista de lo que se lleva quien
  * compre. Si se vacía `precioAnterior`, el sello de rebaja desaparece solo.
  *
- * Aquí manda la firma de Alessandrovaru y no la marca de HB: quien llega
- * todavía no es cliente de HB, es alguien a quien se le está enseñando un
- * trabajo. Al entrar, la jerarquía se invierte.
+ * Aquí manda la firma de Alessandrovaru y no la marca de LM 2006: quien llega
+ * todavía no es cliente del concesionario, es alguien a quien se le está
+ * enseñando un trabajo. Al entrar, la jerarquía se invierte.
  *
  * Esto es la cara del candado; el candado de verdad está en el middleware.
  * Sin la cookie correcta el servidor no sirve ni una página, así que saltarse
@@ -140,10 +140,11 @@ export default function PantallaAcceso({ destino = "/" }) {
       {/* ---------------- Fondo ---------------- */}
       <Diagonales variante="portada" deslizar={false} />
 
-      {/* Velo. Sin él, "INVERSIONES" —que va en rojo— cae justo encima de la
-          banda roja de las diagonales y desaparece: rojo sobre rojo. El velo
-          baja las bandas lo justo para que sigan viéndose de fondo y el texto
-          se lea encima. */}
+      {/* Velo. Las barras del fondo llevan el mismo azul que el logotipo y el
+          mismo rojo que el sello de rebaja, así que sin esto el nombre y el
+          precio caen encima de su propio color y desaparecen. El velo baja las
+          barras lo justo para que sigan viéndose de fondo y el texto se lea
+          encima. */}
       <div className="absolute inset-0 bg-base-100/72" aria-hidden="true" />
 
       <div className="malla malla-centro absolute inset-0 opacity-50" aria-hidden="true" />
@@ -154,7 +155,7 @@ export default function PantallaAcceso({ destino = "/" }) {
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--color-rojo) 35%, transparent), transparent 62%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--color-azul) 40%, transparent), transparent 62%)",
           filter: "blur(90px)",
         }}
       />
@@ -212,17 +213,20 @@ export default function PantallaAcceso({ destino = "/" }) {
               <p className="puerta-cortesia microgramma text-[0.6rem] text-base-content/40">Demo privada de</p>
               <div className="mt-[var(--puerta-v1)] flex items-center gap-4">
                 <LogoChapa lado="var(--puerta-logo)" prioridad />
-                <MarcaHB className="h-10 w-32 text-base-content" />
+                {/* El logotipo dibujado ya dice "LM 2006", así que debajo va el
+                    nombre largo del perfil y no el mismo nombre otra vez. */}
+                <MarcaLM className="h-9 w-auto text-base-content" />
               </div>
               <h1 className="display mt-[var(--puerta-v2)] text-[clamp(1.6rem,4.4vh,3rem)]">
-                HB <span className="text-primary">Inversiones</span>
+                Concesionario <span className="text-primary">Caracas</span>
               </h1>
             </div>
 
             <p data-puerta="titulo" className="puerta-presentacion mt-[var(--puerta-v3)] max-w-md leading-relaxed text-sm text-base-content/65">
-              Tu catálogo de vehículos hecho página web, entero y funcionando: las trece
-              unidades del PDF, con su gráfica, su corte diagonal y su rojo. Entra con tu
-              contraseña y recórrela.
+              Tu inventario de Instagram hecho página web, entero y funcionando:
+              vehículos y camiones separados, cada unidad con su ficha, y todo con tu
+              azul, tus tres barras y tu inclinación. Entra con tu contraseña y
+              recórrela.
             </p>
 
             {/* Lo que trae la edición. */}
@@ -312,7 +316,7 @@ export default function PantallaAcceso({ destino = "/" }) {
                 <input
                   type="text"
                   name="username"
-                  value="hb-inversiones-demo"
+                  value="lm2006-demo"
                   autoComplete="username"
                   readOnly
                   tabIndex={-1}

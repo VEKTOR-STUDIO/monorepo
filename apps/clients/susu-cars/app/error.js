@@ -16,7 +16,7 @@ export default function Error({ error, reset }) {
       <div className="relative">
         <span className="banda mx-auto" aria-hidden="true" />
 
-        <h1 className="display mt-6 text-3xl sm:text-4xl">
+        <h1 className="display mt-6 text-2xl sm:text-3xl">
           Algo se <span className="text-primary">rompió</span>
         </h1>
 

@@ -25,7 +25,7 @@ export default function BloqueVenta() {
           <p className="microgramma text-xs text-primary">Lo que acabas de ver</p>
         </Revelar>
 
-        <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
+        <TituloAnimado as="h2" className="display mt-4 text-center text-3xl sm:text-4xl">
           Esta página puede ser <span className="text-primary">la tuya</span>
         </TituloAnimado>
 
@@ -76,9 +76,10 @@ export default function BloqueVenta() {
 
         <Revelar retraso={180}>
           <p className="mx-auto mt-6 max-w-lg text-center text-xs text-base-content/35">
-            Los vehículos y las fotos que ves son los tuyos, sacados del «Catálogo de
-            vehículos HB». Los precios son de referencia: el catálogo no publica
-            ninguno y se cargan los reales desde el panel.
+            Los vehículos que ves son de muestra y lo dice cada ficha: el día que
+            se monte, el catálogo se carga con tus publicaciones de Instagram, con
+            tus fotos y tus precios. Lo que sí es tuyo desde ya es todo lo demás:
+            tu logotipo, tu oro y tu frase.
           </p>
         </Revelar>
       </div>

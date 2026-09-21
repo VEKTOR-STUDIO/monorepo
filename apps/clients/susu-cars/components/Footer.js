@@ -1,16 +1,17 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
-import Diagonales from "@/components/Diagonales";
+import Filetes from "@/components/Filetes";
 import config from "@/config";
 
 /**
- * El pie: la marca, dónde está el local, por dónde se contacta y los enlaces
+ * El pie: la marca, dónde está la sede, por dónde se contacta y los enlaces
  * legales.
  *
  * La dirección va grande y con su propio bloque, y no escondida en una línea
- * de texto: este negocio vende en un local de Barquisimeto, las trece páginas
- * de su catálogo la llevan impresa al pie, y quien llega a la web buscando
- * "dónde están" tiene que encontrarla sin leer un párrafo.
+ * de texto: este negocio recibe los vehículos en una sede de Av. Casanova, sus
+ * propias publicaciones la repiten dos veces, y quien llega a la web buscando
+ * "dónde están" —para ir a dejar su carro— tiene que encontrarla sin leer un
+ * párrafo.
  *
  * El teléfono solo sale si hay uno configurado; mientras no lo haya, el canal
  * que se enseña es Instagram, que es por donde hoy escribe todo el mundo.
@@ -21,7 +22,7 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden border-t border-base-content/10 bg-base-200">
-      <Diagonales variante="sutil" deslizar={false} />
+      <Filetes variante="sutil" deslizar={false} />
 
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -36,11 +37,11 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="rotulo">El local</p>
+            <p className="rotulo">La sede</p>
             <address className="mt-4 not-italic text-sm leading-relaxed text-base-content/65">
               {business.direccion}
               <br />
-              {business.ciudad}, estado {business.estado}
+              {business.ciudad}, {business.estado}
               <br />
               Venezuela
             </address>
@@ -71,7 +72,7 @@ export default function Footer() {
                   href="/vehiculos"
                   className="text-base-content/65 transition-colors hover:text-primary"
                 >
-                  Todo el inventario
+                  Todo el catálogo
                 </Link>
               </li>
               <li>

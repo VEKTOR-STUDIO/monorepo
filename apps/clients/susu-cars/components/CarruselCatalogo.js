@@ -109,12 +109,12 @@ export default function CarruselCatalogo({ vehiculos }) {
         {/* Encabezado, pegado a la izquierda como el modelo en sus fichas. */}
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
           <span className="banda" aria-hidden="true" />
-          <h2 className="display mt-5 text-4xl sm:text-5xl lg:text-6xl">
+          <h2 className="display mt-5 text-3xl sm:text-4xl">
             El catálogo
             <span className="text-primary"> completo</span>
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-base-content/55 lg:text-base">
-            Las {vehiculos.length} unidades del catálogo de HB, una por una.{" "}
+            Las {vehiculos.length} unidades del catálogo, una por una.{" "}
             <span className="hidden lg:inline">Sigue bajando y desfilan solas.</span>
             <span className="lg:hidden">Arrastra para verlas.</span>
           </p>
@@ -176,11 +176,11 @@ export default function CarruselCatalogo({ vehiculos }) {
               href="/vehiculos"
               className="ficha flex w-64 shrink-0 flex-col items-center justify-center gap-4 p-8 text-center [scroll-snap-align:center] sm:w-72 lg:w-80"
             >
-              <span className="display text-3xl text-primary">Ver todo el inventario</span>
+              <span className="display text-2xl text-primary">Ver todo el catálogo</span>
               <span className="text-sm text-base-content/55">
                 Con filtros por condición, tipo, marca y precio.
               </span>
-              <span className="btn btn-primary mt-2">Entrar al inventario</span>
+              <span className="btn btn-primary mt-2">Entrar al catálogo</span>
             </Link>
           </div>
         </div>

@@ -1,45 +1,57 @@
 import Image from "next/image";
-import MarcaHB from "@/components/MarcaHB";
+import MarcaSusu from "@/components/MarcaSusu";
 
 // -----------------------------------------------------------------------------
-// La marca de HB Inversiones.
+// La marca de SUSU CARS.
 //
-// Su logotipo es un círculo de mármol blanco con el trazo del deportivo encima
-// y "HB INVERSIONES C.A." debajo. Sobre el negro de esta página, ese círculo
-// blanco funciona como una chapa y no hace falta recortarlo ni fundirlo con
-// ningún `mix-blend-mode`: contrasta solo.
+// Su logotipo es un cuadrado negro con un degradado suave, el trazo de un
+// deportivo en oro y "SUSU / CARS" debajo en capitales romanas. Sobre el negro
+// de esta página ese cuadrado casi no se distingue del fondo, así que va
+// SIEMPRE dentro de un filo de oro finísimo: eso lo convierte en una placa y le
+// devuelve el canto que el fondo le quita.
+//
+// Se pensó en fundirlo con `mix-blend-mode: screen` —su fondo es casi negro, y
+// el blend lo haría desaparecer dejando solo el oro—, y se descartó: cualquier
+// ancestro con `z-index`, `filter` o `backdrop-filter` abre un contexto de
+// apilamiento y apaga el blend sin avisar. Pasó en la puerta de la demo del
+// proyecto del que salió esta página, y ahí el logo aparecía metido en un
+// cuadrado negro solo en esa pantalla. El filo es determinista: se ve igual en
+// todas.
 //
 // Tres formas, según el sitio:
 //
-//   <Logo />         la chapa pequeña + el nombre. Para la cabecera y el pie.
+//   <Logo />         la placa pequeña + el nombre. Para la cabecera y el pie.
 //   <LogoGrande />   el trazo dibujado encima del nombre, para portadas.
-//   <LogoChapa />    solo el círculo, a cualquier tamaño.
+//   <LogoPlaca />    solo el cuadrado, a cualquier tamaño.
 //
-// El archivo es la foto de perfil de @hb_inversiones_12 recortada en círculo.
-// Es pequeña (116 px) porque es la resolución que hay; por eso nunca se usa
-// más grande que eso, y cuando hace falta algo grande se dibuja el trazo con
-// <MarcaHB />, que es vector y no se despeina.
+// El archivo es la foto de perfil de @susucars a 320 px, que es la resolución
+// que hay. Cuando hace falta algo más grande se dibuja el trazo con
+// <MarcaSusu />, que es vector y no se despeina.
 // -----------------------------------------------------------------------------
 
-const ARCHIVO = "/marca/hb-logo.png";
-const LADO_ORIGINAL = 116;
+const ARCHIVO = "/marca/susu-logo.jpg";
+const LADO_ORIGINAL = 320;
 
-/** El círculo del logotipo, tal cual. */
-export function LogoChapa({ lado = 36, className = "", prioridad = false }) {
+/** El cuadrado del logotipo, con su filo de oro. */
+export function LogoPlaca({ lado = 36, className = "", prioridad = false }) {
   // `lado` admite un número de píxeles o cualquier medida CSS: la puerta le
-  // pasa un `clamp()` para que la chapa encoja con el alto de la pantalla.
+  // pasa un `clamp()` para que la placa encoja con el alto de la pantalla.
   const medida = typeof lado === "number" ? `${lado}px` : lado;
 
   return (
-    <Image
-      src={ARCHIVO}
-      alt="HB Inversiones C.A."
-      width={LADO_ORIGINAL}
-      height={LADO_ORIGINAL}
-      priority={prioridad}
-      className={`block shrink-0 rounded-full ${className}`}
+    <span
+      className={`block shrink-0 overflow-hidden ring-1 ring-primary/35 ${className}`}
       style={{ width: medida, height: medida }}
-    />
+    >
+      <Image
+        src={ARCHIVO}
+        alt="SUSU CARS"
+        width={LADO_ORIGINAL}
+        height={LADO_ORIGINAL}
+        priority={prioridad}
+        className="size-full object-cover"
+      />
+    </span>
   );
 }
 
@@ -51,13 +63,20 @@ export default function Logo({ className = "", tono = "oscuro", lado = 34 }) {
 
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoChapa lado={lado} />
+      {/* El trazo y no la placa: a 34 px el logotipo completo —carro, "SUSU" y
+          "CARS" uno encima de otro— no se lee, y una marca borrosa en la
+          cabecera es peor que ninguna. La foto de perfil, entera, está en la
+          puerta, que es donde hay sitio para ella. */}
+      <MarcaSusu
+        className="shrink-0 text-primary"
+        style={{ width: lado * 1.9, height: lado * 0.62 }}
+      />
       <span className="leading-none">
-        <span className={`display block text-[1.15rem] leading-none ${color}`}>
-          HB <span className="text-primary">Inversiones</span>
+        <span className={`display block text-[1.05rem] leading-none ${color}`}>
+          Susu <span className="text-primary">Cars</span>
         </span>
-        <span className="cifra mt-0.5 block text-[0.5rem] tracking-[0.3em] text-base-content/40">
-          C.A. · {`Barquisimeto`}
+        <span className="cifra mt-1 block text-[0.5rem] tracking-[0.3em] text-base-content/40">
+          {`Caracas`}
         </span>
       </span>
     </span>
@@ -68,12 +87,12 @@ export default function Logo({ className = "", tono = "oscuro", lado = 34 }) {
 export function LogoGrande({ className = "" }) {
   return (
     <span className={`inline-flex flex-col items-center ${className}`}>
-      <MarcaHB className="h-14 w-44 text-base-content" />
-      <span className="display mt-1 text-4xl leading-none text-base-content sm:text-5xl">
-        HB <span className="text-primary">Inversiones</span>
+      <MarcaSusu className="h-12 w-40 text-primary" />
+      <span className="display tinta-oro mt-2 text-3xl leading-none sm:text-4xl">
+        Susu Cars
       </span>
       <span className="cifra mt-2 text-[0.6rem] tracking-[0.42em] text-base-content/40">
-        C.A.
+        Caracas
       </span>
     </span>
   );

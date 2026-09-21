@@ -17,9 +17,9 @@ import config from "@/config";
 export const revalidate = 1800;
 
 export const metadata = getSEOTags({
-  title: `Inventario de vehículos | ${config.appName}`,
+  title: `Inventario de vehículos y camiones | ${config.appName}`,
   description:
-    "Vehículos 0 km importados y usados verificados en Barquisimeto. Filtra por condición, tipo, marca y precio; cada unidad con su ficha completa.",
+    "Vehículos 0 km y camiones de carga en Caracas. Filtra por segmento, tipo, marca y precio; cada unidad con su ficha técnica completa.",
   canonicalUrlRelative: "/vehiculos",
 });
 
@@ -29,6 +29,7 @@ export default async function Vehiculos({ searchParams }) {
   const facetas = facetasDe(todos);
 
   const lista = filtrar(todos, {
+    segmento: params?.segmento,
     condicion: params?.condicion,
     tipo: params?.tipo,
     marca: params?.marca,
@@ -63,8 +64,8 @@ export default async function Vehiculos({ searchParams }) {
             <Revelar retraso={200}>
               <p className="mt-5 max-w-xl leading-relaxed text-base-content/60">
                 Todo lo que hay en el local ahora mismo, en {config.business.direccion},{" "}
-                {config.business.ciudad}. Cada unidad con su condición, su año, su
-                kilometraje y su motor.
+                {config.business.ciudad}. Vehículos y camiones, cada uno con su año,
+                su motor y su ficha técnica.
               </p>
             </Revelar>
           </div>

@@ -1,6 +1,6 @@
 ---
 name: demo-de-venta
-description: Convierte una app de cliente del monorepo (apps/clients/*) en una demo de venta cerrada, para enseñársela a posibles clientes sin regalarles el trabajo — puerta con contraseña, muro que corta el contenido, acciones bloqueadas en el servidor y bloque de precio. Úsala siempre que se hable de enseñar, mostrar o presentar un proyecto a alguien que aún no lo ha pagado; de "ponerle contraseña", "que no entre cualquiera", "modo demo", "versión de muestra", "cerrar la demo", "que se vea pero no se pueda usar"; o de vender un sistema ya construido. También sirve para quitar la demo el día que el cliente compra, y para llenar la demo con el catálogo real del negocio traído desde su Instagram.
+description: Convierte una app de cliente del monorepo (apps/clients/*) en una demo de venta cerrada, para enseñársela a posibles clientes sin regalarles el trabajo — puerta con contraseña, muro que corta el contenido, acciones bloqueadas en el servidor y bloque de precio. Úsala siempre que se hable de enseñar, mostrar o presentar un proyecto a alguien que aún no lo ha pagado; de "ponerle contraseña", "que no entre cualquiera", "modo demo", "versión de muestra", "cerrar la demo", "que se vea pero no se pueda usar"; o de vender un sistema ya construido. También sirve para quitar la demo el día que el cliente compra, y para llenar la demo de contenido creíble cuando el negocio todavía no ha dado ni una foto.
 ---
 
 # Demo de venta
@@ -29,39 +29,75 @@ la bloquea en el servidor. Si la respuesta es "nadie", no está bloqueada.
 ## El contenido que se enseña
 
 Una demo llena de fotos de stock se nota, y lo que resta no es la foto: es la
-credibilidad de todo lo demás. La versión que vende enseña el catálogo real del
-negocio al que se la estás enseñando —sus vehículos, sus fotos, sus textos— y
-quien la abre deja de imaginar si aquello le serviría.
+credibilidad de todo lo demás. Pero bajarle el catálogo a su Instagram tampoco
+es el camino: cerró las puertas anónimas, pide una cookie de sesión que caduca,
+limita por IP a mitad del trabajo y te deja la demo a medio llenar justo el día
+que hay que enseñarla. **No uses `tools/instagram`.**
 
-Casi todos estos negocios ya tienen el catálogo publicado en Instagram. Para
-traerlo está `tools/instagram/`; léelo antes de usarlo.
+Lo que se hace en su lugar —y es lo que está montado hoy en `im2006`,
+`veloce-autos` y `dealernautacars`— son dos movimientos que van juntos: el
+hueco de cada foto **se dibuja**, y todo lo que no salga del negocio **se marca
+como lo que es**.
 
-```bash
-node tools/instagram/leer-perfil.mjs <cuenta> --max 80
-node tools/instagram/bajar-fotos.mjs tools/instagram/salida/<cuenta>.json \
-     --destino apps/clients/<cliente>/public/<carpeta>
-```
+### Lo que sí se copia, y se copia a mano
 
-Hace falta una cookie de sesión y no hay forma de evitarlo: Instagram cerró
-todas las puertas anónimas —la API contesta `require_login` y el embed devuelve
-la app sin una sola foto—. De dónde sacarla, y a qué ritmo usarla para que no
-limiten la cuenta, está en el README de la herramienta.
+De su perfil público, del PDF que te pasen o de lo que ya te hayan mandado por
+WhatsApp: nombre, logotipo, bio, sedes, canales, teléfono, dirección, marcas
+que trabajan y —cuando lo publiquen— modelo, año, kilometraje y precio
+literales. Se lee y se transcribe; no hay script, y no hace falta.
 
-El script deja el `caption` **crudo a propósito**. Traducir «RAV4 2019 full
-equipo 32mil negociable» a una ficha lo haces tú leyéndolo, no un regex: un
-año mal adivinado en el inventario de un cliente se descubre en la primera
-pregunta de la reunión.
+Traducir «RAV4 2019 full equipo 32mil negociable» a una ficha lo haces tú
+leyéndolo, no un regex: un año mal adivinado en el inventario de un cliente se
+descubre en la primera pregunta de la reunión. Y lo que no digan —color,
+puestos, tracción, documentos— se deja **vacío**, nunca a ojo.
 
-Dos cosas que esta capa hace posibles, y que van juntas:
+### El hueco de la foto, dibujado
 
-- **Lo que no salga de la cuenta, márcalo.** En `aprovechalo-ve` los vehículos
-  inventados llevan `"muestra": true`, y las fotos de stock `"fotoStock": true`,
-  que pinta el aviso «Foto de referencia». Enseñar sin avisar un vehículo que
-  el negocio no tiene es justo el detalle que hunde una reunión que iba bien.
-- **La puerta es lo que te permite usar material ajeno.** Contraseña más
-  `noindex` significa que el catálogo de un negocio no acaba indexado en Google
-  colgando de tu dominio. El corolario incómodo: si algún día apagas la demo
-  con contenido de un tercero dentro, vacía el catálogo antes de abrirla.
+Dos formas, según lo que tenga el negocio:
+
+- **`components/Silueta.js`** — siluetas SVG genéricas, de perfil, una por
+  carrocería (sedán, SUV, pick-up, camión, moto…). Sirven siempre y están ya en
+  casi todos los concesionarios del monorepo: cópialo y quédate con las
+  carrocerías que ese negocio venda. No son el contorno de ningún modelo ni de
+  ninguna marca, a propósito.
+- **`components/PlantillaPublicacion.js`** — la maqueta de sus propias
+  publicaciones, redibujada: su fondo, su emblema, el modelo en condensada y la
+  pastilla con el año y el kilometraje. Cuando el negocio tiene gráfica
+  reconocible esto vende mucho más, porque el hueco enseña exactamente el sitio
+  donde irá su foto y con su estilo. El ejemplo es `dealernautacars`; se mide en
+  `cqw` para que la misma pieza sirva a 90 px en la miniatura y a 1.100 px en la
+  ficha.
+
+Ninguna de las dos es un recuadro gris con un icono: siguen pareciendo un
+escaparate, y las dos desaparecen solas en cuanto la ficha trae `fotos`.
+
+### Marcar lo que no es suyo
+
+Bandera en el JSON, aviso en pantalla, y el aviso se va solo el día que la
+bandera se quita:
+
+| Bandera | Aviso | Cuándo |
+|---|---|---|
+| `muestra: true` | «Unidad de ejemplo» | la unidad entera es inventada |
+| `fotoPendiente: true` | «Foto pendiente» | es suya, pero todavía sin foto |
+| `precioProvisional: true` | «Precio de referencia» | no publican precio y el tuyo es de mercado |
+
+Los avisos viven junto al componente que los enseña (`AvisoSinFoto` y
+`AvisoPrecioProvisional` en `FotoVehiculo.js`) y salen en los tres sitios donde
+se mira: tarjeta, ficha y portada. Enseñar sin avisar un vehículo que el
+negocio no tiene es justo el detalle que hunde una reunión que iba bien.
+
+Arriba del JSON, un campo `_nota` que diga en dos frases de dónde salió cada
+cosa y qué hay que sustituir —`veloce-autos` y `dealernautacars` lo tienen— y
+en el README una sección **«Cargar el inventario real»**: qué falta, con qué
+banderas está marcado y que al subir lo suyo los avisos desaparecen solos. Es lo
+que te evita, tres semanas después, no acordarte de qué era real.
+
+Un apunte que sigue en pie: **la puerta es lo que te permite enseñar material
+ajeno.** Contraseña más `noindex` significa que el logotipo y los textos de un
+negocio no acaban indexados en Google colgando de tu dominio. El corolario
+incómodo: si algún día apagas la demo con contenido de un tercero dentro, vacía
+el catálogo antes de abrirla.
 
 ## Qué construir
 
@@ -79,12 +115,15 @@ Siete piezas. Las tres primeras son el esqueleto; el resto es la venta.
 
 Más dos auxiliares que evitan repetir: `BotonComprar.js` (el CTA, en un solo
 sitio, para que cambiar el enlace sea cambiar una línea) y `AvisoBloqueado.js`
-(el cartel de "esto no se puede hacer aquí").
+(el cartel de "esto no se puede hacer aquí"). Y, mientras el catálogo no tenga
+fotos, `Silueta.js` o `PlantillaPublicacion.js` para que ninguna ficha sea un
+rectángulo negro (arriba).
 
 ## Orden de trabajo
 
-Antes del paso 1, el contenido: una demo se enseña mucho mejor llena del
-catálogo real del negocio (arriba).
+Antes del paso 1, el contenido: una demo se enseña mucho mejor llena, con lo
+suyo transcrito a mano, los huecos de foto dibujados y lo inventado marcado
+(arriba).
 
 ### 1. Configurar antes de construir
 

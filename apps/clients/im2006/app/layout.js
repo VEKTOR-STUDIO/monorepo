@@ -10,10 +10,11 @@ import { esDemo } from "@/libs/demo";
 import config from "@/config";
 import "./globals.css";
 
-// Los titulares del catálogo de HB están en una condensada muy pesada e
-// inclinada. Barlow Condensed en 700/800 itálica es lo más cerca que se llega
-// con una tipografía libre, y es la que le da a la página el aire de portada
-// de catálogo en vez de aire de plantilla.
+// Los titulares de sus publicaciones van en una condensada geométrica muy
+// pesada, del mismo aire que el "2006" del logotipo. Barlow Condensed en
+// 700/800 itálica es lo más cerca que se llega con una tipografía libre, y es
+// la que le da a la página el aire de publicación suya en vez de aire de
+// plantilla.
 const barlow = Barlow_Condensed({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
@@ -44,7 +45,7 @@ const jetbrains = JetBrains_Mono({
 
 // Microgramma: la tipografía de la firma de Alessandrovaru. No es del tema de
 // la página, solo se usa en el crédito de autoría (components/FooterFoot.js) y
-// en lo que le habla al dueño de HB, igual que en el resto del monorepo.
+// en lo que le habla al dueño de LM 2006, igual que en el resto del monorepo.
 const microgramma = localFont({
   src: "../public/fonts/microgramma.otf",
   variable: "--microgramma-font",

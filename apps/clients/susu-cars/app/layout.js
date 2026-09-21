@@ -1,4 +1,4 @@
-import { Barlow_Condensed, Archivo, JetBrains_Mono } from "next/font/google";
+import { Cinzel, Archivo, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
@@ -10,21 +10,23 @@ import { esDemo } from "@/libs/demo";
 import config from "@/config";
 import "./globals.css";
 
-// Los titulares del catálogo de HB están en una condensada muy pesada e
-// inclinada. Barlow Condensed en 700/800 itálica es lo más cerca que se llega
-// con una tipografía libre, y es la que le da a la página el aire de portada
-// de catálogo en vez de aire de plantilla.
-const barlow = Barlow_Condensed({
+// "SUSU" está escrito en capitales romanas de remate fino, de las que se
+// tallaban en piedra. Cinzel es exactamente esa letra y es libre, así que los
+// titulares de la página son los del logotipo y no una aproximación.
+//
+// Solo tiene mayúsculas, y aquí no es un límite: todo lo que usa .display va
+// en caja alta. Lo que sí importa es no pedirle pesos que no hacen falta —cada
+// uno es una descarga más en una página que ya sirve fotos de vehículos.
+const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  style: ["normal", "italic"],
-  variable: "--font-barlow",
+  weight: ["500", "600", "700"],
+  variable: "--font-cinzel",
   display: "swap",
 });
 
 // El cuerpo, en una grotesca ancha que aguanta bien el fondo negro. Hace de
-// contrapeso: si el texto corrido también fuera condensado, la página entera
-// se leería apretada.
+// contrapeso: una romana da mucha personalidad en un titular y cansa en un
+// párrafo, así que todo lo que se lee de verdad va en ésta.
 const archivo = Archivo({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -44,7 +46,8 @@ const jetbrains = JetBrains_Mono({
 
 // Microgramma: la tipografía de la firma de Alessandrovaru. No es del tema de
 // la página, solo se usa en el crédito de autoría (components/FooterFoot.js) y
-// en lo que le habla al dueño de HB, igual que en el resto del monorepo.
+// en lo que le habla al dueño de SUSU CARS, igual que en el resto del
+// monorepo.
 const microgramma = localFont({
   src: "../public/fonts/microgramma.otf",
   variable: "--microgramma-font",
@@ -70,7 +73,7 @@ export default function RootLayout({ children }) {
       data-theme={config.colors.theme}
       // Lo lee el CSS para dejarle sitio a la franja de demo (--alto-barra-demo).
       data-demo={demo ? "true" : undefined}
-      className={`${barlow.variable} ${archivo.variable} ${jetbrains.variable} ${microgramma.variable}`}
+      className={`${cinzel.variable} ${archivo.variable} ${jetbrains.variable} ${microgramma.variable}`}
     >
       <head>
         {renderSchemaTags()}

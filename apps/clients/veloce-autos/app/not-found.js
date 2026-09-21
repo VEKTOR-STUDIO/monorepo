@@ -10,7 +10,7 @@ export default function NoEncontrado() {
         className="pointer-events-none absolute inset-x-0 bottom-[18%] flex justify-center opacity-[0.06]"
         aria-hidden="true"
       >
-        <Silueta tipo="suv" className="w-[120%] max-w-3xl text-base-content" />
+        <Silueta tipo="suv" intensidad={1} className="w-[120%] max-w-3xl text-base-content" />
       </div>
 
       <div className="relative">

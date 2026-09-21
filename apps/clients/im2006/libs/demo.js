@@ -1,12 +1,12 @@
 // -----------------------------------------------------------------------------
 // Modo demo.
 //
-// Esta página se le enseña al dueño de HB Inversiones antes de vendérsela. En
-// demo se ve casi todo —así se entiende qué se compra— pero no se puede usar
-// de verdad:
+// Esta página se le enseña al dueño de LM 2006 antes de vendérsela. En demo se
+// ve casi todo —así se entiende qué se compra— pero no se puede usar de
+// verdad:
 //
 //   · antes de ver nada hay que pasar una puerta con contraseña,
-//   · el inventario se corta al sexto vehículo y el resto queda difuminado,
+//   · el inventario se corta a la sexta unidad y el resto queda difuminado,
 //   · el formulario de contacto no manda nada a ningún teléfono real,
 //   · los botones de WhatsApp no abren conversación con el negocio.
 //
@@ -38,12 +38,15 @@ export const MENSAJE_BLOQUEADO =
 /** El mensaje con el que llega un comprador por un vehículo concreto. */
 export function mensajePorVehiculo(vehiculo) {
   if (!vehiculo) {
-    return "Hola, vi la página de HB Inversiones y quiero información sobre los vehículos.";
+    return "Hola, vi la página de LM 2006 y quiero información sobre el inventario.";
   }
 
   const cual = `${vehiculo.tituloLargo || vehiculo.titulo} ${vehiculo.anio}`;
+  if (vehiculo.esCamion) {
+    return `Hola, me interesa el ${cual}. ¿Sigue disponible y qué capacidad de carga tiene?`;
+  }
   return vehiculo.esNuevo
-    ? `Hola, me interesa el ${cual} 0 km. ¿Sigue disponible y cómo es el financiamiento?`
+    ? `Hola, me interesa el ${cual} 0 km. ¿Sigue disponible?`
     : `Hola, me interesa el ${cual}. ¿Sigue disponible?`;
 }
 

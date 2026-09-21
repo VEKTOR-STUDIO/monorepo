@@ -6,19 +6,19 @@ import { ESTADOS } from "@/libs/vehiculos";
 /**
  * La tarjeta del inventario.
  *
- * La foto es la página entera del catálogo de HB, así que la tarjeta no repite
- * lo que ya dice la imagen: debajo solo van la condición, el modelo, el precio
- * y el kilometraje. El nombre del modelo se escribe aunque esté impreso en la
- * foto porque una imagen no la lee ni Google ni un lector de pantalla.
+ * La foto es la publicación entera de su Instagram, así que la tarjeta no
+ * repite lo que ya dice la imagen: debajo solo van la condición, el modelo, el
+ * precio y el kilometraje. El nombre del modelo se escribe aunque esté impreso
+ * en la foto porque una imagen no la lee ni Google ni un lector de pantalla.
  *
  * Nada se le superpone a la foto. Se probó con la etiqueta de "0 KM" en la
- * esquina de arriba a la izquierda y ahí es justo donde el catálogo pone el
- * año y el modelo en grande, así que se tapaban entre ellos. Las cuatro
- * esquinas de esas fichas están ocupadas —modelo, logo de la marca, viñetas y
- * dirección—, así que lo que se añada va fuera de la imagen.
+ * esquina de arriba a la izquierda y ahí es justo donde ellos ponen su
+ * logotipo. Las cuatro esquinas de sus publicaciones están ocupadas —logotipo,
+ * modelo, ficha técnica y dirección—, así que lo que se añada va fuera de la
+ * imagen.
  *
- * El vehículo vendido se atenúa pero sigue en su sitio: en este negocio,
- * enseñar lo que ya se vendió es parte del argumento de venta.
+ * La unidad vendida se atenúa pero sigue en su sitio: en este negocio, enseñar
+ * lo que ya se vendió es parte del argumento de venta.
  */
 export default function FichaVehiculo({ vehiculo, prioridad = false }) {
   const estado = ESTADOS[vehiculo.estado] || ESTADOS.disponible;
@@ -71,8 +71,23 @@ export default function FichaVehiculo({ vehiculo, prioridad = false }) {
             <p className="cifra text-2xl font-bold leading-none text-base-content">
               {enDolares(vehiculo.precio)}
             </p>
+            {/* Qué va en la segunda línea depende de la unidad, y no por
+                gusto:
+
+                  · En un camión el kilometraje sobra y la capacidad de carga
+                    es el dato por el que se pregunta.
+                  · En un 0 km, "0 km" YA lo dice la etiqueta de arriba, así
+                    que repetirlo gasta la única línea que queda. Va el motor,
+                    que además es lo que separa dos unidades con el mismo
+                    nombre: las dos Corolla Cross Elite solo se distinguen por
+                    el 1.8 y el 2.0.
+                  · En un usado, el kilometraje es lo primero que se mira. */}
             <p className="cifra mt-1.5 truncate text-xs text-base-content/45">
-              {kilometrajeDe(vehiculo)}
+              {vehiculo.esCamion
+                ? vehiculo.capacidad || "Carga por confirmar"
+                : vehiculo.esNuevo
+                  ? [vehiculo.motor, vehiculo.transmision].filter(Boolean).join(" · ")
+                  : kilometrajeDe(vehiculo)}
               {vehiculo.financiado && " · Financiado"}
             </p>
           </div>

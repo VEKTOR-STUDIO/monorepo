@@ -24,17 +24,18 @@ export default function Terminos() {
         ← Volver
       </Link>
 
-      <h1 className="display mt-8 text-3xl">Términos y condiciones</h1>
+      <h1 className="display mt-8 text-2xl">Términos y condiciones</h1>
       <p className="mt-2 text-sm text-base-content/50">Última actualización: {hoy}</p>
 
       <div className="mt-10 space-y-8 leading-relaxed text-base-content/75">
         <section>
           <h2 className="display text-lg text-base-content">1. Qué es este sitio</h2>
           <p className="mt-3">
-            Es el escaparate de {config.business.razonSocial}, que importa y vende
-            vehículos en {config.business.ciudad}. Aquí se publica lo que hay en el
-            local; la venta se cierra en persona o por WhatsApp. La página no cobra,
-            no procesa pagos y no retiene dinero de ninguna operación.
+            Es el escaparate de {config.business.razonSocial}, que compra, vende y
+            recibe vehículos en consignación en {config.business.ciudad}. Aquí se
+            publica lo que hay en la sede; la venta se cierra en persona o por
+            WhatsApp. La página no cobra, no procesa pagos y no retiene dinero de
+            ninguna operación.
           </p>
         </section>
 

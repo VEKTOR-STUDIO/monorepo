@@ -24,7 +24,7 @@ sirva en la web):
 |---|---|
 | `veloce-perfil-instagram.jpg` | **El logotipo**, del que salió el vector de `components/MarcaVeloce.js`. |
 | `instagram-perfil.png` | La bio, las cuatro procedencias, la dirección, el WhatsApp y las cifras. |
-| El **comunicado fijado** de su perfil | Los cuatro canales oficiales, las dos advertencias de seguridad y —sobre todo— la frase que sostiene toda la venta: *"No tenemos página web"*. |
+| `instagram-comunicado.png` | Su comunicado fijado: los cuatro canales oficiales, las dos advertencias de seguridad y —sobre todo— la frase que sostiene toda la venta: *"No tenemos página web"*. |
 
 ### El logotipo no está redibujado a ojo
 

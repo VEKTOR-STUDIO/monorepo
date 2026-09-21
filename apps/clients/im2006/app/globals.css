@@ -8,62 +8,73 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Tema "hb".
+ * Tema "lm".
  *
- * No se inventó una paleta: se copió la del cliente. Las trece páginas de su
- * «CATÁLOGO DE VEHÍCULOS HB» son exactamente lo mismo repetido —negro, rojo y
- * blanco cortados en diagonal, el modelo en itálica condensada arriba a la
- * izquierda, el logo de la marca arriba a la derecha, las viñetas abajo a la
- * derecha y la dirección abajo a la izquierda—, así que esa retícula es la
- * identidad y la web la hereda entera.
+ * No se inventó una paleta: se sacó pixel a pixel del logotipo de LM 2006, que
+ * son tres barras inclinadas sobre un grafito casi negro —plata, roja y un
+ * bloque azul con "LM" en blanco— y "2006" debajo en condensada pesada.
  *
- * Tres decisiones que vienen de ahí y no de un gusto:
+ * Los valores están medidos sobre el archivo (docs/fuentes/lm2006-foto-perfil.jpg),
+ * no elegidos a ojo:
  *
- *   · FONDO NEGRO. Su catálogo es negro; una web blanca hubiera sido otra
- *     marca. Además los vehículos que venden son casi todos blancos o claros,
- *     y sobre negro recortan solos.
- *   · EL CORTE EN DIAGONAL manda en todo: fondos, fotos, botones y hasta la
- *     forma en que entran las cosas al hacer scroll (libs/animaciones.js).
- *   · EL ROJO NO DECORA, SEÑALA. Es el precio, el botón y la condición "0 km".
- *     Si se usara de relleno dejaría de significar nada.
+ *     azul   #0059FF     rojo   #FF1F1F     plata  #AABAD4
+ *     fondo  #1F2227 arriba-izquierda → #040406 abajo-derecha
  *
- * Para mover el rojo de marca: --color-primary aquí y config.colors.main.
+ * Cuatro decisiones que vienen de ahí y no de un gusto:
+ *
+ *   · MANDA EL AZUL. Es el bloque grande del logotipo y es el color con el que
+ *     ellos mismos resaltan en sus publicaciones («DISPONIBILIDAD INMEDIATA»
+ *     va sobre una pastilla azul). Así que el azul es el precio, el botón y el
+ *     enlace.
+ *   · EL ROJO ACOMPAÑA, NO MANDA. En el logotipo es una sola barra estrecha.
+ *     Aquí se reserva para lo que avisa —el estado de una unidad, la capa de
+ *     venta de la demo— y nunca para rellenar.
+ *   · EL FONDO NO ES NEGRO PLANO, ES GRAFITO CON DEGRADADO. El de su logotipo
+ *     y el de sus publicaciones. Un negro liso se vería más barato que su
+ *     propio material.
+ *   · LA INCLINACIÓN ES LA SUYA: −12°, medida sobre el borde del bloque azul
+ *     del logotipo (78,3° respecto a la horizontal). Ver --angulo-lm.
+ *
+ * Para mover el azul de marca: --color-primary aquí y config.colors.main.
  * ------------------------------------------------------------------------- */
 @plugin "daisyui/theme" {
-  name: "hb";
+  name: "lm";
   default: true;
   color-scheme: dark;
 
-  --color-base-100: oklch(13% 0 0);
-  --color-base-200: oklch(17.5% 0 0);
-  --color-base-300: oklch(24% 0 0);
+  /* El grafito del logotipo, no un gris neutro: lleva el mismo tono frío azulado
+     (H≈261) que el fondo de sus publicaciones. */
+  --color-base-100: oklch(15.9% 0.009 264);
+  --color-base-200: oklch(20.8% 0.011 261);
+  --color-base-300: oklch(27% 0.014 259);
   --color-base-content: oklch(97% 0 0);
 
-  /* El rojo del catálogo (#E11019). */
-  --color-primary: oklch(55% 0.225 27);
+  /* El azul del bloque del logotipo (#0059FF). */
+  --color-primary: oklch(54% 0.255 262);
   --color-primary-content: oklch(99% 0 0);
 
-  /* El blanco del catálogo, que es el otro color de la marca. */
-  --color-secondary: oklch(97% 0 0);
-  --color-secondary-content: oklch(13% 0 0);
+  /* La plata de la primera barra (#AABAD4). */
+  --color-secondary: oklch(78.5% 0.041 260);
+  --color-secondary-content: oklch(15.9% 0.009 264);
 
-  --color-accent: oklch(55% 0.225 27);
+  /* El rojo de la barra central (#FF1F1F). */
+  --color-accent: oklch(63.7% 0.249 28);
   --color-accent-content: oklch(99% 0 0);
 
-  --color-neutral: oklch(22% 0 0);
+  --color-neutral: oklch(25% 0.012 261);
   --color-neutral-content: oklch(95% 0 0);
 
-  --color-info: oklch(70% 0.11 240);
-  --color-info-content: oklch(13% 0 0);
+  --color-info: oklch(70% 0.14 250);
+  --color-info-content: oklch(15.9% 0.009 264);
   --color-success: oklch(72% 0.16 155);
-  --color-success-content: oklch(13% 0 0);
+  --color-success-content: oklch(15.9% 0.009 264);
   --color-warning: oklch(80% 0.15 75);
-  --color-warning-content: oklch(13% 0 0);
-  --color-error: oklch(60% 0.22 27);
+  --color-warning-content: oklch(15.9% 0.009 264);
+  --color-error: oklch(63.7% 0.249 28);
   --color-error-content: oklch(99% 0 0);
 
-  /* Radio mínimo: el catálogo no tiene ni una esquina redondeada de verdad.
-     Se deja un pelo para que los campos y los botones no corten. */
+  /* Radio mínimo: en su logotipo y en sus fichas no hay una sola esquina
+     redondeada. Se deja un pelo para que los campos y los botones no corten. */
   --radius-selector: 0.125rem;
   --radius-field: 0.125rem;
   --radius-box: 0.125rem;
@@ -75,9 +86,10 @@
 }
 
 @theme {
-  /* Barlow Condensed en negrita itálica es lo más cerca que se llega del
-     titular del catálogo sin licenciar su tipografía: condensada, muy pesada,
-     inclinada y con los remates cortados en recto. */
+  /* El titular de sus publicaciones —«COROLLA CROSS 2026»— va en una
+     condensada geométrica, pesada y de remates rectos, del mismo aire que el
+     "2006" del logotipo. Barlow Condensed en 700/800 es lo más cerca que se
+     llega con una tipografía libre. */
   --font-display: var(--font-barlow), "Arial Narrow", system-ui, sans-serif;
   --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
@@ -99,11 +111,22 @@
   --radius-2xl: 0.125rem;
   --radius-3xl: 0.125rem;
 
-  --color-tinta: oklch(13% 0 0);
-  --color-humo: oklch(62% 0 0);
-  --color-acero: oklch(30% 0 0);
-  --color-rojo: oklch(55% 0.225 27);
-  --color-rojo-hondo: oklch(42% 0.19 27);
+  /* -------------------------------------------------------------------------
+   * Las tres barras del logotipo, con nombre propio.
+   *
+   * Se usan como trío —y en este orden— siempre que aparece la marca: la
+   * cinta del pie de sus publicaciones, el remate de las secciones, la firma
+   * de las fichas. Separadas pierden el sentido: lo que se reconoce de LM 2006
+   * es la secuencia plata-rojo-azul, no cada color por su cuenta.
+   * ----------------------------------------------------------------------- */
+  --color-plata: oklch(78.5% 0.041 260);
+  --color-rojo: oklch(63.7% 0.249 28);
+  --color-azul: oklch(54% 0.255 262);
+  --color-azul-hondo: oklch(41.6% 0.204 263);
+
+  --color-tinta: oklch(15.9% 0.009 264);
+  --color-humo: oklch(62% 0.008 262);
+  --color-acero: oklch(30.7% 0.017 256);
 
   --animate-flecha: flecha 2.2s ease-in-out infinite;
   --animate-cinta: cinta 42s linear infinite;
@@ -166,9 +189,15 @@ html {
   /* Alto del crédito de autoría del final (components/FooterFoot.js). */
   --alto-credito: 1.9rem;
 
-  /* El ángulo de la marca. Se usa en las diagonales y en los biseles, y está
-     aquí arriba para que cambiarlo cambie la página entera de una vez. */
-  --angulo-hb: -18deg;
+  /* El ángulo de la marca: −12°, que NO es un número redondo elegido a ojo.
+     Es el que tiene el bloque azul de su logotipo, medido sobre el archivo
+     (el borde va a 78,3° de la horizontal). Se usa en las barras, en los
+     biseles y en cómo entran las cosas al hacer scroll, y está aquí arriba
+     para que cambiarlo cambie la página entera de una vez.
+
+     Ojo: el −18° de la versión anterior de esta plantilla era de otra marca.
+     A −18° las tres barras dejan de parecerse a su logotipo. */
+  --angulo-lm: -12deg;
 
   background-color: var(--color-base-100);
 }
@@ -199,7 +228,7 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-rojo);
+  background-color: var(--color-azul);
   color: #fff;
 }
 
@@ -207,9 +236,10 @@ body {
  * Tipografía
  * ------------------------------------------------------------------------ */
 
-/* El titular del catálogo: condensado, muy pesado, en itálica y en mayúsculas.
-   Es lo que hace que un bloque de texto se lea como una portada de HB y no
-   como una web de plantilla. */
+/* El titular de la casa: condensado, muy pesado, en itálica y en mayúsculas.
+   La itálica no es un adorno: el logotipo entero va inclinado y sus titulares
+   también, así que es lo que hace que un bloque de texto se lea como una
+   publicación de LM 2006 y no como una web de plantilla. */
 .display {
   font-family: var(--font-display);
   font-weight: 800;
@@ -274,13 +304,18 @@ body {
  * Esta página tiene DOS voces y conviene no confundirlas:
  *
  *   · Lo que ve el comprador —vehículos, cómo se compra, contacto— va con la
- *     tipografía de la casa.
- *   · Lo que le habla al DUEÑO de HB —cómo se publica, qué incluye, cuánto
- *     cuesta— va en Microgramma, que es la tipografía de la firma de
- *     Alessandrovaru, la misma del crédito del pie.
+ *     tipografía de la casa y en AZUL, que es el color del logotipo.
+ *   · Lo que le habla al DUEÑO de LM 2006 —cómo se publica, qué incluye,
+ *     cuánto cuesta— va en Microgramma, que es la tipografía de la firma de
+ *     Alessandrovaru, y en ROJO.
  *
- * Entre una voz y otra se cruza un cintillo animado, para que se vea de un
- * golpe dónde termina el escaparate y dónde empieza la oferta.
+ * Que las dos voces tengan color propio es lo que las separa de un vistazo, y
+ * el rojo no desentona porque también es suyo: es la barra del medio de su
+ * logotipo. Lo que no puede pasar es que la oferta hable en el azul del
+ * cliente, porque entonces parece que la firma el cliente.
+ *
+ * Entre una voz y otra se cruza un cintillo animado, para que además quede
+ * dicho dónde termina el escaparate y dónde empieza la oferta.
  * ------------------------------------------------------------------------ */
 
 .microgramma {
@@ -343,7 +378,7 @@ body {
   height: 0.75rem;
   background-color: currentColor;
   opacity: 0.5;
-  transform: skewX(var(--angulo-hb));
+  transform: skewX(var(--angulo-lm));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -353,36 +388,74 @@ body {
 }
 
 /* --------------------------------------------------------------------------
- * La gráfica de la casa: el corte en diagonal
+ * La gráfica de la casa: las tres barras
  *
- * En el catálogo, el negro y el rojo nunca se encuentran en horizontal: se
- * cruzan en diagonal, de abajo-izquierda a arriba-derecha. Aquí ese corte
- * aparece de cuatro formas, de más a menos fuerte.
+ * Lo que se reconoce de LM 2006 no es un color, es una SECUENCIA: plata, rojo
+ * y azul, inclinadas −12°, siempre en ese orden y siempre con el azul mucho
+ * más ancho que los otros dos. Está en su logotipo y vuelve a estar, como
+ * remate, al pie de cada una de sus publicaciones.
+ *
+ * Aquí ese trío aparece de cinco formas, de más a menos fuerte.
  * ------------------------------------------------------------------------ */
 
-/* 1. La franja, para acentos cortos: bajo un titular, en un rótulo. */
+/* 1. La marca corta: las tres barras en miniatura, bajo un titular o en un
+      rótulo. Las proporciones son las del logotipo —la plata estrecha, el
+      rojo un poco más, el azul ocupando dos tercios— y van en un solo
+      elemento con degradado de cortes duros, para que el sesgo del conjunto
+      sea uno y no tres peleándose. */
 .banda {
-  height: 0.25rem;
-  width: 3.5rem;
-  background-color: var(--color-rojo);
-  transform: skewX(var(--angulo-hb));
+  height: 0.3rem;
+  width: 4.5rem;
+  transform: skewX(var(--angulo-lm));
+  background-image: linear-gradient(
+    to right,
+    var(--color-plata) 0 12%,
+    transparent 12% 17%,
+    var(--color-rojo) 17% 33%,
+    transparent 33% 38%,
+    var(--color-azul) 38% 100%
+  );
 }
 
+/* La cinta del pie de sus publicaciones: las mismas tres barras de lado a
+   lado. Va recta a propósito —en sus posts el remate inferior no está
+   inclinado— y por eso anula el sesgo. */
 .banda-ancha {
   width: 100%;
   transform: none;
+  background-image: linear-gradient(
+    to right,
+    var(--color-plata) 0 6%,
+    transparent 6% 8%,
+    var(--color-rojo) 8% 16%,
+    transparent 16% 18%,
+    var(--color-azul) 18% 100%
+  );
+}
+
+/* La misma cinta, vertical: es la barrita que en sus fichas va pegada a la
+   izquierda del nombre de la marca. Se monta con `border-left` no, con esto:
+   así lleva los tres colores y no uno. */
+.barra-lateral {
+  width: 0.1875rem;
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-plata) 0 18%,
+    var(--color-rojo) 18% 42%,
+    var(--color-azul) 42% 100%
+  );
 }
 
 /* 2. El bisel, para botones y etiquetas: la caja va sesgada y el contenido
       se contra-sesga para que el texto salga recto. */
 .bisel {
   display: inline-block;
-  transform: skewX(var(--angulo-hb));
+  transform: skewX(var(--angulo-lm));
 }
 
 .bisel > * {
   display: inline-block;
-  transform: skewX(calc(var(--angulo-hb) * -1));
+  transform: skewX(calc(var(--angulo-lm) * -1));
 }
 
 /* 3. El corte, para fotos y bloques enteros: una esquina rebajada, como el
@@ -402,35 +475,46 @@ body {
   );
 }
 
-/* 4. El campo: el fondo diagonal completo, para las secciones que tienen que
-      sonar a portada de catálogo. Son dos cuñas, una roja y una gris, sobre
-      negro, con el mismo ángulo que todo lo demás. */
-.campo-hb {
+/* 4. El campo: el fondo inclinado completo, para las secciones que tienen que
+      sonar a publicación suya. Son las tres barras a tamaño de sección, muy
+      bajadas de tono, con el mismo ángulo que todo lo demás. */
+.campo-lm {
   background-color: var(--color-base-100);
   background-image:
     linear-gradient(
-      100deg,
-      transparent 0 34%,
-      var(--color-rojo-hondo) 34% 41%,
-      transparent 41% 100%
-    ),
-    linear-gradient(
-      100deg,
-      transparent 0 62%,
-      color-mix(in oklab, var(--color-base-content) 7%, transparent) 62% 66%,
-      transparent 66% 100%
+      102deg,
+      transparent 0 30%,
+      color-mix(in oklab, var(--color-plata) 12%, transparent) 30% 32%,
+      transparent 32% 36%,
+      color-mix(in oklab, var(--color-rojo) 30%, transparent) 36% 41%,
+      transparent 41% 45%,
+      var(--color-azul-hondo) 45% 62%,
+      transparent 62% 100%
     );
 }
 
-/* El fondo donde se posan las fotos del catálogo: negro con una insinuación
-   de foco, como el suelo del local. */
+/* 5. El grafito del logotipo, en grande: el degradado que baja de
+      arriba-izquierda a abajo-derecha, que es el fondo de su foto de perfil y
+      el de casi todas sus publicaciones. Es lo que evita que la página sea un
+      negro plano, que se vería más barato que su propio material. */
+.grafito {
+  background-image: linear-gradient(
+    135deg,
+    oklch(25.1% 0.01 261) 0%,
+    oklch(18% 0.01 262) 42%,
+    oklch(12% 0.008 264) 100%
+  );
+}
+
+/* El fondo donde se posan las fotos: el gris del galpón donde las hacen, con
+   una insinuación de foco. */
 .estudio {
   background:
     radial-gradient(
       ellipse 70% 60% at 50% 42%,
-      oklch(26% 0 0) 0%,
-      oklch(18% 0 0) 48%,
-      oklch(12% 0 0) 100%
+      oklch(28% 0.008 262) 0%,
+      oklch(20% 0.009 262) 48%,
+      oklch(14% 0.008 264) 100%
     );
 }
 
@@ -461,6 +545,11 @@ body {
 }
 
 /* El plástico que envuelve la puerta.
+
+   Aquí viene de su propio material: en sus publicaciones las unidades salen
+   todavía forradas de plástico de fábrica —los asientos del Howo, el Corolla
+   recién bajado— y esa arruga es media identidad del negocio.
+
    La foto es casi negra con los pliegues en blanco, así que va en `screen`:
    el negro se cae y solo quedan los brillos de las arrugas, que es lo que hace
    que la portada parezca metida en una bolsa. En `multiply` pasaría lo
@@ -591,8 +680,9 @@ body:has(main.puerta) .footer-foot {
   -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
 }
 
-/* El panal del techo del local. En las fotos de su Instagram el showroom está
-   iluminado con hexágonos, así que el motivo es suyo, no un adorno genérico.
+/* El panal del techo del galpón. En sus publicaciones se ve siempre: el techo
+   está iluminado con paneles hexagonales y salen detrás de cada unidad, tan
+   reconocibles como el logotipo. El motivo es suyo, no un adorno genérico.
    Se reserva para las secciones que hablan del negocio: en todas dejaría de
    significar nada. */
 .textura-panal {
@@ -616,7 +706,7 @@ body:has(main.puerta) .footer-foot {
 
 .insignia-edicion {
   display: inline-block;
-  transform: skewX(var(--angulo-hb));
+  transform: skewX(var(--angulo-lm));
   border: 1px solid color-mix(in oklab, var(--color-base-content) 30%, transparent);
   background-image: linear-gradient(
     100deg,
@@ -632,7 +722,7 @@ body:has(main.puerta) .footer-foot {
 
 .insignia-edicion > * {
   display: inline-block;
-  transform: skewX(calc(var(--angulo-hb) * -1));
+  transform: skewX(calc(var(--angulo-lm) * -1));
 }
 
 /* El sello de rebaja. Va girado, como el adhesivo de una caja. */
@@ -671,9 +761,9 @@ body:has(main.puerta) .footer-foot {
 /* --------------------------------------------------------------------------
  * Tarjetas
  *
- * Nada de cristal ni de sombras pesadas: una línea finísima sobre el negro y
- * un filo rojo que aparece al pasar por encima. El peso visual lo tiene la
- * foto, que ya viene con la gráfica de HB impresa.
+ * Nada de cristal ni de sombras pesadas: una línea finísima sobre el grafito y
+ * un filo azul que aparece al pasar por encima. El peso visual lo tiene la
+ * foto, que ya viene con la gráfica de LM impresa.
  * ------------------------------------------------------------------------ */
 
 .ficha {
@@ -689,7 +779,7 @@ body:has(main.puerta) .footer-foot {
 
 .ficha:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in oklab, var(--color-rojo) 60%, transparent);
+  border-color: color-mix(in oklab, var(--color-azul) 60%, transparent);
   box-shadow: 0 26px 60px -30px #000;
 }
 
@@ -700,7 +790,7 @@ body:has(main.puerta) .footer-foot {
   inset-inline: 0;
   bottom: 0;
   height: 3px;
-  background-color: var(--color-rojo);
+  background-color: var(--color-azul);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -761,11 +851,11 @@ header.con-fondo {
  * Botones
  *
  * En la itálica condensada de la casa, mayúsculas y muy espaciados. Se pensó
- * en sesgarlos como las franjas, y se descartó: un `skewX` sobre el botón
+ * en sesgarlos como las barras, y se descartó: un `skewX` sobre el botón
  * inclina también su texto, que YA viene inclinado por la itálica, y el
- * resultado eran dos pendientes distintas peleándose. El corte diagonal se
- * queda donde se lee bien —las franjas, las fotos, las etiquetas— y el botón
- * se gana la marca por la tipografía.
+ * resultado eran dos pendientes distintas peleándose. La inclinación se queda
+ * donde se lee bien —las barras, las fotos, las etiquetas— y el botón se gana
+ * la marca por la tipografía.
  * ------------------------------------------------------------------------ */
 
 .btn {
@@ -779,11 +869,11 @@ header.con-fondo {
 }
 
 .btn-primary {
-  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-rojo) 95%, transparent);
+  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-azul) 95%, transparent);
 }
 
 .btn-primary:hover {
-  background-color: color-mix(in oklab, var(--color-rojo) 88%, #fff);
+  background-color: color-mix(in oklab, var(--color-azul) 88%, #fff);
 }
 
 /* El botón secundario sobre negro: solo un filo blanco. */
@@ -833,8 +923,8 @@ header.con-fondo {
 }
 
 .entrada:focus {
-  border-color: var(--color-rojo);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-rojo) 22%, transparent);
+  border-color: var(--color-azul);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-azul) 22%, transparent);
 }
 
 /* Los desplegables nativos heredan el fondo del sistema en sus opciones, que
@@ -879,7 +969,7 @@ header.con-fondo {
   background: var(--color-base-300);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-rojo);
+  background: var(--color-azul);
 }
 
 /* Quien pide menos movimiento, no lo tiene. */

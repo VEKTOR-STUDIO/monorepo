@@ -8,12 +8,12 @@ import Parallax from "@/components/Parallax";
 import { enDolares, kilometrajeDe } from "@/libs/formato";
 
 /**
- * Un vehículo del escaparate de la portada.
+ * Una unidad del escaparate de la portada.
  *
- * Está montado como una página del catálogo de HB puesta de lado: el modelo
- * grande en itálica a un lado, la foto al otro, y las diagonales de la casa
- * cruzando por detrás. El año va enorme y translúcido detrás del titular, que
- * es el truco de cartel de toda la vida y aquí además informa.
+ * Está montada como una de sus publicaciones puesta de lado: el modelo grande
+ * en itálica a un lado, la foto al otro, y las barras de la casa cruzando por
+ * detrás. El año va enorme y translúcido detrás del titular, que es el truco
+ * de cartel de toda la vida y aquí además informa.
  *
  * `invertido` alterna de qué lado va la foto para que cuatro seguidos no se
  * lean como cuatro veces la misma pantalla.
@@ -68,7 +68,11 @@ export default function PantallaVehiculo({
                       : "bg-base-content/12 text-base-content"
                   }`}
                 >
-                  {vehiculo.esNuevo ? "Nuevo · 0 km importado" : "Usado verificado"}
+                  {vehiculo.esCamion
+                    ? `Camión · ${vehiculo.capacidad || "carga por confirmar"}`
+                    : vehiculo.esNuevo
+                      ? "Nuevo · 0 km"
+                      : "Usado verificado"}
                 </span>
               </span>
             </Revelar>
@@ -84,10 +88,13 @@ export default function PantallaVehiculo({
             </TituloAnimado>
 
             <Revelar retraso={180}>
+              {/* La misma línea técnica que ellos escriben en sus
+                  publicaciones: versión, motor y caja. En un camión, el
+                  kilometraje se cae y entra la capacidad. */}
               <p className="cifra mt-5 text-sm text-base-content/50">
                 {[
                   vehiculo.version,
-                  kilometrajeDe(vehiculo),
+                  vehiculo.esCamion ? vehiculo.capacidad : kilometrajeDe(vehiculo),
                   vehiculo.motor,
                   vehiculo.transmision,
                 ]

@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------------------
 // Modo demo.
 //
-// Esta página se le enseña al dueño de HB Inversiones antes de vendérsela. En
+// Esta página se le enseña al dueño de SUSU CARS antes de vendérsela. En
 // demo se ve casi todo —así se entiende qué se compra— pero no se puede usar
 // de verdad:
 //
@@ -38,13 +38,11 @@ export const MENSAJE_BLOQUEADO =
 /** El mensaje con el que llega un comprador por un vehículo concreto. */
 export function mensajePorVehiculo(vehiculo) {
   if (!vehiculo) {
-    return "Hola, vi la página de HB Inversiones y quiero información sobre los vehículos.";
+    return "Hola, vi la página de SUSU CARS y quiero información sobre los vehículos.";
   }
 
   const cual = `${vehiculo.tituloLargo || vehiculo.titulo} ${vehiculo.anio}`;
-  return vehiculo.esNuevo
-    ? `Hola, me interesa el ${cual} 0 km. ¿Sigue disponible y cómo es el financiamiento?`
-    : `Hola, me interesa el ${cual}. ¿Sigue disponible?`;
+  return `Hola, me interesa el ${cual} que tienen publicado. ¿Sigue disponible?`;
 }
 
 /**

@@ -22,7 +22,7 @@ export default function BloqueVenta() {
 
       <div className="relative mx-auto max-w-5xl px-4 py-20 sm:px-6">
         <Revelar className="text-center">
-          <p className="microgramma text-xs text-primary">Lo que acabas de ver</p>
+          <p className="microgramma text-xs text-accent">Lo que acabas de ver</p>
         </Revelar>
 
         <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
@@ -31,8 +31,8 @@ export default function BloqueVenta() {
 
         <Revelar retraso={140}>
           <p className="mx-auto mt-6 max-w-lg text-center leading-relaxed text-base-content/60">
-            No es una maqueta: es una página real funcionando, hecha con tu catálogo,
-            tus fotos y tu gráfica. Lo que falta por poner es tu número de WhatsApp,
+            No es una maqueta: es una página real funcionando, hecha con tu
+            inventario y tu gráfica. Lo que falta por poner es tu número de WhatsApp,
             tus precios y tu dominio.
           </p>
         </Revelar>
@@ -76,9 +76,9 @@ export default function BloqueVenta() {
 
         <Revelar retraso={180}>
           <p className="mx-auto mt-6 max-w-lg text-center text-xs text-base-content/35">
-            Los vehículos y las fotos que ves son los tuyos, sacados del «Catálogo de
-            vehículos HB». Los precios son de referencia: el catálogo no publica
-            ninguno y se cargan los reales desde el panel.
+            Las unidades que ves son las tuyas, copiadas de tus propias publicaciones
+            de @lm2006.ccs. Los precios son de referencia salvo el del Corolla HEV,
+            que es el único que publicaste; los reales se cargan desde el panel.
           </p>
         </Revelar>
       </div>

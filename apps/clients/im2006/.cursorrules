@@ -1,8 +1,8 @@
-# HB Inversiones — reglas del proyecto
+# LM 2006 — reglas del proyecto
 
-Catálogo web de HB Inversiones C.A. (@hb_inversiones_12), concesionario de
-Barquisimeto que importa 0 km y vende usados. Léete el README antes de tocar
-nada: explica de dónde sale cada decisión de diseño.
+Catálogo web de LM 2006 (@lm2006.ccs), concesionario de **vehículos y
+camiones** en Los Chaguaramos, Caracas. Léete el README antes de tocar nada:
+explica de dónde sale cada decisión de diseño.
 
 ## Pila
 - Next.js 15 (App Router) + React 19, Turbopack en dev
@@ -20,16 +20,34 @@ nada: explica de dónde sale cada decisión de diseño.
   hoy.
 
 ## Lo que no se toca sin pensarlo
+- **El corte principal es el SEGMENTO** (`vehiculos` / `camiones`), no la
+  carrocería ni la condición. Es la primera línea de su bio y son dos
+  compradores distintos. Ver `SEGMENTOS` en `libs/vehiculos.js`.
 - **El candado de la demo vive en el servidor** (`middleware.js`, las rutas de
   API). Bloquear algo solo en pantalla no es bloquearlo.
 - **La contraseña no puede entrar en `config.js`**: ese archivo lo importan
   componentes de cliente y acabaría en el bundle. Va en `libs/acceso.js`.
 - **GSAP: `fromTo`, nunca `from`** para lo que entra en escena. El CSS deja
   `[data-anima]` en `opacity: 0` y `from` animaría de 0 a 0.
-- **Las fotos son páginas del catálogo del cliente**: se enseñan enteras y no
-  se les superpone nada.
-- El ángulo de la marca es `--angulo-hb` (−18°). Se usa esa variable, no un
-  número suelto.
+- **Las fotos son publicaciones del cliente**: se enseñan enteras y no se les
+  superpone nada. Las cuatro esquinas ya están ocupadas en su plantilla.
+- **No se inventan datos de ficha.** Sus publicaciones no declaran color,
+  puestos ni tracción; esos campos van a `null` y la fila desaparece sola. Un
+  dato adivinado se descubre en la primera pregunta de la reunión.
+
+## La marca
+- El ángulo es `--angulo-lm` (**−12°**, medido sobre el bloque azul de su
+  logotipo). Se usa esa variable, no un número suelto, y no se "redondea" a
+  −15 ni a −18: a otro ángulo deja de parecerse a su logotipo.
+- Las tres barras van **siempre en este orden**: plata, rojo, azul, con el azul
+  mucho más ancho. Igualarlas convierte la marca en la de otra casa alemana
+  muy conocida.
+- **El azul es la acción**: botones, enlaces, precios. Es el color del
+  logotipo y es el mismo en toda la página, incluido el botón de comprar.
+  Meter un segundo color de botón sería peor que no marcar la voz.
+- **El rojo marca dónde habla la oferta**, no el cliente: rótulos y cintillos
+  de venta, el sello de rebaja y los ticks de la comparación con el Instagram.
+  Junto con Microgramma, es lo que avisa de que cambió el interlocutor.
 
 ## Comprobar antes de dar algo por hecho
 ```bash

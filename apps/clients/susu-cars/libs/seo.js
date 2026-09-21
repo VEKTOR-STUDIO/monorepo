@@ -10,17 +10,17 @@ export const getSEOTags = ({
 } = {}) => {
   const defaultKeywords = [
     config.appName,
-    "venta de carros Barquisimeto",
-    "carros 0 km Venezuela",
-    "camionetas en venta Barquisimeto",
-    "carros usados Lara",
-    "importación de vehículos Venezuela",
-    "comprar carro financiado Venezuela",
-    "HB Inversiones",
+    "consignación de vehículos Caracas",
+    "vender mi carro en Caracas",
+    "venta de carros Caracas",
+    "carros usados Caracas",
+    "consignar vehículo Venezuela",
+    "comprar carro Av. Casanova",
+    "SUSU CARS",
   ];
 
   return {
-    title: title || `${config.appName} — Venta e importación de vehículos en Barquisimeto`,
+    title: title || `${config.appName} — Compra, venta y consignación de vehículos en Caracas`,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,

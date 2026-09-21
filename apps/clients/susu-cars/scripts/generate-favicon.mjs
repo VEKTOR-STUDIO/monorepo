@@ -1,13 +1,23 @@
 #!/usr/bin/env node
 /**
- * Genera los iconos de HB Inversiones.
+ * Genera los iconos de SUSU CARS.
  * Uso: npm run generate-favicon  (o: node scripts/generate-favicon.mjs)
  *
  * El dibujo es la marca reducida a lo mínimo que sigue siendo reconocible: el
- * negro, la cuña roja en diagonal y las dos letras en itálica. A 16 px no cabe
- * nada más, y con eso basta para distinguirla en una pestaña.
+ * negro del logotipo, el trazo del deportivo en oro y las dos "S" debajo. A
+ * 16 px no cabe nada más, y con eso basta para distinguirla en una pestaña.
  *
- * No hay ningún archivo de imagen que mantener a mano: si cambia el rojo, se
+ * Dos cosas que hacen que se lea a tamaño pequeño y que conviene no tocar sin
+ * volver a mirarlo a 16 px:
+ *
+ *   · El trazo se ENGORDA en los tamaños chicos. Una línea de 2 px sobre una
+ *     rejilla de 64 desaparece cuando el icono se pinta a 16: el `grosor` sube
+ *     a medida que el lado baja, para que el dibujo conserve el mismo peso
+ *     visual en todos.
+ *   · A 16 px el texto no entra. Por debajo de 32 se dibuja solo el trazo, que
+ *     es lo único que sigue siendo legible.
+ *
+ * No hay ningún archivo de imagen que mantener a mano: si cambia el oro, se
  * cambia aquí y se vuelve a correr.
  */
 
@@ -19,32 +29,48 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, "..", "public");
 const appDir = join(__dirname, "..", "app");
 
-const NEGRO = "#0D0D0D";
-const ROJO = "#E11019";
-const BLANCO = "#FFFFFF";
+const NEGRO = "#0D0C0A";
+const NEGRO_CLARO = "#23211C";
+const ORO = "#C9A24A";
+const ORO_CLARO = "#EBD9A6";
 
 const tamaños = [16, 32, 64, 180];
 
 function construir(lado) {
-  const u = lado / 64; // todo está medido sobre una rejilla de 64
-  const fuente = Math.round(34 * u);
+  // Todo está medido sobre una rejilla de 64. El trazo es la excepción: se
+  // calcula contra el tamaño real para que no se evapore en los iconos chicos.
+  const grosor = lado <= 16 ? 5 : lado <= 32 ? 3.5 : 2.6;
+  const conTexto = lado >= 32;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${lado}" height="${lado}" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="${NEGRO}"/>
-  <path d="M-8 44 L34 44 L22 72 L-20 72 Z" fill="${ROJO}"/>
-  <path d="M40 -8 L82 -8 L60 44 L18 44 Z" fill="${ROJO}" opacity="0.18"/>
-  <text
+  <defs>
+    <radialGradient id="fondo" cx="30%" cy="18%" r="95%">
+      <stop offset="0%" stop-color="${NEGRO_CLARO}"/>
+      <stop offset="100%" stop-color="${NEGRO}"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" fill="url(#fondo)"/>
+  <g fill="none" stroke="${ORO}" stroke-width="${grosor}" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 ${conTexto ? 30 : 38} C7 26 9 23 13 21 L22 17 C27 13 34 11 41 11 C48 11 53 14 56 19"/>
+    <path d="M17 ${conTexto ? 30 : 38} a5 5 0 0 1 10 0"/>
+    <path d="M40 ${conTexto ? 30 : 38} a5 5 0 0 1 10 0"/>
+  </g>
+  ${
+    conTexto
+      ? `<text
     x="50%"
-    y="46%"
+    y="72%"
     dominant-baseline="central"
     text-anchor="middle"
-    font-family="Arial Narrow, Arial, system-ui, sans-serif"
+    font-family="Georgia, 'Times New Roman', serif"
     font-weight="700"
-    font-style="italic"
-    font-size="${fuente}"
-    fill="${BLANCO}"
-  >HB</text>
+    font-size="24"
+    letter-spacing="1"
+    fill="${ORO_CLARO}"
+  >SC</text>`
+      : ""
+  }
 </svg>
 `;
 }

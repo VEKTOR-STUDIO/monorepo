@@ -10,17 +10,18 @@ export const getSEOTags = ({
 } = {}) => {
   const defaultKeywords = [
     config.appName,
-    "venta de carros Barquisimeto",
+    "concesionario Caracas",
+    "venta de carros Caracas",
     "carros 0 km Venezuela",
-    "camionetas en venta Barquisimeto",
-    "carros usados Lara",
-    "importación de vehículos Venezuela",
-    "comprar carro financiado Venezuela",
-    "HB Inversiones",
+    "camiones Sinotruk Venezuela",
+    "camiones de carga Caracas",
+    "consignación de vehículos Caracas",
+    "concesionario Los Chaguaramos",
+    "LM 2006",
   ];
 
   return {
-    title: title || `${config.appName} — Venta e importación de vehículos en Barquisimeto`,
+    title: title || `${config.appName} — Concesionario de vehículos y camiones en Caracas`,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,
@@ -91,7 +92,7 @@ export const renderSchemaTags = () => {
             addressCountry: "VE",
           },
           areaServed: `${config.business.ciudad}, Venezuela`,
-          sameAs: [config.business.instagramUrl].filter(Boolean),
+          sameAs: [config.business.instagramUrl, config.business.linktree].filter(Boolean),
         }),
       }}
     />

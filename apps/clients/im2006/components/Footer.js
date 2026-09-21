@@ -8,9 +8,10 @@ import config from "@/config";
  * legales.
  *
  * La dirección va grande y con su propio bloque, y no escondida en una línea
- * de texto: este negocio vende en un local de Barquisimeto, las trece páginas
- * de su catálogo la llevan impresa al pie, y quien llega a la web buscando
- * "dónde están" tiene que encontrarla sin leer un párrafo.
+ * de texto: este negocio vende en un local de Los Chaguaramos, todas sus
+ * publicaciones la llevan impresa al pie y hasta tienen un destacado del
+ * perfil dedicado a la ubicación. Quien llega buscando "dónde están" tiene que
+ * encontrarla sin leer un párrafo.
  *
  * El teléfono solo sale si hay uno configurado; mientras no lo haya, el canal
  * que se enseña es Instagram, que es por donde hoy escribe todo el mundo.
@@ -40,7 +41,7 @@ export default function Footer() {
             <address className="mt-4 not-italic text-sm leading-relaxed text-base-content/65">
               {business.direccion}
               <br />
-              {business.ciudad}, estado {business.estado}
+              {business.ciudad}, {business.estado}
               <br />
               Venezuela
             </address>
@@ -52,18 +53,18 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm">
               <li>
                 <Link
-                  href="/vehiculos?condicion=nuevo"
+                  href="/vehiculos?segmento=vehiculos"
                   className="text-base-content/65 transition-colors hover:text-primary"
                 >
-                  0 km importados
+                  Vehículos
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/vehiculos?condicion=usado"
+                  href="/vehiculos?segmento=camiones"
                   className="text-base-content/65 transition-colors hover:text-primary"
                 >
-                  Usados verificados
+                  Camiones
                 </Link>
               </li>
               <li>

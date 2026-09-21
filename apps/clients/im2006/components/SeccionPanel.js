@@ -11,6 +11,10 @@ import TituloAnimado from "@/components/TituloAnimado";
 //   · Para quien viene a comprar la página: enseña que no queda atado a nadie
 //     para actualizar su inventario, que es la objeción número uno.
 //
+// La maqueta enseña un camión, un híbrido y un compacto a propósito: son tres
+// unidades suyas de verdad, y de paso queda dicho que el mismo panel sirve
+// para un chasis de quince toneladas y para un Baleno.
+//
 // La maqueta del panel es un dibujo hecho con HTML, no una captura: así no hay
 // imagen que se quede vieja cuando el panel cambie, pesa cero y se lee bien en
 // cualquier pantalla.
@@ -27,7 +31,7 @@ const PASOS = [
     numero: "02",
     titulo: "Cargas el vehículo",
     detalle:
-      "La foto que ya hiciste para el catálogo, el precio, el año, el kilometraje y si es 0 km o usado. Los mismos datos que pones en el post, una sola vez.",
+      "La pieza que ya diseñaste para el post, el precio, el año, el motor y si va en vehículos o en camiones. Los mismos datos que escribes en el pie, una sola vez.",
   },
   {
     numero: "03",
@@ -77,7 +81,7 @@ export default function SeccionPanel() {
 
         <Revelar retraso={160}>
           <p className="mx-auto mt-6 max-w-2xl text-center leading-relaxed text-base-content/60">
-            Cada vehículo de esta página lo publica el propio equipo de HB desde su
+            Cada unidad de esta página la publica el propio equipo de LM 2006 desde su
             panel, en un par de minutos. Nadie tiene que llamar a un programador para
             subir un carro, cambiar un precio o marcar algo como vendido: por eso lo
             que ves aquí es lo que hay hoy en el local.
@@ -94,7 +98,7 @@ export default function SeccionPanel() {
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="cifra ml-3 truncate text-[0.65rem] text-base-content/40">
-                  panel · hb inversiones
+                  panel · lm 2006
                 </span>
               </div>
 
@@ -114,10 +118,10 @@ export default function SeccionPanel() {
                   {[
                     ["Marca", "Toyota"],
                     ["Modelo", "Corolla Cross"],
-                    ["Año", "2024"],
-                    ["Condición", "0 km importado"],
-                    ["Precio", "$38.900"],
-                    ["Financiado", "Sí"],
+                    ["Año", "2026"],
+                    ["Segmento", "Vehículos"],
+                    ["Motor", "1.8L"],
+                    ["Precio", "$39.900"],
                   ].map(([etiqueta, valor]) => (
                     <div key={etiqueta}>
                       <p className="text-[0.6rem] uppercase tracking-wider text-base-content/40">
@@ -133,7 +137,7 @@ export default function SeccionPanel() {
                 {/* Zona de fotos. */}
                 <div className="mt-3 border border-dashed border-base-content/18 px-3 py-4 text-center">
                   <p className="text-[0.65rem] text-base-content/40">
-                    Arrastra aquí la ficha del catálogo
+                    Arrastra aquí la pieza que publicaste
                   </p>
                 </div>
 
@@ -143,20 +147,20 @@ export default function SeccionPanel() {
                 </p>
                 <div className="mt-2 overflow-hidden border border-base-content/8">
                   <FilaMaqueta
-                    nombre="Volkswagen Tharu 2024"
-                    precio="$34.900"
+                    nombre="Sinotruk Howo 15T 2025"
+                    precio="$58.000"
                     estado="Disponible"
                     tono="disponible"
                   />
                   <FilaMaqueta
-                    nombre="Toyota Rush 2023"
-                    precio="$26.500"
+                    nombre="Toyota Corolla HEV 2026"
+                    precio="$36.500"
                     estado="Reservado"
                     tono="reservado"
                   />
                   <FilaMaqueta
-                    nombre="Chevrolet Aveo 2012"
-                    precio="$7.500"
+                    nombre="Suzuki Baleno 2026"
+                    precio="$21.900"
                     estado="Vendido"
                     tono="vendido"
                   />
