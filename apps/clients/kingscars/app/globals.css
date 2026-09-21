@@ -647,23 +647,6 @@ body {
   background-size: 72px 44px;
 }
 
-/* El plástico que envuelve la puerta.
-   La foto es casi negra con los pliegues en blanco, así que va en `screen`:
-   el negro se cae y solo quedan los brillos de las arrugas, que es lo que hace
-   que la portada parezca metida en una bolsa. En `multiply` pasaría lo
-   contrario —se comería el fondo y quedaría una mancha negra—, y por eso no se
-   usa aquí. Va encima de todo el fondo, pero siempre por debajo del contenido,
-   que sube con `z-10`. */
-.plastico {
-  pointer-events: none;
-  opacity: 0.4;
-  mix-blend-mode: screen;
-  background-image: url("/plasticTexture.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 /* -----------------------------------------------------------------------------
  * La puerta, de una sola pantalla.
  *
