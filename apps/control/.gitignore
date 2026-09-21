@@ -1,0 +1,18 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# El tablero vive en el disco y no se sube: son prospectos, notas y material
+# que todavía no es de nadie (PDF, fotos, capturas). Lo que sí se sube es lo
+# que la rutina deja dentro de apps/clients/<carpeta>.
+/data/

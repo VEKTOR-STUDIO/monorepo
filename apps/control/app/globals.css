@@ -1,0 +1,148 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+@source "../libs/etapas.js";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tema "control".
+ *
+ * Esto no es la web de ningún cliente: es el cuarto de máquinas. Se parece a
+ * un panel de instrumentos y no a una landing —grafito, retícula de plano,
+ * cifras en mono— y tiene una sola regla de color:
+ *
+ *   · EL NARANJA ES LA RUTINA. Es el único color de marca y solo aparece donde
+ *     Claude está trabajando o donde un gesto lo va a poner a trabajar. Si
+ *     algo naranja se mueve en pantalla, hay una sesión corriendo.
+ *   · El resto de colores son estados del tablero (info, warning, secondary,
+ *     success), uno por columna, y no se usan para decorar.
+ * ------------------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "control";
+  default: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(15.5% 0.008 255);
+  --color-base-200: oklch(19% 0.01 255);
+  --color-base-300: oklch(26% 0.012 255);
+  --color-base-content: oklch(93% 0.006 255);
+
+  --color-primary: oklch(72% 0.185 48);
+  --color-primary-content: oklch(16% 0.02 48);
+
+  --color-accent: oklch(72% 0.185 48);
+  --color-accent-content: oklch(16% 0.02 48);
+
+  --color-secondary: oklch(74% 0.13 300);
+  --color-secondary-content: oklch(16% 0.02 300);
+
+  --color-neutral: oklch(23% 0.012 255);
+  --color-neutral-content: oklch(90% 0.006 255);
+
+  --color-info: oklch(76% 0.11 235);
+  --color-info-content: oklch(16% 0.02 235);
+  --color-success: oklch(78% 0.16 155);
+  --color-success-content: oklch(16% 0.02 155);
+  --color-warning: oklch(86% 0.15 95);
+  --color-warning-content: oklch(18% 0.02 95);
+  --color-error: oklch(66% 0.2 25);
+  --color-error-content: oklch(98% 0 0);
+
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.375rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: var(--font-plex-sans), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", monospace;
+  /* Microgramma es la firma de Alessandrovaru en todo el monorepo. Aquí, que
+     es su herramienta, deja de ser el crédito del pie y pasa a rotular. */
+  --font-rotulo: var(--microgramma-font), var(--font-plex-mono), monospace;
+
+  --animate-latido: latido 1.6s ease-in-out infinite;
+  --animate-barrido: barrido 2.4s linear infinite;
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.8);
+    }
+  }
+
+  @keyframes barrido {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 2rem 0;
+    }
+  }
+}
+
+html {
+  scrollbar-color: var(--color-base-300) transparent;
+}
+
+/* La retícula de plano: fija detrás de todo, muy tenue, y apagándose hacia
+   abajo para que no compita con las tarjetas. */
+body {
+  background-color: var(--color-base-100);
+  background-image:
+    linear-gradient(to bottom, transparent, var(--color-base-100) 70%),
+    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 4%, transparent) 1px, transparent 1px);
+  background-size:
+    100% 100vh,
+    2.5rem 2.5rem,
+    2.5rem 2.5rem;
+  background-attachment: fixed;
+}
+
+.rotulo {
+  font-family: var(--font-rotulo);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* La franja que corre por arriba de una tarjeta mientras su rutina trabaja. */
+.corriendo {
+  background-image: repeating-linear-gradient(
+    115deg,
+    var(--color-accent) 0 0.5rem,
+    transparent 0.5rem 1rem
+  );
+  background-size: 2rem 100%;
+  animation: var(--animate-barrido);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .corriendo,
+  .animate-latido {
+    animation: none;
+  }
+}
+
+/* El registro de la rutina: una terminal, con las marcas de cada línea
+   coloreadas desde components/Registro.js. */
+.registro {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
