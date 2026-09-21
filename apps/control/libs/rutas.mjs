@@ -3,6 +3,9 @@
 // suelto, fuera de Next, para sobrevivir a los reinicios del servidor.
 import fs from "node:fs";
 import path from "node:path";
+import { aSlug, esSlug } from "./slug.mjs";
+
+export { aSlug, esSlug };
 
 let raizCache = null;
 
@@ -40,24 +43,7 @@ export const archivoRegistro = (id) => path.join(carpetaCandidato(id), "registro
 export const archivoRegistroCrudo = (id) =>
   path.join(carpetaCandidato(id), "registro.jsonl");
 
-// Un id o un nombre de carpeta nunca llevan barras ni puntos: es lo que
-// impide que un valor venido del navegador se salga de su sitio.
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-export const esSlug = (valor) =>
-  typeof valor === "string" && valor.length <= 60 && SLUG.test(valor);
-
 export function exigirSlug(valor, queEs = "identificador") {
   if (!esSlug(valor)) throw new Error(`El ${queEs} «${valor}» no es válido.`);
   return valor;
-}
-
-export function aSlug(texto) {
-  return String(texto || "")
-    .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 60)
-    .replace(/-+$/g, "");
 }

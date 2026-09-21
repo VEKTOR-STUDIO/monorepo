@@ -10,6 +10,7 @@ alessandrovaru-monorepo/
 │   ├── vanilla-template/            ← Shipfast base. Clone this for new client projects.
 │   ├── vanilla-template-supabase/   ← Variant with Supabase auth.
 │   ├── video/                       ← Remotion studio (@alessandrovaru/video). One project per client.
+│   ├── control/                     ← Local control centre: candidates board, template copy and the Claude routine. See its README.
 │   └── clients/                     ← Live client projects (one folder per client).
 ├── packages/
 │   ├── ui/                          ← Shared React components (@alessandrovaru/ui).
@@ -60,6 +61,20 @@ pnpm dev
 # Lint everything:
 pnpm lint
 ```
+
+## Control centre
+
+`apps/control/` is a local-only board that takes a business from "candidate" to
+"sales demo ready": pick a client folder to copy, attach the business's material,
+and moving the card to **Por hacer** launches a headless Claude session that adapts
+the copy with the `demo-de-venta` skill. It also lists the state of every client
+folder. It never commits, pushes or deploys.
+
+```bash
+pnpm --filter @alessandrovaru/control dev   # http://127.0.0.1:4000
+```
+
+See [`apps/control/README.md`](./apps/control/README.md).
 
 ## Video
 

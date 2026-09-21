@@ -1,0 +1,1118 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tema "topmiami".
+ *
+ * No se inventó una paleta: se leyó la de su logotipo, que es lo único gráfico
+ * que Top Miami Cars tiene publicado. Los colores están MEDIDOS sobre el
+ * archivo (public/marca/unnamed.webp), no sacados a ojo:
+ *
+ *   · el azul del filete, de "CARS" y de la línea del deportivo: #001478
+ *   · el acero del escudo: de #404848 a #e0e0e0, en bandas, con el blanco del
+ *     reflejo entre medias
+ *   · la sombra de las letras: un gris medio, dura, caída abajo a la derecha
+ *
+ * Cuatro decisiones que vienen de ahí y no de un gusto:
+ *
+ *   · FONDO BLANCO. El logo está hecho para blanco: "TOP MIAMI" es blanco con
+ *     filete azul y la línea del carro es azul marino. Sobre negro, medio
+ *     emblema desaparece. Una web oscura habría sido otra marca —y además la de
+ *     todos los demás concesionarios de Instagram—.
+ *   · EL AZUL SEÑALA. Es el precio, el botón y el titular. El resto es blanco,
+ *     gris frío y acero.
+ *   · EL ACERO ES EL TERCER COLOR, no un gris cualquiera: va en bandas, como
+ *     metal cepillado, en los filetes, los bordes de arriba de las tarjetas y
+ *     el escudo que cruza por detrás de las secciones.
+ *   · FILETE Y SOMBRA DURA. Sus letras llevan contorno y una sombra gris sin
+ *     difuminar. Aquí ese gesto es el de los titulares grandes, los botones y
+ *     las tarjetas al pasar por encima: nada de sombras blandas de plantilla.
+ *
+ * Para mover el azul de marca: --color-primary aquí y config.colors.main.
+ * ------------------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "topmiami";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(96.8% 0.004 255);
+  --color-base-300: oklch(92% 0.007 255);
+  /* La tinta no es negra: es el azul de la casa llevado casi a negro. */
+  --color-base-content: oklch(20% 0.07 268);
+
+  /* El azul del logotipo (#001478). */
+  --color-primary: oklch(28% 0.165 264);
+  --color-primary-content: oklch(100% 0 0);
+
+  /* El acero del escudo, que es el otro color de la marca. */
+  --color-secondary: oklch(54% 0.012 220);
+  --color-secondary-content: oklch(100% 0 0);
+
+  --color-accent: oklch(42.4% 0.198 266);
+  --color-accent-content: oklch(100% 0 0);
+
+  --color-neutral: oklch(20% 0.07 268);
+  --color-neutral-content: oklch(98% 0 0);
+
+  --color-info: oklch(52% 0.14 245);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(52% 0.13 155);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(68% 0.15 75);
+  --color-warning-content: oklch(18% 0.03 75);
+  --color-error: oklch(52% 0.21 27);
+  --color-error-content: oklch(100% 0 0);
+
+  /* Sus letras tienen las esquinas redondeadas pero el escudo no: un radio
+     medio, que ni es una pastilla ni es un catálogo cuadriculado. */
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  /* Russo One: ancha, pesada, de esquinas redondeadas y con la O casi
+     rectangular. Es la misma familia de formas que la letra de su logotipo, y
+     es libre. Solo existe en un peso, así que aquí nada la pone en negrita. */
+  --font-display: var(--font-russo), "Arial Black", system-ui, sans-serif;
+  /* Titillium Web para el texto corrido: tiene las curvas cuadradas de la
+     display sin ser una letra de rótulo, y se lee bien en pequeño. */
+  --font-sans: var(--font-titillium), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* -------------------------------------------------------------------------
+   * Un solo radio en toda la web.
+   *
+   * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
+   * mismo valor a propósito: así da igual cuál escriba cada componente, el
+   * resultado es siempre el mismo. `rounded-full` se queda fuera, que es lo
+   * que hace círculos y pastillas de verdad.
+   * ----------------------------------------------------------------------- */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.5rem;
+  --radius-3xl: 0.5rem;
+
+  --color-tinta: oklch(20% 0.07 268);
+  --color-azul: oklch(28% 0.165 264);
+  --color-azul-claro: oklch(42.4% 0.198 266);
+  --color-azul-hondo: oklch(21% 0.13 266);
+  --color-acero-hondo: oklch(38% 0.018 205);
+  --color-acero: oklch(58% 0.01 220);
+  --color-plata: oklch(86% 0.004 240);
+  /* La sombra de sus letras. */
+  --color-sombra: oklch(55% 0.008 240);
+
+  --animate-flecha: flecha 2.2s ease-in-out infinite;
+  --animate-cinta: cinta 42s linear infinite;
+
+  /* La flecha de "sigue bajando" del final de la portada. */
+  @keyframes flecha {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateY(0.4rem);
+      opacity: 1;
+    }
+  }
+
+  @keyframes cinta {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+  }
+
+  /* El latido del punto de "en directo" de la puerta. */
+  @keyframes pulso {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.82);
+    }
+  }
+
+  /* El reflejo que recorre el acero, como cuando giras una chapa a la luz. */
+  @keyframes reflejo {
+    from {
+      background-position: 0% 50%;
+    }
+    to {
+      background-position: 200% 50%;
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+
+  /* Alto de la franja de demo. Sin demo vale 0 y la cabecera vuelve arriba
+     del todo; con demo, la cabecera se pega justo debajo de la franja. */
+  --alto-barra-demo: 0px;
+
+  /* Alto del crédito de autoría del final (components/FooterFoot.js). */
+  --alto-credito: 1.9rem;
+
+  /* El acero cepillado del escudo: bandas de gris hondo, plata y blanco. Es la
+     misma receta en todos los sitios donde sale metal, así que vive aquí. */
+  --cromo: linear-gradient(
+    100deg,
+    #454d4f 0%,
+    #8d9395 9%,
+    #f3f4f4 19%,
+    #ffffff 23%,
+    #a9aeb0 33%,
+    #4b5355 46%,
+    #6f7678 54%,
+    #d5d8d9 66%,
+    #ffffff 72%,
+    #b9bdbf 81%,
+    #5a6264 92%,
+    #454d4f 100%
+  );
+
+  /* La sombra de sus letras: dura, gris, abajo a la derecha. */
+  --sombra-dura: 4px 5px 0 color-mix(in oklab, var(--color-sombra) 55%, transparent);
+
+  background-color: var(--color-base-100);
+}
+
+html[data-demo="true"] {
+  --alto-barra-demo: 2.5rem;
+}
+
+/* En demo, la tarjeta flotante de venta se posa abajo. En pantalla estrecha
+   ocupa todo el ancho y taparía el crédito, así que se le da aire. */
+html[data-demo="true"] .footer-foot {
+  padding-bottom: 9.5rem;
+}
+
+@media (min-width: 640px) {
+  html[data-demo="true"] .footer-foot {
+    padding-bottom: 0.25rem;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-base-100);
+}
+
+:target {
+  scroll-margin-top: calc(var(--alto-barra-demo) + 5rem);
+}
+
+::selection {
+  background-color: var(--color-azul);
+  color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+ * Tipografía
+ * ------------------------------------------------------------------------ */
+
+/* La letra del logotipo: ancha, pesada, recta y en mayúsculas. Es lo que hace
+   que un bloque de texto se lea como una pieza de Top Miami Cars y no como una
+   web de plantilla.
+
+   `font-weight: 400` y `font-synthesis: none` van juntos y a propósito: Russo
+   One solo existe en un peso, y si algún componente le pide `font-bold` el
+   navegador fabricaría una negrita falsa —engordando el contorno— que emborrona
+   justo las esquinas redondeadas que la hacen reconocible. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
+  letter-spacing: 0.005em;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+/* La misma letra en pequeño: menús, pestañas, nombres de modelo en una tabla.
+   Un pelo más abierta, que a 12 px las contraformas se cierran. */
+.display-recto {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-style: normal;
+  font-synthesis: none;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+ * El rótulo de la casa: filete y sombra dura
+ *
+ * En el logotipo hay DOS tratamientos de letra y son uno el negativo del otro:
+ *
+ *   · "TOP MIAMI": relleno blanco, filete azul, sombra gris.
+ *   · "CARS":      relleno azul, filete blanco, sombra gris.
+ *
+ * El filete se pinta con `-webkit-text-stroke` y `paint-order: stroke fill`,
+ * que dibuja el contorno POR DETRÁS del relleno: sin eso el trazo se come media
+ * letra hacia dentro y a tamaños medios se cierra el ojo de la A y de la R. Por
+ * eso el grosor es el doble del que se ve: la mitad de dentro queda tapada.
+ *
+ * La sombra es un `drop-shadow` sin desenfoque. `text-shadow` no vale: sombrea
+ * el relleno pero no el filete, y quedaba una sombra más flaca que la letra.
+ *
+ * Solo para titulares grandes. Por debajo de ~22 px el filete empasta.
+ * ------------------------------------------------------------------------ */
+.rotulo-marca,
+.rotulo-marca-inverso {
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.2em var(--color-azul);
+  stroke-linejoin: round;
+  filter: drop-shadow(0.045em 0.06em 0 color-mix(in oklab, var(--color-sombra) 70%, transparent));
+  /* El filete sale por fuera de la caja de la letra: sin este hueco, el
+     titular partido en líneas (SplitText recorta a ras) se lo comería. */
+  padding-inline: 0.1em;
+  margin-inline: -0.1em;
+}
+
+.rotulo-marca {
+  color: #fff;
+}
+
+.rotulo-marca-inverso {
+  color: var(--color-azul);
+  -webkit-text-stroke-color: #fff;
+}
+
+/* Etiquetas pequeñas de sección. */
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-base-content) 55%, transparent);
+}
+
+/* Cifras que se comparan entre sí: precios, kilómetros, años. */
+.cifra {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+ * Los titulares que entran línea a línea
+ *
+ * SplitText envuelve cada línea en una caja con `overflow: clip` para que el
+ * texto ASOME en vez de aparecer. El recorte es exactamente a ras de la caja
+ * de la línea, así que en español se comería las tildes de las mayúsculas
+ * —"ÚNICO", "CAMIÓN"— y, aquí además, el filete y la sombra del rótulo.
+ *
+ * Se le da hueco con padding y se recupera con un margen negativo igual, que
+ * en un elemento generado por GSAP no compite con ninguna utilidad de
+ * Tailwind.
+ * ------------------------------------------------------------------------ */
+.linea-titulo-mask {
+  padding-top: 0.26em;
+  margin-top: -0.26em;
+  padding-inline: 0.16em;
+  margin-inline: -0.16em;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
+}
+
+/* --------------------------------------------------------------------------
+ * Microgramma y los cintillos
+ *
+ * Esta página tiene DOS voces y conviene no confundirlas:
+ *
+ *   · Lo que ve el comprador —el inventario, cómo se compra, contacto— va con
+ *     la tipografía de la casa.
+ *   · Lo que le habla a TOP MIAMI CARS —cómo se publica, qué incluye, cuánto
+ *     cuesta— va en Microgramma, que es la tipografía de la firma de
+ *     Alessandrovaru, la misma del crédito del pie.
+ *
+ * Entre una voz y otra se cruza un cintillo animado, para que se vea de un
+ * golpe dónde termina el escaparate y dónde empieza la oferta.
+ * ------------------------------------------------------------------------ */
+
+.microgramma {
+  font-family: var(--microgramma-font), var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cintillo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-block: 0.7rem;
+  user-select: none;
+  /* Se difumina por los bordes: el texto nace y muere, no se corta en seco. */
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* La pista lleva el contenido DOS veces y se desplaza media pista: al llegar
+   al -50 % la segunda copia está exactamente donde empezó la primera, así que
+   el salto al reiniciar no se ve. */
+.cintillo-pista {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  animation: cinta 38s linear infinite;
+}
+
+.cintillo:hover .cintillo-pista {
+  animation-play-state: paused;
+}
+
+/* La voz de venta: el azul de la casa, que aquí sí llena. */
+.cintillo-venta {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-azul-hondo),
+    var(--color-azul) 45%,
+    var(--color-azul-claro)
+  );
+  color: #fff;
+}
+
+/* La vuelta al escaparate: acero claro, que no compita. */
+.cintillo-cliente {
+  background-color: var(--color-base-200);
+  color: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+  border-block: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+}
+
+.cintillo-texto {
+  font-size: 0.7rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+/* La separación entre una frase y la siguiente: el escudo en pequeño, no un
+   punto cualquiera. */
+.cintillo-punto {
+  display: inline-block;
+  width: 0.62rem;
+  height: 0.7rem;
+  font-size: 0;
+  background-color: currentColor;
+  opacity: 0.6;
+  clip-path: var(--escudo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cintillo-pista {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * La gráfica de la casa: acero, escudo y salón
+ *
+ * El logotipo son tres cosas —un escudo de acero cepillado, la línea de un
+ * deportivo en azul cruzándolo y el rótulo con filete—. La web se monta con
+ * esas mismas tres piezas: el escudo y la línea van dibujados en vector
+ * (components/MarcaTopMiami.js) y aquí está todo lo que es superficie.
+ * ------------------------------------------------------------------------ */
+
+html {
+  /* El contorno del escudo, para recortar piezas pequeñas: el separador de los
+     cintillos, el sello de la puerta, las viñetas. Arriba casi plano con un
+     arco mínimo, los lados rectos hasta pasada la mitad y el pico abajo. */
+  --escudo: polygon(0 6%, 50% 0, 100% 6%, 100% 56%, 50% 100%, 0 56%);
+}
+
+/* Acero cepillado, como relleno. */
+.cromo {
+  background-image: var(--cromo);
+  background-size: 200% 100%;
+}
+
+/* El mismo acero, vivo: el reflejo lo recorre despacio. Se reserva para UNA
+   pieza por pantalla; en todas, dejaría de parecer metal y parecería un
+   cargador. */
+.cromo-vivo {
+  animation: reflejo 9s linear infinite;
+}
+
+/* El filete de acero: la barra corta que va bajo un rótulo o cerrando un
+   bloque. Es el borde de arriba del escudo, en pequeño: grueso, biselado en
+   las puntas, y con el reflejo cruzándolo. */
+.filete {
+  display: block;
+  height: 0.4rem;
+  width: 4.5rem;
+  background-image: var(--cromo);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.4rem) 100%, 0.4rem 100%);
+}
+
+.filete-ancho {
+  width: 100%;
+  height: 0.3rem;
+}
+
+/* El filete en azul, para cuando el acero ya está al lado. */
+.filete-azul {
+  background-image: linear-gradient(to right, var(--color-azul), var(--color-azul-claro));
+}
+
+/* El bisel, para etiquetas: la caja va sesgada y el contenido se contra-sesga
+   para que el texto salga recto. */
+.bisel {
+  display: inline-block;
+  transform: skewX(-10deg);
+}
+
+.bisel > * {
+  display: inline-block;
+  transform: skewX(10deg);
+}
+
+/* La pastilla: el dato corto que acompaña a una unidad —año, kilometraje—. Va
+   en el azul de "CARS", con su filete blanco y su sombra dura. */
+.pastilla {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    100deg,
+    var(--color-azul-hondo),
+    var(--color-azul) 55%,
+    var(--color-azul-claro)
+  );
+  color: #fff;
+  font-weight: 700;
+  box-shadow:
+    0 0 0 2px #fff,
+    3px 4px 0 1px color-mix(in oklab, var(--color-sombra) 60%, transparent);
+}
+
+.pastilla-apagada {
+  background-image: none;
+  background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 75%, transparent);
+  box-shadow: none;
+}
+
+/* El corte, para fotos y bloques enteros: una esquina rebajada, el bisel del
+   escudo. */
+.corte {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.5rem), calc(100% - 1.5rem) 100%, 0 100%);
+}
+
+/* El salón donde se posan las unidades: blanco arriba, gris frío abajo, como
+   un plató de fotos con el suelo pulido. */
+.estudio {
+  background:
+    radial-gradient(ellipse 80% 55% at 50% 38%, #ffffff 0%, transparent 70%),
+    linear-gradient(to bottom, oklch(97% 0.004 255) 0%, oklch(93% 0.008 255) 62%, oklch(88% 0.01 255) 100%);
+}
+
+/* El piso pulido: una línea de horizonte fina y el reflejo que cae de ella. */
+.piso {
+  pointer-events: none;
+  background-image:
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-acero) 38%, transparent) 0, transparent 2px),
+    linear-gradient(to bottom, oklch(90% 0.009 255), oklch(95% 0.005 255) 70%, transparent);
+}
+
+/* La sombra elíptica bajo el vehículo. Sin esto las siluetas flotan. */
+.sombra-piso {
+  background: radial-gradient(
+    ellipse 50% 50% at 50% 50%,
+    color-mix(in oklab, var(--color-tinta) 45%, transparent),
+    transparent 70%
+  );
+  filter: blur(5px);
+}
+
+/* --------------------------------------------------------------------------
+ * Texturas
+ *
+ * Metros de blanco liso se ven vacíos en una pantalla grande. Estas capas le
+ * dan superficie sin llamar la atención, y van como CAPA —un div absoluto
+ * dentro de la sección— y no como pseudoelemento: con un z-index negativo
+ * acabarían por detrás del propio fondo y no se verían nunca.
+ *
+ *   <div className="textura absolute inset-0" aria-hidden="true" />
+ * ------------------------------------------------------------------------ */
+
+/* El cepillado del acero: rayas horizontales finísimas, como las que se ven en
+   el escudo al ampliarlo. Sobre blanco tiene que OSCURECER, y muy poco. */
+.textura {
+  pointer-events: none;
+  opacity: 0.55;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-tinta) 3.5%, transparent) 0 1px,
+    transparent 1px 3px
+  );
+  mask-image: linear-gradient(100deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(100deg, transparent 0%, #000 30%, #000 70%, transparent 100%);
+}
+
+/* El reflejo: dos bandas de luz en diagonal, las del escudo. Solo para las
+   secciones en azul: sobre gris claro no se leían como luz sino como una
+   mancha, así que ahí no se usa. */
+.textura-brillo {
+  pointer-events: none;
+  background-image: linear-gradient(
+    100deg,
+    transparent 0 20%,
+    rgb(255 255 255 / 0.07) 27%,
+    transparent 34% 60%,
+    rgb(255 255 255 / 0.05) 68%,
+    transparent 76%
+  );
+}
+
+/* --------------------------------------------------------------------------
+ * Secciones en azul
+ *
+ * El blanco manda, pero una página entera sin un solo cambio de fondo se lee
+ * plana. Las secciones que llevan esta clase pasan al azul de la casa, y lo
+ * hacen cambiando la VARIABLE de la tinta: así todas las utilidades que ya hay
+ * dentro —`text-base-content/60`, `border-base-content/10`— se recalculan
+ * solas en blanco, sin tocar un solo componente de los que lleva dentro.
+ *
+ * Ojo: el logotipo NO entra aquí. Su línea del carro es azul marino y sobre
+ * azul desaparece; en estas secciones la marca va escrita, no en imagen.
+ * ------------------------------------------------------------------------ */
+.sobre-azul {
+  --color-base-content: oklch(98% 0.005 255);
+  --color-base-100: oklch(24% 0.15 265);
+  --color-base-200: oklch(30% 0.16 264);
+  --color-base-300: oklch(36% 0.16 264);
+  --color-primary: oklch(100% 0 0);
+  --color-primary-content: var(--color-azul);
+  /* El botón principal se da la vuelta: blanco con la letra azul. */
+  --btn-fondo: #fff;
+  --btn-imagen: none;
+  --btn-tinta: var(--color-azul);
+  --btn-sombra: color-mix(in oklab, #000 40%, transparent);
+  color: var(--color-base-content);
+  background-color: var(--color-azul);
+  background-image:
+    radial-gradient(ellipse 90% 70% at 85% 0%, color-mix(in oklab, var(--color-azul-claro) 55%, transparent), transparent 70%),
+    linear-gradient(to bottom, var(--color-azul), var(--color-azul-hondo));
+}
+
+/* Una pieza blanca DENTRO de una sección azul —la tarjeta del precio, por
+   ejemplo—: deshace el cambio de variables y vuelve a ser la web de siempre.
+   `initial` en una variable hace que `var()` caiga a su valor de reserva, que
+   es justo el del tema claro. */
+.sobre-claro {
+  --color-base-content: var(--color-tinta);
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(96.8% 0.004 255);
+  --color-base-300: oklch(92% 0.007 255);
+  --color-primary: var(--color-azul);
+  --color-primary-content: oklch(100% 0 0);
+  --btn-fondo: initial;
+  --btn-imagen: initial;
+  --btn-tinta: initial;
+  --btn-sombra: initial;
+  color: var(--color-tinta);
+}
+
+/* -----------------------------------------------------------------------------
+ * La puerta, de una sola pantalla.
+ *
+ * Es lo primero —y muchas veces lo único— que ve quien recibe el enlace, así
+ * que aquí no se hace scroll: la carátula, la caja de acceso y las dos cintas
+ * caben en `100svh` y ahí se quedan. `svh` y no `vh` porque en el móvil `vh`
+ * mide como si la barra del navegador no existiera y dejaría el pie fuera.
+ *
+ * Para que eso aguante igual en un portátil de 720 px que en un monitor, el
+ * ritmo vertical no va en `rem` fijos: estas medidas se calculan en `vh`, así
+ * que la página se encoge con la pantalla en vez de desbordarla. El mínimo de
+ * cada `clamp()` es el suelo por debajo del cual dejaría de respirar.
+ * -------------------------------------------------------------------------- */
+.puerta {
+  --puerta-v1: clamp(0.3rem, 0.9vh, 0.75rem); /* una etiqueta y su dato */
+  --puerta-v2: clamp(0.5rem, 1.6vh, 1.25rem); /* piezas de un mismo bloque */
+  --puerta-v3: clamp(0.7rem, 2.4vh, 1.75rem); /* de un bloque al siguiente */
+  --puerta-v4: clamp(0.9rem, 3.2vh, 3.5rem); /* entre las dos columnas */
+
+  /* El alto del logotipo. Es apaisado (640×484), así que se pide por alto y el
+     ancho sale solo; encoge con la pantalla. */
+  --puerta-logo: clamp(4.75rem, 12.5vh, 10.5rem);
+}
+
+/* El crédito de autoría se monta en el layout raíz, así que también cae debajo
+   de la puerta. Ahí sobra: la puerta lleva su propia firma, y con el aire que
+   el modo demo le da al crédito son 171 px que rompen la pantalla única. */
+body:has(main.puerta) .footer-foot {
+  display: none;
+}
+
+/* El párrafo de presentación solo sale cuando hay sitio de sobra: en el móvil
+   la columna es estrecha y lo que se vende ya lo cuentan la insignia, la lista
+   y las cintas; en un portátil bajo es lo primero que estorba. El corte está
+   MEDIDO (ver references/trampas.md de la skill); si crece la lista de
+   `demo.incluye`, se vuelve a medir, no se adivina. */
+.puerta-presentacion {
+  display: none;
+}
+
+@media (width >= 64rem) and (height >= 61rem) {
+  .puerta-presentacion {
+    display: block;
+  }
+}
+
+/* Lo que trae la edición.
+ *
+ * Son ocho o nueve renglones que en un móvil no caben en vertical junto a la
+ * caja de acceso, así que ahí la lista se tumba: una fila que se arrastra de
+ * lado, con los puntos enganchados, y que se sale del margen para que se vea
+ * que hay más a la derecha. De `lg` en adelante vuelve a ser la lista de
+ * siempre, que es como se lee mejor. */
+.puerta-incluye {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  margin-inline: -1.25rem;
+  padding-inline: 1.25rem;
+  scrollbar-width: none;
+}
+
+.puerta-incluye::-webkit-scrollbar {
+  display: none;
+}
+
+.puerta-incluye > li {
+  /* 16rem y no 14: con 14 los renglones largos de `demo.incluye` partían en
+     cuatro líneas y la fila entera crecía 16 px, que en un móvil de 800 px de
+     alto son justo los que sacan el botón de la pantalla. */
+  flex: 0 0 16rem;
+  scroll-snap-align: start;
+}
+
+/* Por debajo de 45rem de alto —un Android de gama baja, un iPhone SE, un
+   portátil de 13 pulgadas con muchas barras— no cabe todo, y hay que elegir
+   qué se va. Primero los adornos; después la lista de lo que trae la edición,
+   que es lo único que se cuenta dos veces: las dos cintas llevan girando esas
+   mismas ventajas sin parar. Lo que no se toca es el logotipo, el precio y el
+   formulario, que es a lo que se viene. */
+@media (height < 45rem) {
+  .puerta-cortesia,
+  .puerta-incluido {
+    display: none;
+  }
+}
+
+@media (width >= 64rem) {
+  /* En escritorio el logotipo tiene columna propia y puede crecer. */
+  .puerta {
+    --puerta-logo: clamp(5.25rem, 17vh, 10.5rem);
+  }
+
+  .puerta-incluye {
+    display: grid;
+    gap: var(--puerta-v1);
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .puerta-incluye > li {
+    flex: initial;
+  }
+}
+
+/* Rejilla técnica muy tenue, para los fondos que piden textura sin gráfica:
+   el 404, la pantalla de error y el fondo de la puerta. Se desvanece hacia los
+   bordes con una máscara para que no se vea dónde termina. */
+.malla {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-azul) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-azul) 7%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+}
+
+.malla-centro {
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+}
+
+/* --------------------------------------------------------------------------
+ * Portada de edición  (solo la puerta de la demo)
+ *
+ * La puerta no es una pantalla de login: es el escaparate donde se vende el
+ * sistema. De ahí el lenguaje de carátula de edición especial —insignia,
+ * lista de lo que trae, sello de rebaja, cuenta atrás—, que todo el mundo
+ * sabe leer de un vistazo y que aquí además es verdad: hay un precio, hay una
+ * fecha y hay una lista de lo que se lleva quien compre.
+ *
+ * Nada de esto entra en el escaparate del cliente: ahí vende él, no nosotros.
+ * ------------------------------------------------------------------------ */
+
+.insignia-edicion {
+  display: inline-block;
+  transform: skewX(-10deg);
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--color-azul) 28%, transparent);
+  background-color: #fff;
+  box-shadow: 3px 4px 0 color-mix(in oklab, var(--color-sombra) 45%, transparent);
+}
+
+.insignia-edicion > * {
+  display: inline-block;
+  transform: skewX(10deg);
+}
+
+/* El sello de rebaja. Tiene la forma del escudo, va en el azul de "CARS" con
+   su filete blanco, y girado como el adhesivo de una caja. */
+.sello-descuento {
+  transform: rotate(-8deg);
+  color: #fff;
+  /* El filete blanco va con cuatro sombras de un píxel y medio, una por lado:
+     un `outline` o un `box-shadow` seguirían la caja, no el recorte del escudo.
+     La quinta es la sombra dura de las letras. */
+  filter: drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff)
+    drop-shadow(0 -1.5px 0 #fff)
+    drop-shadow(3px 4px 0 color-mix(in oklab, var(--color-sombra) 70%, transparent));
+}
+
+.sello-descuento > .sello-fondo {
+  position: absolute;
+  inset: 0;
+  clip-path: var(--escudo);
+  background-image: linear-gradient(160deg, var(--color-azul-claro), var(--color-azul) 55%, var(--color-azul-hondo));
+}
+
+/* Cada cosa que trae la edición, como una línea de contenido descargable. */
+.linea-dlc {
+  border-radius: var(--radius-box);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  background-color: color-mix(in oklab, #fff 82%, transparent);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linea-dlc:hover {
+  transform: translateX(4px);
+  border-color: color-mix(in oklab, var(--color-azul) 55%, transparent);
+  background-color: #fff;
+}
+
+/* La caja que tiene que mirarse primero: borde de acero arriba y la sombra
+   dura de las letras. */
+.resplandor {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-azul) 16%, transparent),
+    6px 8px 0 color-mix(in oklab, var(--color-sombra) 38%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Tarjetas
+ *
+ * Blancas, con una línea finísima y el borde de arriba en acero, que es el
+ * borde de arriba del escudo. Al pasar por encima se levantan y dejan debajo
+ * la sombra dura de sus letras: nada de sombras blandas.
+ * ------------------------------------------------------------------------ */
+
+.ficha {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-100);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  transition:
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+/* El borde de acero de arriba. */
+.ficha::before {
+  content: "";
+  position: absolute;
+  inset-inline: -1px;
+  top: -1px;
+  height: 4px;
+  z-index: 1;
+  border-top-left-radius: var(--radius-box);
+  border-top-right-radius: var(--radius-box);
+  background-image: var(--cromo);
+  pointer-events: none;
+}
+
+a.ficha:hover,
+.ficha.group:hover {
+  transform: translate(-2px, -3px);
+  border-color: color-mix(in oklab, var(--color-azul) 55%, transparent);
+  box-shadow: var(--sombra-dura);
+}
+
+/* Panel sin interacción: avisos, bloques de datos. */
+.panel {
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 9%, transparent);
+}
+
+/* La cabecera cuando ya se ha bajado un poco. La clase la pone y la quita
+   GSAP desde components/Header.js, en vez de un estado de React: así el fondo
+   cambia en el mismo fotograma que el scroll y no en el siguiente render. */
+header.con-fondo {
+  background-color: color-mix(in oklab, var(--color-base-100) 86%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+/* Barra translúcida de la cabecera. */
+.barra-vidrio {
+  background-color: color-mix(in oklab, var(--color-base-100) 92%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* --------------------------------------------------------------------------
+ * Hoja de especificaciones
+ * ------------------------------------------------------------------------ */
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border-radius: var(--radius-box);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .specs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.specs > * {
+  background-color: var(--color-base-100);
+  padding: 1rem 1.15rem;
+}
+
+/* --------------------------------------------------------------------------
+ * Botones
+ *
+ * Son los dos tratamientos de letra del logotipo, hechos botón:
+ *
+ *   · el principal es "CARS": relleno azul, letra blanca;
+ *   · el secundario es "TOP MIAMI": relleno blanco, filete azul.
+ *
+ * Y los dos con la sombra gris dura de las letras, que al pulsar se aplasta:
+ * el botón baja justo lo que medía la sombra, como una tecla.
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-synthesis: none;
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none;
+  transition:
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* El fondo, la tinta y la sombra van por variable para que una sección azul
+   (`.sobre-azul`) pueda darle la vuelta al botón sin una regla más específica:
+   una tarjeta blanca metida DENTRO de una sección azul (`.sobre-claro`) tiene
+   que recuperar el botón azul, y con selectores encadenados eso acaba siendo
+   una guerra de especificidad. */
+.btn-primary {
+  background-color: var(--btn-fondo, var(--color-azul));
+  background-image: var(
+    --btn-imagen,
+    linear-gradient(to bottom, var(--color-azul-claro) -60%, var(--color-azul) 70%)
+  );
+  color: var(--btn-tinta, #fff);
+  box-shadow: 3px 4px 0 var(--btn-sombra, color-mix(in oklab, var(--color-sombra) 60%, transparent));
+}
+
+.btn-primary:hover {
+  background-color: var(--btn-fondo, var(--color-azul));
+  background-image: var(
+    --btn-imagen,
+    linear-gradient(to bottom, var(--color-azul-claro) -10%, var(--color-azul) 100%)
+  );
+  color: var(--btn-tinta, #fff);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 5px 0 var(--btn-sombra, color-mix(in oklab, var(--color-sombra) 60%, transparent));
+}
+
+.btn-primary:active,
+.btn-filo:active {
+  transform: translate(3px, 4px);
+  box-shadow: 0 0 0 transparent;
+}
+
+/* El secundario: blanco con filete azul, como "TOP MIAMI". */
+.btn-filo {
+  background-color: #fff;
+  color: var(--color-azul);
+  box-shadow:
+    inset 0 0 0 2px var(--color-azul),
+    3px 4px 0 color-mix(in oklab, var(--color-sombra) 45%, transparent);
+}
+
+.btn-filo:hover {
+  background-color: color-mix(in oklab, var(--color-azul) 6%, #fff);
+  transform: translate(-1px, -1px);
+  box-shadow:
+    inset 0 0 0 2px var(--color-azul),
+    4px 5px 0 color-mix(in oklab, var(--color-sombra) 45%, transparent);
+}
+
+.btn:disabled,
+.btn[disabled] {
+  box-shadow: none;
+  transform: none;
+}
+
+/* El botón que va encima de una foto. */
+.btn-sobre-foto {
+  background-color: color-mix(in oklab, #fff 82%, transparent);
+  color: var(--color-azul);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-sobre-foto:hover {
+  background-color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+ * Formularios
+ * ------------------------------------------------------------------------ */
+
+.entrada {
+  width: 100%;
+  border-radius: var(--radius-field);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 22%, transparent);
+  background-color: #fff;
+  padding: 0.75rem 1.1rem;
+  font-size: 0.9375rem;
+  color: var(--color-tinta);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.entrada::placeholder {
+  color: color-mix(in oklab, var(--color-tinta) 38%, transparent);
+}
+
+.entrada:focus {
+  border-color: var(--color-azul);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-azul) 18%, transparent);
+}
+
+.entrada option {
+  background-color: #fff;
+  color: var(--color-tinta);
+}
+
+/* --------------------------------------------------------------------------
+ * Entrada en escena por scroll (ver components/Revelar.js)
+ * ------------------------------------------------------------------------ */
+
+/* Lo que va a entrar animado se oculta ya en el HTML, para que no dé un salto
+   entre que el servidor lo pinta y GSAP toma el control. Quien no tenga
+   JavaScript lo recupera con el <noscript> del layout. */
+[data-anima] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anima] {
+    opacity: 1;
+  }
+}
+
+/* La barra de progreso de lectura, arriba del todo. */
+.progreso {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* Barra de scroll discreta. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-200);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-plata);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-azul);
+}
+
+/* Quien pide menos movimiento, no lo tiene. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

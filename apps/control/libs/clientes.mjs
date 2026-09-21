@@ -48,6 +48,15 @@ export function claveDemo(carpeta) {
   return leerEnv(carpeta)?.DEMO_PASSWORD || "";
 }
 
+export function nombrePaquete(carpeta) {
+  exigirSlug(carpeta, "nombre de carpeta");
+  try {
+    return JSON.parse(fs.readFileSync(path.join(carpetaClientes(), carpeta, "package.json"), "utf8")).name || carpeta;
+  } catch {
+    return carpeta;
+  }
+}
+
 export function leerPendientes(carpeta) {
   exigirSlug(carpeta, "nombre de carpeta");
   try {
@@ -75,7 +84,9 @@ export async function listarClientes() {
       let paquete = {};
       try {
         paquete = JSON.parse(fs.readFileSync(path.join(absoluta, "package.json"), "utf8"));
-      } catch {}
+      } catch {
+        // Carpeta sin package.json (o roto): sale en la lista con su nombre a secas.
+      }
       const env = leerEnv(carpeta);
       const [commit, cambios] = await Promise.all([ultimoCommit(ruta), cambiosSinSubir(ruta)]);
       return {

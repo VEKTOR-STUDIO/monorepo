@@ -30,7 +30,9 @@ export function rechazoSiNoEsLocal(request) {
     let mismo = false;
     try {
       mismo = new URL(origen).host === host;
-    } catch {}
+    } catch {
+      // Un Origin que ni siquiera es una URL se queda en «no es el mismo».
+    }
     if (!mismo) return NextResponse.json({ error: "Origen no permitido." }, { status: 403 });
   } else if (request.method !== "GET") {
     return NextResponse.json({ error: "Falta el origen de la petición." }, { status: 403 });

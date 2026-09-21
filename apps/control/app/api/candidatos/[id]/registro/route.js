@@ -38,7 +38,9 @@ export async function GET(request, { params }) {
       fs.closeSync(fd);
       texto = trozo.toString("utf8");
     }
-  } catch {}
+  } catch {
+    // Sin registro todavía: la rutina de este candidato nunca se ha lanzado.
+  }
 
   return NextResponse.json({
     texto,

@@ -126,7 +126,9 @@ for (const senal of ["SIGTERM", "SIGINT"]) {
     apunta("■ Detenida desde el tablero.");
     try {
       hijoActual?.kill("SIGTERM");
-    } catch {}
+    } catch {
+      // Ya había terminado por su cuenta.
+    }
   });
 }
 
@@ -295,13 +297,17 @@ try {
       },
       `La rutina falló: ${corta(error.message, 160)}`
     );
-  } catch {}
+  } catch {
+    // La tarjeta se borró a mitad de rutina: no queda dónde apuntarlo.
+  }
 } finally {
   // Por si Claude dejó levantado el servidor con el que probó el cliente.
   spawnSync("fuser", ["-k", `${puertoDePrueba(id)}/tcp`], { stdio: "ignore" });
   quitarCerrojo(id);
   try {
     despachar();
-  } catch {}
+  } catch {
+    // Si la siguiente no arranca, se queda en la cola y sale al próximo gesto.
+  }
 }
 process.exit(salida);

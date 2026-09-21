@@ -15,7 +15,7 @@ export default function Cabecera() {
       <div className="flex h-14 items-center gap-6 px-4 sm:px-6">
         <Link href="/" className="flex items-baseline gap-2.5">
           <span className="rotulo text-sm text-base-content">Alessandrovaru</span>
-          <span className="rotulo hidden text-[0.6rem] text-base-content/45 sm:inline">Control</span>
+          <span className="rotulo hidden text-[0.6rem] text-base-content/55 sm:inline">Control</span>
         </Link>
 
         <Navegacion />
@@ -31,7 +31,7 @@ export default function Cabecera() {
               {enCola > 0 && <span className="font-mono text-accent/70">+{enCola}</span>}
             </Link>
           ) : (
-            <span className="flex items-center gap-2 px-1 text-base-content/45">
+            <span className="flex items-center gap-2 px-1 text-base-content/55">
               <span className="size-1.5 rounded-full bg-base-content/30" />
               Rutina libre
             </span>

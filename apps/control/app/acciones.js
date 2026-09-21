@@ -77,6 +77,21 @@ export async function copiarPlantillaAccion(id, origen, carpeta) {
   }, [`/candidatos/${id}`, "/clientes"]);
 }
 
+// Para cuando la carpeta se borró o se renombró a mano: la tarjeta vuelve a
+// «Candidatos» y se le puede copiar otra plantilla.
+export async function desvincularCarpetaAccion(id) {
+  return intentar(() => {
+    const candidato = leerCandidato(id);
+    if (!candidato) throw new Error("Ese candidato ya no existe.");
+    if (candidato.rutina.estado === "corriendo") throw new Error("La rutina está corriendo.");
+    actualizarCandidato(
+      id,
+      { carpeta: null, plantilla: null, copiada: null, etapa: "candidato", rutina: { estado: "inactiva", encolada: null } },
+      `Desvinculada de apps/clients/${candidato.carpeta}.`
+    );
+  }, [`/candidatos/${id}`]);
+}
+
 export async function moverCandidatoAccion(id, etapa) {
   return intentar(() => {
     const destino = ETAPAS.find((e) => e.id === etapa);
