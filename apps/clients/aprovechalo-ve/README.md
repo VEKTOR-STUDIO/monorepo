@@ -47,7 +47,7 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
    internacional sin `+`, p. ej. `58412XXXXXXX`). Mientras esté vacío, todos
    los botones de contacto caen al DM de Instagram.
 4. **Poner `demo.urlCompra`** si hay enlace de pago. El precio ya está en
-   `config.js`: `demo.precio` es **$399** y `demo.precioAnterior` el **$690**
+   `config.js`: `demo.precio` es **$449** y `demo.precioAnterior` el **$740**
    que sale tachado al lado. Vaciando `precioAnterior` desaparece la rebaja.
 
 ---

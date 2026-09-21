@@ -30,7 +30,7 @@ import config from "@/config";
  * esta pantalla con las herramientas del navegador no lleva a ningún sitio.
  */
 
-/** "$990" y "$690" → 30. Null si no hay rebaja que anunciar. */
+/** "$740" y "$449" → 39. Null si no hay rebaja que anunciar. */
 function calcularDescuento(antes, ahora) {
   const limpiar = (v) => Number(String(v ?? "").replace(/[^\d.]/g, ""));
   const a = limpiar(antes);

@@ -25,9 +25,6 @@
 //   · Los vehículos de data/vehiculos.json son de MUESTRA mientras Instagram
 //     no deje leer el perfil. Van marcados y la página lo dice en voz alta.
 //     Ver README, sección «Cargar el inventario real».
-//   · `demo.precio` — puesto por encima del de los otros clientes porque este
-//     negocio es más grande (dos sedes, 222 mil seguidores). Confírmalo antes
-//     de repartir el enlace.
 // -----------------------------------------------------------------------------
 
 const config = {
@@ -209,11 +206,11 @@ const config = {
     // componentes del navegador y acabaría en el bundle, a la vista de
     // cualquiera. Vive en libs/acceso.js, que solo corre en el servidor.
 
-    // PENDIENTE: confirmar el precio y poner el enlace de compra.
-    precio: "$690",
+    // PENDIENTE: poner el enlace de compra.
+    precio: "$449",
     // El precio de antes, que sale tachado al lado del de ahora. Vacío = no
     // se enseña ninguna rebaja.
-    precioAnterior: "$980",
+    precioAnterior: "$740",
     precioNota: "Pago único · dominio, montaje y carga del inventario incluidos",
 
     // Hasta cuándo vale el precio rebajado. Es una FECHA REAL, no una cuenta

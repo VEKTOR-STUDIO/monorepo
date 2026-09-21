@@ -106,11 +106,11 @@ const config = {
     // componentes del navegador y acabaría en el bundle, a la vista de
     // cualquiera. Vive en libs/acceso.js, que solo corre en el servidor.
 
-    // PENDIENTE: poner el precio real y el enlace de compra antes de enseñarla.
-    precio: "$490",
-    // El precio de antes, que saldría tachado al lado del de ahora. Se deja
-    // vacío a propósito: no hay rebaja inventada hasta que decidas cuál es.
-    precioAnterior: "",
+    // PENDIENTE: poner el enlace de compra antes de enseñarla.
+    precio: "$449",
+    // El precio de antes, que sale tachado al lado del de ahora. Vacío = no
+    // se enseña ninguna rebaja.
+    precioAnterior: "$740",
     precioNota: "Pago único · instalación y catálogo cargado incluidos",
 
     // Hasta cuándo vale el precio. Es una FECHA REAL, no una cuenta atrás que

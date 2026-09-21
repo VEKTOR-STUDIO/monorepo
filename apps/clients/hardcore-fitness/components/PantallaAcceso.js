@@ -29,7 +29,7 @@ import config from "@/config";
  * Sin la cookie correcta el servidor no sirve ni una página de la tienda.
  */
 
-/** "$690" y "$399" → 42. Null si no hay rebaja que anunciar. */
+/** "$740" y "$449" → 39. Null si no hay rebaja que anunciar. */
 function calcularDescuento(antes, ahora) {
   const limpiar = (v) => Number(String(v ?? "").replace(/[^\d.]/g, ""));
   const a = limpiar(antes);

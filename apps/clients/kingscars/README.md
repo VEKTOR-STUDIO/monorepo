@@ -327,7 +327,7 @@ Y la lista corta:
 - [ ] Confirmar si tienen correo (no publican ninguno)
 - [ ] `domainName` / `SITE_URL` con el dominio de verdad
 - [ ] `DEMO_PASSWORD` propia antes de repartir el enlace
-- [ ] `demo.precio` / `demo.precioAnterior` confirmados (hoy $690 / $990)
+- [ ] `demo.urlCompra` con el enlace de pago (el precio ya está fijado en $449 / $740)
 - [ ] `demo.urlCompra` (hoy vacío → los botones llevan a `/contacto`)
 - [ ] `demo.ofertaHasta` con una fecha que todavía no haya pasado
 - [ ] Enganchar `app/api/contacto/route.js` y `app/api/vender/route.js` al canal

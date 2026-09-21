@@ -61,24 +61,13 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
         ))}
       </div>
 
-      {/* La condición, en segundo plano. */}
-      <div className="flex flex-wrap gap-2">
-        <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")}>
-          Nuevas y usadas
-        </BotonFiltro>
-        {facetas.condiciones.map((c) => (
-          <BotonFiltro
-            key={c.slug}
-            activo={condicion === c.slug}
-            onClick={() => cambiar("condicion", c.slug)}
-          >
-            {c.nombre}
-            <span className="cifra ml-1.5 opacity-55">{c.total}</span>
-          </BotonFiltro>
-        ))}
-      </div>
+      {/* La carrocería, en segundo plano.
 
-      {/* La carrocería, ya en tercer plano. */}
+          Antes de esta fila había OTRA de condición, más pequeña, que era la
+          que había en la plantilla cuando el corte principal era otra cosa. Al
+          subir la condición a primera fila quedaron las dos, con los mismos
+          botones y los mismos números, una encima de la otra. Se vio en una
+          captura, no en el código. */}
       <div className="flex flex-wrap gap-2">
         <BotonFiltro activo={tipo === ""} onClick={() => cambiar("tipo", "")}>
           Cualquier carrocería

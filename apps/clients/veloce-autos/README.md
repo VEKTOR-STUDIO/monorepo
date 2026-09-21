@@ -59,7 +59,7 @@ con `npm run generate-favicon`.
 | Contador de oferta limitada | ✅ con fecha real, **revísala antes de enseñarla** |
 | **Inventario real** | ⏳ **pendiente — hoy son 16 unidades de ejemplo** |
 | **Fotos** | ⏳ pendiente — ninguna ficha tiene foto; se dibuja la silueta |
-| **Precio de la demo** | ⏳ `$690` puesto por tamaño del negocio; confírmalo |
+| Precio de la demo | ✅ `$449` (antes `$740`), el mismo de todo el monorepo |
 | **Dominio** | ⏳ pendiente — hoy `veloceautos.com` es de trabajo |
 | **Panel de administración** | ⏳ no existe; la portada lo anuncia como parte de lo que se vende |
 
@@ -300,7 +300,6 @@ Y la lista corta:
 
 - [ ] Cargar el inventario real desde su Instagram y quitar `"muestra": true`
 - [ ] Bajar sus fotos a `public/vehiculos/`
-- [ ] Confirmar `demo.precio` (hoy `$690`, puesto por tamaño del negocio)
 - [ ] `domainName` / `SITE_URL` con el dominio de verdad
 - [ ] `DEMO_PASSWORD` propia antes de repartir el enlace
 - [ ] `demo.urlCompra` (hoy vacío → los botones llevan a `/contacto`)

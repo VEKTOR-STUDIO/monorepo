@@ -190,7 +190,8 @@ Todo lo demás —precio, enlace de compra, cuántos productos se ven— está e
 
 ```js
 demo: {
-  precio: "$490",
+  precio: "$449",
+  precioAnterior: "$740",   // ← sale tachado al lado del de ahora
   precioNota: "Pago único · instalación y catálogo cargado incluidos",
   urlCompra: "",          // ← PENDIENTE: poner el enlace de compra
   productosVisibles: 12,
@@ -238,7 +239,7 @@ Con `NEXT_PUBLIC_DEMO=false` la puerta desaparece entera.
 | Sitio | Qué pasa |
 |---|---|
 | Antes de todo | Pantalla con el logo animado pidiendo contraseña |
-| Franja superior | "Demo · el sistema está a la venta · $490" + botón, en todas las páginas |
+| Franja superior | "Demo · el sistema está a la venta · $449" + botón, en todas las páginas |
 | `/tienda` | 12 productos nítidos, el resto difuminado detrás de la oferta |
 | Al bajar media página | Asoma una tarjeta con el precio. Si la cierras, no vuelve en la sesión |
 | Final de portada, ficha, tienda y contacto | Bloque de venta con qué incluye y el precio |

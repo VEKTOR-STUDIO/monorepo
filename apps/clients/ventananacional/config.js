@@ -162,13 +162,12 @@ const config = {
     // componentes del navegador y acabaría en el bundle, a la vista de
     // cualquiera. Vive en libs/acceso.js, que solo corre en el servidor.
 
-    // El precio va por encima del de otros clientes del monorepo a propósito:
-    // aquí son dos sedes, catálogo grande y cuatro operaciones distintas.
-    // Si se decide otro número, se cambia aquí y cambia en toda la página.
-    precio: "$690",
+    // El precio es el mismo en todo el monorepo. Si se decide otro número, se
+    // cambia aquí y cambia en toda la página.
+    precio: "$449",
     // El precio de antes, que sale tachado al lado del de ahora. Vacío = no se
     // enseña ninguna rebaja.
-    precioAnterior: "$990",
+    precioAnterior: "$740",
     precioNota: "Pago único · dominio, montaje y carga del catálogo incluidos",
 
     // Hasta cuándo vale el precio rebajado. Es una FECHA REAL, no una cuenta

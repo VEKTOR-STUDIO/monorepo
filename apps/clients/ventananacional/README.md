@@ -46,11 +46,10 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
 
 1. **Cambiar la contraseña.** Está en `libs/acceso.js` como valor de reserva
    (`ventanacional2026`). Se pisa con `DEMO_PASSWORD` en el entorno.
-2. **Revisar el precio.** `config.demo.precio` es **$690** y
-   `precioAnterior` el **$990** que sale tachado al lado. Está por encima del
-   de otros clientes del monorepo a propósito —dos salas, catálogo grande,
-   cuatro operaciones—, pero es una decisión, no un dato: se cambia en una
-   línea y cambia en toda la página.
+2. **Revisar el precio.** `config.demo.precio` es **$449** y
+   `precioAnterior` el **$740** que sale tachado al lado, el mismo par que el
+   resto del monorepo. Es una decisión, no un dato: se cambia en una línea y
+   cambia en toda la página.
 3. **Mover `demo.ofertaHasta`** a una fecha que tenga sentido para la
    conversación que vas a tener.
 4. **Cargar los vehículos reales.** Ver la sección siguiente.

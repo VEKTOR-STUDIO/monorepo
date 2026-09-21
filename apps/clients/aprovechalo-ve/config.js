@@ -106,10 +106,10 @@ const config = {
     // cualquiera. Vive en libs/acceso.js, que solo corre en el servidor.
 
     // PENDIENTE: poner el enlace de compra.
-    precio: "$399",
+    precio: "$449",
     // El precio de antes, que sale tachado al lado del de ahora. Vacío = no
     // se enseña ninguna rebaja.
-    precioAnterior: "$690",
+    precioAnterior: "$740",
     precioNota: "Pago único · dominio, montaje y carga del catálogo incluidos",
 
     // Hasta cuándo vale el precio rebajado. Es una FECHA REAL, no una cuenta

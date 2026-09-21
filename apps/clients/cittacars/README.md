@@ -58,7 +58,7 @@ daisyUI 5. Sin base de datos: el inventario es un JSON.
    local que no sabemos dónde está. En cuanto el cliente lo diga, se cambia en
    `config.js` y en `data/vehiculos.json`.
 6. **Poner `demo.urlCompra`** si hay enlace de pago. El precio ya está en
-   `config.js`: `demo.precio` es **$399** y `demo.precioAnterior` el **$690**
+   `config.js`: `demo.precio` es **$449** y `demo.precioAnterior` el **$740**
    que sale tachado al lado. Vaciando `precioAnterior` desaparece la rebaja.
 
 ---
