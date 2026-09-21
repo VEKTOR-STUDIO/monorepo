@@ -1,5 +1,5 @@
 {
-  "name": "hb-inversiones",
+  "name": "veloce-autos",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -35,5 +35,5 @@
     "react": "$react",
     "react-dom": "$react-dom"
   },
-  "description": "Página de venta de vehículos de HB Inversiones C.A. (@hb_inversiones_12, Barquisimeto): catálogo 0 km y usados, ficha por vehículo y contacto por WhatsApp."
+  "description": "Página de Veloce Autos (@veloce.autos, Caracas): importación directa desde Dubái, Europa, China y USA, inventario con ficha por unidad, dos sedes y contacto por WhatsApp."
 }

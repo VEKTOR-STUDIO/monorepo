@@ -1,0 +1,3 @@
+# Las lecturas crudas son material de trabajo, no fuente de verdad: la fuente
+# de verdad es el data/*.json del cliente. Además caducan solas.
+salida/*.json

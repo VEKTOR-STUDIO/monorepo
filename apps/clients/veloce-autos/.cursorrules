@@ -1,15 +1,17 @@
-# HB Inversiones — reglas del proyecto
+# Veloce Autos — reglas del proyecto
 
-Catálogo web de HB Inversiones C.A. (@hb_inversiones_12), concesionario de
-Barquisimeto que importa 0 km y vende usados. Léete el README antes de tocar
-nada: explica de dónde sale cada decisión de diseño.
+Inventario web de Veloce Autos (@veloce.autos), importadora de Caracas que trae
+vehículos de Dubái, Europa, China y USA, con showroom en La Florida y segunda
+sede en Chacao. Léete el README antes de tocar nada: explica de dónde sale cada
+decisión de diseño.
 
 ## Pila
 - Next.js 15 (App Router) + React 19, Turbopack en dev
 - Tailwind CSS 4 (configurado en CSS, sin tailwind.config) + daisyUI 5
 - GSAP 3 (ScrollTrigger y SplitText)
-- **Sin base de datos.** El catálogo es `data/vehiculos.json`. No hay Supabase,
-  no hay Stripe, no hay cuentas de usuario. Si algo pide una, está mal.
+- **Sin base de datos.** El inventario es `data/vehiculos.json`. No hay
+  Supabase, no hay Stripe, no hay cuentas de usuario. Si algo pide una, está
+  mal.
 
 ## Cómo se escribe aquí
 - **Todo en español**: nombres de componentes, funciones, variables, props y
@@ -26,10 +28,20 @@ nada: explica de dónde sale cada decisión de diseño.
   componentes de cliente y acabaría en el bundle. Va en `libs/acceso.js`.
 - **GSAP: `fromTo`, nunca `from`** para lo que entra en escena. El CSS deja
   `[data-anima]` en `opacity: 0` y `from` animaría de 0 a 0.
-- **Las fotos son páginas del catálogo del cliente**: se enseñan enteras y no
-  se les superpone nada.
-- El ángulo de la marca es `--angulo-hb` (−18°). Se usa esa variable, no un
+- **Esta marca no tiene color.** El `--color-primary` es el blanco. Si hace
+  falta destacar algo, se destaca con contraste, no metiendo un acento nuevo.
+  El único color permitido es el del estado de una unidad (disponible,
+  reservado, vendido), donde el color es información.
+- **El logotipo es un trazado exacto**, no un dibujo a ojo
+  (`components/MarcaVeloce.js`). Si hay que rehacerlo, se vuelve a trazar del
+  original de `docs/fuentes/`, no se retoca a mano.
+- **Microgramma solo dentro de las zonas marcadas por `Cintillo`.** Se parece
+  al rótulo de Veloce y fuera de ahí las dos voces de la página se confunden.
+- El ángulo de la marca es `--angulo-veloce` (−21°). Se usa esa variable, no un
   número suelto.
+- **Las unidades llevan `"muestra": true` mientras no sean suyas.** Quitar ese
+  campo sin tener el inventario real es enseñar como de Veloce un carro que
+  Veloce no tiene.
 
 ## Comprobar antes de dar algo por hecho
 ```bash

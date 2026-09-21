@@ -1,22 +1,20 @@
 import Image from "next/image";
-import Silueta from "@/components/Silueta";
+import PlantillaPublicacion from "@/components/PlantillaPublicacion";
 
 /**
- * El cuadro donde va el vehículo.
+ * El cuadro donde va la unidad.
  *
- * Las fotos de esta página son las trece páginas del catálogo de HB tal cual:
- * el vehículo recortado sobre el corte diagonal de la marca, con el modelo
- * arriba, las viñetas abajo a la derecha y la dirección del local abajo a la
- * izquierda. Vienen en 4:5 y se enseñan ENTERAS, sin recortar: la gráfica es
- * del cliente y recortarla sería tirar a la basura lo mejor que tiene.
+ * Cuando hay foto, se enseña entera y sin recortar (`contain` por defecto): las
+ * fotos de DealerNauta son publicaciones cuadradas maquetadas con su gráfica
+ * —el modelo arriba, la pastilla del año abajo— y recortarlas sería tirar a la
+ * basura lo mejor que tienen. El hueco que queda alrededor lo tapa el fondo de
+ * estudio, que es negro como el de la ficha, así que no se nota que haya hueco.
  *
- * De ahí que el `object-fit` por defecto sea `contain` y no `cover`. El hueco
- * que queda alrededor lo tapa el fondo de estudio, que es negro como el de la
- * ficha, así que no se nota que haya hueco.
- *
- * Sin foto —que es lo que pasaría con un vehículo cargado desde el panel y
- * todavía sin fotografiar— dibuja la silueta del tipo, que mantiene la página
- * presentable en vez de dejar un rectángulo vacío.
+ * Cuando NO hay foto —que hoy es siempre, porque Instagram no deja descargar
+ * las suyas— se dibuja la plantilla de sus propias publicaciones: cielo
+ * naranja, la ciudad, el asfalto y la silueta del tipo de unidad encima. Así el
+ * hueco de la foto enseña exactamente dónde va a ir su foto, y con su gráfica,
+ * en vez de dejar un rectángulo negro.
  */
 export default function FotoVehiculo({
   vehiculo,
@@ -24,6 +22,7 @@ export default function FotoVehiculo({
   prioridad = false,
   encajar = "contain",
   sizes = "(max-width: 768px) 100vw, 50vw",
+  compacta = false,
 }) {
   const foto = vehiculo.fotos?.[0] || null;
 
@@ -39,25 +38,30 @@ export default function FotoVehiculo({
           className={encajar === "cover" ? "object-cover" : "object-contain"}
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center p-[8%]">
-          <div className="relative w-full max-w-2xl">
-            <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content/25" />
-            {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
-            <div className="sombra-piso absolute inset-x-[6%] bottom-[3%] h-3" aria-hidden="true" />
-          </div>
-        </div>
+        <PlantillaPublicacion vehiculo={vehiculo} compacta={compacta} />
       )}
     </div>
   );
 }
 
-/** El cartelito de "aquí falta la foto real", para el modo muestra. */
+/**
+ * "Aquí falta la foto real".
+ *
+ * No es un detalle menor y por eso se dice en voz alta: de DealerNauta no hay
+ * ni una foto en el proyecto. Instagram devuelve un muro de acceso y no deja
+ * descargar las publicaciones de @dealernautacars, así que lo que se ve en cada
+ * ficha es la plantilla de sus posts dibujada, no su unidad.
+ *
+ * Meter fotos de banco de imágenes y hacerlas pasar por suyas habría quedado
+ * más lucido y habría sido mentira. Desaparece en cuanto la ficha traiga
+ * `fotos`.
+ */
 export function AvisoSinFoto({ className = "" }) {
   return (
     <span
-      className={`cifra bg-base-content/6 px-2.5 py-1 text-[0.65rem] text-base-content/45 ${className}`}
+      className={`cifra rounded-full bg-base-content/6 px-3 py-1 text-[0.65rem] text-base-content/45 ${className}`}
     >
-      Foto pendiente
+      Aquí va tu foto
     </span>
   );
 }
@@ -65,18 +69,18 @@ export function AvisoSinFoto({ className = "" }) {
 /**
  * "Este precio todavía no es el suyo".
  *
- * El catálogo en PDF que mandó HB no publica ni un precio: trae el modelo, el
- * año, el kilometraje y poco más. Los precios de esta demo son de referencia
- * de mercado, puestos para que la página se pueda enseñar funcionando, y decir
- * eso en voz alta es la diferencia entre una demo honesta y una que se inventa
- * el inventario de otro.
+ * DealerNauta no publica precios en Instagram, y las publicaciones ni siquiera
+ * se pueden leer una a una. Los precios de esta demo son referencias de
+ * mercado, puestas para que la página se pueda enseñar funcionando, y decir eso
+ * en voz alta es la diferencia entre una demo honesta y una que se inventa el
+ * inventario de otro.
  *
  * Desaparece solo en cuanto la ficha deja de llevar `precioProvisional`.
  */
 export function AvisoPrecioProvisional({ className = "" }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 border border-base-content/15 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border border-base-content/15 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
     >
       <svg
         width="12"
@@ -90,7 +94,29 @@ export function AvisoPrecioProvisional({ className = "" }) {
         <circle cx="12" cy="12" r="10" />
         <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
       </svg>
-      Precio de referencia: el catálogo de HB no publica precios
+      Precio de referencia: tus publicaciones no llevan precio
+    </span>
+  );
+}
+
+/** "Esta unidad la puse yo de muestra", para las que no salen de su cuenta. */
+export function AvisoDeMuestra({ className = "" }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border border-base-content/15 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
+    >
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        aria-hidden="true"
+      >
+        <path d="M12 3v18M3 12h18" strokeLinecap="round" />
+      </svg>
+      Unidad de muestra, para llenar el inventario
     </span>
   );
 }

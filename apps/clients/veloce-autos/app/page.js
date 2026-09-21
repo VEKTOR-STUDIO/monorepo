@@ -3,15 +3,16 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Revelar from "@/components/Revelar";
 import TituloAnimado from "@/components/TituloAnimado";
-import Diagonales from "@/components/Diagonales";
+import Alas from "@/components/Alas";
 import Parallax from "@/components/Parallax";
 import Cifra from "@/components/Cifra";
-import MarcaHB from "@/components/MarcaHB";
-import FotoVehiculo from "@/components/FotoVehiculo";
+import MarcaVeloce from "@/components/MarcaVeloce";
+import FotoVehiculo, { AvisoMuestra } from "@/components/FotoVehiculo";
 import PantallaVehiculo from "@/components/PantallaVehiculo";
 import CarruselCatalogo from "@/components/CarruselCatalogo";
 import BotonContacto from "@/components/BotonContacto";
 import SeccionPanel from "@/components/SeccionPanel";
+import SeccionCanales from "@/components/SeccionCanales";
 import Cintillo from "@/components/Cintillo";
 import SeccionPorQue from "@/components/SeccionPorQue";
 import BloqueVenta from "@/components/demo/BloqueVenta";
@@ -19,14 +20,15 @@ import {
   leerVehiculos,
   facetasDe,
   filtrar,
-  hayPreciosProvisionales,
-  CONDICIONES,
+  hayMuestras,
+  ENTREGAS,
+  ORIGENES,
 } from "@/libs/vehiculos";
 import { esDemo } from "@/libs/demo";
 import { enDolares } from "@/libs/formato";
 import config from "@/config";
 
-// El inventario se toca a mano y cambia un par de veces por semana: media hora
+// El inventario se toca a mano y cambia varias veces por semana: media hora
 // de caché es de sobra y ahorra leer el JSON en cada visita.
 export const revalidate = 1800;
 
@@ -35,17 +37,23 @@ export default function Inicio() {
   const facetas = facetasDe(vehiculos);
   const demo = esDemo();
 
-  // El escaparate: los marcados como destacados, y si no hay, los más nuevos.
+  // El escaparate: los marcados como destacados, y si no hay, los primeros.
   const escaparate = vehiculos.filter((v) => v.destacado && v.disponible).slice(0, 4);
   const portada = escaparate[0] || vehiculos[0];
   const desde = Math.min(...vehiculos.map((v) => v.precio));
 
-  // Para los dos caminos de la sección de condición: cuántos hay de cada uno y
-  // desde cuánto arranca cada lado.
-  const caminos = CONDICIONES.map((condicion) => {
-    const lista = filtrar(vehiculos, { condicion: condicion.slug, orden: "precio-asc" });
-    return { ...condicion, total: lista.length, desde: lista[0]?.precio, muestra: lista[0] };
+  // Los dos caminos: lo que está hoy en el showroom y lo que se trae. Para
+  // cada uno, cuántos hay y desde cuánto arranca.
+  const caminos = ENTREGAS.map((entrega) => {
+    const lista = filtrar(vehiculos, { entrega: entrega.slug, orden: "precio-asc" });
+    return { ...entrega, total: lista.length, desde: lista[0]?.precio, muestra: lista[0] };
   }).filter((c) => c.total > 0);
+
+  // Las cuatro procedencias de su bio, con lo que hay de cada una.
+  const origenes = ORIGENES.map((origen) => ({
+    ...origen,
+    total: vehiculos.filter((v) => v.origen === origen.slug).length,
+  }));
 
   return (
     <>
@@ -54,13 +62,13 @@ export default function Inicio() {
       <main>
         {/* ------------------------------------------------------------------
             Portada.
-            La retícula es la de sus fichas de catálogo: el texto a la
-            izquierda, el vehículo a la derecha y las diagonales cruzando por
-            detrás. Lo único que cambia es que aquí el titular es la frase con
-            la que se presentan en Instagram.
+            El titular es la primera línea de su bio, que es además lo único
+            que los distingue de cualquier otro concesionario de Caracas: no
+            venden carros, los TRAEN. Las cuatro procedencias van justo debajo
+            porque son la prueba de esa frase.
            ---------------------------------------------------------------- */}
         <section className="relative flex min-h-svh items-center overflow-hidden px-4 pb-16 pt-10 sm:px-6">
-          <Diagonales variante="portada" />
+          <Alas variante="portada" />
           <div className="textura absolute inset-0" aria-hidden="true" />
 
           <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
@@ -68,9 +76,9 @@ export default function Inicio() {
             <div>
               <Revelar desde="izquierda">
                 <div className="flex items-center gap-3">
-                  <MarcaHB className="h-7 w-24 text-base-content" />
+                  <MarcaVeloce className="h-6 w-auto text-base-content" />
                   <span className="cifra text-[0.65rem] tracking-[0.3em] text-base-content/45">
-                    {config.business.ciudad.toUpperCase()} · {config.business.estado.toUpperCase()}
+                    {config.business.ciudad.toUpperCase()} · VENEZUELA
                   </span>
                 </div>
               </Revelar>
@@ -78,16 +86,16 @@ export default function Inicio() {
               <TituloAnimado
                 as="h1"
                 retraso={150}
-                className="display mt-7 text-5xl leading-[0.88] sm:text-6xl lg:text-7xl xl:text-8xl"
+                className="display mt-7 text-5xl leading-[0.95] sm:text-6xl lg:text-7xl"
               >
-                Importamos y vendemos el auto{" "}
-                <span className="text-primary">de tus sueños</span>
+                Importación <span className="text-base-content/55">directa</span>
               </TituloAnimado>
 
               <Revelar retraso={420}>
                 <p className="mt-7 max-w-lg text-base leading-relaxed text-base-content/60 sm:text-lg">
-                  {config.business.lema}. Unidades 0 km traídas por nosotros y usados
-                  revisados uno a uno, con su ficha completa y su precio a la vista.
+                  {config.business.lema}, traídos por nosotros desde Dubái, Europa, China y
+                  Estados Unidos. Lo que está en el showroom se ve hoy; lo que no, se
+                  encarga con la versión y el color que quieras.
                 </p>
               </Revelar>
 
@@ -97,7 +105,7 @@ export default function Inicio() {
                     Ver el inventario
                   </Link>
                   <BotonContacto demo={demo} className="btn btn-filo flex-1">
-                    Escribir por WhatsApp
+                    Cotizar por WhatsApp
                   </BotonContacto>
                 </div>
               </Revelar>
@@ -107,10 +115,10 @@ export default function Inicio() {
                   número final escrito, así que sin JavaScript se leen igual.
 
                   En móvil van más pequeñas y con menos hueco a propósito: a
-                  tamaño de escritorio, "$7.500" no cabe en un tercio de 390 px
-                  y se montaba encima de la cifra de al lado. El `min-w-0` es
-                  lo que deja a las columnas encogerse; sin él, la anchura
-                  mínima del contenido manda sobre el reparto de la rejilla. */}
+                  tamaño de escritorio, "$27.900" no cabe en un tercio de
+                  390 px y se montaba encima de la cifra de al lado. El
+                  `min-w-0` es lo que deja a las columnas encogerse; sin él, la
+                  anchura mínima del contenido manda sobre el reparto. */}
               <Revelar retraso={620}>
                 <dl className="mt-14 grid w-full max-w-xl grid-cols-3 gap-3 border-t border-base-content/10 pt-7 sm:gap-6">
                   <div className="min-w-0">
@@ -122,7 +130,7 @@ export default function Inicio() {
                     </dd>
                   </div>
                   <div className="min-w-0">
-                    <dt className="cifra text-2xl font-bold text-primary sm:text-3xl">
+                    <dt className="cifra text-2xl font-bold text-base-content sm:text-3xl">
                       <Cifra valor={desde} formato="dolaresRedondos" />
                     </dt>
                     <dd className="mt-1.5 text-[0.6rem] uppercase tracking-wider text-base-content/40 sm:text-[0.7rem]">
@@ -141,7 +149,7 @@ export default function Inicio() {
               </Revelar>
             </div>
 
-            {/* ---- El vehículo de portada ---- */}
+            {/* ---- La unidad de portada ---- */}
             {portada && (
               <Revelar desde="corte" retraso={260} className="hidden lg:block">
                 <Parallax desde={-6} hasta={6}>
@@ -149,14 +157,14 @@ export default function Inicio() {
                     <FotoVehiculo
                       vehiculo={portada}
                       prioridad
-                      className="aspect-4/5 w-full"
+                      className="aspect-4/3 w-full"
                       sizes="45vw"
                     />
                     <p className="display mt-4 flex items-baseline justify-between gap-4 text-lg">
                       <span className="text-base-content/70">
                         {portada.marca} {portada.modelo}
                       </span>
-                      <span className="cifra text-xl font-bold text-primary">
+                      <span className="cifra text-xl font-bold text-base-content">
                         {enDolares(portada.precio)}
                       </span>
                     </p>
@@ -186,47 +194,87 @@ export default function Inicio() {
         </section>
 
         {/* ------------------------------------------------------------------
-            El catálogo entero, desfilando de lado.
+            Las cuatro procedencias.
+            Es la línea uno de su bio convertida en navegación. Va antes que
+            nada porque es lo que este negocio tiene y los demás no, y porque
+            un comprador que sabe que quiere "algo de Dubái" llega aquí y en
+            un clic está filtrando.
+           ---------------------------------------------------------------- */}
+        <section className="relative overflow-hidden border-t border-base-content/8 bg-base-200 px-4 py-16 sm:px-6">
+          <div className="textura absolute inset-0" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-7xl">
+            <Revelar>
+              <p className="rotulo text-center">Traemos de</p>
+            </Revelar>
+
+            <div className="mt-10 grid gap-px border border-base-content/10 bg-base-content/10 sm:grid-cols-2 lg:grid-cols-4">
+              {origenes.map((origen, i) => (
+                <Revelar key={origen.slug} retraso={i * 90}>
+                  <Link
+                    href={`/vehiculos?origen=${origen.slug}`}
+                    className="group flex h-full flex-col bg-base-200 p-7 transition-colors hover:bg-base-300"
+                  >
+                    <p className="display text-3xl sm:text-4xl">{origen.nombre}</p>
+                    <p className="mt-4 flex-1 text-sm leading-relaxed text-base-content/55">
+                      {origen.detalle}
+                    </p>
+                    <p className="cifra mt-6 flex items-center gap-2 text-xs text-base-content/40">
+                      <span className="text-base-content/75">
+                        {origen.total}{" "}
+                        {origen.total === 1 ? "unidad" : "unidades"}
+                      </span>
+                      <span
+                        className="transition-transform duration-300 group-hover:translate-x-1"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    </p>
+                  </Link>
+                </Revelar>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            El inventario entero, desfilando de lado.
            ---------------------------------------------------------------- */}
         <CarruselCatalogo vehiculos={vehiculos} />
 
         {/* ------------------------------------------------------------------
-            Los dos caminos: 0 km importado o usado verificado. Es el corte que
-            de verdad hace este negocio, y la primera pregunta de cualquiera
-            que llega.
+            Los dos caminos: lo que está aquí y lo que se trae. Es la primera
+            pregunta de cualquiera que escribe, y en un Instagram no tiene
+            respuesta posible sin preguntar.
            ---------------------------------------------------------------- */}
         <section className="relative overflow-hidden border-t border-base-content/8 px-4 py-24 sm:px-6">
-          <Diagonales variante="seccion" />
+          <Alas variante="seccion" />
           <div className="textura absolute inset-0" aria-hidden="true" />
 
           <div className="relative mx-auto max-w-7xl">
             <Revelar>
               <span className="banda" aria-hidden="true" />
-              <p className="rotulo mt-5">Qué buscas</p>
+              <p className="rotulo mt-5">Cómo la consigues</p>
             </Revelar>
 
             <TituloAnimado as="h2" className="display mt-4 text-4xl sm:text-5xl">
-              Dos formas de comprar aquí
+              Está aquí, o te la traemos
             </TituloAnimado>
 
             <div className="mt-14 grid gap-6 lg:grid-cols-2">
               {caminos.map((camino, i) => (
                 <Revelar key={camino.slug} desde="corte" retraso={i * 140}>
                   <Link
-                    href={`/vehiculos?condicion=${camino.slug}`}
+                    href={`/vehiculos?entrega=${camino.slug}`}
                     className="ficha group flex h-full flex-col overflow-hidden"
                   >
                     <div className="relative">
                       <FotoVehiculo
                         vehiculo={camino.muestra}
                         className="aspect-16/10 w-full"
-                        encajar="cover"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
-                      {/* La foto es una página de catálogo en 4:5 recortada a
-                          apaisado, así que aquí sí va `cover`: de lo que se
-                          trata es de enseñar el corte diagonal y el vehículo,
-                          no la ficha completa, que ya está en su tarjeta. */}
                       <div
                         className="absolute inset-0 bg-linear-to-t from-base-200 via-base-200/20 to-transparent"
                         aria-hidden="true"
@@ -235,13 +283,13 @@ export default function Inicio() {
 
                     <div className="flex flex-1 flex-col p-6 sm:p-7">
                       <p className="display text-3xl sm:text-4xl">
-                        {camino.slug === "nuevo" ? (
+                        {camino.slug === "showroom" ? (
                           <>
-                            <span className="text-primary">0 km</span> importados
+                            En <span className="text-base-content/55">showroom</span>
                           </>
                         ) : (
                           <>
-                            Usados <span className="text-primary">verificados</span>
+                            A <span className="text-base-content/55">pedido</span>
                           </>
                         )}
                       </p>
@@ -260,10 +308,10 @@ export default function Inicio() {
                           </p>
                         </div>
                         <span
-                          className="display text-sm text-primary transition-transform duration-300 group-hover:translate-x-1.5"
+                          className="display text-sm text-base-content/70 transition-transform duration-300 group-hover:translate-x-1.5"
                           aria-hidden="true"
                         >
-                          Verlos →
+                          Verlas →
                         </span>
                       </div>
                     </div>
@@ -272,15 +320,15 @@ export default function Inicio() {
               ))}
             </div>
 
-            {/* Las marcas que hoy están en el local. */}
+            {/* Las marcas que hoy están en inventario. */}
             <Revelar retraso={180}>
               <div className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-base-content/10 pt-8">
-                <p className="rotulo">En el local</p>
+                <p className="rotulo">Marcas</p>
                 {facetas.marcas.map((m) => (
                   <Link
                     key={m.valor}
                     href={`/vehiculos?marca=${encodeURIComponent(m.valor)}`}
-                    className="display-recto text-lg tracking-wide text-base-content/45 transition-colors hover:text-primary"
+                    className="display-recto text-lg text-base-content/45 transition-colors hover:text-base-content"
                   >
                     {m.valor}
                     <span className="cifra ml-1.5 text-xs opacity-60">{m.total}</span>
@@ -304,16 +352,16 @@ export default function Inicio() {
         ))}
 
         {/* ------------------------------------------------------------------
-            Cómo se compra. Es el recorrido que hoy se hace entre el Instagram,
-            el WhatsApp y el local, puesto por escrito para que el comprador
-            sepa a qué atenerse.
+            Cómo se compra. El recorrido que hoy se hace entre el Instagram, el
+            WhatsApp y el showroom, puesto por escrito para que el comprador
+            sepa a qué atenerse antes de escribir.
            ---------------------------------------------------------------- */}
         <section
           id="como-comprar"
           className="relative overflow-hidden border-t border-base-content/8 bg-base-200 px-4 py-24 sm:px-6"
         >
           <div className="textura absolute inset-0" aria-hidden="true" />
-          <div className="textura-panal absolute inset-0" aria-hidden="true" />
+          <div className="textura-galon absolute inset-0" aria-hidden="true" />
 
           <div className="relative mx-auto max-w-5xl">
             <Revelar className="text-center">
@@ -327,7 +375,7 @@ export default function Inicio() {
             <div className="mt-16 grid gap-8 md:grid-cols-3">
               {config.compra.pasos.map((paso, i) => (
                 <Revelar key={paso.titulo} desde="giro" retraso={i * 130}>
-                  <div className="relative h-full border-t-2 border-primary/40 pt-6">
+                  <div className="relative h-full border-t-2 border-base-content/25 pt-6">
                     <span className="display absolute -top-11 left-0 text-5xl text-base-content/12">
                       0{i + 1}
                     </span>
@@ -343,91 +391,95 @@ export default function Inicio() {
         </section>
 
         {/* ------------------------------------------------------------------
-            Dónde estamos. Va al pie de las trece páginas de su catálogo, así
-            que aquí tiene sección propia.
+            Las dos sedes.
+            No es un detalle de pie de página: La Florida y Chacao tienen
+            cuentas de Instagram distintas, así que quien ve una publicación de
+            una y escribe a la otra acaba rebotando. Aquí cada sede lleva su
+            dirección, su cuenta y las unidades que tiene.
            ---------------------------------------------------------------- */}
         <section
-          id="donde-estamos"
+          id="sedes"
           className="relative overflow-hidden border-t border-base-content/8 px-4 py-24 sm:px-6"
         >
-          <Diagonales variante="seccion" />
+          <Alas variante="seccion" />
           <div className="textura absolute inset-0" aria-hidden="true" />
 
-          <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-            <div>
-              <Revelar>
-                <p className="rotulo">Dónde estamos</p>
-              </Revelar>
+          <div className="relative mx-auto max-w-6xl">
+            <Revelar>
+              <span className="banda" aria-hidden="true" />
+              <p className="rotulo mt-5">Dónde estamos</p>
+            </Revelar>
 
-              <TituloAnimado as="h2" className="display mt-4 text-4xl sm:text-5xl lg:text-6xl">
-                {config.business.direccion}
-              </TituloAnimado>
+            <TituloAnimado as="h2" className="display mt-4 text-4xl sm:text-5xl">
+              Dos sedes en Caracas
+            </TituloAnimado>
 
-              <Revelar retraso={200}>
-                <p className="cifra mt-5 text-lg text-primary">
-                  {config.business.ciudad}, estado {config.business.estado}
-                </p>
-                <p className="mt-6 max-w-md leading-relaxed text-base-content/60">
-                  Aquí se ven los vehículos, se prueban y se cierra el trato. Puedes
-                  venir a verlos sin compromiso o escribirnos antes para apartar una
-                  cita.
-                </p>
-                <p className="mt-4 text-sm text-base-content/45">{config.business.horario}</p>
+            <div className="mt-14 grid gap-6 lg:grid-cols-2">
+              {config.business.sedes.map((sede, i) => {
+                const total = vehiculos.filter((v) => v.sede === sede.slug).length;
+                return (
+                  <Revelar key={sede.slug} desde={i === 0 ? "izquierda" : "derecha"} retraso={i * 120}>
+                    <div className="panel flex h-full flex-col p-7 sm:p-8">
+                      <p className="display text-3xl sm:text-4xl">{sede.corto}</p>
+                      <address className="mt-4 not-italic leading-relaxed text-base-content/60">
+                        {sede.direccion}
+                        <br />
+                        {sede.ciudad}, Venezuela
+                      </address>
+                      <p className="mt-4 text-sm text-base-content/45">{sede.nota}</p>
 
-                <div className="mt-9 flex flex-wrap gap-3">
-                  <BotonContacto demo={demo} className="btn btn-primary">
-                    Escribir por WhatsApp
-                  </BotonContacto>
-                  <a
-                    href={config.business.instagramUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-filo"
-                  >
-                    @{config.business.instagram}
-                  </a>
-                </div>
-              </Revelar>
+                      <div className="mt-auto flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-base-content/10 pt-6">
+                        <p className="cifra text-sm text-base-content/70">
+                          {total} {total === 1 ? "unidad" : "unidades"}
+                        </p>
+                        <a
+                          href={sede.instagramUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="cifra text-sm text-base-content/70 underline-offset-4 transition-colors hover:text-base-content hover:underline"
+                        >
+                          @{sede.instagram}
+                        </a>
+                        <Link
+                          href={`/vehiculos?sede=${sede.slug}`}
+                          className="display ml-auto text-xs text-base-content/70"
+                        >
+                          Ver las suyas →
+                        </Link>
+                      </div>
+                    </div>
+                  </Revelar>
+                );
+              })}
             </div>
 
-            {/* Los servicios, como una lista de fichas. */}
-            <Revelar desde="derecha" retraso={140}>
-              <ul className="divide-y divide-base-content/10 border-y border-base-content/10">
-                {config.business.servicios.map((servicio, i) => (
-                  <li key={servicio} className="flex items-center gap-5 py-6">
-                    <span className="cifra shrink-0 text-xs text-primary">
-                      0{i + 1}
-                    </span>
-                    <span className="display text-2xl text-base-content/85">{servicio}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <dl className="mt-8 grid grid-cols-2 gap-4">
-                <div>
-                  <dt className="cifra text-3xl font-bold text-base-content">
-                    {config.business.publicaciones}
-                  </dt>
-                  <dd className="mt-1 text-[0.7rem] uppercase tracking-wider text-base-content/40">
-                    publicaciones
-                  </dd>
-                </div>
-                <div>
-                  <dt className="cifra text-3xl font-bold text-base-content">
-                    {config.business.seguidores}
-                  </dt>
-                  <dd className="mt-1 text-[0.7rem] uppercase tracking-wider text-base-content/40">
-                    seguidores
-                  </dd>
-                </div>
-              </dl>
+            <Revelar retraso={200}>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <BotonContacto demo={demo} className="btn btn-primary">
+                  Cotizar por WhatsApp
+                </BotonContacto>
+                <a
+                  href={config.business.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-filo"
+                >
+                  @{config.business.instagram}
+                </a>
+                <p className="text-sm text-base-content/45">{config.business.horario}</p>
+              </div>
             </Revelar>
           </div>
         </section>
 
         {/* ------------------------------------------------------------------
-            Aquí cambia el interlocutor: lo que viene le habla al dueño de HB,
-            no a quien vino a comprar un carro. El cintillo lo avisa.
+            Los canales oficiales, del comunicado fijado de su Instagram.
+           ---------------------------------------------------------------- */}
+        <SeccionCanales />
+
+        {/* ------------------------------------------------------------------
+            Aquí cambia el interlocutor: lo que viene le habla a Veloce, no a
+            quien vino a comprar un carro. El cintillo lo avisa.
            ---------------------------------------------------------------- */}
         {/* El panel se queda aunque se apague la demo: al comprador le explica
             por qué el inventario está al día. Lo que sí desaparece con la demo
@@ -437,25 +489,29 @@ export default function Inicio() {
         {demo && <SeccionPorQue />}
         {demo && <Cintillo variante="cliente" />}
 
-        {/* Aviso honesto mientras los precios sean de referencia. */}
-        {hayPreciosProvisionales() && (
+        {/* Aviso honesto mientras el inventario sea de muestra. */}
+        {hayMuestras() && (
           <section className="border-t border-base-content/8 px-4 py-14 sm:px-6">
             <div className="panel mx-auto max-w-3xl p-7 text-center">
-              <p className="rotulo">Sobre los precios</p>
+              <p className="rotulo">Sobre estas unidades</p>
               <p className="mt-4 text-sm leading-relaxed text-base-content/60">
-                Los {vehiculos.length} vehículos y sus fotos salen del catálogo en PDF de{" "}
+                Las {vehiculos.length} unidades que ves son de ejemplo, no el inventario
+                real de{" "}
                 <a
                   href={config.business.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-primary hover:underline"
+                  className="font-medium text-base-content hover:underline"
                 >
                   @{config.business.instagram}
                 </a>
-                : son sus unidades y sus fotos. Lo único que no sale de ahí son los
-                precios, porque el catálogo no publica ninguno; los que ves son de
-                referencia de mercado y se sustituyen por los reales desde el panel.
+                . Están para que la página se pueda recorrer funcionando. Lo que sí es
+                suyo y está tomado de lo que publican: el logotipo, las cuatro
+                procedencias, las dos sedes, los canales oficiales, la dirección y el
+                WhatsApp. El inventario de verdad se carga desde su Instagram y sustituye
+                a este en un solo paso.
               </p>
+              <AvisoMuestra corto className="mt-5" />
             </div>
           </section>
         )}

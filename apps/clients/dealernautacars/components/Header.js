@@ -8,17 +8,22 @@ import { usarGsap } from "@/libs/animaciones";
 import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
+// El primer corte del menú es el del negocio: vehículos por un lado, camiones
+// por el otro. Es la misma división que tienen partida en dos cuentas de
+// Instagram y en dos sedes, y son dos compradores que no se parecen en nada.
 const ENLACES = [
+  { href: "/vehiculos?segmento=auto", texto: "Vehículos" },
+  { href: "/vehiculos?segmento=camion", texto: "Camiones" },
   { href: "/vehiculos?condicion=nuevo", texto: "0 km" },
-  { href: "/vehiculos?condicion=usado", texto: "Usados" },
   { href: "/vehiculos", texto: "Todo el inventario" },
-  { href: "/#donde-estamos", texto: "Dónde estamos" },
+  { href: "/#sedes", texto: "Las sedes" },
   { href: "/contacto", texto: "Contacto" },
 ];
 
-// Atajo a la comparación con Linktree. Solo existe mientras se está vendiendo
-// la página: es un argumento para el dueño, no para quien viene a ver carros.
-const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no el PDF?" };
+// Atajo a la comparación con el Instagram suelto. Solo existe mientras se está
+// vendiendo la página: es un argumento para el dueño, no para quien viene a
+// ver carros.
+const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no solo Instagram?" };
 
 /**
  * La cabecera.

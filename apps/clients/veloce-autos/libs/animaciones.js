@@ -8,11 +8,11 @@
 // una ficha que entra en la portada y otra que entra en el inventario tienen
 // que sentirse iguales.
 //
-// El movimiento de esta página no es decorativo. La gráfica de HB es un corte
-// diagonal en rojo y negro, así que casi todo entra CORTADO: barridos en
-// diagonal, líneas de titular que suben desde detrás de una máscara y fotos
-// que se abren con el mismo ángulo. Es la misma idea del catálogo, pero en
-// movimiento.
+// El movimiento de esta página no es decorativo. La marca de Veloce es una V
+// que se abre desde un punto, así que casi todo entra ABRIÉNDOSE: los fondos
+// despliegan sus alas, las fotos se descubren del centro hacia los lados y las
+// líneas de titular asoman desde detrás de una máscara. Es el mismo gesto del
+// logotipo, pero en movimiento.
 //
 // Todo pasa por gsap.matchMedia(), que además de separar móvil y escritorio
 // atiende "prefers-reduced-motion": quien lo pida no ve ni un movimiento, y al
@@ -35,9 +35,6 @@ export const TIEMPOS = {
   larga: 1.25,
   escalonado: 0.07,
 };
-
-/** El ángulo de las diagonales de la marca, en grados. */
-export const ANGULO = -18;
 
 /** Punto de disparo estándar: cuando al elemento le falta poco para entrar. */
 export const DISPARO = "top 85%";
@@ -125,8 +122,8 @@ export function entrar(g, objetivo, opciones = {}) {
  * El titular, línea a línea, saliendo de detrás de una máscara.
  *
  * `mask: "lines"` envuelve cada línea en una caja recortada, así que la línea
- * no aparece: ASOMA. Es el movimiento que mejor traduce el corte diagonal del
- * catálogo impreso.
+ * no aparece: ASOMA. Con un titular tan espaciado como el de esta marca es la
+ * entrada que mejor funciona: el texto sale entero, no letra a letra.
  *
  * `autoSplit` vuelve a partir el texto cuando terminan de cargar las
  * tipografías y cuando cambia el ancho: sin eso, un titular partido con la
@@ -178,19 +175,24 @@ export function revelarTexto(g, nodo, opciones = {}) {
 }
 
 /**
- * Un barrido en diagonal: el elemento se descubre con el ángulo de la marca.
+ * El barrido de la casa: el elemento se descubre desde el eje hacia los dos
+ * lados, como las alas del logotipo al abrirse.
+ *
+ * El recorte de partida no es una línea vertical, sino una V muy cerrada: por
+ * eso los dos puntos de arriba están juntos en el centro y los de abajo un
+ * poco más abiertos. Al ensancharse, lo primero que asoma es el vértice.
  *
  * Es un `clip-path` animado, no una máscara de imagen, para que funcione sobre
  * cualquier cosa —una foto, un bloque de color, una tarjeta entera—.
  */
-export function barrerDiagonal(g, objetivo, opciones = {}) {
+export function barrerVertice(g, objetivo, opciones = {}) {
   const { retraso = 0, duracion = TIEMPOS.larga, disparador = objetivo } = opciones;
 
   return g.fromTo(
     objetivo,
-    { clipPath: "polygon(0 0, 0 0, -22% 100%, 0 100%)" },
+    { clipPath: "polygon(50% 0, 50% 0, 54% 100%, 46% 100%)" },
     {
-      clipPath: "polygon(0 0, 122% 0, 100% 100%, 0 100%)",
+      clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
       duration: duracion,
       ease: "power4.inOut",
       delay: retraso / 1000,

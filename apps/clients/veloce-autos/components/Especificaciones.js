@@ -5,15 +5,16 @@ import { kilometrajeDe } from "@/libs/formato";
  * finas. Es lo primero que mira quien compra y lo primero que pregunta quien
  * escribe, así que va antes que cualquier texto de venta.
  *
- * La primera casilla es la CONDICIÓN y no el año: en este catálogo la mitad de
- * las unidades entran 0 km importadas y la otra mitad son usadas, y esa es la
- * respuesta que todo el mundo busca antes que ninguna otra.
+ * La primera casilla es la PROCEDENCIA y no el año: en este negocio todo se
+ * importa, y de dónde viene una unidad es lo que explica su precio, su
+ * equipamiento y cuánto tarda en llegar. Es la respuesta que todo el mundo
+ * busca antes que ninguna otra.
  *
  * La retícula y los separadores están en globals.css (.specs).
  */
 export default function Especificaciones({ vehiculo, className = "" }) {
   const datos = [
-    { etiqueta: "Condición", valor: vehiculo.esNuevo ? "0 km" : "Usado" },
+    { etiqueta: "Procedencia", valor: vehiculo.origenInfo?.nombre || "—" },
     { etiqueta: "Año", valor: vehiculo.anio },
     { etiqueta: "Kilometraje", valor: kilometrajeDe(vehiculo) },
     { etiqueta: "Motor", valor: vehiculo.motor },
@@ -36,6 +37,8 @@ export default function Especificaciones({ vehiculo, className = "" }) {
 /** La lista larga, para la ficha del vehículo. */
 export function EspecificacionesCompletas({ vehiculo, className = "" }) {
   const datos = [
+    { etiqueta: "Procedencia", valor: vehiculo.origenInfo?.nombre },
+    { etiqueta: "Entrega", valor: vehiculo.entregaInfo?.nombre },
     { etiqueta: "Condición", valor: vehiculo.condicionInfo?.nombre },
     { etiqueta: "Marca", valor: vehiculo.marca },
     {
@@ -50,9 +53,8 @@ export function EspecificacionesCompletas({ vehiculo, className = "" }) {
     { etiqueta: "Combustible", valor: vehiculo.combustible },
     { etiqueta: "Puestos", valor: vehiculo.puestos },
     { etiqueta: "Color", valor: vehiculo.color },
-    { etiqueta: "Financiamiento", valor: vehiculo.financiado ? "Disponible" : null },
     { etiqueta: "Documentos", valor: vehiculo.documentos },
-    { etiqueta: "Ubicación", valor: vehiculo.ubicacion },
+    { etiqueta: "Sede", valor: vehiculo.sedeInfo?.nombre },
   ].filter((d) => d.valor);
 
   return (

@@ -10,7 +10,7 @@ import BotonComprar from "@/components/demo/BotonComprar";
 export default function AvisoBloqueado({ titulo, children, className = "" }) {
   return (
     <div
-      className={`border-l-2 border-primary bg-primary/8 p-4 ${className}`}
+      className={`border-l-2 border-base-content/50 bg-base-content/6 p-4 ${className}`}
       role="status"
     >
       <p className="rotulo">{titulo || "Desactivado en la demo"}</p>

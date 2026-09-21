@@ -18,7 +18,7 @@ export default function BloqueVenta() {
   return (
     <section className="relative overflow-hidden border-t border-base-content/10 bg-base-200">
       <div className="textura absolute inset-0" aria-hidden="true" />
-      <div className="textura-panal absolute inset-0" aria-hidden="true" />
+      <div className="textura-via absolute inset-0" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-5xl px-4 py-20 sm:px-6">
         <Revelar className="text-center">
@@ -31,9 +31,9 @@ export default function BloqueVenta() {
 
         <Revelar retraso={140}>
           <p className="mx-auto mt-6 max-w-lg text-center leading-relaxed text-base-content/60">
-            No es una maqueta: es una página real funcionando, hecha con tu catálogo,
-            tus fotos y tu gráfica. Lo que falta por poner es tu número de WhatsApp,
-            tus precios y tu dominio.
+            No es una maqueta: es una página real funcionando, hecha con tu emblema, tu
+            naranja y la gráfica de tus publicaciones. Lo que falta por poner es tu
+            inventario real, tus precios, tus fotos y tu dominio.
           </p>
         </Revelar>
 
@@ -76,9 +76,11 @@ export default function BloqueVenta() {
 
         <Revelar retraso={180}>
           <p className="mx-auto mt-6 max-w-lg text-center text-xs text-base-content/35">
-            Los vehículos y las fotos que ves son los tuyos, sacados del «Catálogo de
-            vehículos HB». Los precios son de referencia: el catálogo no publica
-            ninguno y se cargan los reales desde el panel.
+            Los primeros seis modelos salen de tu propia cuadrícula de Instagram; el
+            resto son de muestra. Ningún precio es tuyo —tus publicaciones no llevan
+            precio— y no hay ni una foto tuya, porque Instagram no deja descargarlas:
+            lo que ves dibujado es la plantilla de tus posts. Todo eso se carga desde
+            el panel.
           </p>
         </Revelar>
       </div>

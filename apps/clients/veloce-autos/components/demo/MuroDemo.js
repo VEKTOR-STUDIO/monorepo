@@ -31,17 +31,19 @@ export default function MuroDemo({ ocultos, children }) {
 
       <div className="absolute inset-x-0 top-6 flex justify-center px-4">
         <div className="ficha w-full max-w-md p-7 text-center shadow-2xl shadow-black/50">
-          <p className="microgramma text-[0.65rem] text-primary">Hasta aquí llega la demo</p>
+          <p className="microgramma text-[0.65rem] text-base-content/70">
+            Hasta aquí llega la demo
+          </p>
 
           <p className="display mt-4 text-2xl">
-            <span className="cifra text-primary">+{ocultos}</span>{" "}
-            {ocultos === 1 ? "vehículo más" : "vehículos más"}
+            <span className="cifra">+{ocultos}</span>{" "}
+            {ocultos === 1 ? "unidad más" : "unidades más"}
           </p>
 
           <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-            La página completa lleva todo el catálogo, la ficha de cada unidad, el
-            corte entre 0 km y usados, y el botón de WhatsApp que llega con el
-            modelo ya escrito.
+            La página completa lleva el inventario entero, la ficha de cada unidad, los
+            filtros por procedencia y por sede, y el botón de WhatsApp que llega con el
+            modelo y la sede ya escritos.
           </p>
 
           <p className="mt-5 flex items-baseline justify-center gap-2.5">
@@ -50,7 +52,9 @@ export default function MuroDemo({ ocultos, children }) {
                 {config.demo.precioAnterior}
               </span>
             )}
-            <span className="cifra text-3xl font-bold text-primary">{config.demo.precio}</span>
+            <span className="cifra text-3xl font-bold text-base-content">
+              {config.demo.precio}
+            </span>
           </p>
           <p className="mt-1 text-xs text-base-content/45">{config.demo.precioNota}</p>
 

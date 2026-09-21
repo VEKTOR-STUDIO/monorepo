@@ -1,64 +1,85 @@
 import Revelar from "@/components/Revelar";
 import TituloAnimado from "@/components/TituloAnimado";
 import BotonComprar from "@/components/demo/BotonComprar";
+import config from "@/config";
 
 // -----------------------------------------------------------------------------
-// "¿Y esto por qué no es el PDF de siempre?"
+// "¿Y para qué, si ya tengo Instagram?"
 //
-// Es la objeción real de ESTE cliente, y no una genérica. HB ya tiene un
-// sistema que le funciona: un catálogo en PDF de trece páginas, maquetado con
-// cuidado, que manda por WhatsApp. Esta página se construyó a partir de ese
-// mismo PDF, así que la comparación no es teórica: cada fila se puede
-// comprobar mirando las dos cosas.
+// Es la objeción real de ESTE cliente, y no una genérica. DealerNauta tiene
+// 68,4 mil seguidores y 1.107 publicaciones repartidas en dos cuentas. Les
+// funciona. Cualquier argumento que empiece por "Instagram no sirve" es falso
+// y además se nota, así que la sección empieza reconociendo lo contrario.
 //
-// El argumento NO es que el PDF sea malo. Es bueno —por eso la web le copió
-// la gráfica entera— y decirlo da credibilidad a todo lo demás. El argumento
-// es que un PDF no se busca, no se actualiza sin rehacerlo y no lo encuentra
-// nadie en Google.
+// El argumento es otro: Instagram es un río y esto es un almacén. Una
+// publicación del martes ya no la ve nadie el viernes; un enlace con todo el
+// inventario sí. Y sobre todo, la cuenta no es suya —se la pueden cerrar,
+// hackear o bajar el alcance de un día para otro— y el dominio sí.
 //
-// Habla el vendedor del sistema, no HB: por eso va en la zona marcada por el
-// cintillo y con Microgramma.
+// Habla el vendedor del sistema, no DealerNauta: por eso va en la zona marcada
+// por el cintillo y con Microgramma.
 // -----------------------------------------------------------------------------
 
 const COMPARACION = [
   {
     tema: "Cuando entra una unidad nueva",
-    pdf: "Hay que rehacer la página en el editor, exportar el PDF otra vez y volver a mandárselo a todo el mundo.",
-    pagina: "Se carga desde el panel en dos minutos y ya está arriba. El enlace que mandaste ayer enseña el inventario de hoy.",
-  },
-  {
-    tema: "Cuando algo se vende",
-    pdf: "Sigue en el PDF que ya circula. Te escriben por un carro que ya no está y hay que explicarlo cada vez.",
-    pagina: "Se marca vendido y deja de ofrecerse solo. Se puede dejar a la vista, atenuado, que también vende.",
+    instagram:
+      "Se publica, la ven los que estén conectados esa tarde y el resto no se entera. A los tres días está enterrada bajo otras diez.",
+    pagina:
+      "Se carga desde el panel en dos minutos y se queda arriba. El enlace que mandaste hace un mes enseña el inventario de hoy.",
   },
   {
     tema: "Buscar algo concreto",
-    pdf: "Trece páginas que se pasan una a una. Si alguien quiere un 0 km de menos de 25.000, lo tiene que ir mirando.",
-    pagina: "Filtros por condición, tipo, marca, año y precio. Y la búsqueda hecha se copia y se manda como enlace.",
+    instagram:
+      "1.107 publicaciones que se pasan con el dedo. Quien quiera un camión de menos de 45.000 tiene que ir mirando cuadro por cuadro.",
+    pagina:
+      "Filtros por vehículo o camión, condición, marca, año y precio. Y la búsqueda hecha se copia y se manda como enlace.",
   },
   {
-    tema: "Mandar un vehículo por WhatsApp",
-    pdf: "Se manda el PDF entero, de dos megas, y el cliente busca la página. O se manda una captura suelta, sin datos.",
-    pagina: "Un enlace por vehículo, con su foto, su precio y su ficha. Se abre al instante y se ve igual en cualquier teléfono.",
+    tema: "Cuando algo se vende",
+    instagram:
+      "La publicación sigue ahí. Te escriben por una unidad que ya no está y hay que explicarlo cada vez.",
+    pagina:
+      "Se marca vendida y deja de ofrecerse sola. Se puede dejar a la vista, atenuada, que también vende.",
+  },
+  {
+    tema: "Tus dos cuentas",
+    instagram:
+      "Quien llega a @dealernautacarsccs no sabe que los camiones están en la otra cuenta, y al revés. Se pierde media venta cruzada.",
+    pagina:
+      "Un solo sitio con los dos negocios separados por dentro. Quien viene por un carro ve que también hay camiones, y cada botón escribe a la sede correcta.",
+  },
+  {
+    tema: "Mandar una unidad por WhatsApp",
+    instagram:
+      "Se manda una captura sin datos, o el enlace del post, que abre la aplicación y se pierde entre comentarios.",
+    pagina:
+      "Un enlace por unidad, con su ficha, su precio y su año. Se abre al instante y se ve igual en cualquier teléfono.",
   },
   {
     tema: "Quien busca en Google",
-    pdf: "No te encuentra. Un PDF que viaja por WhatsApp no está en ningún buscador.",
-    pagina: "Cada ficha se indexa con su marca, modelo, año y ciudad: «Corolla Cross 2024 Barquisimeto» te encuentra a ti.",
+    instagram:
+      "No te encuentra. Un post de Instagram no aparece cuando alguien busca «4Runner 2026 Caracas».",
+    pagina:
+      "Cada ficha se indexa con su marca, modelo, año y ciudad. Esa búsqueda te encuentra a ti.",
   },
   {
     tema: "El precio en bolívares",
-    pdf: "Se repite en cada conversación, y cambia todos los días.",
+    instagram: "Se repite en cada conversación, y cambia todos los días.",
     pagina: "Sale solo, a la tasa del BCV del día, debajo del precio en dólares.",
   },
   {
-    tema: "El enlace del perfil de Instagram",
-    pdf: "Hoy no hay ninguno: quien ve una publicación y quiere el resto tiene que escribir y pedir el catálogo.",
-    pagina: "Tu dominio en la bio. Quien entra ve las trece unidades sin escribirle a nadie.",
+    tema: "De quién es la cuenta",
+    instagram:
+      "De Instagram. Si la cierran, la hackean o le bajan el alcance, se va con ella todo lo construido en seis años.",
+    pagina:
+      "Tuyo el dominio, tuyo el código y tuyo el inventario. Si mañana no quieres seguir conmigo, te lo llevas entero.",
   },
 ];
 
 export default function SeccionPorQue() {
+  const { business } = config;
+
   return (
     <section id="por-que" className="relative overflow-hidden px-4 py-24 sm:px-6">
       <div className="textura absolute inset-0" aria-hidden="true" />
@@ -69,15 +90,15 @@ export default function SeccionPorQue() {
         </Revelar>
 
         <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
-          ¿Y esto por qué no es el PDF de siempre?
+          ¿Y para qué, si ya tengo Instagram?
         </TituloAnimado>
 
         <Revelar retraso={160}>
           <p className="mx-auto mt-6 max-w-2xl text-center leading-relaxed text-base-content/60">
-            Tu catálogo en PDF está bien hecho: tan bien que esta página le copió la
-            gráfica entera —el negro, el rojo, las diagonales, la itálica—. El
-            problema no es ese. Es que un PDF no se busca, no se actualiza sin
-            rehacerlo y no lo encuentra nadie en Google.
+            Porque te funciona: {business.seguidores} seguidores y {business.publicaciones}{" "}
+            publicaciones no se consiguen de casualidad. Esta página no viene a sustituir
+            eso, viene a darle un sitio a dónde apuntar. Instagram es un río —lo de hoy
+            tapa lo de ayer— y esto es el almacén donde queda todo.
           </p>
         </Revelar>
 
@@ -85,14 +106,14 @@ export default function SeccionPorQue() {
             fila lleva su propia etiqueta encima. */}
         <Revelar retraso={80}>
           <div className="mt-14 hidden gap-5 sm:grid sm:grid-cols-2">
-            <p className="microgramma text-[0.7rem] text-base-content/45">Con el PDF</p>
+            <p className="microgramma text-[0.7rem] text-base-content/45">Solo con Instagram</p>
             <p className="microgramma text-[0.7rem] text-primary">Con tu propia página</p>
           </div>
         </Revelar>
 
         <div className="mt-4 divide-y divide-base-content/10 border-y border-base-content/10">
-          {COMPARACION.map((fila, i) => (
-            <Revelar key={fila.tema} retraso={i * 60}>
+          {COMPARACION.map((fila) => (
+            <Revelar key={fila.tema}>
               <div className="py-6">
                 <p className="microgramma mb-3.5 text-[0.65rem] text-base-content/40">
                   {fila.tema}
@@ -100,20 +121,20 @@ export default function SeccionPorQue() {
 
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
                   {/* Lo de hoy. */}
-                  <div className="flex gap-3">
+                  <div className="flex min-w-0 gap-3">
                     <span className="mt-0.5 shrink-0 text-base-content/25" aria-hidden="true">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
                       </svg>
                     </span>
                     <p className="text-sm leading-relaxed text-base-content/45">
-                      <span className="microgramma mr-2 text-[0.6rem] sm:hidden">PDF:</span>
-                      {fila.pdf}
+                      <span className="microgramma mr-2 text-[0.6rem] sm:hidden">Instagram:</span>
+                      {fila.instagram}
                     </p>
                   </div>
 
                   {/* Lo que se compra. */}
-                  <div className="flex gap-3">
+                  <div className="flex min-w-0 gap-3">
                     <span className="mt-0.5 shrink-0 text-primary" aria-hidden="true">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
                         <path d="m20 6-11 11-5-5" strokeLinecap="round" strokeLinejoin="round" />
@@ -138,9 +159,10 @@ export default function SeccionPorQue() {
               <span className="font-semibold text-base-content">
                 No hay que elegir entre las dos.
               </span>{" "}
-              El PDF se sigue mandando igual; lo que cambia es que ahora tiene un sitio
-              a dónde apuntar. Y la página se alimenta de las mismas fichas que ya
-              maquetas: no hay trabajo nuevo.
+              Sigues publicando igual; lo que cambia es que el enlace de la bio deja de
+              ser un WhatsApp suelto y pasa a ser tu inventario completo. Y la página se
+              alimenta de los mismos datos que ya escribes en cada post: no hay trabajo
+              nuevo.
             </p>
             <BotonComprar className="btn btn-primary shrink-0" />
           </div>

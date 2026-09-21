@@ -5,6 +5,14 @@
 // escribir una contraseña. Quien acierta se lleva una cookie firmada y ya no
 // se le vuelve a pedir en una semana.
 //
+// Aquí la puerta hace además un segundo trabajo. Esta demo lleva dentro el
+// logotipo, la dirección, el WhatsApp y los canales de un negocio que no la ha
+// comprado, y su propio comunicado avisa de que "cualquier portal web que use
+// nuestro nombre no es oficial". Contraseña más `noindex` es lo que impide que
+// esto acabe en Google colgando de un dominio ajeno y dándoles la razón. Si
+// algún día se apaga la demo con este contenido dentro, hay que vaciarlo
+// antes.
+//
 // La cookie NO guarda la contraseña: guarda su huella. Falsificarla exige
 // conocer la contraseña, que es exactamente lo que queremos.
 //
@@ -15,7 +23,7 @@
 
 import { esDemo } from "@/libs/demo";
 
-export const COOKIE_ACCESO = "hb_acceso";
+export const COOKIE_ACCESO = "veloce_acceso";
 export const DIAS_DE_ACCESO = 7;
 
 /**
@@ -30,7 +38,7 @@ export const DIAS_DE_ACCESO = 7;
  * /api/entrar y app/entrar/page.js, todos servidor—, así que la contraseña no
  * viaja en el bundle. Por eso no está en config.js.
  */
-const CLAVE_POR_DEFECTO = "hbinversiones2026";
+const CLAVE_POR_DEFECTO = "veloceautos2026";
 
 /** La contraseña configurada. El entorno manda. */
 export function claveDeAcceso() {
@@ -49,7 +57,7 @@ export function hayCandado() {
  * que va sobre el runtime edge.
  */
 export async function huellaDe(clave) {
-  const datos = new TextEncoder().encode(`hb-inversiones::acceso::${clave}`);
+  const datos = new TextEncoder().encode(`veloce-autos::acceso::${clave}`);
   const resumen = await crypto.subtle.digest("SHA-256", datos);
   return [...new Uint8Array(resumen)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
@@ -79,13 +87,16 @@ export async function claveEsCorrecta(intento) {
 /**
  * Rutas que se sirven aunque no se haya pasado la puerta: la propia puerta,
  * su formulario y lo que la pantalla necesita para pintarse.
+ *
+ * Aquí ya no hace falta abrir ninguna carpeta de imágenes: el logotipo de la
+ * puerta es SVG en línea (components/MarcaVeloce.js), así que no hay ni un
+ * archivo de marca que servir antes de la contraseña.
  */
 export function rutaLibre(pathname) {
   return (
     pathname === "/entrar" ||
     pathname === "/api/entrar" ||
     pathname.startsWith("/_next") ||
-    pathname.startsWith("/marca/") ||
     pathname === "/favicon.ico"
   );
 }

@@ -27,7 +27,7 @@ const PASOS = [
     numero: "02",
     titulo: "Cargas el vehículo",
     detalle:
-      "La foto que ya hiciste para el catálogo, el precio, el año, el kilometraje y si es 0 km o usado. Los mismos datos que pones en el post, una sola vez.",
+      "La foto que ya hiciste para el post, el precio, el año, el kilometraje, y si es vehículo o camión. Los mismos datos que escribes en Instagram, una sola vez.",
   },
   {
     numero: "03",
@@ -64,7 +64,7 @@ export default function SeccionPanel() {
       className="relative overflow-hidden border-t border-base-content/8 bg-base-200 px-4 py-24 sm:px-6"
     >
       <div className="textura absolute inset-0" aria-hidden="true" />
-      <div className="textura-panal absolute inset-0" aria-hidden="true" />
+      <div className="textura-via absolute inset-0" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-7xl">
         <Revelar className="text-center">
@@ -77,10 +77,10 @@ export default function SeccionPanel() {
 
         <Revelar retraso={160}>
           <p className="mx-auto mt-6 max-w-2xl text-center leading-relaxed text-base-content/60">
-            Cada vehículo de esta página lo publica el propio equipo de HB desde su
-            panel, en un par de minutos. Nadie tiene que llamar a un programador para
-            subir un carro, cambiar un precio o marcar algo como vendido: por eso lo
-            que ves aquí es lo que hay hoy en el local.
+            Cada unidad de esta página la publica el propio equipo de DealerNauta desde
+            su panel, en un par de minutos, y desde cualquiera de las dos sedes. Nadie
+            tiene que llamar a un programador para subir un camión, cambiar un precio o
+            marcar algo como vendido: por eso lo que ves aquí es lo que hay hoy.
           </p>
         </Revelar>
 
@@ -94,7 +94,7 @@ export default function SeccionPanel() {
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="cifra ml-3 truncate text-[0.65rem] text-base-content/40">
-                  panel · hb inversiones
+                  panel · dealernauta cars
                 </span>
               </div>
 
@@ -113,11 +113,11 @@ export default function SeccionPanel() {
                 <div className="mt-4 grid grid-cols-2 gap-2.5">
                   {[
                     ["Marca", "Toyota"],
-                    ["Modelo", "Corolla Cross"],
-                    ["Año", "2024"],
-                    ["Condición", "0 km importado"],
-                    ["Precio", "$38.900"],
-                    ["Financiado", "Sí"],
+                    ["Modelo", "Frontlander"],
+                    ["Año", "2026"],
+                    ["Tipo", "Vehículo · 0 km"],
+                    ["Precio", "$33.900"],
+                    ["Sede", "Caracas"],
                   ].map(([etiqueta, valor]) => (
                     <div key={etiqueta}>
                       <p className="text-[0.6rem] uppercase tracking-wider text-base-content/40">
@@ -133,7 +133,7 @@ export default function SeccionPanel() {
                 {/* Zona de fotos. */}
                 <div className="mt-3 border border-dashed border-base-content/18 px-3 py-4 text-center">
                   <p className="text-[0.65rem] text-base-content/40">
-                    Arrastra aquí la ficha del catálogo
+                    Arrastra aquí las fotos del post
                   </p>
                 </div>
 
@@ -143,20 +143,20 @@ export default function SeccionPanel() {
                 </p>
                 <div className="mt-2 overflow-hidden border border-base-content/8">
                   <FilaMaqueta
-                    nombre="Volkswagen Tharu 2024"
-                    precio="$34.900"
+                    nombre="Toyota 4Runner Off Road 2026"
+                    precio="$79.000"
                     estado="Disponible"
                     tono="disponible"
                   />
                   <FilaMaqueta
-                    nombre="Toyota Rush 2023"
-                    precio="$26.500"
+                    nombre="Chevrolet Silverado 2014"
+                    precio="$16.500"
                     estado="Reservado"
                     tono="reservado"
                   />
                   <FilaMaqueta
-                    nombre="Chevrolet Aveo 2012"
-                    precio="$7.500"
+                    nombre="Mitsubishi Canter FE 2023"
+                    precio="$42.000"
                     estado="Vendido"
                     tono="vendido"
                   />
@@ -189,7 +189,7 @@ export default function SeccionPanel() {
                   <span className="font-semibold text-base-content">
                     El panel va incluido.
                   </span>{" "}
-                  No se paga aparte ni se cobra por vehículo publicado: es parte de la
+                  No se paga aparte ni se cobra por unidad publicada: es parte de la
                   página y el inventario es tuyo, no de nadie más.
                 </p>
               </div>

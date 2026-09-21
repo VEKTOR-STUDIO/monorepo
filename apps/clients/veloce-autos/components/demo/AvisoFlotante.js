@@ -6,7 +6,7 @@ import BotonComprar from "@/components/demo/BotonComprar";
 import Contador from "@/components/demo/Contador";
 import config from "@/config";
 
-const LLAVE = "hb-inversiones.demo.aviso-cerrado";
+const LLAVE = "veloce-autos.demo.aviso-cerrado";
 
 /**
  * Tarjeta que asoma por abajo cuando el visitante lleva media página bajada.
@@ -81,11 +81,13 @@ export default function AvisoFlotante() {
           </svg>
         </button>
 
-        <p className="microgramma text-[0.65rem] text-primary">Estás viendo una demo</p>
+        <p className="microgramma text-[0.65rem] text-base-content/70">
+          Estás viendo una demo
+        </p>
 
         <p className="mt-2.5 pr-5 text-sm leading-relaxed text-base-content/70">
-          Tu catálogo en PDF convertido en página: inventario, ficha por vehículo y
-          contacto directo por WhatsApp. Con tu rojo y tus diagonales.
+          El enlace oficial que hoy no tienes: inventario por procedencia y por sede,
+          ficha de cada unidad y contacto directo por WhatsApp. Con tu marca.
         </p>
 
         <div className="mt-4 flex items-center justify-between gap-3">
@@ -96,7 +98,9 @@ export default function AvisoFlotante() {
                   {config.demo.precioAnterior}
                 </span>
               )}
-              <span className="cifra text-xl font-bold text-primary">{config.demo.precio}</span>
+              <span className="cifra text-xl font-bold text-base-content">
+                {config.demo.precio}
+              </span>
             </p>
             <p className="text-[0.7rem] text-base-content/40">{config.demo.precioNota}</p>
             <p className="mt-1 flex items-center gap-1.5">

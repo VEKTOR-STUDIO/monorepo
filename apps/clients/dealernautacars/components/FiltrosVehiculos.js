@@ -11,9 +11,10 @@ import { useCallback } from "react";
  * exactamente lo que hace un vendedor con un cliente. Y al volver atrás, el
  * navegador recupera el filtro.
  *
- * El primer corte es la CONDICIÓN, en una fila propia y más grande que el
- * resto: en este negocio nadie busca "un sedán", busca "un 0 km" o "un usado
- * bueno", y son dos compradores con dos presupuestos distintos.
+ * El primer corte es el SEGMENTO —vehículo o camión—, en una fila propia y más
+ * grande que el resto: en este negocio nadie busca "un sedán", busca "un carro"
+ * o "un camión", y son dos compradores que no se parecen en nada. La condición
+ * (0 km o usado) viene después, y la carrocería ya en tercer plano.
  */
 export default function FiltrosVehiculos({ facetas, total, mostrados }) {
   const router = useRouter();
@@ -31,36 +32,56 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
     [params, router, ruta]
   );
 
+  const segmento = params.get("segmento") || "";
   const condicion = params.get("condicion") || "";
   const tipo = params.get("tipo") || "";
   const marca = params.get("marca") || "";
   const orden = params.get("orden") || "";
-  const hayFiltro = Boolean(condicion || tipo || marca || orden || params.get("q"));
+  const hayFiltro = Boolean(
+    segmento || condicion || tipo || marca || orden || params.get("q")
+  );
 
   return (
     <div className="space-y-5">
-      {/* El corte principal. */}
+      {/* El corte principal: vehículos o camiones. */}
       <div className="flex flex-wrap gap-2">
-        <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")} grande>
+        <BotonFiltro activo={segmento === ""} onClick={() => cambiar("segmento", "")} grande>
           Todo
+        </BotonFiltro>
+        {facetas.segmentos.map((s) => (
+          <BotonFiltro
+            key={s.slug}
+            activo={segmento === s.slug}
+            onClick={() => cambiar("segmento", s.slug)}
+            grande
+          >
+            {s.nombre}
+            <span className="cifra ml-2 opacity-55">{s.total}</span>
+          </BotonFiltro>
+        ))}
+      </div>
+
+      {/* La condición, en segundo plano. */}
+      <div className="flex flex-wrap gap-2">
+        <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")}>
+          Nuevas y usadas
         </BotonFiltro>
         {facetas.condiciones.map((c) => (
           <BotonFiltro
             key={c.slug}
             activo={condicion === c.slug}
             onClick={() => cambiar("condicion", c.slug)}
-            grande
           >
             {c.nombre}
-            <span className="cifra ml-2 opacity-55">{c.total}</span>
+            <span className="cifra ml-1.5 opacity-55">{c.total}</span>
           </BotonFiltro>
         ))}
       </div>
 
-      {/* La carrocería, ya en segundo plano. */}
+      {/* La carrocería, ya en tercer plano. */}
       <div className="flex flex-wrap gap-2">
         <BotonFiltro activo={tipo === ""} onClick={() => cambiar("tipo", "")}>
-          Cualquier tipo
+          Cualquier carrocería
         </BotonFiltro>
         {facetas.tipos.map((t) => (
           <BotonFiltro key={t.slug} activo={tipo === t.slug} onClick={() => cambiar("tipo", t.slug)}>
@@ -109,7 +130,7 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
         )}
 
         <p className="cifra ml-auto text-sm text-base-content/45">
-          {mostrados === total ? `${total} vehículos` : `${mostrados} de ${total}`}
+          {mostrados === total ? `${total} unidades` : `${mostrados} de ${total}`}
         </p>
       </div>
     </div>
@@ -117,10 +138,11 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
 }
 
 /**
- * Una pestaña de filtro, con el filo sesgado de la casa.
+ * Una pestaña de filtro, con la forma de pastilla de sus publicaciones.
  *
- * El sesgo va en el botón y el contenido se endereza con `.bisel`, así que el
- * texto sale recto aunque la caja esté inclinada.
+ * Redonda del todo y no rectangular a propósito: las etiquetas de año y
+ * kilometraje que ellos ponen al pie de cada post son óvalos naranjas, y esta
+ * es la misma pieza haciendo otro trabajo.
  */
 function BotonFiltro({ activo, onClick, children, grande = false }) {
   return (
@@ -128,19 +150,15 @@ function BotonFiltro({ activo, onClick, children, grande = false }) {
       type="button"
       onClick={onClick}
       aria-pressed={activo}
-      className={`bisel transition-colors ${
+      className={`display-recto rounded-full tracking-wide transition-colors ${
+        grande ? "px-5 py-2.5 text-sm" : "px-4 py-1.5 text-xs"
+      } ${
         activo
-          ? "bg-primary text-primary-content"
+          ? "pastilla"
           : "bg-base-200 text-base-content/70 hover:bg-base-300 hover:text-base-content"
       }`}
     >
-      <span
-        className={`display-recto block tracking-wide ${
-          grande ? "px-5 py-2.5 text-sm" : "px-4 py-1.5 text-xs"
-        }`}
-      >
-        {children}
-      </span>
+      {children}
     </button>
   );
 }

@@ -10,17 +10,18 @@ export const getSEOTags = ({
 } = {}) => {
   const defaultKeywords = [
     config.appName,
-    "venta de carros Barquisimeto",
-    "carros 0 km Venezuela",
-    "camionetas en venta Barquisimeto",
-    "carros usados Lara",
     "importación de vehículos Venezuela",
-    "comprar carro financiado Venezuela",
-    "HB Inversiones",
+    "importar carro desde Dubái",
+    "carros importados Caracas",
+    "concesionario La Florida Caracas",
+    "autos premium Chacao",
+    "camionetas 0 km Caracas",
+    "importación directa de vehículos",
+    "Veloce Autos",
   ];
 
   return {
-    title: title || `${config.appName} — Venta e importación de vehículos en Barquisimeto`,
+    title: title || `${config.appName} — Importación directa de vehículos en Caracas`,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,
@@ -91,7 +92,13 @@ export const renderSchemaTags = () => {
             addressCountry: "VE",
           },
           areaServed: `${config.business.ciudad}, Venezuela`,
-          sameAs: [config.business.instagramUrl].filter(Boolean),
+          // Las dos cuentas de sede y el TikTok, tal como los enumera su
+          // comunicado: es lo que le dice a Google cuáles son los perfiles
+          // legítimos de este negocio y cuáles no.
+          sameAs: [
+            ...config.business.canales.map((c) => c.url),
+            config.business.tiktokUrl,
+          ].filter((u) => u && !u.includes("wa.me")),
         }),
       }}
     />

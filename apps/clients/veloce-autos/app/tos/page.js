@@ -31,32 +31,34 @@ export default function Terminos() {
         <section>
           <h2 className="display text-lg text-base-content">1. Qué es este sitio</h2>
           <p className="mt-3">
-            Es el escaparate de {config.business.razonSocial}, que importa y vende
-            vehículos en {config.business.ciudad}. Aquí se publica lo que hay en el
-            local; la venta se cierra en persona o por WhatsApp. La página no cobra,
-            no procesa pagos y no retiene dinero de ninguna operación.
+            Es el escaparate oficial de {config.business.razonSocial}, que importa y
+            vende vehículos en {config.business.ciudad}. Aquí se publica lo que hay en
+            las sedes y lo que se puede traer por encargo; la venta se cierra en persona
+            o por WhatsApp. La página no cobra, no procesa pagos y no retiene dinero de
+            ninguna operación. Cualquier otro portal que use este nombre no es nuestro:
+            los canales oficiales están listados en la portada.
           </p>
         </section>
 
         <section>
           <h2 className="display text-lg text-base-content">2. La información publicada</h2>
           <p className="mt-3">
-            Los datos de cada vehículo —año, kilometraje, motor, condición,
-            documentos y precio— se publican de buena fe. El precio es referencial y
-            puede cambiar sin aviso; la disponibilidad también. Las condiciones de
-            financiamiento se acuerdan caso por caso y no forman parte de lo
-            publicado aquí. Antes de cerrar cualquier trato, el comprador debe
-            verificar el vehículo y sus documentos por su cuenta.
+            Los datos de cada vehículo —año, kilometraje, motor, procedencia,
+            condición, documentos y precio— se publican de buena fe. El precio es
+            referencial y puede cambiar sin aviso; la disponibilidad también. En las
+            unidades por encargo, el precio, la configuración y el plazo de entrega se
+            confirman al cotizar y dependen del origen. Antes de cerrar cualquier trato,
+            el comprador debe verificar el vehículo y sus documentos por su cuenta.
           </p>
         </section>
 
         <section>
           <h2 className="display text-lg text-base-content">3. Revisión del vehículo</h2>
           <p className="mt-3">
-            Recomendamos siempre inspeccionar el vehículo en persona —en{" "}
-            {config.business.direccion}, {config.business.ciudad}— y llevarlo a un
-            taller de confianza antes de comprar. La inspección es responsabilidad
-            del comprador.
+            Recomendamos siempre inspeccionar el vehículo en persona —en cualquiera de
+            las dos sedes, {config.business.sedes.map((s) => s.corto).join(" o ")},{" "}
+            {config.business.ciudad}— y llevarlo a un taller de confianza antes de
+            comprar. La inspección es responsabilidad del comprador.
           </p>
         </section>
 
@@ -68,7 +70,7 @@ export default function Terminos() {
               href={config.business.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="text-base-content underline-offset-4 hover:underline"
             >
               @{config.business.instagram}
             </a>

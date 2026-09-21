@@ -22,14 +22,14 @@ export default function BarraDemo() {
   if (!esDemo() || ruta === "/entrar") return null;
 
   return (
-    <div className="barra-vidrio sticky top-0 z-60 h-10 border-b border-primary/25">
+    <div className="barra-vidrio sticky top-0 z-60 h-10 border-b border-base-content/20">
       <div className="mx-auto flex h-full max-w-7xl items-center gap-3 px-4 sm:px-6">
         <span className="flex items-center gap-2">
           <span
-            className="inline-block size-1.5 animate-[latido_3.5s_ease-in-out_infinite] rounded-full bg-primary"
+            className="inline-block size-1.5 animate-[latido_3.5s_ease-in-out_infinite] rounded-full bg-base-content"
             aria-hidden="true"
           />
-          <span className="rotulo text-primary">Demo</span>
+          <span className="rotulo text-base-content">Demo</span>
         </span>
 
         <p className="min-w-0 truncate text-xs text-base-content/70">

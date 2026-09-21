@@ -1,79 +1,77 @@
-import Image from "next/image";
-import MarcaHB from "@/components/MarcaHB";
+import MarcaVeloce from "@/components/MarcaVeloce";
 
 // -----------------------------------------------------------------------------
-// La marca de HB Inversiones.
+// La marca de Veloce Autos.
 //
-// Su logotipo es un círculo de mármol blanco con el trazo del deportivo encima
-// y "HB INVERSIONES C.A." debajo. Sobre el negro de esta página, ese círculo
-// blanco funciona como una chapa y no hace falta recortarlo ni fundirlo con
-// ningún `mix-blend-mode`: contrasta solo.
+// Todo sale de components/MarcaVeloce.js, que es el trazado exacto de su foto
+// de perfil. Aquí solo se monta de las tres maneras en que hace falta:
 //
-// Tres formas, según el sitio:
+//   <Logo />         la V y el nombre en línea. Cabecera y pie.
+//   <LogoGrande />   la V encima del nombre, como su comunicado. Portadas.
+//   <LogoChapa />    la V negra dentro del círculo blanco, como su avatar.
 //
-//   <Logo />         la chapa pequeña + el nombre. Para la cabecera y el pie.
-//   <LogoGrande />   el trazo dibujado encima del nombre, para portadas.
-//   <LogoChapa />    solo el círculo, a cualquier tamaño.
+// No hay ningún PNG detrás. El original —public de Instagram, 1080 px— está
+// guardado en docs/fuentes/ como material de partida, pero la página no lo
+// sirve: lo que se pinta es vector, así que la chapa de 28 px de la cabecera y
+// la V de 600 px de una portada salen del mismo dibujo.
 //
-// El archivo es la foto de perfil de @hb_inversiones_12 recortada en círculo.
-// Es pequeña (116 px) porque es la resolución que hay; por eso nunca se usa
-// más grande que eso, y cuando hace falta algo grande se dibuja el trazo con
-// <MarcaHB />, que es vector y no se despeina.
+// El color siempre es `currentColor`. Sobre el negro de la página la marca es
+// blanca; dentro de la chapa, el círculo es blanco y la V hereda el negro. Un
+// solo dibujo, ningún archivo por variante.
 // -----------------------------------------------------------------------------
 
-const ARCHIVO = "/marca/hb-logo.png";
-const LADO_ORIGINAL = 116;
-
-/** El círculo del logotipo, tal cual. */
-export function LogoChapa({ lado = 36, className = "", prioridad = false }) {
-  // `lado` admite un número de píxeles o cualquier medida CSS: la puerta le
-  // pasa un `clamp()` para que la chapa encoja con el alto de la pantalla.
+/**
+ * El avatar: la V negra en un círculo blanco, igual que su foto de perfil.
+ *
+ * `lado` admite un número de píxeles o cualquier medida CSS —la puerta le pasa
+ * un `clamp()` para que encoja con el alto de la pantalla—.
+ */
+export function LogoChapa({ lado = 36, className = "" }) {
   const medida = typeof lado === "number" ? `${lado}px` : lado;
+  // Por debajo de unos 22 px el hueco entre las púas y el cuerpo no cabe en un
+  // píxel y la marca se empasta, así que ahí se pinta la versión sin púas.
+  const diminuta = typeof lado === "number" && lado < 22;
 
   return (
-    <Image
-      src={ARCHIVO}
-      alt="HB Inversiones C.A."
-      width={LADO_ORIGINAL}
-      height={LADO_ORIGINAL}
-      priority={prioridad}
-      className={`block shrink-0 rounded-full ${className}`}
+    <span
+      className={`relative inline-flex shrink-0 items-center justify-center rounded-full bg-white ${className}`}
       style={{ width: medida, height: medida }}
-    />
+      aria-hidden="true"
+    >
+      <MarcaVeloce compacta={diminuta} className="h-[42%] w-auto text-black" />
+    </span>
   );
 }
 
 /**
  * @param {"claro"|"oscuro"} tono  sobre fondo claro o sobre fondo oscuro
  */
-export default function Logo({ className = "", tono = "oscuro", lado = 34 }) {
+export default function Logo({ className = "", tono = "oscuro", alto = 26 }) {
   const color = tono === "oscuro" ? "text-base-content" : "text-base-100";
 
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <LogoChapa lado={lado} />
+    <span className={`inline-flex items-center gap-3 ${className}`}>
+      <MarcaVeloce className={`w-auto shrink-0 ${color}`} style={{ height: alto }} />
       <span className="leading-none">
-        <span className={`display block text-[1.15rem] leading-none ${color}`}>
-          HB <span className="text-primary">Inversiones</span>
-        </span>
-        <span className="cifra mt-0.5 block text-[0.5rem] tracking-[0.3em] text-base-content/40">
-          C.A. · {`Barquisimeto`}
+        <span className={`marca block text-[1.05rem] leading-none ${color}`}>Veloce</span>
+        <span className="marca mt-1 block text-[0.42rem] leading-none tracking-[0.5em] text-base-content/45">
+          Autos
         </span>
       </span>
     </span>
   );
 }
 
-/** Grande y centrado: el trazo dibujado y el nombre debajo. */
+/** Grande y centrado, como la cabecera de su comunicado. */
 export function LogoGrande({ className = "" }) {
   return (
     <span className={`inline-flex flex-col items-center ${className}`}>
-      <MarcaHB className="h-14 w-44 text-base-content" />
-      <span className="display mt-1 text-4xl leading-none text-base-content sm:text-5xl">
-        HB <span className="text-primary">Inversiones</span>
+      <MarcaVeloce className="h-14 w-auto text-base-content sm:h-20" />
+      <span className="marca mt-4 text-4xl leading-none text-base-content sm:text-5xl">
+        Veloce
       </span>
-      <span className="cifra mt-2 text-[0.6rem] tracking-[0.42em] text-base-content/40">
-        C.A.
+      <span className="marca mt-2.5 text-[0.6rem] leading-none tracking-[0.62em] text-base-content/45">
+        Autos
       </span>
     </span>
   );

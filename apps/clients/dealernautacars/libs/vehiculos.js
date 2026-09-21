@@ -1,16 +1,18 @@
 // -----------------------------------------------------------------------------
 // El inventario.
 //
-// La fuente de verdad es data/vehiculos.json, que replica el «CATÁLOGO DE
-// VEHÍCULOS HB»: una página por vehículo, con su foto y sus viñetas. Se lee del
-// disco, no de una base de datos, porque un catálogo de una docena larga de
-// vehículos que cambia un par de veces por semana no necesita más, y así la
-// página funciona sin depender de nada externo.
+// La fuente de verdad es data/vehiculos.json. Se lee del disco, no de una base
+// de datos, porque un inventario de un par de docenas de unidades que cambia
+// un par de veces por semana no necesita más, y así la página funciona sin
+// depender de nada externo.
 //
-// El corte que de verdad usa este negocio no es la carrocería: es 0 KM
-// IMPORTADO contra USADO. La bio lo dice antes que nada —"importamos y
-// vendemos"— y son dos compradores distintos, así que la condición es un
-// filtro de primer nivel y no un dato escondido en la ficha.
+// EL CORTE PRINCIPAL DE ESTE NEGOCIO NO ES LA CARROCERÍA NI LA CONDICIÓN: ES
+// VEHÍCULOS CONTRA CAMIONES. DealerNauta lo tiene partido hasta en dos cuentas
+// de Instagram y en dos sedes —los carros en Los Chaguaramos, los camiones en
+// San Antonio de los Altos—, y son dos compradores que no se parecen en nada:
+// uno viene a cambiar de carro y el otro viene a montar una flota. Por eso el
+// `segmento` manda sobre todo lo demás, y la condición (0 km / usado) queda en
+// segundo nivel.
 //
 // Todo lo que pinta la web pasa por aquí: si mañana esto se muda a Supabase,
 // se cambia `leerVehiculos` y el resto del sitio ni se entera.
@@ -18,25 +20,52 @@
 
 import catalogo from "@/data/vehiculos.json";
 
-/** Las carrocerías del catálogo, en el orden en que se enseñan. */
+/** El primer corte: los dos negocios que conviven bajo la misma marca. */
+export const SEGMENTOS = [
+  {
+    slug: "auto",
+    nombre: "Vehículos",
+    corto: "Vehículos",
+    singular: "vehículo",
+    plural: "vehículos",
+    resumen:
+      "0 km recién llegados y usados en perfectas condiciones, revisados antes de salir a la venta.",
+    sede: "caracas",
+  },
+  {
+    slug: "camion",
+    nombre: "Camiones",
+    corto: "Camiones",
+    singular: "camión",
+    plural: "camiones",
+    resumen:
+      "Nuevos y usados, de carga liviana a pesada. Es el flanco con el que son el N.º 1 a nivel nacional.",
+    sede: "san-antonio",
+  },
+];
+
+/** Las carrocerías, en el orden en que se enseñan. */
 export const TIPOS = [
   { slug: "suv", nombre: "Camionetas", singular: "camioneta", plural: "camionetas" },
   { slug: "sedan", nombre: "Sedanes", singular: "sedán", plural: "sedanes" },
+  { slug: "pickup", nombre: "Pick-ups", singular: "pick-up", plural: "pick-ups" },
+  { slug: "camion", nombre: "Camiones de carga", singular: "camión", plural: "camiones" },
+  { slug: "furgon", nombre: "Furgonetas", singular: "furgoneta", plural: "furgonetas" },
 ];
 
-/** El corte principal: lo que entra importado y lo que entra usado. */
+/** El segundo corte: lo que entra 0 km y lo que entra usado. */
 export const CONDICIONES = [
   {
     slug: "nuevo",
-    nombre: "0 km importados",
+    nombre: "0 km",
     corto: "0 km",
-    resumen: "Unidades nuevas, traídas por HB, con opción de financiamiento.",
+    resumen: "Unidades nuevas, sin rodar, listas para salir con su documentación.",
   },
   {
     slug: "usado",
-    nombre: "Usados verificados",
+    nombre: "Usados",
     corto: "Usado",
-    resumen: "Revisados uno a uno, con sus papeles y su kilometraje a la vista.",
+    resumen: "En perfectas condiciones, revisados uno a uno, con su kilometraje a la vista.",
   },
 ];
 
@@ -46,15 +75,17 @@ export const ESTADOS = {
   vendido: { texto: "Vendido", punto: "bg-base-content/35", clase: "text-base-content/50" },
 };
 
-/** Un vehículo, con lo derivado ya calculado. */
+/** Una unidad, con lo derivado ya calculado. */
 function normalizar(v) {
   return {
     ...v,
     titulo: `${v.marca} ${v.modelo}`,
     tituloLargo: [v.marca, v.modelo, v.version].filter(Boolean).join(" "),
-    tipo: TIPOS.find((t) => t.slug === v.carroceria) || TIPOS[1],
+    tipo: TIPOS.find((t) => t.slug === v.carroceria) || TIPOS[0],
+    segmentoInfo: SEGMENTOS.find((s) => s.slug === v.segmento) || SEGMENTOS[0],
     condicionInfo: CONDICIONES.find((c) => c.slug === v.condicion) || CONDICIONES[1],
     esNuevo: v.condicion === "nuevo",
+    esCamion: v.segmento === "camion",
     disponible: v.estado === "disponible",
   };
 }
@@ -73,12 +104,22 @@ export function vehiculoPorSlug(slug) {
 /**
  * ¿Queda algún precio sin confirmar?
  *
- * El catálogo en PDF no publica precios, así que los del JSON son de
- * referencia hasta que el cliente cargue los suyos. Lo usa el aviso de la
- * portada y el sello de las fichas.
+ * Instagram no deja leer las publicaciones una a una, así que los precios del
+ * JSON son de referencia hasta que el cliente cargue los suyos. Lo usa el
+ * aviso de la portada y el sello de las fichas.
  */
 export function hayPreciosProvisionales() {
   return leerVehiculos().some((v) => v.precioProvisional);
+}
+
+/** ¿Y alguna unidad que no salga de su Instagram, sino puesta de muestra? */
+export function hayUnidadesDeMuestra() {
+  return leerVehiculos().some((v) => v.deMuestra);
+}
+
+/** Cuántas unidades salen, una a una, de su propio Instagram. */
+export function totalVerificadas() {
+  return leerVehiculos().filter((v) => !v.deMuestra).length;
 }
 
 export function actualizadoEn() {
@@ -103,6 +144,10 @@ export function facetasDe(vehiculos) {
 
   return {
     marcas: contar("marca"),
+    segmentos: SEGMENTOS.map((s) => ({
+      ...s,
+      total: vehiculos.filter((v) => v.segmento === s.slug).length,
+    })).filter((s) => s.total > 0),
     tipos: TIPOS.map((t) => ({
       ...t,
       total: vehiculos.filter((v) => v.carroceria === t.slug).length,
@@ -121,14 +166,15 @@ export function facetasDe(vehiculos) {
  * El buscador. Todos los criterios son opcionales y se acumulan.
  *
  * `q` busca en marca, modelo, versión y año a la vez, que es como la gente
- * escribe de verdad: "corolla 2024", "camioneta 0 km".
+ * escribe de verdad: "4runner 2026", "camión 0 km", "corolla usado".
  */
 export function filtrar(
   vehiculos,
-  { condicion, tipo, marca, precioMax, anioMin, q, orden } = {}
+  { segmento, condicion, tipo, marca, precioMax, anioMin, q, orden } = {}
 ) {
   let lista = [...vehiculos];
 
+  if (segmento) lista = lista.filter((v) => v.segmento === segmento);
   if (condicion) lista = lista.filter((v) => v.condicion === condicion);
   if (tipo) lista = lista.filter((v) => v.carroceria === tipo);
   if (marca) lista = lista.filter((v) => v.marca === marca);
@@ -143,8 +189,8 @@ export function filtrar(
     const palabras = q.toLowerCase().trim().split(/\s+/);
     lista = lista.filter((v) => {
       const heno = `${v.marca} ${v.modelo} ${v.version || ""} ${v.anio} ${v.carroceria} ${
-        v.esNuevo ? "0 km nuevo importado" : "usado"
-      }`.toLowerCase();
+        v.segmento === "camion" ? "camion camiones carga" : "vehiculo carro"
+      } ${v.esNuevo ? "0 km nuevo" : "usado"}`.toLowerCase();
       return palabras.every((p) => heno.includes(p));
     });
   }
@@ -157,8 +203,8 @@ export function filtrar(
     case "anio-desc":
       return lista.sort((a, b) => b.anio - a.anio);
     case "km-asc":
-      // El kilometraje desconocido —el catálogo no siempre lo dice— se va al
-      // final: si contara como 0 se colaría delante de los 0 km de verdad.
+      // El kilometraje desconocido se va al final: si contara como 0 se
+      // colaría delante de los 0 km de verdad.
       return lista.sort(
         (a, b) =>
           (Number.isFinite(a.km) ? a.km : Infinity) -

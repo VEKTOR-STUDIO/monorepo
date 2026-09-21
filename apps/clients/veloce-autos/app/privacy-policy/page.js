@@ -38,9 +38,19 @@ export default function Privacidad() {
         <section>
           <h2 className="display text-lg text-base-content">Para qué los usamos</h2>
           <p className="mt-3">
-            Únicamente para responderte sobre el vehículo o el inmueble por el
-            que preguntas. No se venden ni se ceden a terceros, y no se usan para
-            mandarte publicidad que no hayas pedido.
+            Únicamente para responderte sobre la unidad por la que preguntas o para
+            cotizarte una importación. No se venden ni se ceden a terceros, y no se usan
+            para mandarte publicidad que no hayas pedido.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="display text-lg text-base-content">Lo que nunca te vamos a pedir</h2>
+          <p className="mt-3">
+            No pedimos códigos de confirmación, contraseñas ni datos bancarios por este
+            formulario, ni por ningún otro canal. Si alguien te los pide a nombre de{" "}
+            {config.business.nombre}, no somos nosotros: verifícalo en la lista de
+            canales oficiales de la portada antes de responder.
           </p>
         </section>
 
@@ -61,7 +71,7 @@ export default function Privacidad() {
               href={config.business.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary hover:underline"
+              className="text-base-content underline-offset-4 hover:underline"
             >
               @{config.business.instagram}
             </a>

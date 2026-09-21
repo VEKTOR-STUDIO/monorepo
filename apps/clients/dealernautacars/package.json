@@ -1,5 +1,5 @@
 {
-  "name": "hb-inversiones",
+  "name": "dealernautacars",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -35,5 +35,5 @@
     "react": "$react",
     "react-dom": "$react-dom"
   },
-  "description": "Página de venta de vehículos de HB Inversiones C.A. (@hb_inversiones_12, Barquisimeto): catálogo 0 km y usados, ficha por vehículo y contacto por WhatsApp."
+  "description": "Página de inventario de DealerNauta Cars (@dealernautacars y @dealernautacarsccs, Caracas y San Antonio de los Altos): vehículos 0 km y usados, camiones nuevos y usados, ficha por unidad y WhatsApp a la sede que corresponde."
 }

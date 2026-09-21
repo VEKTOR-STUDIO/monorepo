@@ -5,12 +5,17 @@
 // derecho a saber cuál está leyendo:
 //
 //   · el ESCAPARATE, que le habla al comprador de un carro;
-//   · la OFERTA, que le habla al dueño de HB Inversiones sobre el sistema
-//     que se le está vendiendo.
+//   · la OFERTA, que le habla a Veloce Autos sobre el sistema que se le está
+//     vendiendo.
 //
 // Entre una y otra pasa esta cinta, en Microgramma —la tipografía de la firma
 // de Alessandrovaru— para que se lea como una voz ajena a la marca del
 // cliente. No es decoración: es el aviso de que cambia el interlocutor.
+//
+// Con este cliente el aviso hace falta más que nunca. Microgramma y el rótulo
+// de Veloce vienen del mismo esqueleto cuadrado y de lejos se parecen, así que
+// lo que de verdad separa las dos voces es dónde aparece cada una. Microgramma
+// no sale nunca fuera de las zonas que marcan estas cintas.
 //
 // El texto va duplicado a propósito; el porqué está en .cintillo-pista
 // (app/globals.css).
@@ -18,7 +23,7 @@
 
 const MENSAJES = {
   venta: [
-    "Esto es para ti, dueño de HB Inversiones",
+    "Esto es para ti, Veloce",
     "Así se administra por dentro",
     "Lo que sigue es la oferta",
     "Tu página, tu dominio, tu código",
@@ -36,7 +41,7 @@ const MENSAJES = {
     "Precio de lanzamiento",
     "Todo incluido · sin mensualidad",
     "El código es tuyo",
-    "Hecha con tu catálogo",
+    "Hecha con tu marca",
   ],
 
   // La de abajo, girando al revés para que las dos no vayan en paralelo.
@@ -44,7 +49,8 @@ const MENSAJES = {
     "Dominio propio",
     "Inventario ilimitado",
     "Panel incluido",
-    "0 km y usados separados",
+    "Dubái · Europa · China · USA",
+    "Las dos sedes separadas",
     "Entrega en 7 días",
   ],
 };

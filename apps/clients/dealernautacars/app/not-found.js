@@ -10,7 +10,7 @@ export default function NoEncontrado() {
         className="pointer-events-none absolute inset-x-0 bottom-[18%] flex justify-center opacity-[0.06]"
         aria-hidden="true"
       >
-        <Silueta tipo="sedan" className="w-[120%] max-w-3xl text-base-content" />
+        <Silueta tipo="camion" className="w-[120%] max-w-3xl text-base-content" />
       </div>
 
       <div className="relative">
@@ -19,8 +19,8 @@ export default function NoEncontrado() {
         <h1 className="display mt-4 text-3xl sm:text-4xl">Aquí no hay nada</h1>
 
         <p className="mx-auto mt-5 max-w-sm text-base-content/60">
-          La página que buscas no existe, o el vehículo que venías a ver ya se
-          vendió y salió del catálogo.
+          La página que buscas no existe, o la unidad que venías a ver ya se vendió y
+          salió del inventario.
         </p>
 
         <div className="mt-8 flex flex-wrap justify-center gap-3">

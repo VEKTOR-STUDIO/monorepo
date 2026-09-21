@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { LogoChapa } from "@/components/Logo";
-import MarcaHB from "@/components/MarcaHB";
-import Diagonales from "@/components/Diagonales";
+import MarcaDealernauta from "@/components/MarcaDealernauta";
+import Escenario from "@/components/Escenario";
 import Cintillo from "@/components/Cintillo";
 import Contador from "@/components/demo/Contador";
 import { contexto, usarGsap } from "@/libs/animaciones";
@@ -22,16 +22,16 @@ import config from "@/config";
  * de antes, la fecha en que se acaba y la lista de lo que se lleva quien
  * compre. Si se vacía `precioAnterior`, el sello de rebaja desaparece solo.
  *
- * Aquí manda la firma de Alessandrovaru y no la marca de HB: quien llega
- * todavía no es cliente de HB, es alguien a quien se le está enseñando un
- * trabajo. Al entrar, la jerarquía se invierte.
+ * Aquí manda la firma de Alessandrovaru y no la marca de DealerNauta: quien
+ * llega todavía no es cliente de DealerNauta, es alguien a quien se le está
+ * enseñando un trabajo. Al entrar, la jerarquía se invierte.
  *
  * Esto es la cara del candado; el candado de verdad está en el middleware.
  * Sin la cookie correcta el servidor no sirve ni una página, así que saltarse
  * esta pantalla con las herramientas del navegador no lleva a ningún sitio.
  */
 
-/** "$740" y "$449" → 39. Null si no hay rebaja que anunciar. */
+/** "$990" y "$690" → 30. Null si no hay rebaja que anunciar. */
 function calcularDescuento(antes, ahora) {
   const limpiar = (v) => Number(String(v ?? "").replace(/[^\d.]/g, ""));
   const a = limpiar(antes);
@@ -138,12 +138,12 @@ export default function PantallaAcceso({ destino = "/" }) {
   return (
     <main ref={raiz} className="puerta relative flex h-svh flex-col overflow-hidden bg-base-100">
       {/* ---------------- Fondo ---------------- */}
-      <Diagonales variante="portada" deslizar={false} />
+      <Escenario variante="portada" deslizar={false} />
 
-      {/* Velo. Sin él, "INVERSIONES" —que va en rojo— cae justo encima de la
-          banda roja de las diagonales y desaparece: rojo sobre rojo. El velo
-          baja las bandas lo justo para que sigan viéndose de fondo y el texto
-          se lea encima. */}
+      {/* Velo. Sin él, "CARS" —que va en naranja— cae justo encima del cielo
+          naranja del escenario y desaparece: naranja sobre naranja. El velo
+          baja el fondo lo justo para que se siga viendo y el texto se lea
+          encima. */}
       <div className="absolute inset-0 bg-base-100/72" aria-hidden="true" />
 
       <div className="malla malla-centro absolute inset-0 opacity-50" aria-hidden="true" />
@@ -154,7 +154,7 @@ export default function PantallaAcceso({ destino = "/" }) {
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--color-rojo) 35%, transparent), transparent 62%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--color-naranja) 35%, transparent), transparent 62%)",
           filter: "blur(90px)",
         }}
       />
@@ -172,12 +172,10 @@ export default function PantallaAcceso({ destino = "/" }) {
           rara no cupiera, se desplazaría por dentro en vez de comerse el
           principio. La página, por fuera, no hace scroll nunca.
 
-          El `z-10` abre un contexto de apilamiento, y eso apaga el
-          `mix-blend-screen` con el que LogoCuadrado/LogoFoto se comen su
-          propio fondo negro: por eso el logotipo sale aquí dentro de un
-          cuadrado que en la cabecera no se ve. Quitarlo lo arregla —el fondo
-          va antes en el árbol, así que el cuerpo queda encima igual—, pero
-          cambia la carátula, así que se deja como estaba. */}
+          El `z-10` abre un contexto de apilamiento. Eso apagaría un
+          `mix-blend-mode`, que es por lo que el emblema NO usa blend para
+          comerse su fondo negro sino el filtro SVG `marca-alfa` del layout
+          raíz: a un filtro le da igual en qué contexto esté. */}
       <div className="relative z-10 flex min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain">
         <div className="m-auto grid w-full max-w-6xl gap-x-[clamp(1.5rem,4vw,3.5rem)] gap-y-[var(--puerta-v4)] px-5 py-[var(--puerta-v2)] lg:grid-cols-[1.15fr_1fr]">
           {/* ============ Columna izquierda: la carátula ============ */}
@@ -212,17 +210,17 @@ export default function PantallaAcceso({ destino = "/" }) {
               <p className="puerta-cortesia microgramma text-[0.6rem] text-base-content/40">Demo privada de</p>
               <div className="mt-[var(--puerta-v1)] flex items-center gap-4">
                 <LogoChapa lado="var(--puerta-logo)" prioridad />
-                <MarcaHB className="h-10 w-32 text-base-content" />
+                <MarcaDealernauta className="h-10 w-32 text-base-content" />
               </div>
               <h1 className="display mt-[var(--puerta-v2)] text-[clamp(1.6rem,4.4vh,3rem)]">
-                HB <span className="text-primary">Inversiones</span>
+                <span className="text-primary">Dealernauta</span>Cars
               </h1>
             </div>
 
             <p data-puerta="titulo" className="puerta-presentacion mt-[var(--puerta-v3)] max-w-md leading-relaxed text-sm text-base-content/65">
-              Tu catálogo de vehículos hecho página web, entero y funcionando: las trece
-              unidades del PDF, con su gráfica, su corte diagonal y su rojo. Entra con tu
-              contraseña y recórrela.
+              Tu inventario hecho página web, entero y funcionando: vehículos y camiones
+              separados, tus dos sedes, y la gráfica de tus publicaciones —el cielo
+              naranja, la ciudad, el asfalto—. Entra con tu contraseña y recórrela.
             </p>
 
             {/* Lo que trae la edición. */}
@@ -312,7 +310,7 @@ export default function PantallaAcceso({ destino = "/" }) {
                 <input
                   type="text"
                   name="username"
-                  value="hb-inversiones-demo"
+                  value="dealernauta-cars-demo"
                   autoComplete="username"
                   readOnly
                   tabIndex={-1}

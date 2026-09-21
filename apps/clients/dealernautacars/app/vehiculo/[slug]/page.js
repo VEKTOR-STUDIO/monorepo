@@ -2,19 +2,23 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import FotoVehiculo, { AvisoSinFoto, AvisoPrecioProvisional } from "@/components/FotoVehiculo";
+import FotoVehiculo, {
+  AvisoSinFoto,
+  AvisoPrecioProvisional,
+  AvisoDeMuestra,
+} from "@/components/FotoVehiculo";
 import BotonContacto from "@/components/BotonContacto";
 import Especificaciones, { EspecificacionesCompletas } from "@/components/Especificaciones";
 import RejillaVehiculos from "@/components/RejillaVehiculos";
 import Revelar from "@/components/Revelar";
 import TituloAnimado from "@/components/TituloAnimado";
-import Diagonales from "@/components/Diagonales";
+import Escenario from "@/components/Escenario";
 import AvisoBloqueado from "@/components/demo/AvisoBloqueado";
 import BloqueVenta from "@/components/demo/BloqueVenta";
 import { leerVehiculos, vehiculoPorSlug, ESTADOS } from "@/libs/vehiculos";
 import { obtenerTasa } from "@/libs/bcv";
 import { enDolares, enBolivares, aBolivares, kilometrajeDe } from "@/libs/formato";
-import { esDemo } from "@/libs/demo";
+import { esDemo, sedeDe } from "@/libs/demo";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
 
@@ -30,11 +34,12 @@ export async function generateMetadata({ params }) {
   const vehiculo = vehiculoPorSlug(slug);
   if (!vehiculo) return getSEOTags();
 
-  const condicion = vehiculo.esNuevo ? "0 km importado" : kilometrajeDe(vehiculo);
+  const condicion = vehiculo.esNuevo ? "0 km" : kilometrajeDe(vehiculo);
+  const donde = vehiculo.ubicacion || config.business.ciudad;
 
   return getSEOTags({
     title: `${vehiculo.tituloLargo} ${vehiculo.anio} | ${config.appName}`,
-    description: `${vehiculo.tituloLargo} ${vehiculo.anio}, ${condicion}, ${vehiculo.motor}. ${enDolares(vehiculo.precio)} en ${config.business.ciudad}.`,
+    description: `${vehiculo.tituloLargo} ${vehiculo.anio}, ${condicion}, ${vehiculo.motor}. ${enDolares(vehiculo.precio)} en ${donde}.`,
     canonicalUrlRelative: `/vehiculo/${vehiculo.slug}`,
   });
 }
@@ -51,17 +56,19 @@ export default async function Vehiculo({ params }) {
 
   const estado = ESTADOS[vehiculo.estado] || ESTADOS.disponible;
   const demo = esDemo();
+  const sede = sedeDe(vehiculo);
 
-  // Parecidos: primero los de la misma condición y carrocería, que es lo que
-  // de verdad ayuda a quien todavía no se ha decidido; si no salen tres, se
-  // completa con los de la misma condición.
+  // Parecidos: primero los del mismo segmento y carrocería, que es lo que de
+  // verdad ayuda a quien todavía no se ha decidido; si no salen tres, se
+  // completa con los del mismo segmento. Un camión nunca se propone junto a un
+  // sedán: son compradores distintos.
   const resto = leerVehiculos().filter((v) => v.slug !== vehiculo.slug);
   const parecidos = [
     ...resto.filter(
-      (v) => v.carroceria === vehiculo.carroceria && v.condicion === vehiculo.condicion
+      (v) => v.segmento === vehiculo.segmento && v.carroceria === vehiculo.carroceria
     ),
     ...resto.filter(
-      (v) => v.condicion === vehiculo.condicion && v.carroceria !== vehiculo.carroceria
+      (v) => v.segmento === vehiculo.segmento && v.carroceria !== vehiculo.carroceria
     ),
   ].slice(0, 3);
 
@@ -81,12 +88,12 @@ export default async function Vehiculo({ params }) {
         </div>
 
         <article className="relative overflow-hidden">
-          <Diagonales variante="sutil" />
+          <Escenario variante="sutil" />
 
           <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">
             <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
-              {/* La foto, lo primero y lo más grande. Es la página del catálogo
-                  de HB entera, así que no se recorta. */}
+              {/* La imagen, lo primero y lo más grande. Es una publicación
+                  cuadrada suya, así que no se recorta. */}
               <div>
                 <Revelar desde="corte">
                   <FotoVehiculo
@@ -137,7 +144,7 @@ export default async function Vehiculo({ params }) {
                       <span className={estado.clase}>{estado.texto}</span>
                     </span>
                     <span className="text-sm text-base-content/50">
-                      · {config.business.ciudad}
+                      · {sede?.nombre || vehiculo.ubicacion}
                     </span>
                   </div>
                 </Revelar>
@@ -166,11 +173,9 @@ export default async function Vehiculo({ params }) {
                         ≈ {enBolivares(enBs)} · tasa BCV {tasa.valor.toFixed(2)}
                       </p>
                     )}
-                    {vehiculo.financiado && (
-                      <p className="mt-2 text-sm text-base-content/60">
-                        Con opción de financiamiento
-                      </p>
-                    )}
+                    <p className="mt-2 text-sm text-base-content/60">
+                      Se ve y se prueba en {sede?.direccion || vehiculo.ubicacion}
+                    </p>
                   </div>
                 </Revelar>
 
@@ -182,10 +187,11 @@ export default async function Vehiculo({ params }) {
                   <div className="mt-8">
                     {demo ? (
                       <AvisoBloqueado titulo="El contacto está desactivado en la demo">
-                        En la página entregada, este botón abre WhatsApp con el mensaje
-                        ya escrito —«me interesa el {vehiculo.tituloLargo} {vehiculo.anio},
-                        ¿sigue disponible?»— para que el comprador no tenga que explicar
-                        nada y en HB sepan de entrada por cuál unidad preguntan.
+                        En la página entregada, este botón abre WhatsApp con{" "}
+                        {sede?.nombre} ({sede?.telefono}) y el mensaje ya escrito —«me
+                        interesa el {vehiculo.tituloLargo} {vehiculo.anio}, ¿sigue
+                        disponible?»— para que el comprador no tenga que explicar nada y
+                        conteste la sede que tiene la unidad delante.
                       </AvisoBloqueado>
                     ) : (
                       <BotonContacto
@@ -204,7 +210,7 @@ export default async function Vehiculo({ params }) {
                         <li key={detalle} className="flex gap-3 text-sm leading-snug">
                           <span
                             className="mt-1 h-3 w-2 shrink-0 bg-primary"
-                            style={{ transform: "skewX(var(--angulo-hb))" }}
+                            style={{ transform: "skewX(var(--angulo-dn))" }}
                             aria-hidden="true"
                           />
                           <span className="display-recto tracking-wide text-base-content/80">
@@ -215,9 +221,10 @@ export default async function Vehiculo({ params }) {
                     </ul>
                   )}
 
-                  {vehiculo.precioProvisional && (
-                    <div className="mt-7">
-                      <AvisoPrecioProvisional />
+                  {(vehiculo.precioProvisional || vehiculo.deMuestra) && (
+                    <div className="mt-7 flex flex-wrap gap-3">
+                      {vehiculo.precioProvisional && <AvisoPrecioProvisional />}
+                      {vehiculo.deMuestra && <AvisoDeMuestra />}
                     </div>
                   )}
                 </Revelar>
@@ -232,7 +239,8 @@ export default async function Vehiculo({ params }) {
                   {vehiculo.descripcion}
                 </p>
                 <p className="mt-8 text-sm leading-relaxed text-base-content/45">
-                  Se ve y se prueba en {config.business.direccion}, {config.business.ciudad}.
+                  Se ve y se prueba en {sede?.direccion}. Para verla, escribe antes al{" "}
+                  {sede?.telefono} y te la apartan.
                 </p>
               </Revelar>
 
@@ -252,7 +260,7 @@ export default async function Vehiculo({ params }) {
                 <p className="rotulo">También te puede servir</p>
               </Revelar>
               <TituloAnimado as="h2" className="display mt-4 text-3xl sm:text-4xl">
-                {vehiculo.esNuevo ? "Otros 0 km del catálogo" : "Otros usados del catálogo"}
+                {vehiculo.esCamion ? "Otros camiones" : "Otros vehículos"}
               </TituloAnimado>
               <RejillaVehiculos vehiculos={parecidos} className="mt-10" />
             </div>

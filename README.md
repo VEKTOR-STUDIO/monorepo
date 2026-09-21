@@ -17,6 +17,8 @@ alessandrovaru-monorepo/
 │   ├── eslint-config/               ← Shared lint rules (@alessandrovaru/eslint-config).
 │   ├── tsconfig/                    ← Shared jsconfig/tsconfig base (@alessandrovaru/tsconfig).
 │   └── lib/                         ← Shared helpers (@alessandrovaru/lib).
+├── tools/
+│   └── instagram/                   ← Read a public Instagram catalogue into a client app. See its README.
 ├── pnpm-workspace.yaml
 ├── turbo.json
 └── package.json

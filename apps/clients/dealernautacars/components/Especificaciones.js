@@ -5,9 +5,9 @@ import { kilometrajeDe } from "@/libs/formato";
  * finas. Es lo primero que mira quien compra y lo primero que pregunta quien
  * escribe, así que va antes que cualquier texto de venta.
  *
- * La primera casilla es la CONDICIÓN y no el año: en este catálogo la mitad de
- * las unidades entran 0 km importadas y la otra mitad son usadas, y esa es la
- * respuesta que todo el mundo busca antes que ninguna otra.
+ * La primera casilla es la CONDICIÓN y no el año: en este inventario conviven
+ * unidades 0 km y usadas, y esa es la respuesta que todo el mundo busca antes
+ * que ninguna otra.
  *
  * La retícula y los separadores están en globals.css (.specs).
  */
@@ -50,9 +50,10 @@ export function EspecificacionesCompletas({ vehiculo, className = "" }) {
     { etiqueta: "Combustible", valor: vehiculo.combustible },
     { etiqueta: "Puestos", valor: vehiculo.puestos },
     { etiqueta: "Color", valor: vehiculo.color },
-    { etiqueta: "Financiamiento", valor: vehiculo.financiado ? "Disponible" : null },
+    { etiqueta: "Tipo", valor: vehiculo.segmentoInfo?.singular },
+    { etiqueta: "Carrocería", valor: vehiculo.tipo?.singular },
     { etiqueta: "Documentos", valor: vehiculo.documentos },
-    { etiqueta: "Ubicación", valor: vehiculo.ubicacion },
+    { etiqueta: "Sede", valor: vehiculo.ubicacion },
   ].filter((d) => d.valor);
 
   return (

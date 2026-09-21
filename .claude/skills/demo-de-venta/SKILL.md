@@ -1,6 +1,6 @@
 ---
 name: demo-de-venta
-description: Convierte una app de cliente del monorepo (apps/clients/*) en una demo de venta cerrada, para enseñársela a posibles clientes sin regalarles el trabajo — puerta con contraseña, muro que corta el contenido, acciones bloqueadas en el servidor y bloque de precio. Úsala siempre que se hable de enseñar, mostrar o presentar un proyecto a alguien que aún no lo ha pagado; de "ponerle contraseña", "que no entre cualquiera", "modo demo", "versión de muestra", "cerrar la demo", "que se vea pero no se pueda usar"; o de vender un sistema ya construido. También sirve para quitar la demo el día que el cliente compra.
+description: Convierte una app de cliente del monorepo (apps/clients/*) en una demo de venta cerrada, para enseñársela a posibles clientes sin regalarles el trabajo — puerta con contraseña, muro que corta el contenido, acciones bloqueadas en el servidor y bloque de precio. Úsala siempre que se hable de enseñar, mostrar o presentar un proyecto a alguien que aún no lo ha pagado; de "ponerle contraseña", "que no entre cualquiera", "modo demo", "versión de muestra", "cerrar la demo", "que se vea pero no se pueda usar"; o de vender un sistema ya construido. También sirve para quitar la demo el día que el cliente compra, y para llenar la demo con el catálogo real del negocio traído desde su Instagram.
 ---
 
 # Demo de venta
@@ -26,6 +26,43 @@ en el middleware, en una server action o en una ruta de API.
 Corolario práctico: por cada cosa que bloquees en la interfaz, pregúntate quién
 la bloquea en el servidor. Si la respuesta es "nadie", no está bloqueada.
 
+## El contenido que se enseña
+
+Una demo llena de fotos de stock se nota, y lo que resta no es la foto: es la
+credibilidad de todo lo demás. La versión que vende enseña el catálogo real del
+negocio al que se la estás enseñando —sus vehículos, sus fotos, sus textos— y
+quien la abre deja de imaginar si aquello le serviría.
+
+Casi todos estos negocios ya tienen el catálogo publicado en Instagram. Para
+traerlo está `tools/instagram/`; léelo antes de usarlo.
+
+```bash
+node tools/instagram/leer-perfil.mjs <cuenta> --max 80
+node tools/instagram/bajar-fotos.mjs tools/instagram/salida/<cuenta>.json \
+     --destino apps/clients/<cliente>/public/<carpeta>
+```
+
+Hace falta una cookie de sesión y no hay forma de evitarlo: Instagram cerró
+todas las puertas anónimas —la API contesta `require_login` y el embed devuelve
+la app sin una sola foto—. De dónde sacarla, y a qué ritmo usarla para que no
+limiten la cuenta, está en el README de la herramienta.
+
+El script deja el `caption` **crudo a propósito**. Traducir «RAV4 2019 full
+equipo 32mil negociable» a una ficha lo haces tú leyéndolo, no un regex: un
+año mal adivinado en el inventario de un cliente se descubre en la primera
+pregunta de la reunión.
+
+Dos cosas que esta capa hace posibles, y que van juntas:
+
+- **Lo que no salga de la cuenta, márcalo.** En `aprovechalo-ve` los vehículos
+  inventados llevan `"muestra": true`, y las fotos de stock `"fotoStock": true`,
+  que pinta el aviso «Foto de referencia». Enseñar sin avisar un vehículo que
+  el negocio no tiene es justo el detalle que hunde una reunión que iba bien.
+- **La puerta es lo que te permite usar material ajeno.** Contraseña más
+  `noindex` significa que el catálogo de un negocio no acaba indexado en Google
+  colgando de tu dominio. El corolario incómodo: si algún día apagas la demo
+  con contenido de un tercero dentro, vacía el catálogo antes de abrirla.
+
 ## Qué construir
 
 Siete piezas. Las tres primeras son el esqueleto; el resto es la venta.
@@ -45,6 +82,9 @@ sitio, para que cambiar el enlace sea cambiar una línea) y `AvisoBloqueado.js`
 (el cartel de "esto no se puede hacer aquí").
 
 ## Orden de trabajo
+
+Antes del paso 1, el contenido: una demo se enseña mucho mejor llena del
+catálogo real del negocio (arriba).
 
 ### 1. Configurar antes de construir
 

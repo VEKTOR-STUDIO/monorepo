@@ -5,9 +5,14 @@
 // del BCV del día (libs/bcv.js) y se enseña debajo, más pequeño: orienta sin
 // competir con la cifra que de verdad importa.
 
+// `narrowSymbol` y no el formato por defecto: en es-VE, `style: "currency"` con
+// USD escribe "USD 16.500", y aquí un precio de carro se escribe "$16.500".
+// Es lo que pone el cliente en sus publicaciones y lo que espera leer
+// cualquiera que entre.
 const DOLAR = new Intl.NumberFormat("es-VE", {
   style: "currency",
   currency: "USD",
+  currencyDisplay: "narrowSymbol",
   minimumFractionDigits: 0,
   maximumFractionDigits: 0,
 });
@@ -48,9 +53,9 @@ export function fechaCorta(valor) {
 /**
  * El kilometraje tal como hay que leerlo en la tarjeta.
  *
- * Tres casos, y los tres importan en este catálogo: el 0 km importado, el
- * usado con su cifra, y el que el catálogo no declara —que no es cero, es
- * desconocido, y decir "0 km" ahí sería mentir—.
+ * Tres casos, y los tres importan en este inventario: el 0 km, el usado con su
+ * cifra, y el que la publicación no declara —que no es cero, es desconocido, y
+ * decir "0 km" ahí sería mentir—.
  */
 export function kilometrajeDe(vehiculo) {
   if (vehiculo?.condicion === "nuevo") return "0 km";

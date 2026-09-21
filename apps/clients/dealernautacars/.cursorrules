@@ -1,15 +1,18 @@
-# HB Inversiones — reglas del proyecto
+# DealerNauta Cars — reglas del proyecto
 
-Catálogo web de HB Inversiones C.A. (@hb_inversiones_12), concesionario de
-Barquisimeto que importa 0 km y vende usados. Léete el README antes de tocar
-nada: explica de dónde sale cada decisión de diseño.
+Inventario web de DealerNauta Cars (@dealernautacars y @dealernautacarsccs),
+concesionario con dos sedes: vehículos 0 km y usados en Los Chaguaramos,
+Caracas, y camiones nuevos y usados en San Antonio de los Altos, Miranda.
+Léete el README antes de tocar nada: explica de dónde sale cada decisión de
+diseño, y sobre todo **qué material del cliente NO se pudo conseguir**.
 
 ## Pila
 - Next.js 15 (App Router) + React 19, Turbopack en dev
 - Tailwind CSS 4 (configurado en CSS, sin tailwind.config) + daisyUI 5
 - GSAP 3 (ScrollTrigger y SplitText)
-- **Sin base de datos.** El catálogo es `data/vehiculos.json`. No hay Supabase,
-  no hay Stripe, no hay cuentas de usuario. Si algo pide una, está mal.
+- **Sin base de datos.** El inventario es `data/vehiculos.json`. No hay
+  Supabase, no hay Stripe, no hay cuentas de usuario. Si algo pide una, está
+  mal.
 
 ## Cómo se escribe aquí
 - **Todo en español**: nombres de componentes, funciones, variables, props y
@@ -26,10 +29,20 @@ nada: explica de dónde sale cada decisión de diseño.
   componentes de cliente y acabaría en el bundle. Va en `libs/acceso.js`.
 - **GSAP: `fromTo`, nunca `from`** para lo que entra en escena. El CSS deja
   `[data-anima]` en `opacity: 0` y `from` animaría de 0 a 0.
-- **Las fotos son páginas del catálogo del cliente**: se enseñan enteras y no
-  se les superpone nada.
-- El ángulo de la marca es `--angulo-hb` (−18°). Se usa esa variable, no un
-  número suelto.
+- **El corte principal es `segmento` (vehículo / camión)**, no la condición ni
+  la carrocería. Es lo que decide a qué sede y a qué WhatsApp escribe cada
+  ficha (`sedeDe()` en `libs/demo.js`).
+- **No hay ni una foto del cliente**, y no se inventa ninguna: lo que se dibuja
+  es la plantilla de sus posts (`components/PlantillaPublicacion.js`). Meter
+  fotos de banco de imágenes como si fueran suyas está prohibido aquí.
+- Cuando haya fotos, **se enseñan enteras** y no se les superpone nada: sus
+  posts ya llevan el modelo y la pastilla rotulados.
+- El ángulo de la marca es `--angulo-dn` (−11°) y su gemelo `ANGULO` en
+  `libs/animaciones.js`. Se usan esas variables, no un número suelto, y se
+  cambian las dos a la vez.
+- **El emblema se recorta con el filtro `marca-alfa`**, nunca con
+  `mix-blend-mode`: el blend se apaga en cuanto un ancestro abre un contexto de
+  apilamiento.
 
 ## Comprobar antes de dar algo por hecho
 ```bash

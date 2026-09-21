@@ -7,13 +7,20 @@ import { useCallback } from "react";
  * Los filtros del inventario.
  *
  * Todo vive en la URL y no en el estado del componente: así una búsqueda
- * —"camionetas 0 km hasta 30.000"— se copia y se manda por WhatsApp, que es
- * exactamente lo que hace un vendedor con un cliente. Y al volver atrás, el
+ * —"camionetas de Dubái hasta 40.000"— se copia y se manda por WhatsApp, que
+ * es exactamente lo que hace un vendedor con un cliente. Y al volver atrás, el
  * navegador recupera el filtro.
  *
- * El primer corte es la CONDICIÓN, en una fila propia y más grande que el
- * resto: en este negocio nadie busca "un sedán", busca "un 0 km" o "un usado
- * bueno", y son dos compradores con dos presupuestos distintos.
+ * El orden de los cortes no es casual, y es lo que diferencia este inventario
+ * del de cualquier otro concesionario:
+ *
+ *   1. ENTREGA —¿está aquí o hay que traerlo?—. Es la primera pregunta de
+ *      todo el que escribe y la que decide si la conversación va de venir
+ *      mañana o de encargar a cuatro semanas.
+ *   2. PROCEDENCIA. La primera línea de su bio es "Dubái | Europa | China |
+ *      USA", así que mucha gente llega buscando por ahí.
+ *   3. El resto —tipo, condición, sede, marca— en selectores, que es donde
+ *      va lo que se consulta y no lo que se navega.
  */
 export default function FiltrosVehiculos({ facetas, total, mostrados }) {
   const router = useRouter();
@@ -31,46 +38,98 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
     [params, router, ruta]
   );
 
-  const condicion = params.get("condicion") || "";
+  const entrega = params.get("entrega") || "";
+  const origen = params.get("origen") || "";
   const tipo = params.get("tipo") || "";
+  const condicion = params.get("condicion") || "";
+  const sede = params.get("sede") || "";
   const marca = params.get("marca") || "";
   const orden = params.get("orden") || "";
-  const hayFiltro = Boolean(condicion || tipo || marca || orden || params.get("q"));
+  const hayFiltro = Boolean(
+    entrega || origen || tipo || condicion || sede || marca || orden || params.get("q")
+  );
 
   return (
     <div className="space-y-5">
-      {/* El corte principal. */}
+      {/* 1. ¿Está aquí o hay que traerlo? */}
       <div className="flex flex-wrap gap-2">
-        <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")} grande>
+        <BotonFiltro activo={entrega === ""} onClick={() => cambiar("entrega", "")} grande>
           Todo
         </BotonFiltro>
-        {facetas.condiciones.map((c) => (
+        {facetas.entregas.map((e) => (
           <BotonFiltro
-            key={c.slug}
-            activo={condicion === c.slug}
-            onClick={() => cambiar("condicion", c.slug)}
+            key={e.slug}
+            activo={entrega === e.slug}
+            onClick={() => cambiar("entrega", e.slug)}
             grande
           >
-            {c.nombre}
-            <span className="cifra ml-2 opacity-55">{c.total}</span>
+            {e.nombre}
+            <span className="cifra ml-2 opacity-55">{e.total}</span>
           </BotonFiltro>
         ))}
       </div>
 
-      {/* La carrocería, ya en segundo plano. */}
+      {/* 2. De dónde viene. */}
       <div className="flex flex-wrap gap-2">
-        <BotonFiltro activo={tipo === ""} onClick={() => cambiar("tipo", "")}>
-          Cualquier tipo
+        <BotonFiltro activo={origen === ""} onClick={() => cambiar("origen", "")}>
+          Cualquier procedencia
         </BotonFiltro>
-        {facetas.tipos.map((t) => (
-          <BotonFiltro key={t.slug} activo={tipo === t.slug} onClick={() => cambiar("tipo", t.slug)}>
-            {t.nombre}
-            <span className="cifra ml-1.5 opacity-55">{t.total}</span>
+        {facetas.origenes.map((o) => (
+          <BotonFiltro
+            key={o.slug}
+            activo={origen === o.slug}
+            onClick={() => cambiar("origen", o.slug)}
+          >
+            {o.nombre}
+            <span className="cifra ml-1.5 opacity-55">{o.total}</span>
           </BotonFiltro>
         ))}
       </div>
 
+      {/* 3. Lo que se consulta. */}
       <div className="flex flex-wrap items-center gap-3">
+        <select
+          value={tipo}
+          onChange={(e) => cambiar("tipo", e.target.value)}
+          className="entrada max-w-45 cursor-pointer py-2 text-sm"
+          aria-label="Filtrar por carrocería"
+        >
+          <option value="">Cualquier tipo</option>
+          {facetas.tipos.map((t) => (
+            <option key={t.slug} value={t.slug}>
+              {t.nombre} ({t.total})
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={condicion}
+          onChange={(e) => cambiar("condicion", e.target.value)}
+          className="entrada max-w-45 cursor-pointer py-2 text-sm"
+          aria-label="Filtrar por condición"
+        >
+          <option value="">Nuevos y usados</option>
+          {facetas.condiciones.map((c) => (
+            <option key={c.slug} value={c.slug}>
+              {c.nombre} ({c.total})
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sede}
+          onChange={(e) => cambiar("sede", e.target.value)}
+          className="entrada max-w-45 cursor-pointer py-2 text-sm"
+          aria-label="Filtrar por sede"
+        >
+          <option value="">Las dos sedes</option>
+          {facetas.sedes.map((s) => (
+            <option key={s.slug} value={s.slug}>
+              {s.corto} ({s.total})
+            </option>
+          ))}
+        </select>
+
         <select
           value={marca}
           onChange={(e) => cambiar("marca", e.target.value)}
@@ -102,7 +161,7 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
           <button
             type="button"
             onClick={() => router.push(ruta, { scroll: false })}
-            className="text-sm text-base-content/50 underline-offset-4 transition-colors hover:text-primary hover:underline"
+            className="text-sm text-base-content/50 underline-offset-4 transition-colors hover:text-base-content hover:underline"
           >
             Limpiar filtros
           </button>
@@ -135,7 +194,7 @@ function BotonFiltro({ activo, onClick, children, grande = false }) {
       }`}
     >
       <span
-        className={`display-recto block tracking-wide ${
+        className={`display-recto block ${
           grande ? "px-5 py-2.5 text-sm" : "px-4 py-1.5 text-xs"
         }`}
       >

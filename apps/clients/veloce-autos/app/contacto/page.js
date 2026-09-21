@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Revelar from "@/components/Revelar";
 import TituloAnimado from "@/components/TituloAnimado";
-import Diagonales from "@/components/Diagonales";
+import Alas from "@/components/Alas";
 import FormularioContacto from "@/components/FormularioContacto";
 import BotonContacto from "@/components/BotonContacto";
 import BloqueVenta from "@/components/demo/BloqueVenta";
@@ -15,7 +15,7 @@ const { business } = config;
 
 export const metadata = getSEOTags({
   title: `Contacto · ${config.appName}`,
-  description: `Escríbenos por WhatsApp o Instagram, o pásate por el local en ${business.direccion}, ${business.ciudad}.`,
+  description: `Escríbenos por WhatsApp o Instagram, o pásate por el showroom de ${business.direccion}, ${business.ciudad}.`,
   canonicalUrlRelative: "/contacto",
 });
 
@@ -28,7 +28,7 @@ export default function Contacto() {
 
       <main>
         <section className="relative overflow-hidden border-b border-base-content/8 px-4 py-20 sm:px-6">
-          <Diagonales variante="seccion" />
+          <Alas variante="seccion" />
           <div className="textura absolute inset-0" aria-hidden="true" />
 
           <div className="relative mx-auto max-w-7xl">
@@ -40,9 +40,9 @@ export default function Contacto() {
             </TituloAnimado>
             <Revelar retraso={200}>
               <p className="mt-5 max-w-lg text-lg leading-relaxed text-base-content/60">
-                Lo más rápido es WhatsApp. Si prefieres, déjanos qué buscas y te
-                escribimos nosotros. Y si estás por {business.ciudad}, pásate por el
-                local a verlos.
+                Lo más rápido es WhatsApp. Si prefieres, déjanos qué buscas —esté o no
+                en el inventario— y te cotizamos. Y si estás por {business.ciudad}, pásate
+                por cualquiera de las dos sedes.
               </p>
             </Revelar>
           </div>
@@ -52,18 +52,25 @@ export default function Contacto() {
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
             {/* Canales */}
             <div className="space-y-4">
-              <Revelar>
-                <div className="ficha p-6">
-                  <p className="rotulo">El local</p>
-                  <address className="display mt-3 not-italic text-2xl leading-tight">
-                    {business.direccion}
-                  </address>
-                  <p className="cifra mt-2 text-sm text-primary">
-                    {business.ciudad}, estado {business.estado}
-                  </p>
-                  <p className="mt-4 text-sm text-base-content/55">{business.horario}</p>
-                </div>
-              </Revelar>
+              {business.sedes.map((sede, i) => (
+                <Revelar key={sede.slug} retraso={i * 80}>
+                  <div className="ficha p-6">
+                    <p className="rotulo">{sede.nombre}</p>
+                    <address className="display mt-3 not-italic text-2xl leading-tight">
+                      {sede.direccion}
+                    </address>
+                    <a
+                      href={sede.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cifra mt-2 inline-block text-sm text-base-content/70 underline-offset-4 transition-colors hover:text-base-content hover:underline"
+                    >
+                      @{sede.instagram}
+                    </a>
+                    <p className="mt-4 text-sm text-base-content/55">{business.horario}</p>
+                  </div>
+                </Revelar>
+              ))}
 
               <Revelar retraso={80}>
                 <div className="ficha p-6">
@@ -89,7 +96,7 @@ export default function Contacto() {
                   className="ficha group block p-6"
                 >
                   <p className="rotulo">Instagram</p>
-                  <p className="display mt-3 text-2xl transition-colors group-hover:text-primary">
+                  <p className="display mt-3 text-2xl transition-colors group-hover:text-base-content/60">
                     @{business.instagram}
                   </p>
                   <p className="cifra mt-2 text-sm text-base-content/55">
@@ -105,8 +112,8 @@ export default function Contacto() {
                     {business.servicios.map((servicio) => (
                       <li key={servicio} className="flex gap-3">
                         <span
-                          className="mt-1.5 h-2.5 w-1.5 shrink-0 bg-primary"
-                          style={{ transform: "skewX(var(--angulo-hb))" }}
+                          className="mt-1.5 h-2.5 w-1.5 shrink-0 bg-base-content/70"
+                          style={{ transform: "skewX(var(--angulo-veloce))" }}
                           aria-hidden="true"
                         />
                         {servicio}
@@ -123,9 +130,9 @@ export default function Contacto() {
                 <p className="rotulo">Déjanos tus datos</p>
                 <h2 className="display mt-3 text-3xl">Cuéntanos qué buscas</h2>
                 <p className="mt-4 text-sm leading-relaxed text-base-content/55">
-                  Si no ves lo que quieres en el inventario, dilo aquí: se importa. Y si
-                  quieres saber por el financiamiento de un 0 km, también se explica por
-                  aquí.
+                  Si no ves lo que quieres en el inventario, dilo aquí: se importa. Di la
+                  marca, el modelo, el año y el presupuesto, y te decimos de dónde sale
+                  mejor y cuánto tarda.
                 </p>
 
                 <div className="mt-7">

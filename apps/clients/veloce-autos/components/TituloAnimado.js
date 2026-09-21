@@ -6,9 +6,10 @@ import { contexto, revelarTexto } from "@/libs/animaciones";
 /**
  * Un titular que asoma línea a línea desde detrás de una máscara.
  *
- * Es el movimiento principal de la página, y no es un adorno: el catálogo de
- * HB tiene el modelo cortado en diagonal contra el fondo, y esto es lo mismo
- * en movimiento —el texto no aparece, SALE de detrás de algo—.
+ * Es el movimiento principal de la página. Con una tipografía tan espaciada
+ * como la de esta marca, es también la única entrada que funciona: letra a
+ * letra, un titular con este tracking se lee como una cuenta atrás. Aquí el
+ * texto no aparece, SALE de detrás de algo, y sale entero.
  *
  * Se usa donde iría el `<h1>`/`<h2>` y se le pasa la etiqueta:
  *

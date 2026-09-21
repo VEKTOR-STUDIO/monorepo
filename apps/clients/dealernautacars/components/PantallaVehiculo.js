@@ -1,17 +1,17 @@
 import Link from "next/link";
 import FotoVehiculo from "@/components/FotoVehiculo";
 import BotonContacto from "@/components/BotonContacto";
-import Diagonales from "@/components/Diagonales";
+import Escenario from "@/components/Escenario";
 import TituloAnimado from "@/components/TituloAnimado";
 import Revelar from "@/components/Revelar";
 import Parallax from "@/components/Parallax";
 import { enDolares, kilometrajeDe } from "@/libs/formato";
 
 /**
- * Un vehículo del escaparate de la portada.
+ * Una unidad del escaparate de la portada.
  *
- * Está montado como una página del catálogo de HB puesta de lado: el modelo
- * grande en itálica a un lado, la foto al otro, y las diagonales de la casa
+ * Está montada como una publicación suya puesta de lado: el modelo grande en
+ * itálica a un lado, la imagen al otro, y el cielo y las alas de la casa
  * cruzando por detrás. El año va enorme y translúcido detrás del titular, que
  * es el truco de cartel de toda la vida y aquí además informa.
  *
@@ -31,7 +31,7 @@ export default function PantallaVehiculo({
 }) {
   return (
     <section className="relative overflow-hidden border-t border-base-content/8 px-4 py-20 sm:px-6 sm:py-28">
-      <Diagonales variante={invertido ? "sutil" : "seccion"} />
+      <Escenario variante={invertido ? "sutil" : "seccion"} />
       <div className="textura absolute inset-0" aria-hidden="true" />
 
       <div className="relative mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -68,7 +68,7 @@ export default function PantallaVehiculo({
                       : "bg-base-content/12 text-base-content"
                   }`}
                 >
-                  {vehiculo.esNuevo ? "Nuevo · 0 km importado" : "Usado verificado"}
+                  {vehiculo.esNuevo ? "0 km · sin rodar" : "Usado en perfectas condiciones"}
                 </span>
               </span>
             </Revelar>
@@ -107,9 +107,9 @@ export default function PantallaVehiculo({
                 <p className="cifra text-4xl font-bold leading-none text-primary sm:text-5xl">
                   {enDolares(vehiculo.precio)}
                 </p>
-                {vehiculo.financiado && (
-                  <p className="text-sm text-base-content/55">Con opción de financiamiento</p>
-                )}
+                <p className="text-sm text-base-content/55">
+                  {vehiculo.esCamion ? "Sede San Antonio de los Altos" : "Sede Caracas"}
+                </p>
               </div>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">

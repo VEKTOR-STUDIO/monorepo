@@ -8,11 +8,11 @@
 // una ficha que entra en la portada y otra que entra en el inventario tienen
 // que sentirse iguales.
 //
-// El movimiento de esta página no es decorativo. La gráfica de HB es un corte
-// diagonal en rojo y negro, así que casi todo entra CORTADO: barridos en
-// diagonal, líneas de titular que suben desde detrás de una máscara y fotos
-// que se abren con el mismo ángulo. Es la misma idea del catálogo, pero en
-// movimiento.
+// El movimiento de esta página no es decorativo. La gráfica de DealerNauta son
+// dos alas barriendo por detrás del vehículo y un cielo naranja sobre asfalto,
+// así que casi todo entra BARRIENDO: alas que cruzan, líneas de titular que
+// suben desde detrás de una máscara y fotos que se abren con el mismo ángulo.
+// Es la misma idea de sus publicaciones, pero en movimiento.
 //
 // Todo pasa por gsap.matchMedia(), que además de separar móvil y escritorio
 // atiende "prefers-reduced-motion": quien lo pida no ve ni un movimiento, y al
@@ -36,8 +36,14 @@ export const TIEMPOS = {
   escalonado: 0.07,
 };
 
-/** El ángulo de las diagonales de la marca, en grados. */
-export const ANGULO = -18;
+/**
+ * El ángulo del ala de la marca, en grados.
+ *
+ * Mucho más tumbado que un corte diagonal al uso: en el emblema las alas son
+ * casi horizontales, y ese es el gesto que hay que repetir. Tiene que ir a la
+ * par con --angulo-dn de globals.css.
+ */
+export const ANGULO = -11;
 
 /** Punto de disparo estándar: cuando al elemento le falta poco para entrar. */
 export const DISPARO = "top 85%";

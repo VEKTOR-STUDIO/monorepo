@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#0D0D0D"/>
-  <path d="M-8 44 L34 44 L22 72 L-20 72 Z" fill="#E11019"/>
-  <path d="M40 -8 L82 -8 L60 44 L18 44 Z" fill="#E11019" opacity="0.18"/>
-  <text
-    x="50%"
-    y="46%"
-    dominant-baseline="central"
-    text-anchor="middle"
-    font-family="Arial Narrow, Arial, system-ui, sans-serif"
-    font-weight="700"
-    font-style="italic"
-    font-size="9"
-    fill="#FFFFFF"
-  >HB</text>
+  <rect width="64" height="64" fill="#FFFFFF"/>
+  <g transform="translate(2 11.04) scale(0.41929)" fill="#0A0A0B">
+      <path d="M143.1 0.1L136.3 10.2L93.7 30.9L81.1 85.2L71.6 100L62 85.2L49.5 30.9L6.8 10.2L0 0.1L58.4 26.4L71.6 87.4L84.7 26.4Z"/>
+  </g>
 </svg>

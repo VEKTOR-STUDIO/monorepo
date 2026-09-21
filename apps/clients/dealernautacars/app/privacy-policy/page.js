@@ -38,9 +38,9 @@ export default function Privacidad() {
         <section>
           <h2 className="display text-lg text-base-content">Para qué los usamos</h2>
           <p className="mt-3">
-            Únicamente para responderte sobre el vehículo o el inmueble por el
-            que preguntas. No se venden ni se ceden a terceros, y no se usan para
-            mandarte publicidad que no hayas pedido.
+            Únicamente para responderte sobre la unidad por la que preguntas. No se
+            venden ni se ceden a terceros, y no se usan para mandarte publicidad que no
+            hayas pedido.
           </p>
         </section>
 

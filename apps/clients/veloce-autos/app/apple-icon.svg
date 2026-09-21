@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#0D0D0D"/>
-  <path d="M-8 44 L34 44 L22 72 L-20 72 Z" fill="#E11019"/>
-  <path d="M40 -8 L82 -8 L60 44 L18 44 Z" fill="#E11019" opacity="0.18"/>
-  <text
-    x="50%"
-    y="46%"
-    dominant-baseline="central"
-    text-anchor="middle"
-    font-family="Arial Narrow, Arial, system-ui, sans-serif"
-    font-weight="700"
-    font-style="italic"
-    font-size="96"
-    fill="#FFFFFF"
-  >HB</text>
+  <rect width="64" height="64" fill="#FFFFFF"/>
+  <g transform="translate(9 15.93) scale(0.32145)" fill="#0A0A0B">
+      <path d="M143.1 0.1L136.3 10.2L93.7 30.9L81.1 85.2L71.6 100L62 85.2L49.5 30.9L6.8 10.2L0 0.1L58.4 26.4L71.6 87.4L84.7 26.4Z"/>
+      <path d="M89.2 71L97.8 33.7L133.3 16.1L126 27.6L106.8 37.9L104.5 48.1Z"/>
+      <path d="M53.9 71L45.3 33.7L9.8 16.1L17.1 27.6L36.3 37.9L38.6 48.1Z"/>
+  </g>
 </svg>

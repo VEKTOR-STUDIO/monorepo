@@ -48,8 +48,8 @@ export function fechaCorta(valor) {
 /**
  * El kilometraje tal como hay que leerlo en la tarjeta.
  *
- * Tres casos, y los tres importan en este catálogo: el 0 km importado, el
- * usado con su cifra, y el que el catálogo no declara —que no es cero, es
+ * Tres casos, y los tres importan en este inventario: el 0 km importado, el
+ * usado con su cifra, y el que todavía no se ha confirmado —que no es cero, es
  * desconocido, y decir "0 km" ahí sería mentir—.
  */
 export function kilometrajeDe(vehiculo) {

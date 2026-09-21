@@ -1,7 +1,7 @@
 /** Mapa del sitio. Las fichas de vehículo entran solas: next-sitemap recorre
  *  la salida del build, que ya las pregenera una por una. */
 module.exports = {
-  siteUrl: process.env.SITE_URL || "https://hbinversiones.com",
+  siteUrl: process.env.SITE_URL || "https://veloceautos.com",
   generateRobotsTxt: true,
   exclude: [
     "/twitter-image",

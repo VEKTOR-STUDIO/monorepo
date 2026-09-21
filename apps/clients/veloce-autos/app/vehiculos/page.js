@@ -1,15 +1,15 @@
 import { Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Diagonales from "@/components/Diagonales";
+import Alas from "@/components/Alas";
 import TituloAnimado from "@/components/TituloAnimado";
 import Revelar from "@/components/Revelar";
 import FiltrosVehiculos from "@/components/FiltrosVehiculos";
 import RejillaVehiculos from "@/components/RejillaVehiculos";
-import { AvisoPrecioProvisional } from "@/components/FotoVehiculo";
+import { AvisoMuestra } from "@/components/FotoVehiculo";
 import MuroDemo from "@/components/demo/MuroDemo";
 import BloqueVenta from "@/components/demo/BloqueVenta";
-import { leerVehiculos, facetasDe, filtrar, hayPreciosProvisionales } from "@/libs/vehiculos";
+import { leerVehiculos, facetasDe, filtrar, hayMuestras } from "@/libs/vehiculos";
 import { esDemo } from "@/libs/demo";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
@@ -19,7 +19,7 @@ export const revalidate = 1800;
 export const metadata = getSEOTags({
   title: `Inventario de vehículos | ${config.appName}`,
   description:
-    "Vehículos 0 km importados y usados verificados en Barquisimeto. Filtra por condición, tipo, marca y precio; cada unidad con su ficha completa.",
+    "Vehículos importados de Dubái, Europa, China y Estados Unidos, en showroom o a pedido. Filtra por procedencia, entrega, sede, marca y precio; cada unidad con su ficha completa.",
   canonicalUrlRelative: "/vehiculos",
 });
 
@@ -29,7 +29,10 @@ export default async function Vehiculos({ searchParams }) {
   const facetas = facetasDe(todos);
 
   const lista = filtrar(todos, {
+    entrega: params?.entrega,
+    origen: params?.origen,
     condicion: params?.condicion,
+    sede: params?.sede,
     tipo: params?.tipo,
     marca: params?.marca,
     precioMax: params?.precioMax,
@@ -50,7 +53,7 @@ export default async function Vehiculos({ searchParams }) {
 
       <main>
         <section className="relative overflow-hidden border-b border-base-content/8 px-4 py-20 sm:px-6">
-          <Diagonales variante="seccion" />
+          <Alas variante="seccion" />
           <div className="textura absolute inset-0" aria-hidden="true" />
 
           <div className="relative mx-auto max-w-7xl">
@@ -62,9 +65,9 @@ export default async function Vehiculos({ searchParams }) {
             </TituloAnimado>
             <Revelar retraso={200}>
               <p className="mt-5 max-w-xl leading-relaxed text-base-content/60">
-                Todo lo que hay en el local ahora mismo, en {config.business.direccion},{" "}
-                {config.business.ciudad}. Cada unidad con su condición, su año, su
-                kilometraje y su motor.
+                Lo que está hoy en el showroom y lo que se trae por encargo, junto. Cada
+                unidad dice de dónde viene, en qué sede está y en qué condición, antes de
+                que tengas que escribir para preguntarlo.
               </p>
             </Revelar>
           </div>
@@ -84,7 +87,8 @@ export default async function Vehiculos({ searchParams }) {
               <div className="panel mt-10 p-14 text-center">
                 <p className="display text-2xl">Nada con esos filtros</p>
                 <p className="mt-3 text-sm text-base-content/55">
-                  Prueba a quitar alguno; el inventario cambia cada semana.
+                  Prueba a quitar alguno. Y si buscas algo que no está, se encarga: casi
+                  todo este inventario entró así.
                 </p>
               </div>
             ) : (
@@ -99,9 +103,9 @@ export default async function Vehiculos({ searchParams }) {
               </>
             )}
 
-            {hayPreciosProvisionales() && (
+            {hayMuestras() && (
               <div className="mt-12 flex justify-center">
-                <AvisoPrecioProvisional />
+                <AvisoMuestra />
               </div>
             )}
           </div>

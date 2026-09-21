@@ -17,7 +17,7 @@ export default function Error({ error, reset }) {
         <span className="banda mx-auto" aria-hidden="true" />
 
         <h1 className="display mt-6 text-3xl sm:text-4xl">
-          Algo se <span className="text-primary">rompió</span>
+          Algo se <span className="text-base-content/50">rompió</span>
         </h1>
 
         <p className="mx-auto mt-5 max-w-sm text-base-content/60">

@@ -1,4 +1,4 @@
-import { Barlow_Condensed, Archivo, JetBrains_Mono } from "next/font/google";
+import { Saira, Michroma, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
@@ -10,31 +10,33 @@ import { esDemo } from "@/libs/demo";
 import config from "@/config";
 import "./globals.css";
 
-// Los titulares del catálogo de HB están en una condensada muy pesada e
-// inclinada. Barlow Condensed en 700/800 itálica es lo más cerca que se llega
-// con una tipografía libre, y es la que le da a la página el aire de portada
-// de catálogo en vez de aire de plantilla.
-const barlow = Barlow_Condensed({
+// Saira lleva sola el peso de la página: titulares y texto corrido. Es una
+// neo-grotesca de esqueleto cuadrado, que es lo que tiene el rótulo "VELOCE"
+// de su comunicado, y trae toda la escala de pesos, así que la jerarquía se
+// puede hacer con grosor y espaciado en vez de con una segunda tipografía.
+// Una sola familia es además lo que hace que la página se lea "de showroom":
+// lo caro no mezcla letras.
+const saira = Saira({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  style: ["normal", "italic"],
-  variable: "--font-barlow",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-saira",
   display: "swap",
 });
 
-// El cuerpo, en una grotesca ancha que aguanta bien el fondo negro. Hace de
-// contrapeso: si el texto corrido también fuera condensado, la página entera
-// se leería apretada.
-const archivo = Archivo({
+// Michroma, y solo para el rótulo de la marca. Es la que tiene la O
+// rectangular y la C de lados planos del logotipo original; a cambio solo
+// existe en un peso y es demasiado ancha para cualquier otra cosa. Se usa en
+// "Veloce" y "Autos", nada más.
+const michroma = Michroma({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-archivo",
+  weight: ["400"],
+  variable: "--font-michroma",
   display: "swap",
 });
 
 // Las cifras —precios, kilometrajes, años— van en mono para que se alineen en
 // columna y se puedan comparar de un vistazo, que es lo que hace todo el que
-// mira un catálogo de carros.
+// mira un inventario.
 const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
@@ -44,7 +46,7 @@ const jetbrains = JetBrains_Mono({
 
 // Microgramma: la tipografía de la firma de Alessandrovaru. No es del tema de
 // la página, solo se usa en el crédito de autoría (components/FooterFoot.js) y
-// en lo que le habla al dueño de HB, igual que en el resto del monorepo.
+// en lo que le habla a Veloce, igual que en el resto del monorepo.
 const microgramma = localFont({
   src: "../public/fonts/microgramma.otf",
   variable: "--microgramma-font",
@@ -70,7 +72,7 @@ export default function RootLayout({ children }) {
       data-theme={config.colors.theme}
       // Lo lee el CSS para dejarle sitio a la franja de demo (--alto-barra-demo).
       data-demo={demo ? "true" : undefined}
-      className={`${barlow.variable} ${archivo.variable} ${jetbrains.variable} ${microgramma.variable}`}
+      className={`${saira.variable} ${michroma.variable} ${jetbrains.variable} ${microgramma.variable}`}
     >
       <head>
         {renderSchemaTags()}

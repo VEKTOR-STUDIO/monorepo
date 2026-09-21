@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 /**
- * Genera los iconos de HB Inversiones.
+ * Genera los iconos de DealerNauta Cars.
  * Uso: npm run generate-favicon  (o: node scripts/generate-favicon.mjs)
  *
- * El dibujo es la marca reducida a lo mínimo que sigue siendo reconocible: el
- * negro, la cuña roja en diagonal y las dos letras en itálica. A 16 px no cabe
- * nada más, y con eso basta para distinguirla en una pestaña.
+ * El dibujo es el emblema reducido a lo que sobrevive a 32 px: el negro, el ala
+ * naranja, la plateada por debajo y las siglas que van dentro del carro de su
+ * logotipo. El escudo completo —el arco de texto, las estrellas, el rótulo— a
+ * este tamaño es una mancha, así que no se intenta.
  *
- * No hay ningún archivo de imagen que mantener a mano: si cambia el rojo, se
+ * No hay ningún archivo de imagen que mantener a mano: si cambia el naranja, se
  * cambia aquí y se vuelve a correr.
  */
 
@@ -20,23 +21,26 @@ const publicDir = join(__dirname, "..", "public");
 const appDir = join(__dirname, "..", "app");
 
 const NEGRO = "#0D0D0D";
-const ROJO = "#E11019";
+const NARANJA = "#F07423";
+const PLATA = "#C8CBD0";
 const BLANCO = "#FFFFFF";
 
 const tamaños = [16, 32, 64, 180];
 
 function construir(lado) {
   const u = lado / 64; // todo está medido sobre una rejilla de 64
-  const fuente = Math.round(34 * u);
+  // A 16 px "DC" tiene que ocupar casi toda la caja o no se lee nada.
+  const fuente = lado <= 16 ? 32 : 30;
+  void u;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${lado}" height="${lado}" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="${NEGRO}"/>
-  <path d="M-8 44 L34 44 L22 72 L-20 72 Z" fill="${ROJO}"/>
-  <path d="M40 -8 L82 -8 L60 44 L18 44 Z" fill="${ROJO}" opacity="0.18"/>
+  <rect width="64" height="64" rx="12" fill="${NEGRO}"/>
+  <path d="M2 22 L60 14 L58 23 L4 31 Z" fill="${NARANJA}"/>
+  <path d="M8 50 L62 44 L60 50 L10 55 Z" fill="${PLATA}" opacity="0.55"/>
   <text
     x="50%"
-    y="46%"
+    y="56%"
     dominant-baseline="central"
     text-anchor="middle"
     font-family="Arial Narrow, Arial, system-ui, sans-serif"
@@ -44,7 +48,7 @@ function construir(lado) {
     font-style="italic"
     font-size="${fuente}"
     fill="${BLANCO}"
-  >HB</text>
+  >DC</text>
 </svg>
 `;
 }

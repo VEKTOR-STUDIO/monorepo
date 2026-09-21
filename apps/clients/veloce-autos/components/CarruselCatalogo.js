@@ -2,18 +2,19 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import FotoVehiculo from "@/components/FotoVehiculo";
+import FotoVehiculo, { SelloMuestra } from "@/components/FotoVehiculo";
 import { usarGsap } from "@/libs/animaciones";
 import { enDolares, kilometrajeDe } from "@/libs/formato";
 
 // -----------------------------------------------------------------------------
-// El catálogo, de lado.
+// El inventario, de lado.
 //
-// Su catálogo es un PDF que se pasa página a página, y esta sección es eso
-// mismo: la página se queda quieta y las trece fichas desfilan de derecha a
-// izquierda mientras bajas. Es el movimiento más fuerte del sitio y está
-// puesto justo donde hace falta —arriba, después de la portada— porque es lo
-// que contesta de un golpe la pregunta "¿qué tienen?".
+// Hoy, para ver lo que tiene Veloce hay que bajar por una cuadrícula de 2.391
+// publicaciones. Esta sección es lo contrario: la página se queda quieta y las
+// unidades desfilan de derecha a izquierda mientras bajas. Es el movimiento
+// más fuerte del sitio y está puesto justo donde hace falta —arriba, después
+// de la portada— porque es lo que contesta de un golpe la pregunta "¿qué
+// tienen?".
 //
 // Dos decisiones que no son de gusto:
 //
@@ -110,11 +111,12 @@ export default function CarruselCatalogo({ vehiculos }) {
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
           <span className="banda" aria-hidden="true" />
           <h2 className="display mt-5 text-4xl sm:text-5xl lg:text-6xl">
-            El catálogo
-            <span className="text-primary"> completo</span>
+            Todo el
+            <span className="text-base-content/50"> inventario</span>
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-base-content/55 lg:text-base">
-            Las {vehiculos.length} unidades del catálogo de HB, una por una.{" "}
+            Las {vehiculos.length} unidades, una por una, sin bajar por una cuadrícula de
+            publicaciones.{" "}
             <span className="hidden lg:inline">Sigue bajando y desfilan solas.</span>
             <span className="lg:hidden">Arrastra para verlas.</span>
           </p>
@@ -132,29 +134,28 @@ export default function CarruselCatalogo({ vehiculos }) {
                 href={`/vehiculo/${vehiculo.slug}`}
                 className="ficha group block w-64 shrink-0 overflow-hidden [scroll-snap-align:center] sm:w-72 lg:w-80"
               >
-                <FotoVehiculo
-                  vehiculo={vehiculo}
-                  prioridad={i < 2}
-                  className="aspect-4/5 w-full"
-                  sizes="(max-width: 640px) 16rem, (max-width: 1024px) 18rem, 20rem"
-                />
+                <div className="relative">
+                  <FotoVehiculo
+                    vehiculo={vehiculo}
+                    prioridad={i < 2}
+                    className="aspect-4/3 w-full"
+                    sizes="(max-width: 640px) 16rem, (max-width: 1024px) 18rem, 20rem"
+                  />
+                  {vehiculo.muestra && <SelloMuestra className="absolute right-2.5 top-2.5" />}
+                </div>
 
-                {/* Nada encima de la foto: las cuatro esquinas de las fichas
-                    del catálogo ya están ocupadas. La condición va debajo. */}
                 <div className="p-4">
                   <div className="flex items-center gap-2">
-                    <span className="bisel shrink-0">
-                      <span
-                        className={`block px-2 py-0.5 text-[0.55rem] font-bold uppercase tracking-wider ${
-                          vehiculo.esNuevo
-                            ? "bg-primary text-primary-content"
-                            : "bg-base-content/12 text-base-content/75"
-                        }`}
-                      >
-                        {vehiculo.esNuevo ? "0 km" : "Usado"}
-                      </span>
+                    <span
+                      className={`shrink-0 px-2 py-0.5 text-[0.55rem] font-semibold uppercase tracking-[0.16em] ${
+                        vehiculo.enShowroom
+                          ? "bg-primary text-primary-content"
+                          : "border border-base-content/20 text-base-content/70"
+                      }`}
+                    >
+                      {vehiculo.enShowroom ? "Aquí" : "A pedido"}
                     </span>
-                    <p className="display-recto min-w-0 truncate text-xs tracking-wide text-base-content/60">
+                    <p className="display-recto min-w-0 truncate text-xs text-base-content/65">
                       {vehiculo.tituloLargo}
                     </p>
                   </div>
@@ -164,7 +165,9 @@ export default function CarruselCatalogo({ vehiculos }) {
                       {enDolares(vehiculo.precio)}
                     </p>
                     <p className="cifra shrink-0 text-[0.65rem] text-base-content/40">
-                      {kilometrajeDe(vehiculo)}
+                      {[vehiculo.origenInfo?.nombre, kilometrajeDe(vehiculo)]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </p>
                   </div>
                 </div>
@@ -176,9 +179,9 @@ export default function CarruselCatalogo({ vehiculos }) {
               href="/vehiculos"
               className="ficha flex w-64 shrink-0 flex-col items-center justify-center gap-4 p-8 text-center [scroll-snap-align:center] sm:w-72 lg:w-80"
             >
-              <span className="display text-3xl text-primary">Ver todo el inventario</span>
+              <span className="display text-3xl">Ver todo el inventario</span>
               <span className="text-sm text-base-content/55">
-                Con filtros por condición, tipo, marca y precio.
+                Con filtros por procedencia, entrega, sede, marca y precio.
               </span>
               <span className="btn btn-primary mt-2">Entrar al inventario</span>
             </Link>
@@ -188,7 +191,7 @@ export default function CarruselCatalogo({ vehiculos }) {
         {/* Cuánto llevas del desfile. Solo donde hay desfile. */}
         <div className="mx-auto mt-8 hidden w-full max-w-7xl px-4 sm:px-6 lg:block">
           <div className="h-px w-full bg-base-content/12" aria-hidden="true">
-            <div ref={barra} className="progreso h-px w-full bg-primary" />
+            <div ref={barra} className="progreso h-px w-full bg-base-content" />
           </div>
         </div>
       </div>

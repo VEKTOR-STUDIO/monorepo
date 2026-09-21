@@ -11,9 +11,10 @@ export const dynamic = "force-dynamic";
  * mano y hacerle llegar mensajes falsos al negocio real.
  *
  * PENDIENTE (para el día que se entregue): hoy, fuera de demo, esta ruta acepta
- * el mensaje y responde bien, pero no lo reenvía a ningún sitio —no hay todavía
- * ni número de WhatsApp ni dominio de correo verificado—. Hay que engancharla
- * al canal que elija el cliente antes de apagar el modo demo.
+ * el mensaje y responde bien, pero no lo reenvía a ningún sitio —falta el
+ * dominio de correo verificado—. Hay que engancharla al canal que elija el
+ * cliente, que con toda probabilidad será el WhatsApp corporativo, antes de
+ * apagar el modo demo.
  */
 export async function POST(peticion) {
   if (esDemo()) {

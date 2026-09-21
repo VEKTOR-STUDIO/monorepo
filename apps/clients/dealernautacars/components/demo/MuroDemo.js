@@ -5,7 +5,7 @@ import config from "@/config";
 /**
  * El corte del inventario.
  *
- * Los primeros vehículos se ven nítidos; a partir de ahí el resto se difumina y
+ * Las primeras unidades se ven nítidas; a partir de ahí el resto se difumina y
  * encima aparece la oferta. Lo difuminado sigue en el HTML a propósito —se ve
  * que hay más inventario detrás— pero no se puede leer ni pulsar: `select-none`
  * y `pointer-events-none` lo dejan como decorado, y `aria-hidden` lo saca del
@@ -35,13 +35,13 @@ export default function MuroDemo({ ocultos, children }) {
 
           <p className="display mt-4 text-2xl">
             <span className="cifra text-primary">+{ocultos}</span>{" "}
-            {ocultos === 1 ? "vehículo más" : "vehículos más"}
+            {ocultos === 1 ? "unidad más" : "unidades más"}
           </p>
 
           <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-            La página completa lleva todo el catálogo, la ficha de cada unidad, el
-            corte entre 0 km y usados, y el botón de WhatsApp que llega con el
-            modelo ya escrito.
+            La página completa lleva todo el inventario, la ficha de cada unidad, el
+            corte entre vehículos y camiones, y el botón de WhatsApp que llega a la
+            sede correcta con el modelo ya escrito.
           </p>
 
           <p className="mt-5 flex items-baseline justify-center gap-2.5">

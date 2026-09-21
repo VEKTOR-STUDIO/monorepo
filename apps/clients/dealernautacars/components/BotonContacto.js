@@ -1,19 +1,22 @@
 "use client";
 
 import toast from "react-hot-toast";
-import { mensajePorVehiculo } from "@/libs/demo";
+import { mensajePorVehiculo, sedeDe } from "@/libs/demo";
 import config from "@/config";
 
 /**
- * "Me interesa este vehículo".
+ * "Me interesa esta unidad".
  *
- * Fuera de demo abre WhatsApp con el vehículo ya escrito en el mensaje, que es
- * el único paso que de verdad importa en este negocio: el comprador escribe
- * sabiendo qué está preguntando y el vendedor no pierde el hilo.
+ * Fuera de demo abre WhatsApp con la unidad ya escrita en el mensaje y con el
+ * número de LA SEDE QUE CORRESPONDE: los camiones se atienden en San Antonio de
+ * los Altos y los vehículos en Caracas. Es el único paso que de verdad importa
+ * en este negocio: el comprador escribe sabiendo qué pregunta, y le contesta
+ * quien tiene la unidad delante.
  *
- * En demo NO abre nada. No es un adorno desactivado: si abriera, cualquiera
- * que esté probando la demo le estaría mandando mensajes falsos al negocio
- * real. En su lugar explica qué haría el sistema entregado.
+ * En demo NO abre nada. No es un adorno desactivado: los dos números son
+ * reales, así que si abriera, cualquiera que esté probando la demo le estaría
+ * mandando mensajes falsos al negocio. En su lugar explica qué haría el sistema
+ * entregado.
  *
  * El enlace se arma en el cliente y no en el servidor a propósito: así el
  * número no viaja en el HTML de todas las fichas, donde lo cosecharía
@@ -26,6 +29,7 @@ export default function BotonContacto({
   demo = false,
 }) {
   const texto = children || "Me interesa";
+  const sede = sedeDe(vehiculo);
 
   if (demo) {
     return (
@@ -34,7 +38,9 @@ export default function BotonContacto({
         className={className}
         onClick={() =>
           toast(
-            `En la página entregada, esto abre WhatsApp con el mensaje ya escrito: «${mensajePorVehiculo(vehiculo)}»`,
+            `En la página entregada, esto abre WhatsApp con ${
+              sede ? `${sede.nombre} (${sede.telefono})` : "el negocio"
+            } y el mensaje ya escrito: «${mensajePorVehiculo(vehiculo)}»`,
             { icon: "🔒", duration: 6000 }
           )
         }
@@ -44,11 +50,11 @@ export default function BotonContacto({
     );
   }
 
-  const { whatsapp, instagramUrl } = config.business;
+  const numero = sede?.whatsapp || config.business.whatsapp;
 
-  const destino = whatsapp
-    ? `https://wa.me/${whatsapp}?text=${encodeURIComponent(mensajePorVehiculo(vehiculo))}`
-    : instagramUrl;
+  const destino = numero
+    ? `https://wa.me/${numero}?text=${encodeURIComponent(mensajePorVehiculo(vehiculo))}`
+    : config.business.instagramUrl;
 
   return (
     <a href={destino} target="_blank" rel="noopener noreferrer" className={className}>

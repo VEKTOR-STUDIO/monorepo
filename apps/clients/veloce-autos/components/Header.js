@@ -9,16 +9,17 @@ import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
 const ENLACES = [
-  { href: "/vehiculos?condicion=nuevo", texto: "0 km" },
-  { href: "/vehiculos?condicion=usado", texto: "Usados" },
-  { href: "/vehiculos", texto: "Todo el inventario" },
-  { href: "/#donde-estamos", texto: "Dónde estamos" },
+  { href: "/vehiculos?entrega=showroom", texto: "En showroom" },
+  { href: "/vehiculos?entrega=encargo", texto: "A pedido" },
+  { href: "/vehiculos", texto: "Inventario" },
+  { href: "/#sedes", texto: "Sedes" },
   { href: "/contacto", texto: "Contacto" },
 ];
 
-// Atajo a la comparación con Linktree. Solo existe mientras se está vendiendo
-// la página: es un argumento para el dueño, no para quien viene a ver carros.
-const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no el PDF?" };
+// Atajo a la comparación con el Instagram. Solo existe mientras se está
+// vendiendo la página: es un argumento para el dueño, no para quien viene a
+// ver carros.
+const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué una web?" };
 
 /**
  * La cabecera.
@@ -105,7 +106,7 @@ export default function Header() {
             <Link
               key={enlace.href}
               href={enlace.href}
-              className="display-recto text-xs tracking-widest text-base-content/60 transition-colors hover:text-primary"
+              className="display-recto text-xs text-base-content/60 transition-colors hover:text-base-content"
             >
               {enlace.texto}
             </Link>
@@ -118,7 +119,7 @@ export default function Header() {
         <button
           type="button"
           onClick={() => setAbierto((v) => !v)}
-          className="ml-auto p-2 text-base-content/70 transition-colors hover:text-primary lg:hidden"
+          className="ml-auto p-2 text-base-content/70 transition-colors hover:text-base-content lg:hidden"
           aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={abierto}
         >
@@ -139,7 +140,7 @@ export default function Header() {
               <Link
                 key={enlace.href}
                 href={enlace.href}
-                className="display-recto border-b border-base-content/8 py-3.5 text-base tracking-wide text-base-content/80 transition-colors hover:text-primary"
+                className="display-recto border-b border-base-content/8 py-3.5 text-base text-base-content/80 transition-colors hover:text-base-content"
               >
                 {enlace.texto}
               </Link>

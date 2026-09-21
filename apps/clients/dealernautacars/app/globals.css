@@ -8,65 +8,71 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Tema "hb".
+ * Tema "dealernauta".
  *
- * No se inventó una paleta: se copió la del cliente. Las trece páginas de su
- * «CATÁLOGO DE VEHÍCULOS HB» son exactamente lo mismo repetido —negro, rojo y
- * blanco cortados en diagonal, el modelo en itálica condensada arriba a la
- * izquierda, el logo de la marca arriba a la derecha, las viñetas abajo a la
- * derecha y la dirección abajo a la izquierda—, así que esa retícula es la
- * identidad y la web la hereda entera.
+ * No se inventó una paleta: se copió la suya. Sus dos cuentas de Instagram
+ * publican siempre la misma pieza —cielo naranja degradado, el perfil de la
+ * ciudad recortado detrás, el vehículo posado sobre asfalto, el titular en
+ * condensada pesadísima y una pastilla naranja abajo con el año y el
+ * kilometraje—, y el logotipo es un emblema circular naranja, plata y blanco
+ * sobre negro. Esa retícula es la identidad y la web la hereda entera.
  *
- * Tres decisiones que vienen de ahí y no de un gusto:
+ * Cuatro decisiones que vienen de ahí y no de un gusto:
  *
- *   · FONDO NEGRO. Su catálogo es negro; una web blanca hubiera sido otra
- *     marca. Además los vehículos que venden son casi todos blancos o claros,
- *     y sobre negro recortan solos.
- *   · EL CORTE EN DIAGONAL manda en todo: fondos, fotos, botones y hasta la
- *     forma en que entran las cosas al hacer scroll (libs/animaciones.js).
- *   · EL ROJO NO DECORA, SEÑALA. Es el precio, el botón y la condición "0 km".
- *     Si se usara de relleno dejaría de significar nada.
+ *   · FONDO NEGRO. Su emblema está calado sobre negro puro y sus piezas usan
+ *     el negro como respiro entre naranjas. Una web clara habría sido otra
+ *     marca.
+ *   · EL NARANJA NO DECORA, SEÑALA. Es el precio, el botón, la condición
+ *     "0 km" y el cielo de la portada. Si se usara de relleno en todas partes
+ *     dejaría de significar nada, que es justo lo que le pasa a media
+ *     Instagram.
+ *   · LA PLATA ES EL TERCER COLOR, no un gris cualquiera. Las dos alas del
+ *     emblema son plateadas; aquí esa plata es la de los bordes, los filetes y
+ *     las cifras secundarias.
+ *   · ARCOS, NO ESQUINAS. El logotipo son dos alas curvas y un arco de texto.
+ *     Por eso aquí las cosas se redondean un poco y las pastillas se redondean
+ *     del todo, al revés que en una marca de catálogo cuadriculado.
  *
- * Para mover el rojo de marca: --color-primary aquí y config.colors.main.
+ * Para mover el naranja de marca: --color-primary aquí y config.colors.main.
  * ------------------------------------------------------------------------- */
 @plugin "daisyui/theme" {
-  name: "hb";
+  name: "dealernauta";
   default: true;
   color-scheme: dark;
 
-  --color-base-100: oklch(13% 0 0);
-  --color-base-200: oklch(17.5% 0 0);
-  --color-base-300: oklch(24% 0 0);
+  --color-base-100: oklch(12.5% 0 0);
+  --color-base-200: oklch(17% 0 0);
+  --color-base-300: oklch(23.5% 0 0);
   --color-base-content: oklch(97% 0 0);
 
-  /* El rojo del catálogo (#E11019). */
-  --color-primary: oklch(55% 0.225 27);
-  --color-primary-content: oklch(99% 0 0);
+  /* El naranja del emblema (#F07423). */
+  --color-primary: oklch(68% 0.17 46);
+  --color-primary-content: oklch(14% 0.03 46);
 
-  /* El blanco del catálogo, que es el otro color de la marca. */
-  --color-secondary: oklch(97% 0 0);
+  /* La plata de las alas, que es el otro color de la marca. */
+  --color-secondary: oklch(82% 0.006 250);
   --color-secondary-content: oklch(13% 0 0);
 
-  --color-accent: oklch(55% 0.225 27);
-  --color-accent-content: oklch(99% 0 0);
+  --color-accent: oklch(80% 0.145 68);
+  --color-accent-content: oklch(14% 0.03 46);
 
-  --color-neutral: oklch(22% 0 0);
+  --color-neutral: oklch(21% 0 0);
   --color-neutral-content: oklch(95% 0 0);
 
   --color-info: oklch(70% 0.11 240);
   --color-info-content: oklch(13% 0 0);
   --color-success: oklch(72% 0.16 155);
   --color-success-content: oklch(13% 0 0);
-  --color-warning: oklch(80% 0.15 75);
+  --color-warning: oklch(82% 0.15 80);
   --color-warning-content: oklch(13% 0 0);
-  --color-error: oklch(60% 0.22 27);
+  --color-error: oklch(62% 0.22 25);
   --color-error-content: oklch(99% 0 0);
 
-  /* Radio mínimo: el catálogo no tiene ni una esquina redondeada de verdad.
-     Se deja un pelo para que los campos y los botones no corten. */
-  --radius-selector: 0.125rem;
-  --radius-field: 0.125rem;
-  --radius-box: 0.125rem;
+  /* Un redondeo suave, del lado de los arcos del emblema. Lo redondo del todo
+     se reserva para las pastillas, que es donde su gráfica lo pide. */
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.375rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -76,34 +82,37 @@
 
 @theme {
   /* Barlow Condensed en negrita itálica es lo más cerca que se llega del
-     titular del catálogo sin licenciar su tipografía: condensada, muy pesada,
-     inclinada y con los remates cortados en recto. */
+     titular de sus publicaciones sin licenciar su tipografía: condensada, muy
+     pesada, inclinada y con los remates cortados en recto. */
   --font-display: var(--font-barlow), "Arial Narrow", system-ui, sans-serif;
   --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
 
   /* -------------------------------------------------------------------------
-   * Un solo radio en toda la web, y es casi cero.
+   * Un solo radio en toda la web.
    *
    * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
    * mismo valor a propósito: así da igual cuál escriba cada componente, el
    * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
-   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos de
-   * verdad —puntos de estado, el logo— y esos sí deben seguir siendo redondos.
+   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos y
+   * pastillas de verdad —el emblema, las etiquetas de año y kilometraje— y
+   * esos sí deben seguir siendo redondos.
    * ----------------------------------------------------------------------- */
-  --radius-xs: 0.125rem;
-  --radius-sm: 0.125rem;
-  --radius-md: 0.125rem;
-  --radius-lg: 0.125rem;
-  --radius-xl: 0.125rem;
-  --radius-2xl: 0.125rem;
-  --radius-3xl: 0.125rem;
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.375rem;
+  --radius-xl: 0.375rem;
+  --radius-2xl: 0.375rem;
+  --radius-3xl: 0.375rem;
 
-  --color-tinta: oklch(13% 0 0);
+  --color-tinta: oklch(12.5% 0 0);
   --color-humo: oklch(62% 0 0);
   --color-acero: oklch(30% 0 0);
-  --color-rojo: oklch(55% 0.225 27);
-  --color-rojo-hondo: oklch(42% 0.19 27);
+  --color-naranja: oklch(68% 0.17 46);
+  --color-naranja-claro: oklch(80% 0.145 68);
+  --color-naranja-hondo: oklch(55% 0.155 42);
+  --color-plata: oklch(82% 0.006 250);
 
   --animate-flecha: flecha 2.2s ease-in-out infinite;
   --animate-cinta: cinta 42s linear infinite;
@@ -166,9 +175,12 @@ html {
   /* Alto del crédito de autoría del final (components/FooterFoot.js). */
   --alto-credito: 1.9rem;
 
-  /* El ángulo de la marca. Se usa en las diagonales y en los biseles, y está
-     aquí arriba para que cambiarlo cambie la página entera de una vez. */
-  --angulo-hb: -18deg;
+  /* El ángulo de la marca. En sus piezas el corte del asfalto y el filo de las
+     etiquetas van inclinados, pero mucho menos que en un catálogo de
+     diagonales duras: aquí el gesto es el ala del emblema, que es casi
+     horizontal. Está arriba del todo para que cambiarlo cambie la página
+     entera de una vez. */
+  --angulo-dn: -11deg;
 
   background-color: var(--color-base-100);
 }
@@ -199,7 +211,7 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-rojo);
+  background-color: var(--color-naranja);
   color: #fff;
 }
 
@@ -207,9 +219,9 @@ body {
  * Tipografía
  * ------------------------------------------------------------------------ */
 
-/* El titular del catálogo: condensado, muy pesado, en itálica y en mayúsculas.
-   Es lo que hace que un bloque de texto se lea como una portada de HB y no
-   como una web de plantilla. */
+/* El titular de sus publicaciones: condensado, muy pesado, en itálica y en
+   mayúsculas. Es lo que hace que un bloque de texto se lea como una pieza de
+   DealerNauta y no como una web de plantilla. */
 .display {
   font-family: var(--font-display);
   font-weight: 800;
@@ -252,8 +264,7 @@ body {
  * SplitText envuelve cada línea en una caja con `overflow: clip` para que el
  * texto ASOME en vez de aparecer. El recorte es exactamente a ras de la caja
  * de la línea, así que en español se comería las tildes de las mayúsculas
- * —"ÚNICO", "2024 TOYOTA URBAN CRUISER"— y el rabo de la itálica por la
- * derecha.
+ * —"ÚNICO", "CAMIÓN"— y el rabo de la itálica por la derecha.
  *
  * Se le da hueco con padding y se recupera con un margen negativo igual, que
  * en un elemento generado por GSAP no compite con ninguna utilidad de
@@ -273,9 +284,9 @@ body {
  *
  * Esta página tiene DOS voces y conviene no confundirlas:
  *
- *   · Lo que ve el comprador —vehículos, cómo se compra, contacto— va con la
- *     tipografía de la casa.
- *   · Lo que le habla al DUEÑO de HB —cómo se publica, qué incluye, cuánto
+ *   · Lo que ve el comprador —vehículos, camiones, cómo se compra, contacto—
+ *     va con la tipografía de la casa.
+ *   · Lo que le habla a DEALERNAUTA —cómo se publica, qué incluye, cuánto
  *     cuesta— va en Microgramma, que es la tipografía de la firma de
  *     Alessandrovaru, la misma del crédito del pie.
  *
@@ -317,10 +328,15 @@ body {
   animation-play-state: paused;
 }
 
-/* La voz de venta: el rojo de la casa, que aquí sí llena. */
+/* La voz de venta: el naranja de la casa, que aquí sí llena. */
 .cintillo-venta {
-  background-color: var(--color-rojo);
-  color: #fff;
+  background-image: linear-gradient(
+    100deg,
+    var(--color-naranja-hondo),
+    var(--color-naranja) 45%,
+    var(--color-naranja-claro)
+  );
+  color: oklch(16% 0.03 46);
 }
 
 /* La vuelta al escaparate: oscura y discreta, que no compita. */
@@ -333,17 +349,18 @@ body {
 .cintillo-texto {
   font-size: 0.7rem;
   line-height: 1;
+  font-weight: 600;
 }
 
-/* La barra inclinada que separa una frase de la siguiente: el mismo ángulo
-   que todo lo demás. */
+/* La separación entre una frase y la siguiente: el ala del emblema en
+   pequeño, no un punto cualquiera. */
 .cintillo-punto {
   display: inline-block;
-  width: 0.5rem;
-  height: 0.75rem;
+  width: 0.75rem;
+  height: 0.4rem;
   background-color: currentColor;
-  opacity: 0.5;
-  transform: skewX(var(--angulo-hb));
+  opacity: 0.55;
+  clip-path: polygon(0 40%, 100% 0, 85% 100%, 12% 72%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -353,82 +370,172 @@ body {
 }
 
 /* --------------------------------------------------------------------------
- * La gráfica de la casa: el corte en diagonal
+ * La gráfica de la casa: cielo naranja, ciudad y asfalto
  *
- * En el catálogo, el negro y el rojo nunca se encuentran en horizontal: se
- * cruzan en diagonal, de abajo-izquierda a arriba-derecha. Aquí ese corte
- * aparece de cuatro formas, de más a menos fuerte.
+ * Es la receta exacta de sus publicaciones, de arriba abajo: un cielo naranja
+ * que va de ámbar a naranja quemado, el perfil de la ciudad recortado en
+ * negro sobre él, y el asfalto gris ocupando el tercio de abajo con el
+ * vehículo posado encima.
+ *
+ * Las tres capas van por separado a propósito: cada sección usa las que le
+ * hagan falta y con la intensidad que aguante el texto que lleve encima.
  * ------------------------------------------------------------------------ */
 
-/* 1. La franja, para acentos cortos: bajo un titular, en un rótulo. */
-.banda {
-  height: 0.25rem;
-  width: 3.5rem;
-  background-color: var(--color-rojo);
-  transform: skewX(var(--angulo-hb));
+/* 1. El cielo. `--cielo-fuerza` gradúa cuánto pesa sin tocar el degradado. */
+.cielo {
+  --cielo-fuerza: 1;
+  background-color: var(--color-base-100);
+  background-image:
+    radial-gradient(
+      ellipse 120% 85% at 50% 100%,
+      color-mix(in oklab, var(--color-naranja-claro) calc(38% * var(--cielo-fuerza)), transparent) 0%,
+      color-mix(in oklab, var(--color-naranja) calc(30% * var(--cielo-fuerza)), transparent) 32%,
+      color-mix(in oklab, var(--color-naranja-hondo) calc(16% * var(--cielo-fuerza)), transparent) 58%,
+      transparent 82%
+    );
 }
 
-.banda-ancha {
+.cielo-suave {
+  --cielo-fuerza: 0.45;
+}
+
+/* El cielo de una PIEZA suelta —la tarjeta de una unidad—, que no es lo mismo
+   que el de una sección.
+
+   En una sección el cielo tiñe un fondo negro y tiene que dejar leer el texto
+   que lleva encima, así que va mezclado con transparente. En una tarjeta el
+   cielo ES la pieza: ahí su naranja va a plena potencia, como en sus posts, y
+   lo único que se le pide es que el vehículo blanco recorte contra él. */
+.cielo-pieza {
+  background-image: linear-gradient(
+    to bottom,
+    oklch(30% 0.09 42) 0%,
+    var(--color-naranja-hondo) 34%,
+    var(--color-naranja) 62%,
+    var(--color-naranja-claro) 88%
+  );
+}
+
+/* 2. La ciudad. Es el perfil de una ciudad de torres con el cerro detrás:
+      Caracas vista desde el sur, que es lo que sale en sus piezas. Va como
+      capa absoluta, anclada abajo, y se difumina por arriba para que no se vea
+      dónde termina el recorte. */
+/* `--horizonte-alto` es lo ALTO QUE SE DIBUJAN LOS EDIFICIOS, y no lo alto que
+   mide la capa. Son cosas distintas y confundirlas fue el primer error: con
+   `background-size: auto 100%` la ciudad se estiraba con la capa, así que en
+   una portada de 3.600 px salían torres de 1.600 px que ya no parecían una
+   ciudad, parecían un muro. Ahora los edificios miden siempre lo mismo y la
+   capa solo decide cuánto cielo queda por encima. */
+.horizonte {
+  --horizonte-alto: clamp(70px, 16vh, 190px);
+  pointer-events: none;
+  background-repeat: repeat-x;
+  background-position: bottom center;
+  background-size: auto var(--horizonte-alto);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='240' viewBox='0 0 1200 240' preserveAspectRatio='none'%3E%3Cg fill='%23000000'%3E%3Cpath d='M0 240 L0 150 L60 96 L120 126 L190 70 L250 112 L320 60 L400 104 L470 74 L540 120 L620 66 L700 110 L780 80 L860 124 L940 88 L1020 130 L1100 100 L1200 140 L1200 240 Z' opacity='0.55'/%3E%3Cg%3E%3Crect x='28' y='168' width='46' height='72'/%3E%3Crect x='86' y='140' width='34' height='100'/%3E%3Crect x='132' y='186' width='54' height='54'/%3E%3Crect x='198' y='120' width='40' height='120'/%3E%3Crect x='250' y='160' width='30' height='80'/%3E%3Crect x='292' y='178' width='62' height='62'/%3E%3Crect x='366' y='132' width='38' height='108'/%3E%3Crect x='416' y='172' width='44' height='68'/%3E%3Crect x='472' y='150' width='28' height='90'/%3E%3Crect x='512' y='186' width='58' height='54'/%3E%3Crect x='582' y='126' width='42' height='114'/%3E%3Crect x='636' y='166' width='32' height='74'/%3E%3Crect x='680' y='182' width='60' height='58'/%3E%3Crect x='752' y='144' width='36' height='96'/%3E%3Crect x='800' y='176' width='48' height='64'/%3E%3Crect x='860' y='156' width='30' height='84'/%3E%3Crect x='902' y='188' width='56' height='52'/%3E%3Crect x='970' y='134' width='40' height='106'/%3E%3Crect x='1022' y='170' width='34' height='70'/%3E%3Crect x='1068' y='184' width='62' height='56'/%3E%3Crect x='1142' y='150' width='38' height='90'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  mask-image: linear-gradient(to top, #000 45%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 100%);
+}
+
+/* 3. El asfalto. Gris oscuro con grano y el filo de la vía cortado en el
+      ángulo de la casa, como en sus piezas. */
+.asfalto {
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      to top,
+      oklch(26% 0.004 250) 0%,
+      oklch(21% 0.004 250) 55%,
+      transparent 100%
+    );
+}
+
+.asfalto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23a)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* El ala del emblema, para acentos cortos: bajo un titular, en un rótulo.
+   Es una cuña que arranca gruesa y muere en punta, como las dos alas que
+   cruzan por detrás del carro en su logotipo. */
+.ala {
+  height: 0.3rem;
+  width: 4rem;
+  background-image: linear-gradient(
+    to right,
+    var(--color-naranja),
+    color-mix(in oklab, var(--color-naranja) 30%, transparent)
+  );
+  clip-path: polygon(0 0, 100% 22%, 100% 78%, 0 100%);
+}
+
+.ala-ancha {
   width: 100%;
-  transform: none;
 }
 
-/* 2. El bisel, para botones y etiquetas: la caja va sesgada y el contenido
-      se contra-sesga para que el texto salga recto. */
+/* La plateada, la que en el emblema va debajo de la naranja. */
+.ala-plata {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--color-plata) 70%, transparent),
+    transparent
+  );
+}
+
+/* El bisel, para botones y etiquetas: la caja va sesgada y el contenido se
+   contra-sesga para que el texto salga recto. */
 .bisel {
   display: inline-block;
-  transform: skewX(var(--angulo-hb));
+  transform: skewX(var(--angulo-dn));
 }
 
 .bisel > * {
   display: inline-block;
-  transform: skewX(calc(var(--angulo-hb) * -1));
+  transform: skewX(calc(var(--angulo-dn) * -1));
 }
 
-/* 3. El corte, para fotos y bloques enteros: una esquina rebajada, como el
-      canto de las fichas del catálogo. */
-.corte {
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.75rem), calc(100% - 1.75rem) 100%, 0 100%);
-}
-
-.corte-doble {
-  clip-path: polygon(
-    1.5rem 0,
-    100% 0,
-    100% calc(100% - 1.5rem),
-    calc(100% - 1.5rem) 100%,
-    0 100%,
-    0 1.5rem
+/* La pastilla: el óvalo naranja con el año y el kilometraje que llevan todas
+   sus publicaciones al pie de la foto. */
+.pastilla {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    100deg,
+    var(--color-naranja-hondo),
+    var(--color-naranja) 55%,
+    var(--color-naranja-claro)
   );
+  color: oklch(16% 0.03 46);
+  font-weight: 700;
+  box-shadow: 0 10px 26px -14px color-mix(in oklab, var(--color-naranja) 90%, transparent);
 }
 
-/* 4. El campo: el fondo diagonal completo, para las secciones que tienen que
-      sonar a portada de catálogo. Son dos cuñas, una roja y una gris, sobre
-      negro, con el mismo ángulo que todo lo demás. */
-.campo-hb {
-  background-color: var(--color-base-100);
-  background-image:
-    linear-gradient(
-      100deg,
-      transparent 0 34%,
-      var(--color-rojo-hondo) 34% 41%,
-      transparent 41% 100%
-    ),
-    linear-gradient(
-      100deg,
-      transparent 0 62%,
-      color-mix(in oklab, var(--color-base-content) 7%, transparent) 62% 66%,
-      transparent 66% 100%
-    );
+.pastilla-apagada {
+  background-image: none;
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 75%, transparent);
+  box-shadow: none;
 }
 
-/* El fondo donde se posan las fotos del catálogo: negro con una insinuación
-   de foco, como el suelo del local. */
+/* El corte, para fotos y bloques enteros: una esquina rebajada, el mismo
+   gesto de sus etiquetas. */
+.corte {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.5rem), calc(100% - 1.5rem) 100%, 0 100%);
+}
+
+/* El fondo donde se posan las unidades: negro con una insinuación de foco,
+   como el suelo del salón. */
 .estudio {
   background:
     radial-gradient(
       ellipse 70% 60% at 50% 42%,
-      oklch(26% 0 0) 0%,
+      oklch(25% 0 0) 0%,
       oklch(18% 0 0) 48%,
       oklch(12% 0 0) 100%
     );
@@ -443,10 +550,10 @@ body {
 /* --------------------------------------------------------------------------
  * Texturas
  *
- * Kilómetros de negro liso se ven baratos en una pantalla grande. Estas dos
- * capas le dan superficie sin llamar la atención, y van como CAPA —un div
- * absoluto dentro de la sección— y no como pseudoelemento: con un z-index
- * negativo acabarían por detrás del propio fondo y no se verían nunca.
+ * Kilómetros de negro liso se ven baratos en una pantalla grande. Estas capas
+ * le dan superficie sin llamar la atención, y van como CAPA —un div absoluto
+ * dentro de la sección— y no como pseudoelemento: con un z-index negativo
+ * acabarían por detrás del propio fondo y no se verían nunca.
  *
  *   <div className="textura absolute inset-0" aria-hidden="true" />
  * ------------------------------------------------------------------------ */
@@ -458,6 +565,21 @@ body {
   opacity: 0.5;
   mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* La vía: las rayas de la calzada, tenues, en diagonal. Sustituye al panal que
+   traía la plantilla —eso era el techo del local de otro cliente— y se reserva
+   para las secciones que hablan del negocio; en todas dejaría de significar
+   nada. */
+.textura-via {
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: repeating-linear-gradient(
+    101deg,
+    transparent 0 46px,
+    #fff 46px 50px,
+    transparent 50px 120px
+  );
 }
 
 /* El plástico que envuelve la puerta.
@@ -496,9 +618,9 @@ body {
   --puerta-v3: clamp(0.7rem, 2.4vh, 1.75rem); /* de un bloque al siguiente */
   --puerta-v4: clamp(0.9rem, 3.2vh, 3.5rem); /* entre las dos columnas */
 
-  /* El logotipo se pide en píxeles porque el mismo componente sirve en la
+  /* El emblema se pide en píxeles porque el mismo componente sirve en la
      cabecera; aquí se le pasa esta medida para que encoja con el alto. */
-  --puerta-logo: clamp(3rem, 8vh, 4.875rem);
+  --puerta-logo: clamp(3.25rem, 8.5vh, 5.25rem);
 }
 
 /* El crédito de autoría se monta en el layout raíz, así que también cae debajo
@@ -510,12 +632,17 @@ body:has(main.puerta) .footer-foot {
 
 /* El párrafo de presentación solo sale cuando hay sitio de sobra: en el móvil
    la columna es estrecha y lo que se vende ya lo cuentan la insignia, el
-   carrusel y las cintas; en un portátil bajo es lo primero que estorba. */
+   carrusel y las cintas; en un portátil bajo es lo primero que estorba.
+
+   El corte está en 52rem de alto y no en 46 porque está MEDIDO: con las nueve
+   líneas de `demo.incluye`, a 1440×800 la columna izquierda pedía 741 px en
+   733 disponibles y el párrafo eran justo los 110 px que sobraban. Si algún día
+   crece la lista, este número se vuelve a medir; no se adivina. */
 .puerta-presentacion {
   display: none;
 }
 
-@media (width >= 64rem) and (height >= 46rem) {
+@media (width >= 64rem) and (height >= 52rem) {
   .puerta-presentacion {
     display: block;
   }
@@ -523,7 +650,7 @@ body:has(main.puerta) .footer-foot {
 
 /* Lo que trae la edición.
  *
- * Son siete u ocho renglones que en un móvil no caben en vertical junto a la
+ * Son ocho o nueve renglones que en un móvil no caben en vertical junto a la
  * caja de acceso, así que ahí la lista se tumba: una fila que se arrastra de
  * lado, con los puntos enganchados, y que se sale del margen para que se vea
  * que hay más a la derecha. De `lg` en adelante vuelve a ser la lista de
@@ -548,11 +675,11 @@ body:has(main.puerta) .footer-foot {
 }
 
 /* Por debajo de 45rem de alto —un Android de gama baja, un iPhone SE, un
-   portátil de 13 pulgadas con muchas barras— no cabe
-   todo, y hay que elegir qué se va. Primero los adornos; después la lista de
-   lo que trae la edición, que es lo único que se cuenta dos veces: las dos
-   cintas llevan girando esas mismas ventajas sin parar. Lo que no se toca es
-   el logotipo, el precio y el formulario, que es a lo que se viene. */
+   portátil de 13 pulgadas con muchas barras— no cabe todo, y hay que elegir
+   qué se va. Primero los adornos; después la lista de lo que trae la edición,
+   que es lo único que se cuenta dos veces: las dos cintas llevan girando esas
+   mismas ventajas sin parar. Lo que no se toca es el emblema, el precio y el
+   formulario, que es a lo que se viene. */
 @media (height < 45rem) {
   .puerta-cortesia,
   .puerta-incluido {
@@ -591,17 +718,6 @@ body:has(main.puerta) .footer-foot {
   -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
 }
 
-/* El panal del techo del local. En las fotos de su Instagram el showroom está
-   iluminado con hexágonos, así que el motivo es suyo, no un adorno genérico.
-   Se reserva para las secciones que hablan del negocio: en todas dejaría de
-   significar nada. */
-.textura-panal {
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='96' viewBox='0 0 112 96'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='2'%3E%3Cpath d='M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z'/%3E%3Cpath d='M84 0 L112 16 L112 48 L84 64 L56 48 L56 16 Z'/%3E%3Cpath d='M28 64 L56 80 L56 96'/%3E%3Cpath d='M84 64 L112 80 L112 96'/%3E%3Cpath d='M0 80 L0 96'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 112px 96px;
-}
-
 /* --------------------------------------------------------------------------
  * Portada de edición  (solo la puerta de la demo)
  *
@@ -616,7 +732,8 @@ body:has(main.puerta) .footer-foot {
 
 .insignia-edicion {
   display: inline-block;
-  transform: skewX(var(--angulo-hb));
+  transform: skewX(var(--angulo-dn));
+  border-radius: 9999px;
   border: 1px solid color-mix(in oklab, var(--color-base-content) 30%, transparent);
   background-image: linear-gradient(
     100deg,
@@ -632,21 +749,28 @@ body:has(main.puerta) .footer-foot {
 
 .insignia-edicion > * {
   display: inline-block;
-  transform: skewX(calc(var(--angulo-hb) * -1));
+  transform: skewX(calc(var(--angulo-dn) * -1));
 }
 
 /* El sello de rebaja. Va girado, como el adhesivo de una caja. */
 .sello-descuento {
   transform: rotate(-9deg);
-  background-color: var(--color-rojo);
-  color: #fff;
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    140deg,
+    var(--color-naranja-claro),
+    var(--color-naranja) 55%,
+    var(--color-naranja-hondo)
+  );
+  color: oklch(16% 0.03 46);
   box-shadow:
-    0 0 0 3px color-mix(in oklab, var(--color-rojo) 25%, transparent),
-    0 14px 30px -12px color-mix(in oklab, var(--color-rojo) 70%, transparent);
+    0 0 0 3px color-mix(in oklab, var(--color-naranja) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-naranja) 70%, transparent);
 }
 
 /* Cada cosa que trae la edición, como una línea de contenido descargable. */
 .linea-dlc {
+  border-radius: var(--radius-box);
   border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
   background-color: color-mix(in oklab, var(--color-base-content) 4%, transparent);
   transition:
@@ -657,7 +781,7 @@ body:has(main.puerta) .footer-foot {
 
 .linea-dlc:hover {
   transform: translateX(4px);
-  border-color: color-mix(in oklab, var(--color-rojo) 55%, transparent);
+  border-color: color-mix(in oklab, var(--color-naranja) 55%, transparent);
   background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
 }
 
@@ -665,20 +789,21 @@ body:has(main.puerta) .footer-foot {
 .resplandor {
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--color-base-content) 14%, transparent),
-    0 0 70px -14px color-mix(in oklab, var(--color-rojo) 55%, transparent);
+    0 0 70px -14px color-mix(in oklab, var(--color-naranja) 55%, transparent);
 }
 
 /* --------------------------------------------------------------------------
  * Tarjetas
  *
  * Nada de cristal ni de sombras pesadas: una línea finísima sobre el negro y
- * un filo rojo que aparece al pasar por encima. El peso visual lo tiene la
- * foto, que ya viene con la gráfica de HB impresa.
+ * un filo naranja que aparece al pasar por encima. El peso visual lo tiene la
+ * unidad, que ya viene con la gráfica de la casa impresa.
  * ------------------------------------------------------------------------ */
 
 .ficha {
   position: relative;
   isolation: isolate;
+  border-radius: var(--radius-box);
   background-color: var(--color-base-200);
   border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
   transition:
@@ -689,18 +814,25 @@ body:has(main.puerta) .footer-foot {
 
 .ficha:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in oklab, var(--color-rojo) 60%, transparent);
+  border-color: color-mix(in oklab, var(--color-naranja) 60%, transparent);
   box-shadow: 0 26px 60px -30px #000;
 }
 
-/* El filo rojo del borde inferior, que solo crece al pasar por encima. */
+/* El filo naranja del borde inferior, que solo crece al pasar por encima. */
 .ficha::after {
   content: "";
   position: absolute;
   inset-inline: 0;
   bottom: 0;
   height: 3px;
-  background-color: var(--color-rojo);
+  border-bottom-left-radius: var(--radius-box);
+  border-bottom-right-radius: var(--radius-box);
+  background-image: linear-gradient(
+    to right,
+    var(--color-naranja-hondo),
+    var(--color-naranja) 50%,
+    var(--color-naranja-claro)
+  );
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -712,6 +844,7 @@ body:has(main.puerta) .footer-foot {
 
 /* Panel sin interacción: avisos, bloques de datos. */
 .panel {
+  border-radius: var(--radius-box);
   background-color: var(--color-base-200);
   border: 1px solid color-mix(in oklab, var(--color-base-content) 8%, transparent);
 }
@@ -743,6 +876,7 @@ header.con-fondo {
   gap: 1px;
   background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
   border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border-radius: var(--radius-box);
   overflow: hidden;
 }
 
@@ -761,11 +895,11 @@ header.con-fondo {
  * Botones
  *
  * En la itálica condensada de la casa, mayúsculas y muy espaciados. Se pensó
- * en sesgarlos como las franjas, y se descartó: un `skewX` sobre el botón
- * inclina también su texto, que YA viene inclinado por la itálica, y el
- * resultado eran dos pendientes distintas peleándose. El corte diagonal se
- * queda donde se lee bien —las franjas, las fotos, las etiquetas— y el botón
- * se gana la marca por la tipografía.
+ * en sesgarlos como las alas, y se descartó: un `skewX` sobre el botón inclina
+ * también su texto, que YA viene inclinado por la itálica, y el resultado eran
+ * dos pendientes distintas peleándose. El sesgo se queda donde se lee bien
+ * —las etiquetas, las pastillas— y el botón se gana la marca por la tipografía
+ * y por el degradado naranja del emblema.
  * ------------------------------------------------------------------------ */
 
 .btn {
@@ -779,23 +913,34 @@ header.con-fondo {
 }
 
 .btn-primary {
-  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-rojo) 95%, transparent);
+  background-image: linear-gradient(
+    100deg,
+    var(--color-naranja-hondo),
+    var(--color-naranja) 55%,
+    var(--color-naranja-claro)
+  );
+  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-naranja) 95%, transparent);
 }
 
 .btn-primary:hover {
-  background-color: color-mix(in oklab, var(--color-rojo) 88%, #fff);
+  background-image: linear-gradient(
+    100deg,
+    var(--color-naranja),
+    var(--color-naranja-claro) 60%,
+    var(--color-naranja-claro)
+  );
 }
 
-/* El botón secundario sobre negro: solo un filo blanco. */
+/* El botón secundario sobre negro: solo un filo plateado. */
 .btn-filo {
   background-color: transparent;
   color: var(--color-base-content);
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-base-content) 28%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-plata) 30%, transparent);
 }
 
 .btn-filo:hover {
   background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-base-content) 55%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-plata) 60%, transparent);
 }
 
 /* El botón que va encima de una foto. */
@@ -833,8 +978,8 @@ header.con-fondo {
 }
 
 .entrada:focus {
-  border-color: var(--color-rojo);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-rojo) 22%, transparent);
+  border-color: var(--color-naranja);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-naranja) 22%, transparent);
 }
 
 /* Los desplegables nativos heredan el fondo del sistema en sus opciones, que
@@ -879,7 +1024,7 @@ header.con-fondo {
   background: var(--color-base-300);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-rojo);
+  background: var(--color-naranja);
 }
 
 /* Quien pide menos movimiento, no lo tiene. */

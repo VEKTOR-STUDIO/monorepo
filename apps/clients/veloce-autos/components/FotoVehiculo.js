@@ -1,28 +1,24 @@
 import Image from "next/image";
 import Silueta from "@/components/Silueta";
+import MarcaVeloce from "@/components/MarcaVeloce";
 
 /**
- * El cuadro donde va el vehículo.
+ * El cuadro donde va la unidad.
  *
- * Las fotos de esta página son las trece páginas del catálogo de HB tal cual:
- * el vehículo recortado sobre el corte diagonal de la marca, con el modelo
- * arriba, las viñetas abajo a la derecha y la dirección del local abajo a la
- * izquierda. Vienen en 4:5 y se enseñan ENTERAS, sin recortar: la gráfica es
- * del cliente y recortarla sería tirar a la basura lo mejor que tiene.
+ * Con foto, la enseña recortada al cuadro. Sin foto —que hoy es el caso de
+ * todo el inventario, porque las suyas siguen dentro de Instagram— dibuja la
+ * silueta de la carrocería sobre el charco de luz del showroom, con la V de la
+ * casa de marca de agua detrás.
  *
- * De ahí que el `object-fit` por defecto sea `contain` y no `cover`. El hueco
- * que queda alrededor lo tapa el fondo de estudio, que es negro como el de la
- * ficha, así que no se nota que haya hueco.
- *
- * Sin foto —que es lo que pasaría con un vehículo cargado desde el panel y
- * todavía sin fotografiar— dibuja la silueta del tipo, que mantiene la página
- * presentable en vez de dejar un rectángulo vacío.
+ * Ese fondo no es relleno. Un hueco gris con un icono de cámara dice "aquí
+ * falta algo"; una silueta centrada sobre la marca dice "así se va a ver tu
+ * unidad cuando subas la foto", que es lo que hay que enseñar en una demo.
  */
 export default function FotoVehiculo({
   vehiculo,
   className = "",
   prioridad = false,
-  encajar = "contain",
+  encajar = "cover",
   sizes = "(max-width: 768px) 100vw, 50vw",
 }) {
   const foto = vehiculo.fotos?.[0] || null;
@@ -36,22 +32,32 @@ export default function FotoVehiculo({
           fill
           sizes={sizes}
           priority={prioridad}
-          className={encajar === "cover" ? "object-cover" : "object-contain"}
+          className={encajar === "contain" ? "object-contain" : "object-cover"}
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center p-[8%]">
-          <div className="relative w-full max-w-2xl">
-            <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content/25" />
-            {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
-            <div className="sombra-piso absolute inset-x-[6%] bottom-[3%] h-3" aria-hidden="true" />
+        <>
+          {/* La marca de agua, grande y al 4 %: se intuye, no se lee. */}
+          <div
+            className="pointer-events-none absolute inset-0 flex items-center justify-center"
+            aria-hidden="true"
+          >
+            <MarcaVeloce className="h-[62%] w-auto text-base-content/[0.045]" />
           </div>
-        </div>
+
+          <div className="absolute inset-0 flex items-center justify-center p-[9%]">
+            <div className="relative w-full max-w-2xl">
+              <Silueta tipo={vehiculo.carroceria} className="w-full text-base-content/30" />
+              {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
+              <div className="sombra-piso absolute inset-x-[8%] bottom-[4%] h-3" aria-hidden="true" />
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
 }
 
-/** El cartelito de "aquí falta la foto real", para el modo muestra. */
+/** El cartelito de "aquí falta la foto real". */
 export function AvisoSinFoto({ className = "" }) {
   return (
     <span
@@ -63,17 +69,20 @@ export function AvisoSinFoto({ className = "" }) {
 }
 
 /**
- * "Este precio todavía no es el suyo".
+ * "Esta unidad no es suya todavía".
  *
- * El catálogo en PDF que mandó HB no publica ni un precio: trae el modelo, el
- * año, el kilometraje y poco más. Los precios de esta demo son de referencia
- * de mercado, puestos para que la página se pueda enseñar funcionando, y decir
- * eso en voz alta es la diferencia entre una demo honesta y una que se inventa
- * el inventario de otro.
+ * Es el aviso más importante de la demo y por eso está escrito sin rodeos. El
+ * inventario real de Veloce está en @veloce.autos; mientras no se pueda traer
+ * de ahí, lo que se enseña son unidades de ejemplo con precios de referencia.
  *
- * Desaparece solo en cuanto la ficha deja de llevar `precioProvisional`.
+ * Enseñar como suyo un vehículo que el negocio no tiene es justo el detalle
+ * que hunde una reunión que iba bien: basta con que pregunten "¿y esa Prado
+ * dónde está?". Decirlo antes de que lo pregunten convierte el problema en
+ * una muestra de cómo se va a ver lo suyo.
+ *
+ * Desaparece solo en cuanto la ficha deja de llevar `muestra`.
  */
-export function AvisoPrecioProvisional({ className = "" }) {
+export function AvisoMuestra({ className = "", corto = false }) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 border border-base-content/15 px-3 py-1.5 text-[0.7rem] text-base-content/55 ${className}`}
@@ -86,11 +95,23 @@ export function AvisoPrecioProvisional({ className = "" }) {
         stroke="currentColor"
         strokeWidth="2"
         aria-hidden="true"
+        className="shrink-0"
       >
         <circle cx="12" cy="12" r="10" />
         <path d="M12 16v-4M12 8h.01" strokeLinecap="round" />
       </svg>
-      Precio de referencia: el catálogo de HB no publica precios
+      {corto ? "Unidad de ejemplo" : "Unidad de ejemplo: el inventario real está en su Instagram"}
+    </span>
+  );
+}
+
+/** La versión diminuta, para la esquina de una tarjeta de la rejilla. */
+export function SelloMuestra({ className = "" }) {
+  return (
+    <span
+      className={`cifra bg-base-100/85 px-2 py-1 text-[0.6rem] uppercase tracking-wider text-base-content/60 backdrop-blur-sm ${className}`}
+    >
+      Ejemplo
     </span>
   );
 }

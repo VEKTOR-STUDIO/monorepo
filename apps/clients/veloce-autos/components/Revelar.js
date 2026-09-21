@@ -13,8 +13,9 @@ import { contexto, mostrar, DISPARO, TIEMPOS, SALIDA_FUERTE } from "@/libs/anima
  *   izquierda  para lo que acompaña a un texto por el lado.
  *   derecha    idem, al revés.
  *   escala     para lo que tiene que sentirse cerca: fotos, tarjetas grandes.
- *   corte      entra recortado en diagonal, con el ángulo de la marca. Es el
- *              más fuerte y se reserva para las fotos y los bloques de color.
+ *   corte      se abre desde el eje hacia los dos lados, como las alas del
+ *              logotipo. Es el más fuerte y se reserva para las fotos y los
+ *              bloques grandes.
  *   giro       llega inclinado y se endereza; para las tarjetas del inventario.
  *
  * `once` a propósito: revelar algo cada vez que pasa por pantalla marea al
@@ -29,12 +30,15 @@ const SALIDAS = {
   giro: { y: 44, rotate: -2.5, scale: 0.97 },
   corte: {
     y: 26,
-    clipPath: "polygon(0 0, 0 0, -24% 100%, 0 100%)",
+    // Una V muy cerrada sobre el eje: los dos puntos de arriba juntos en el
+    // centro, los de abajo apenas abiertos. Al ensancharse asoma el vértice
+    // primero, que es el gesto de la marca.
+    clipPath: "polygon(50% 0, 50% 0, 54% 100%, 46% 100%)",
   },
 };
 
 const LLEGADA = {
-  clipPath: "polygon(0 0, 124% 0, 100% 100%, 0 100%)",
+  clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
 };
 
 export default function Revelar({

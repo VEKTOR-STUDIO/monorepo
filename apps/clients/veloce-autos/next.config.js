@@ -4,10 +4,11 @@ const nextConfig = {
   // si algún día el catálogo crece de verdad.
   staticPageGenerationTimeout: 120,
   images: {
-    // Las fotos de los vehículos son las trece páginas del catálogo de HB y
-    // viven en /public/vehiculos, así que no hace falta ningún dominio
-    // externo. Si algún día el inventario pasa a servirse desde un
-    // almacenamiento aparte, es aquí donde se declara.
+    // Hoy ninguna ficha tiene foto: se dibuja la silueta de la carrocería.
+    // Cuando se carguen las fotos reales desde su Instagram irán a
+    // /public/vehiculos, que tampoco necesita dominio externo. Si algún día el
+    // inventario pasa a servirse desde un almacenamiento aparte, es aquí donde
+    // se declara.
     remotePatterns: [],
   },
 };

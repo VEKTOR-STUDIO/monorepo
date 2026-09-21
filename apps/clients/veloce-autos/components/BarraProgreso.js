@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation";
 import { usarGsap } from "@/libs/animaciones";
 
 /**
- * El hilo rojo de arriba: cuánto llevas leído de la página.
+ * El hilo de arriba: cuánto llevas leído de la página.
  *
  * Es el único elemento de movimiento que está siempre en pantalla, así que
- * tiene que ser el más discreto de todos: dos píxeles de alto y el rojo de la
- * casa. Va atado al scroll con `scrub`, sin duración propia, para que se
+ * tiene que ser el más discreto de todos: dos píxeles de alto y el blanco de
+ * la casa. Va atado al scroll con `scrub`, sin duración propia, para que se
  * sienta pegado a la rueda y no persiguiéndola.
  *
  * Se recalcula al cambiar de página porque cada una mide distinto; sin eso, al

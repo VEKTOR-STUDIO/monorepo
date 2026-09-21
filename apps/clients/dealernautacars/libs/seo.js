@@ -10,17 +10,18 @@ export const getSEOTags = ({
 } = {}) => {
   const defaultKeywords = [
     config.appName,
-    "venta de carros Barquisimeto",
-    "carros 0 km Venezuela",
-    "camionetas en venta Barquisimeto",
-    "carros usados Lara",
-    "importación de vehículos Venezuela",
-    "comprar carro financiado Venezuela",
-    "HB Inversiones",
+    "concesionario Caracas",
+    "venta de camiones Venezuela",
+    "camiones nuevos y usados Venezuela",
+    "carros 0 km Caracas",
+    "carros usados Caracas",
+    "consignación de vehículos Caracas",
+    "dealer San Antonio de los Altos",
+    "DealerNauta Cars",
   ];
 
   return {
-    title: title || `${config.appName} — Venta e importación de vehículos en Barquisimeto`,
+    title: title || `${config.appName} — Vehículos y camiones en Caracas y San Antonio de los Altos`,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,
@@ -90,8 +91,27 @@ export const renderSchemaTags = () => {
             addressRegion: config.business.estado,
             addressCountry: "VE",
           },
-          areaServed: `${config.business.ciudad}, Venezuela`,
-          sameAs: [config.business.instagramUrl].filter(Boolean),
+          areaServed: "Caracas y Miranda, Venezuela",
+          // Las dos sedes, cada una con su dirección y su teléfono. Sin esto,
+          // Google entiende que DealerNauta es un solo local y se queda con
+          // uno de los dos.
+          location: config.business.sedes.map((sede) => ({
+            "@type": "AutoDealer",
+            name: `${config.business.nombre} · ${sede.nombre}`,
+            telephone: `+${sede.whatsapp}`,
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: sede.zona,
+              addressLocality: sede.nombre,
+              addressRegion: sede.estado,
+              addressCountry: "VE",
+            },
+            sameAs: [sede.instagramUrl].filter(Boolean),
+          })),
+          sameAs: [
+            config.business.instagramUrl,
+            config.business.instagramCaracasUrl,
+          ].filter(Boolean),
         }),
       }}
     />

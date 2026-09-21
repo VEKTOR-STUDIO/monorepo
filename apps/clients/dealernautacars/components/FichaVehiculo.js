@@ -6,19 +6,18 @@ import { ESTADOS } from "@/libs/vehiculos";
 /**
  * La tarjeta del inventario.
  *
- * La foto es la página entera del catálogo de HB, así que la tarjeta no repite
- * lo que ya dice la imagen: debajo solo van la condición, el modelo, el precio
- * y el kilometraje. El nombre del modelo se escribe aunque esté impreso en la
- * foto porque una imagen no la lee ni Google ni un lector de pantalla.
+ * La imagen es una publicación de DealerNauta —la suya cuando la haya, y
+ * mientras tanto la plantilla dibujada— y ya lleva el modelo y el año escritos
+ * encima, así que la tarjeta no los repite por gusto: debajo van la condición,
+ * el modelo, el precio y el kilometraje. El nombre del modelo se escribe
+ * igualmente porque una imagen no la lee ni Google ni un lector de pantalla.
  *
- * Nada se le superpone a la foto. Se probó con la etiqueta de "0 KM" en la
- * esquina de arriba a la izquierda y ahí es justo donde el catálogo pone el
- * año y el modelo en grande, así que se tapaban entre ellos. Las cuatro
- * esquinas de esas fichas están ocupadas —modelo, logo de la marca, viñetas y
- * dirección—, así que lo que se añada va fuera de la imagen.
+ * Nada se le superpone a la imagen salvo el estado. Sus publicaciones tienen
+ * las cuatro esquinas ocupadas —modelo arriba, emblema al otro lado, pastilla
+ * abajo—, así que lo que se añada va fuera.
  *
- * El vehículo vendido se atenúa pero sigue en su sitio: en este negocio,
- * enseñar lo que ya se vendió es parte del argumento de venta.
+ * La unidad vendida se atenúa pero sigue en su sitio: en este negocio, enseñar
+ * lo que ya se vendió es parte del argumento de venta.
  */
 export default function FichaVehiculo({ vehiculo, prioridad = false }) {
   const estado = ESTADOS[vehiculo.estado] || ESTADOS.disponible;
@@ -49,18 +48,21 @@ export default function FichaVehiculo({ vehiculo, prioridad = false }) {
       </div>
 
       <div className="p-4 sm:p-5">
-        <div className="flex items-center gap-2.5">
-          <span className="bisel shrink-0">
-            <span
-              className={`block px-2.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider ${
-                vehiculo.esNuevo
-                  ? "bg-primary text-primary-content"
-                  : "bg-base-content/12 text-base-content/75"
-              }`}
-            >
-              {vehiculo.esNuevo ? "0 km" : `Usado ${vehiculo.anio}`}
-            </span>
+        <div className="flex items-center gap-2">
+          {/* La pastilla del año y la condición, que es como ellos rotulan sus
+              publicaciones. */}
+          <span
+            className={`shrink-0 px-2.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider ${
+              vehiculo.esNuevo ? "pastilla" : "pastilla pastilla-apagada"
+            }`}
+          >
+            {vehiculo.esNuevo ? `${vehiculo.anio} · 0 km` : `Usado ${vehiculo.anio}`}
           </span>
+          {vehiculo.esCamion && (
+            <span className="rotulo shrink-0 text-[0.55rem] tracking-[0.2em] text-base-content/45">
+              Camión
+            </span>
+          )}
           <h3 className="display-recto min-w-0 truncate text-sm tracking-wide text-base-content/70">
             {vehiculo.tituloLargo}
           </h3>
@@ -73,7 +75,7 @@ export default function FichaVehiculo({ vehiculo, prioridad = false }) {
             </p>
             <p className="cifra mt-1.5 truncate text-xs text-base-content/45">
               {kilometrajeDe(vehiculo)}
-              {vehiculo.financiado && " · Financiado"}
+              {vehiculo.traccion === "4x4" && " · 4x4"}
             </p>
           </div>
 

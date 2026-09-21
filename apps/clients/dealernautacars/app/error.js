@@ -14,7 +14,7 @@ export default function Error({ error, reset }) {
       <div className="malla absolute inset-0" aria-hidden="true" />
 
       <div className="relative">
-        <span className="banda mx-auto" aria-hidden="true" />
+        <span className="ala mx-auto" aria-hidden="true" />
 
         <h1 className="display mt-6 text-3xl sm:text-4xl">
           Algo se <span className="text-primary">rompió</span>

@@ -1,15 +1,16 @@
 // -----------------------------------------------------------------------------
 // Tasa oficial del BCV (bolívares por dólar).
 //
-// Dos de las tres formas de pago del catálogo se cobran en bolívares a la tasa
-// del día, así que la tienda necesita ese número fresco.
+// Los precios se negocian en dólares, pero buena parte de los pagos se hacen en
+// bolívares a la tasa del día, así que la página necesita ese número fresco
+// para enseñar el equivalente debajo de cada precio.
 //
 // Se pide a una API en el momento en que hace falta. No hay cron ni tabla: el
 // caché de fetch de Next guarda la respuesta una hora y la comparte entre todas
-// las visitas, así que una tienda con mil visitas hace una consulta por hora,
-// no mil. Si la API falla, se prueba la siguiente; si fallan todas, la tienda
-// enseña los precios en dólares y dice que el monto en bolívares se confirma al
-// cerrar el pedido.
+// las visitas, así que una página con mil visitas hace una consulta por hora,
+// no mil. Si la API falla, se prueba la siguiente; si fallan todas, la página
+// enseña los precios en dólares y no pinta el equivalente, que es un extra y
+// nunca debe tumbar la página.
 // -----------------------------------------------------------------------------
 
 // Cuánto se reutiliza la misma lectura, en segundos. El BCV publica una vez al
@@ -42,10 +43,10 @@ const HOY = () => new Date().toISOString().slice(0, 10);
 
 // Memoria del proceso, por encima del caché de fetch de Next.
 //
-// Hace falta porque al construir el sitio se generan 231 fichas de producto y
-// todas piden la tasa: sin esto, cada worker sale a la red por cada página,
-// la API acaba cortando y la build se cae por tiempo de espera. Con la
-// memoria, cada proceso consulta una vez y reparte el resultado.
+// Hace falta porque al construir el sitio se genera una ficha por unidad y
+// todas piden la tasa: sin esto, cada worker sale a la red por cada página, la
+// API acaba cortando y la build se cae por tiempo de espera. Con la memoria,
+// cada proceso consulta una vez y reparte el resultado.
 let recordado = null; // { tasa, momento }
 let enCurso = null; // promesa compartida mientras se consulta
 const MEMORIA_FALLO_MS = 60_000;
@@ -66,7 +67,7 @@ async function consultar(fuente) {
 
   // Una tasa es un número positivo y, en Venezuela, de un orden concreto. Si
   // llega algo raro es mejor pasar a la siguiente fuente que pintar un disparate
-  // en todos los precios de la tienda.
+  // en todos los precios.
   if (!Number.isFinite(valor) || valor <= 0 || valor > 1_000_000) {
     throw new Error(`${fuente.nombre} devolvió una cifra que no cuadra: ${valor}`);
   }
@@ -79,7 +80,7 @@ async function consultar(fuente) {
 }
 
 /**
- * La tasa que usa la tienda.
+ * La tasa que usa la página.
  *
  * @returns {Promise<{valor:number, fechaValor:string, fuente:string}|null>}
  *   null si ninguna fuente respondió. Quien la use debe contemplarlo: sin tasa

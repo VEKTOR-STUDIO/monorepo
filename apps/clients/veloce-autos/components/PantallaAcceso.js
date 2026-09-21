@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LogoChapa } from "@/components/Logo";
-import MarcaHB from "@/components/MarcaHB";
-import Diagonales from "@/components/Diagonales";
+import MarcaVeloce from "@/components/MarcaVeloce";
+import Alas from "@/components/Alas";
 import Cintillo from "@/components/Cintillo";
 import Contador from "@/components/demo/Contador";
 import { contexto, usarGsap } from "@/libs/animaciones";
@@ -22,8 +21,8 @@ import config from "@/config";
  * de antes, la fecha en que se acaba y la lista de lo que se lleva quien
  * compre. Si se vacía `precioAnterior`, el sello de rebaja desaparece solo.
  *
- * Aquí manda la firma de Alessandrovaru y no la marca de HB: quien llega
- * todavía no es cliente de HB, es alguien a quien se le está enseñando un
+ * Aquí manda la firma de Alessandrovaru y no la marca de Veloce: quien llega
+ * todavía no es cliente de Veloce, es alguien a quien se le está enseñando un
  * trabajo. Al entrar, la jerarquía se invierte.
  *
  * Esto es la cara del candado; el candado de verdad está en el middleware.
@@ -31,7 +30,7 @@ import config from "@/config";
  * esta pantalla con las herramientas del navegador no lleva a ningún sitio.
  */
 
-/** "$740" y "$449" → 39. Null si no hay rebaja que anunciar. */
+/** "$980" y "$690" → 30. Null si no hay rebaja que anunciar. */
 function calcularDescuento(antes, ahora) {
   const limpiar = (v) => Number(String(v ?? "").replace(/[^\d.]/g, ""));
   const a = limpiar(antes);
@@ -138,12 +137,11 @@ export default function PantallaAcceso({ destino = "/" }) {
   return (
     <main ref={raiz} className="puerta relative flex h-svh flex-col overflow-hidden bg-base-100">
       {/* ---------------- Fondo ---------------- */}
-      <Diagonales variante="portada" deslizar={false} />
+      <Alas variante="portada" deslizar={false} />
 
-      {/* Velo. Sin él, "INVERSIONES" —que va en rojo— cae justo encima de la
-          banda roja de las diagonales y desaparece: rojo sobre rojo. El velo
-          baja las bandas lo justo para que sigan viéndose de fondo y el texto
-          se lea encima. */}
+      {/* Velo. Las alas del fondo viven al 10 % como mucho, pero la del centro
+          cruza justo por donde cae el titular; el velo las baja lo justo para
+          que sigan viéndose y el texto se lea encima. */}
       <div className="absolute inset-0 bg-base-100/72" aria-hidden="true" />
 
       <div className="malla malla-centro absolute inset-0 opacity-50" aria-hidden="true" />
@@ -153,8 +151,10 @@ export default function PantallaAcceso({ destino = "/" }) {
         className="pointer-events-none absolute left-1/2 top-1/3 size-[40rem] -translate-x-1/2 -translate-y-1/2 opacity-60"
         aria-hidden="true"
         style={{
+          // Luz fría, no color: esta marca no tiene ninguno y un halo de
+          // acento sería lo único coloreado de toda la pantalla.
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--color-rojo) 35%, transparent), transparent 62%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--color-base-content) 22%, transparent), transparent 62%)",
           filter: "blur(90px)",
         }}
       />
@@ -172,12 +172,9 @@ export default function PantallaAcceso({ destino = "/" }) {
           rara no cupiera, se desplazaría por dentro en vez de comerse el
           principio. La página, por fuera, no hace scroll nunca.
 
-          El `z-10` abre un contexto de apilamiento, y eso apaga el
-          `mix-blend-screen` con el que LogoCuadrado/LogoFoto se comen su
-          propio fondo negro: por eso el logotipo sale aquí dentro de un
-          cuadrado que en la cabecera no se ve. Quitarlo lo arregla —el fondo
-          va antes en el árbol, así que el cuerpo queda encima igual—, pero
-          cambia la carátula, así que se deja como estaba. */}
+          El logotipo de aquí es el mismo SVG que la cabecera, así que no hay
+          ningún fondo que fundir ni ningún `mix-blend-mode` que se pueda
+          apagar por culpa del contexto de apilamiento que abre `z-10`. */}
       <div className="relative z-10 flex min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain">
         <div className="m-auto grid w-full max-w-6xl gap-x-[clamp(1.5rem,4vw,3.5rem)] gap-y-[var(--puerta-v4)] px-5 py-[var(--puerta-v2)] lg:grid-cols-[1.15fr_1fr]">
           {/* ============ Columna izquierda: la carátula ============ */}
@@ -198,9 +195,10 @@ export default function PantallaAcceso({ destino = "/" }) {
               </span>
             </div>
 
-            {/* Repite lo que ya dice la cinta de arriba. En escritorio es un
-                adorno que cabe; en el móvil son 39 px de lo mismo. */}
-            <div data-puerta="insignia" className="mt-[var(--puerta-v3)] hidden lg:block">
+            {/* Repite lo que ya dice la cinta de arriba, así que es lo primero
+                que sobra cuando no cabe todo: en el móvil se va por ancho y en
+                un portátil de 800 px, por alto (ver .puerta-insignia). */}
+            <div data-puerta="insignia" className="puerta-insignia mt-[var(--puerta-v3)] hidden lg:block">
               <span className="insignia-edicion px-4 py-2">
                 <span className="microgramma text-[0.65rem] text-base-content">
                   Edición completa · Acceso anticipado
@@ -210,19 +208,22 @@ export default function PantallaAcceso({ destino = "/" }) {
 
             <div data-puerta="logo" className="mt-[var(--puerta-v3)] flex flex-col items-center lg:items-start">
               <p className="puerta-cortesia microgramma text-[0.6rem] text-base-content/40">Demo privada de</p>
-              <div className="mt-[var(--puerta-v1)] flex items-center gap-4">
-                <LogoChapa lado="var(--puerta-logo)" prioridad />
-                <MarcaHB className="h-10 w-32 text-base-content" />
-              </div>
-              <h1 className="display mt-[var(--puerta-v2)] text-[clamp(1.6rem,4.4vh,3rem)]">
-                HB <span className="text-primary">Inversiones</span>
+              <MarcaVeloce
+                className="mt-[var(--puerta-v2)] w-auto text-base-content"
+                style={{ height: "var(--puerta-logo)" }}
+              />
+              <h1 className="marca mt-[var(--puerta-v2)] text-[clamp(1.4rem,3.8vh,2.6rem)] leading-none">
+                Veloce
               </h1>
+              <p className="marca mt-[var(--puerta-v1)] text-[0.55rem] leading-none tracking-[0.62em] text-base-content/45">
+                Autos
+              </p>
             </div>
 
             <p data-puerta="titulo" className="puerta-presentacion mt-[var(--puerta-v3)] max-w-md leading-relaxed text-sm text-base-content/65">
-              Tu catálogo de vehículos hecho página web, entero y funcionando: las trece
-              unidades del PDF, con su gráfica, su corte diagonal y su rojo. Entra con tu
-              contraseña y recórrela.
+              Su comunicado dice «no tenemos página web». Esta es: importación por
+              procedencia, showroom y encargo separados, las dos sedes con su cuenta y los
+              canales oficiales publicados. Entra con tu contraseña y recórrela.
             </p>
 
             {/* Lo que trae la edición. */}
@@ -238,7 +239,7 @@ export default function PantallaAcceso({ destino = "/" }) {
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="text-xs leading-snug text-base-content/80">{cosa}</span>
-                    <span className="ml-auto shrink-0 text-primary/60" aria-hidden="true">
+                    <span className="ml-auto shrink-0 text-base-content/45" aria-hidden="true">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                         <path d="m20 6-11 11-5-5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
@@ -312,7 +313,7 @@ export default function PantallaAcceso({ destino = "/" }) {
                 <input
                   type="text"
                   name="username"
-                  value="hb-inversiones-demo"
+                  value="veloce-autos-demo"
                   autoComplete="username"
                   readOnly
                   tabIndex={-1}

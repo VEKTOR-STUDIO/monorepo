@@ -12,15 +12,15 @@ export const dynamic = "force-dynamic";
  *
  * PENDIENTE (para el día que se entregue): hoy, fuera de demo, esta ruta acepta
  * el mensaje y responde bien, pero no lo reenvía a ningún sitio —no hay todavía
- * ni número de WhatsApp ni dominio de correo verificado—. Hay que engancharla
- * al canal que elija el cliente antes de apagar el modo demo.
+ * dominio de correo verificado—. Hay que engancharla al canal que elija el
+ * cliente (Resend, o un WhatsApp de la empresa) antes de apagar el modo demo.
  */
 export async function POST(peticion) {
   if (esDemo()) {
     return NextResponse.json(
       {
         error:
-          "Esto es una demo: el mensaje no se envía. En la página entregada llega directo al WhatsApp del negocio.",
+          "Esto es una demo: el mensaje no se envía. En la página entregada llega directo al WhatsApp de la sede que corresponda.",
       },
       { status: 403 }
     );

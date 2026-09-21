@@ -9,7 +9,10 @@ import TituloAnimado from "@/components/TituloAnimado";
 //   · Para quien viene a comprar un carro: explica por qué lo que ve está al
 //     día —lo publica el propio vendedor, no un programador cada quince días—.
 //   · Para quien viene a comprar la página: enseña que no queda atado a nadie
-//     para actualizar su inventario, que es la objeción número uno.
+//     para actualizar su inventario, que es la objeción número uno. En un
+//     negocio que mueve varias unidades por semana entre dos sedes, depender
+//     de un programador para publicar una sería motivo de sobra para no
+//     comprar.
 //
 // La maqueta del panel es un dibujo hecho con HTML, no una captura: así no hay
 // imagen que se quede vieja cuando el panel cambie, pesa cero y se lee bien en
@@ -27,13 +30,13 @@ const PASOS = [
     numero: "02",
     titulo: "Cargas el vehículo",
     detalle:
-      "La foto que ya hiciste para el catálogo, el precio, el año, el kilometraje y si es 0 km o usado. Los mismos datos que pones en el post, una sola vez.",
+      "Las fotos que ya hiciste para la publicación, el precio, el año, de dónde viene, en qué sede está y si se entrega hoy o por encargo. Los mismos datos que escribes en el post, una sola vez.",
   },
   {
     numero: "03",
     titulo: "Queda publicado",
     detalle:
-      "Aparece al instante en el inventario y con su enlace propio, listo para pegarlo en la publicación o mandarlo por WhatsApp.",
+      "Aparece al instante en el inventario, con su enlace propio y ya filtrable por procedencia y por sede. Listo para pegarlo en la publicación o mandarlo por WhatsApp.",
   },
 ];
 
@@ -64,7 +67,7 @@ export default function SeccionPanel() {
       className="relative overflow-hidden border-t border-base-content/8 bg-base-200 px-4 py-24 sm:px-6"
     >
       <div className="textura absolute inset-0" aria-hidden="true" />
-      <div className="textura-panal absolute inset-0" aria-hidden="true" />
+      <div className="textura-galon absolute inset-0" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-7xl">
         <Revelar className="text-center">
@@ -77,10 +80,10 @@ export default function SeccionPanel() {
 
         <Revelar retraso={160}>
           <p className="mx-auto mt-6 max-w-2xl text-center leading-relaxed text-base-content/60">
-            Cada vehículo de esta página lo publica el propio equipo de HB desde su
-            panel, en un par de minutos. Nadie tiene que llamar a un programador para
-            subir un carro, cambiar un precio o marcar algo como vendido: por eso lo
-            que ves aquí es lo que hay hoy en el local.
+            Cada unidad de esta página la publica el propio equipo de Veloce desde su
+            panel, en un par de minutos, y da igual desde qué sede. Nadie tiene que
+            llamar a un programador para subir un carro, cambiar un precio o marcar algo
+            como vendido: por eso lo que ves aquí es lo que hay hoy.
           </p>
         </Revelar>
 
@@ -94,7 +97,7 @@ export default function SeccionPanel() {
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="cifra ml-3 truncate text-[0.65rem] text-base-content/40">
-                  panel · hb inversiones
+                  panel · veloce autos
                 </span>
               </div>
 
@@ -113,11 +116,13 @@ export default function SeccionPanel() {
                 <div className="mt-4 grid grid-cols-2 gap-2.5">
                   {[
                     ["Marca", "Toyota"],
-                    ["Modelo", "Corolla Cross"],
-                    ["Año", "2024"],
-                    ["Condición", "0 km importado"],
-                    ["Precio", "$38.900"],
-                    ["Financiado", "Sí"],
+                    ["Modelo", "Land Cruiser Prado"],
+                    ["Año", "2025"],
+                    ["Procedencia", "Dubái"],
+                    ["Entrega", "En showroom"],
+                    ["Sede", "La Florida"],
+                    ["Condición", "0 km"],
+                    ["Precio", "$89.900"],
                   ].map(([etiqueta, valor]) => (
                     <div key={etiqueta}>
                       <p className="text-[0.6rem] uppercase tracking-wider text-base-content/40">
@@ -133,7 +138,7 @@ export default function SeccionPanel() {
                 {/* Zona de fotos. */}
                 <div className="mt-3 border border-dashed border-base-content/18 px-3 py-4 text-center">
                   <p className="text-[0.65rem] text-base-content/40">
-                    Arrastra aquí la ficha del catálogo
+                    Arrastra aquí las fotos de la publicación
                   </p>
                 </div>
 
@@ -143,20 +148,20 @@ export default function SeccionPanel() {
                 </p>
                 <div className="mt-2 overflow-hidden border border-base-content/8">
                   <FilaMaqueta
-                    nombre="Volkswagen Tharu 2024"
-                    precio="$34.900"
+                    nombre="BMW X5 xDrive40i 2023"
+                    precio="$78.000"
                     estado="Disponible"
                     tono="disponible"
                   />
                   <FilaMaqueta
-                    nombre="Toyota Rush 2023"
-                    precio="$26.500"
+                    nombre="Jeep Grand Cherokee 2023"
+                    precio="$58.900"
                     estado="Reservado"
                     tono="reservado"
                   />
                   <FilaMaqueta
-                    nombre="Chevrolet Aveo 2012"
-                    precio="$7.500"
+                    nombre="Kia Sportage 2024"
+                    precio="$36.500"
                     estado="Vendido"
                     tono="vendido"
                   />
@@ -170,7 +175,7 @@ export default function SeccionPanel() {
             {PASOS.map((paso, i) => (
               <Revelar key={paso.numero} retraso={i * 120}>
                 <div className="flex gap-5 border-b border-base-content/10 py-6 last:border-0">
-                  <span className="cifra shrink-0 text-2xl font-bold text-primary/40">
+                  <span className="cifra shrink-0 text-2xl font-bold text-base-content/30">
                     {paso.numero}
                   </span>
                   <div>

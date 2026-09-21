@@ -18,22 +18,22 @@ export default function BloqueVenta() {
   return (
     <section className="relative overflow-hidden border-t border-base-content/10 bg-base-200">
       <div className="textura absolute inset-0" aria-hidden="true" />
-      <div className="textura-panal absolute inset-0" aria-hidden="true" />
+      <div className="textura-galon absolute inset-0" aria-hidden="true" />
 
       <div className="relative mx-auto max-w-5xl px-4 py-20 sm:px-6">
         <Revelar className="text-center">
-          <p className="microgramma text-xs text-primary">Lo que acabas de ver</p>
+          <p className="microgramma text-xs text-base-content/70">Lo que acabas de ver</p>
         </Revelar>
 
         <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
-          Esta página puede ser <span className="text-primary">la tuya</span>
+          Esta página puede ser <span className="text-base-content/55">la tuya</span>
         </TituloAnimado>
 
         <Revelar retraso={140}>
           <p className="mx-auto mt-6 max-w-lg text-center leading-relaxed text-base-content/60">
-            No es una maqueta: es una página real funcionando, hecha con tu catálogo,
-            tus fotos y tu gráfica. Lo que falta por poner es tu número de WhatsApp,
-            tus precios y tu dominio.
+            No es una maqueta: es una página real funcionando, con tu logotipo, tus
+            cuatro procedencias, tus dos sedes y tus canales oficiales. Lo que falta por
+            cargar es tu inventario, que sale de tu propio Instagram, y tu dominio.
           </p>
         </Revelar>
 
@@ -42,7 +42,7 @@ export default function BloqueVenta() {
             <ul className="grid gap-3.5 sm:grid-cols-2">
               {incluye.map((cosa) => (
                 <li key={cosa} className="flex gap-3 text-sm leading-snug">
-                  <span className="mt-0.5 shrink-0 text-primary" aria-hidden="true">
+                  <span className="mt-0.5 shrink-0 text-base-content" aria-hidden="true">
                     ✓
                   </span>
                   <span className="text-base-content/70">{cosa}</span>
@@ -58,7 +58,7 @@ export default function BloqueVenta() {
                     <span className="cifra line-through">{precioAnterior}</span>
                   </p>
                 )}
-                <p className="cifra mt-0.5 text-4xl font-bold text-primary">{precio}</p>
+                <p className="cifra mt-0.5 text-4xl font-bold text-base-content">{precio}</p>
                 <p className="mt-1 text-xs text-base-content/45">{precioNota}</p>
 
                 <div className="mt-5">
@@ -76,9 +76,9 @@ export default function BloqueVenta() {
 
         <Revelar retraso={180}>
           <p className="mx-auto mt-6 max-w-lg text-center text-xs text-base-content/35">
-            Los vehículos y las fotos que ves son los tuyos, sacados del «Catálogo de
-            vehículos HB». Los precios son de referencia: el catálogo no publica
-            ninguno y se cargan los reales desde el panel.
+            Las unidades que ves son de ejemplo, no tu inventario: Instagram limitó las
+            peticiones el día que se montó esto y no se pudo leer tu perfil. Tu
+            inventario real entra desde ahí y sustituye a este en un solo paso.
           </p>
         </Revelar>
       </div>

@@ -4,8 +4,8 @@
 // Arriba de esta página conviven dos cosas distintas y el visitante tiene
 // derecho a saber cuál está leyendo:
 //
-//   · el ESCAPARATE, que le habla al comprador de un carro;
-//   · la OFERTA, que le habla al dueño de HB Inversiones sobre el sistema
+//   · el ESCAPARATE, que le habla al comprador de un carro o de un camión;
+//   · la OFERTA, que le habla al dueño de DealerNauta Cars sobre el sistema
 //     que se le está vendiendo.
 //
 // Entre una y otra pasa esta cinta, en Microgramma —la tipografía de la firma
@@ -18,7 +18,7 @@
 
 const MENSAJES = {
   venta: [
-    "Esto es para ti, dueño de HB Inversiones",
+    "Esto es para ti, DealerNauta",
     "Así se administra por dentro",
     "Lo que sigue es la oferta",
     "Tu página, tu dominio, tu código",
@@ -36,7 +36,7 @@ const MENSAJES = {
     "Precio de lanzamiento",
     "Todo incluido · sin mensualidad",
     "El código es tuyo",
-    "Hecha con tu catálogo",
+    "Hecha con tu Instagram",
   ],
 
   // La de abajo, girando al revés para que las dos no vayan en paralelo.
@@ -44,7 +44,8 @@ const MENSAJES = {
     "Dominio propio",
     "Inventario ilimitado",
     "Panel incluido",
-    "0 km y usados separados",
+    "Vehículos y camiones separados",
+    "Tus dos sedes",
     "Entrega en 7 días",
   ],
 };

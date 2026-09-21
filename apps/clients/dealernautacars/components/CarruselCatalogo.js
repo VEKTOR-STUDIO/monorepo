@@ -7,13 +7,13 @@ import { usarGsap } from "@/libs/animaciones";
 import { enDolares, kilometrajeDe } from "@/libs/formato";
 
 // -----------------------------------------------------------------------------
-// El catálogo, de lado.
+// El inventario, de lado.
 //
-// Su catálogo es un PDF que se pasa página a página, y esta sección es eso
-// mismo: la página se queda quieta y las trece fichas desfilan de derecha a
-// izquierda mientras bajas. Es el movimiento más fuerte del sitio y está
-// puesto justo donde hace falta —arriba, después de la portada— porque es lo
-// que contesta de un golpe la pregunta "¿qué tienen?".
+// Su escaparate es una cuadrícula de Instagram que se pasa con el dedo, y esta
+// sección es eso mismo puesto en horizontal: la página se queda quieta y las
+// unidades desfilan de derecha a izquierda mientras bajas. Es el movimiento más
+// fuerte del sitio y está puesto justo donde hace falta —arriba, después de la
+// portada— porque es lo que contesta de un golpe la pregunta "¿qué tienen?".
 //
 // Dos decisiones que no son de gusto:
 //
@@ -101,20 +101,20 @@ export default function CarruselCatalogo({ vehiculos }) {
     <section
       ref={seccion}
       className="relative overflow-hidden border-t border-base-content/8 bg-base-100"
-      aria-label="Catálogo completo"
+      aria-label="Inventario completo"
     >
       <div className="textura absolute inset-0" aria-hidden="true" />
 
       <div className="relative flex min-h-svh flex-col justify-center py-16 lg:py-0">
         {/* Encabezado, pegado a la izquierda como el modelo en sus fichas. */}
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          <span className="banda" aria-hidden="true" />
+          <span className="ala" aria-hidden="true" />
           <h2 className="display mt-5 text-4xl sm:text-5xl lg:text-6xl">
-            El catálogo
+            El inventario
             <span className="text-primary"> completo</span>
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-base-content/55 lg:text-base">
-            Las {vehiculos.length} unidades del catálogo de HB, una por una.{" "}
+            Las {vehiculos.length} unidades, una por una: vehículos y camiones.{" "}
             <span className="hidden lg:inline">Sigue bajando y desfilan solas.</span>
             <span className="lg:hidden">Arrastra para verlas.</span>
           </p>
@@ -139,20 +139,16 @@ export default function CarruselCatalogo({ vehiculos }) {
                   sizes="(max-width: 640px) 16rem, (max-width: 1024px) 18rem, 20rem"
                 />
 
-                {/* Nada encima de la foto: las cuatro esquinas de las fichas
-                    del catálogo ya están ocupadas. La condición va debajo. */}
+                {/* Nada encima de la imagen: las cuatro esquinas de sus
+                    publicaciones ya están ocupadas. La condición va debajo. */}
                 <div className="p-4">
                   <div className="flex items-center gap-2">
-                    <span className="bisel shrink-0">
-                      <span
-                        className={`block px-2 py-0.5 text-[0.55rem] font-bold uppercase tracking-wider ${
-                          vehiculo.esNuevo
-                            ? "bg-primary text-primary-content"
-                            : "bg-base-content/12 text-base-content/75"
-                        }`}
-                      >
-                        {vehiculo.esNuevo ? "0 km" : "Usado"}
-                      </span>
+                    <span
+                      className={`shrink-0 px-2 py-0.5 text-[0.55rem] font-bold uppercase tracking-wider ${
+                        vehiculo.esNuevo ? "pastilla" : "pastilla pastilla-apagada"
+                      }`}
+                    >
+                      {vehiculo.esNuevo ? "0 km" : "Usado"}
                     </span>
                     <p className="display-recto min-w-0 truncate text-xs tracking-wide text-base-content/60">
                       {vehiculo.tituloLargo}
@@ -178,7 +174,7 @@ export default function CarruselCatalogo({ vehiculos }) {
             >
               <span className="display text-3xl text-primary">Ver todo el inventario</span>
               <span className="text-sm text-base-content/55">
-                Con filtros por condición, tipo, marca y precio.
+                Con filtros por vehículo o camión, condición, marca y precio.
               </span>
               <span className="btn btn-primary mt-2">Entrar al inventario</span>
             </Link>
