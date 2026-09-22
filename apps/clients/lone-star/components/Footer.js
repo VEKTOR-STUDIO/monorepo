@@ -1,17 +1,16 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import Escenario from "@/components/Escenario";
+import Bandera from "@/components/Bandera";
 import config from "@/config";
 
 /**
- * El pie: la marca, las dos sedes, por dónde se contacta y los enlaces
+ * El pie: la marca, a dónde mandan, por dónde se contacta y los enlaces
  * legales.
  *
- * Las sedes van cada una en su bloque, con su teléfono y su Instagram, y no
- * escondidas en una línea de texto: DealerNauta vende en dos sitios y con dos
- * cuentas —los vehículos en Los Chaguaramos, los camiones en San Antonio de
- * los Altos—, y quien llega a la web buscando "dónde están" tiene que
- * encontrar la suya sin leer un párrafo.
+ * Lo que va en grande es el número de WhatsApp, igual que en la banda de abajo
+ * de todas sus piezas: en este negocio no hay salón que visitar, todo empieza
+ * por un mensaje.
  */
 export default function Footer() {
   const { business } = config;
@@ -24,101 +23,76 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="min-w-0 lg:col-span-2">
-            <Logo lado={46} />
+            <Logo />
             <p className="display mt-6 max-w-sm text-2xl leading-tight text-base-content/85">
-              {business.tagline}
+              Tu vehículo, <span className="text-primary">nuestro compromiso</span>
             </p>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-base-content/50">
-              {business.lema}. {business.trayectoria}.
+              {business.lema}. Desde {business.direccion}, con envíos a{" "}
+              {business.destinos.map((d) => d.nombre).join(", ")} {business.destinosNota}.
             </p>
           </div>
 
-          {business.sedes.map((sede) => (
-            <div key={sede.slug} className="min-w-0">
-              <p className="rotulo">{sede.nombre}</p>
-              <address className="mt-4 not-italic text-sm leading-relaxed text-base-content/65">
-                {sede.zona}
-                <br />
-                {sede.estado}
-                <br />
-                Venezuela
-              </address>
-              <p className="cifra mt-3 text-sm text-base-content/75">{sede.telefono}</p>
-              <a
-                href={sede.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-1 inline-block text-sm text-base-content/55 transition-colors hover:text-primary"
-              >
-                @{sede.instagram}
-              </a>
-            </div>
-          ))}
+          <div className="min-w-0">
+            <p className="rotulo">Escríbenos</p>
+            <p className="cifra mt-4 text-lg font-bold text-base-content">
+              {business.whatsappVisible}
+            </p>
+            <p className="mt-1 text-sm text-base-content/55">Por WhatsApp o por DM</p>
+            <a
+              href={business.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-block text-sm text-base-content/65 transition-colors hover:text-primary"
+            >
+              @{business.instagram}
+            </a>
+          </div>
+
+          <div className="min-w-0">
+            <p className="rotulo">Enviamos a</p>
+            <ul className="mt-4 space-y-2.5">
+              {business.destinos.map((d) => (
+                <li key={d.slug} className="flex items-center gap-3 text-sm text-base-content/70">
+                  <Bandera codigo={d.bandera} nombre={d.nombre} className="size-5" />
+                  {d.nombre}
+                </li>
+              ))}
+              <li className="text-sm text-base-content/45">…{business.destinosNota}</li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12 grid gap-8 border-t border-base-content/10 pt-8 sm:grid-cols-2">
           <div className="min-w-0">
             <p className="rotulo">Inventario</p>
             <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 text-sm">
-              <li>
-                <Link
-                  href="/vehiculos?segmento=auto"
-                  className="text-base-content/65 transition-colors hover:text-primary"
-                >
-                  Vehículos
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/vehiculos?segmento=camion"
-                  className="text-base-content/65 transition-colors hover:text-primary"
-                >
-                  Camiones
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/vehiculos?condicion=nuevo"
-                  className="text-base-content/65 transition-colors hover:text-primary"
-                >
-                  0 km
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/vehiculos?condicion=usado"
-                  className="text-base-content/65 transition-colors hover:text-primary"
-                >
-                  Usados
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/vehiculos"
-                  className="text-base-content/65 transition-colors hover:text-primary"
-                >
-                  Todo el inventario
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/contacto"
-                  className="text-base-content/65 transition-colors hover:text-primary"
-                >
-                  Escribir
-                </Link>
-              </li>
+              {[
+                ["/vehiculos?segmento=subasta", "En subasta"],
+                ["/vehiculos?segmento=pedido", "A pedido"],
+                ["/vehiculos?tipo=pickup", "Pickups"],
+                ["/vehiculos?tipo=suv", "Camionetas"],
+                ["/vehiculos", "Todo el inventario"],
+                ["/contacto", "Escribir"],
+              ].map(([href, texto]) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className="text-base-content/65 transition-colors hover:text-primary"
+                  >
+                    {texto}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div className="min-w-0">
             <p className="rotulo">Qué hacemos</p>
             <p className="display mt-4 text-xl leading-tight text-base-content/80">
-              {business.arcoLogo}
+              {business.lema}
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-base-content/50">
-              {business.servicios.join(" · ")}.
-            </p>
+            <p className="mt-3 text-sm leading-relaxed text-base-content/50">{business.remate}.</p>
           </div>
         </div>
 

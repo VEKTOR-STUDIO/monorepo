@@ -1,27 +1,28 @@
 import Silueta from "@/components/Silueta";
+import { Estrella } from "@/components/Logo";
+import { enMillas } from "@/libs/formato";
 
 // -----------------------------------------------------------------------------
 // La plantilla de sus publicaciones, dibujada.
 //
-// Ninguna unidad de este inventario tiene foto: Instagram devuelve un muro de
-// acceso y no deja descargar ni una imagen de @dealernautacars. Así que en vez
-// de dejar trece rectángulos negros —o, peor, de meter fotos de banco de
-// imágenes haciéndolas pasar por suyas—, cada ficha se dibuja con la misma
-// receta con la que ellos maquetan sus posts:
+// De Lone Star solo hay foto de la Tacoma y del Corolla. Para el resto, en vez
+// de dejar rectángulos negros —o, peor, de meter fotos de banco de imágenes
+// haciéndolas pasar por suyas—, cada ficha se dibuja con la misma receta con
+// la que ellos maquetan su pieza de la Tacoma:
 //
-//   cielo naranja  →  la ciudad recortada  →  asfalto  →  el vehículo encima,
-//   el modelo en condensada arriba a la izquierda, el emblema arriba a la
-//   derecha y la pastilla naranja con el año y el kilometraje abajo.
+//   noche negra con humo rojo  →  el puerto al fondo  →  piso mojado  →  la
+//   unidad encima; la marca en blanco y el modelo en rojo arriba a la
+//   izquierda, la banda roja de "EN SUBASTA" arriba a la derecha y la tira de
+//   datos al pie: millaje, daño primario y si arranca y rueda.
 //
 // Es decir: el hueco de la foto enseña exactamente el sitio donde va a ir su
-// foto, y con su gráfica. El día que suban las suyas desde el panel, esto
-// desaparece solo.
+// foto, y con su gráfica. El día que la ficha traiga `fotos`, esto desaparece
+// solo.
 //
 // Todo se mide en `cqw` —unidades del ancho del propio contenedor— porque la
 // misma pieza se usa a 256 px en el carrusel, a 1.100 px en la ficha y a 90 px
-// en las miniaturas. Con `rem` habría que escribir cuatro juegos de tamaños y
-// alguno se quedaría atrás; con `cqw`, la composición se escala entera igual
-// que una imagen.
+// en las miniaturas. Con `cqw`, la composición se escala entera igual que una
+// imagen.
 // -----------------------------------------------------------------------------
 
 /**
@@ -29,8 +30,17 @@ import Silueta from "@/components/Silueta";
  * @param {boolean} compacta  para miniaturas: se queda solo la escena
  */
 export default function PlantillaPublicacion({ vehiculo, compacta = false }) {
-  const anio = vehiculo?.anio;
-  const km = vehiculo?.condicion === "nuevo" ? "0 km" : kilometrajeCorto(vehiculo?.km);
+  const datos = vehiculo?.enSubasta
+    ? [
+        ["Millaje", Number.isFinite(vehiculo.millas) ? enMillas(vehiculo.millas) : "—"],
+        ["Daño", vehiculo.danio || "—"],
+        ["Condición", vehiculo.condicionInfo?.corto || "—"],
+      ]
+    : [
+        ["Años", vehiculo?.anioTexto || "A elegir"],
+        ["Tipo", vehiculo?.tipo?.singular || "—"],
+        ["Entrega", "En tu país"],
+      ];
 
   return (
     <div
@@ -38,33 +48,29 @@ export default function PlantillaPublicacion({ vehiculo, compacta = false }) {
       style={{ containerType: "inline-size" }}
       aria-hidden="true"
     >
-      {/* El cielo, a plena potencia: aquí no hay texto encima que proteger, la
-          pieza ES el cielo. */}
+      {/* La noche con el humo rojo, a plena potencia: aquí la pieza ES el
+          fondo. */}
       <div className="cielo-pieza absolute inset-0" />
 
-      {/* La ciudad, contra el cielo. El alto de los edificios va en `cqw` y no
-          en `vh` como en las secciones: esta misma pieza se dibuja a 256 px en
-          el carrusel y a 1.100 px en la ficha, y lo que tiene que mantenerse es
-          la PROPORCIÓN con la tarjeta, no un tamaño de pantalla. */}
+      {/* El puntillado de la esquina, como en sus piezas del Corolla. */}
+      <div className="puntillado absolute left-0 top-0 h-[22%] w-[26%] opacity-40" />
+
+      {/* El puerto, contra el rojo. El alto va en `cqw` para que guarde la
+          PROPORCIÓN con la tarjeta y no con la pantalla. */}
       <div
-        className="horizonte absolute inset-x-0 bottom-[24%] h-[42%] opacity-90"
-        style={{ "--horizonte-alto": "26cqw" }}
+        className="horizonte absolute inset-x-0 bottom-[26%] h-[36%] opacity-95"
+        style={{ "--horizonte-alto": "20cqw" }}
       />
 
-      {/* El asfalto donde se posa la unidad. */}
+      {/* El piso mojado donde se posa la unidad. */}
       <div className="asfalto absolute inset-x-0 bottom-0 h-[30%]" />
 
-      {/* El vehículo. Se apoya justo sobre el filo del asfalto y se sale un
-          pelo por los lados, como en sus piezas: el dibujo es muy apaisado y
-          dentro de una tarjeta 4:5 quedaba diminuto, con medio cartel de cielo
-          vacío encima. */}
-      <div className="absolute inset-x-[-3%] bottom-[18%]">
+      {/* La unidad, apoyada en el filo del piso y un pelo más ancha que la
+          tarjeta, como en sus piezas: el dibujo es muy apaisado y dentro de
+          una tarjeta 4:5 quedaba diminuto. */}
+      <div className="absolute inset-x-[-3%] bottom-[19%]">
         <div className="relative">
-          <Silueta
-            tipo={vehiculo?.carroceria}
-            className="w-full text-base-content/85"
-          />
-          {/* La sombra va debajo de las ruedas, no del dibujo entero. */}
+          <Silueta tipo={vehiculo?.carroceria} className="w-full text-base-content/85" />
           <div className="sombra-piso absolute inset-x-[8%] bottom-[2%] h-[6%]" />
         </div>
       </div>
@@ -74,57 +80,60 @@ export default function PlantillaPublicacion({ vehiculo, compacta = false }) {
 
       {!compacta && (
         <>
-          {/* El modelo, arriba a la izquierda, como en sus piezas. */}
-          <div
-            className="absolute left-0 top-0"
-            style={{ padding: "6cqw", maxWidth: "76%" }}
-          >
+          {/* La cabecera de sus piezas: la estrella y, debajo, la marca en
+              blanco y el modelo en rojo. */}
+          <div className="absolute left-0 top-0" style={{ padding: "6cqw", maxWidth: "70%" }}>
+            <Estrella className="text-base-content" style={{ width: "7cqw", height: "7cqw" }} />
             <p
-              className="display text-base-content"
-              style={{ fontSize: "8.5cqw", lineHeight: 0.88 }}
+              className="display mt-[3cqw] text-base-content"
+              style={{ fontSize: "8.4cqw", lineHeight: 0.9 }}
             >
-              {vehiculo?.marca}{" "}
-              <span className="text-primary">{vehiculo?.modelo}</span>
+              {vehiculo?.marca} {vehiculo?.modelo}
             </p>
-            {vehiculo?.version && (
-              <p
-                className="display-recto mt-[2cqw] text-base-content/60"
-                style={{ fontSize: "3.4cqw", letterSpacing: "0.1em" }}
-              >
-                {vehiculo.version}
-              </p>
-            )}
+            <p className="display text-primary" style={{ fontSize: "8.4cqw", lineHeight: 0.9 }}>
+              {[vehiculo?.version, vehiculo?.anio].filter(Boolean).join(" ") ||
+                vehiculo?.segmentoInfo?.nombre}
+            </p>
           </div>
 
-          {/* La pastilla del pie: año y kilometraje, que es lo que ellos
-              ponen. */}
-          <div
-            className="absolute inset-x-0 bottom-0 flex justify-center"
-            style={{ padding: "5cqw" }}
-          >
+          {/* La banda roja de arriba a la derecha. */}
+          <div className="absolute right-0 top-0" style={{ padding: "6cqw 0" }}>
             <span
-              className="pastilla cifra"
+              className="display block bg-primary text-primary-content"
               style={{
                 fontSize: "3.6cqw",
-                padding: "1.8cqw 5cqw",
-                gap: "3cqw",
+                padding: "1.6cqw 5cqw 1.6cqw 4cqw",
+                clipPath: "polygon(2.4cqw 0, 100% 0, 100% 100%, 0 100%)",
               }}
             >
-              {anio && <span>Año {anio}</span>}
-              {anio && km && <span style={{ opacity: 0.55 }}>·</span>}
-              {km && <span>{km}</span>}
+              {vehiculo?.enSubasta ? "En subasta" : "A pedido"}
             </span>
           </div>
+
+          {/* La tira de datos del pie, en tres casillas. */}
+          <dl
+            className="absolute inset-x-0 bottom-0 grid grid-cols-3 border-t border-primary/60 bg-base-100/85"
+            style={{ padding: "3cqw 4cqw" }}
+          >
+            {datos.map(([etiqueta, valor]) => (
+              <div key={etiqueta} className="min-w-0 text-center">
+                <dt
+                  className="display-recto text-base-content/55"
+                  style={{ fontSize: "2.6cqw", letterSpacing: "0.12em" }}
+                >
+                  {etiqueta}
+                </dt>
+                <dd
+                  className="display-recto truncate text-base-content"
+                  style={{ fontSize: "3.6cqw", marginTop: "0.8cqw" }}
+                >
+                  {valor}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </>
       )}
     </div>
   );
-}
-
-/** 48000 → "48.000 km". Vacío cuando el dato no está declarado. */
-function kilometrajeCorto(km) {
-  if (km === null || km === undefined || km === "" || !Number.isFinite(Number(km))) {
-    return "";
-  }
-  return `${new Intl.NumberFormat("es-VE").format(Number(km))} km`;
 }

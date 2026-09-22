@@ -7,7 +7,7 @@ import { getSEOTags } from "@/libs/seo";
 export const dynamic = "force-dynamic";
 
 export const metadata = getSEOTags({
-  title: "Acceso · DealerNauta Cars",
+  title: "Acceso · Lone Star All In Autos",
   description: "Página de demostración con acceso restringido.",
   extraTags: { robots: { index: false, follow: false } },
 });

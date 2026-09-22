@@ -16,9 +16,8 @@ import Escenario from "@/components/Escenario";
 import AvisoBloqueado from "@/components/demo/AvisoBloqueado";
 import BloqueVenta from "@/components/demo/BloqueVenta";
 import { leerVehiculos, vehiculoPorSlug, ESTADOS } from "@/libs/vehiculos";
-import { obtenerTasa } from "@/libs/bcv";
-import { enDolares, enBolivares, aBolivares, kilometrajeDe } from "@/libs/formato";
-import { esDemo, sedeDe } from "@/libs/demo";
+import { enDolares, millajeDe } from "@/libs/formato";
+import { esDemo, mensajePorVehiculo } from "@/libs/demo";
 import { getSEOTags } from "@/libs/seo";
 import config from "@/config";
 
@@ -34,12 +33,17 @@ export async function generateMetadata({ params }) {
   const vehiculo = vehiculoPorSlug(slug);
   if (!vehiculo) return getSEOTags();
 
-  const condicion = vehiculo.esNuevo ? "0 km" : kilometrajeDe(vehiculo);
-  const donde = vehiculo.ubicacion || config.business.ciudad;
+  const detalle = vehiculo.enSubasta
+    ? [`en subasta`, millajeDe(vehiculo), vehiculo.danio && `daño ${vehiculo.danio}`]
+    : [`a pedido`, `desde ${enDolares(vehiculo.precio)}`];
 
   return getSEOTags({
-    title: `${vehiculo.tituloLargo} ${vehiculo.anio} | ${config.appName}`,
-    description: `${vehiculo.tituloLargo} ${vehiculo.anio}, ${condicion}, ${vehiculo.motor}. ${enDolares(vehiculo.precio)} en ${donde}.`,
+    title: `${vehiculo.nombreCompleto} | ${config.appName}`,
+    description: `${vehiculo.nombreCompleto}, ${detalle
+      .filter(Boolean)
+      .join(
+        ", "
+      )}. Comprado en USA, reparado y exportado a Venezuela, Panamá, Colombia y toda Latinoamérica.`,
     canonicalUrlRelative: `/vehiculo/${vehiculo.slug}`,
   });
 }
@@ -49,19 +53,14 @@ export default async function Vehiculo({ params }) {
   const vehiculo = vehiculoPorSlug(slug);
   if (!vehiculo) notFound();
 
-  // La tasa es un extra: si la API no responde, se enseña el precio en dólares
-  // y ya está. Nunca debe tumbar la página.
-  const tasa = await obtenerTasa();
-  const enBs = aBolivares(vehiculo.precio, tasa?.valor);
-
   const estado = ESTADOS[vehiculo.estado] || ESTADOS.disponible;
   const demo = esDemo();
-  const sede = sedeDe(vehiculo);
+  const conFoto = vehiculo.fotos?.length > 0;
 
   // Parecidos: primero los del mismo segmento y carrocería, que es lo que de
   // verdad ayuda a quien todavía no se ha decidido; si no salen tres, se
-  // completa con los del mismo segmento. Un camión nunca se propone junto a un
-  // sedán: son compradores distintos.
+  // completa con los del mismo segmento. A quien mira un lote en subasta se le
+  // proponen otros lotes, no modelos a pedido: son dos preguntas distintas.
   const resto = leerVehiculos().filter((v) => v.slug !== vehiculo.slug);
   const parecidos = [
     ...resto.filter(
@@ -92,14 +91,15 @@ export default async function Vehiculo({ params }) {
 
           <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6">
             <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-14">
-              {/* La imagen, lo primero y lo más grande. Es una publicación
-                  cuadrada suya, así que no se recorta. */}
+              {/* La imagen, lo primero y lo más grande. Sus fotos son de patio
+                  de subasta, apaisadas; la plantilla dibujada es vertical, como
+                  sus piezas. Cada una va en su proporción. */}
               <div>
                 <Revelar desde="corte">
                   <FotoVehiculo
                     vehiculo={vehiculo}
                     prioridad
-                    className="aspect-4/5 w-full"
+                    className={`${conFoto ? "aspect-4/3" : "aspect-4/5"} w-full`}
                     sizes="(max-width: 1024px) 100vw, 55vw"
                   />
                 </Revelar>
@@ -110,14 +110,14 @@ export default async function Vehiculo({ params }) {
                       <FotoVehiculo
                         key={foto}
                         vehiculo={{ ...vehiculo, fotos: [foto] }}
-                        className="aspect-4/5 w-full"
+                        className="aspect-4/3 w-full"
                         sizes="20vw"
                       />
                     ))}
                   </div>
                 )}
 
-                {!vehiculo.fotos?.length && (
+                {!conFoto && (
                   <div className="mt-3 flex justify-center">
                     <AvisoSinFoto />
                   </div>
@@ -131,50 +131,59 @@ export default async function Vehiculo({ params }) {
                     <span className="bisel">
                       <span
                         className={`block px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider ${
-                          vehiculo.esNuevo
+                          vehiculo.enSubasta
                             ? "bg-primary text-primary-content"
                             : "bg-base-content/12 text-base-content"
                         }`}
                       >
-                        {vehiculo.condicionInfo.nombre}
+                        {vehiculo.enSubasta ? "Disponible en subasta" : "A pedido"}
                       </span>
                     </span>
-                    <span className="flex items-center gap-1.5 text-sm font-medium">
-                      <span className={`size-2 rounded-full ${estado.punto}`} aria-hidden="true" />
-                      <span className={estado.clase}>{estado.texto}</span>
-                    </span>
-                    <span className="text-sm text-base-content/50">
-                      · {sede?.nombre || vehiculo.ubicacion}
-                    </span>
+                    {vehiculo.condicionInfo && (
+                      <span className="display-recto text-sm tracking-wide text-base-content/80">
+                        {vehiculo.condicionInfo.nombre}
+                      </span>
+                    )}
+                    {vehiculo.estado !== "disponible" && (
+                      <span className="flex items-center gap-1.5 text-sm font-medium">
+                        <span
+                          className={`size-2 rounded-full ${estado.punto}`}
+                          aria-hidden="true"
+                        />
+                        <span className={estado.clase}>{estado.texto}</span>
+                      </span>
+                    )}
+                    {vehiculo.ubicacion && (
+                      <span className="text-sm text-base-content/50">· {vehiculo.ubicacion}</span>
+                    )}
                   </div>
                 </Revelar>
 
-                <TituloAnimado
-                  as="h1"
-                  retraso={100}
-                  className="display mt-5 text-5xl sm:text-6xl"
-                >
-                  {vehiculo.marca} <span className="text-primary">{vehiculo.modelo}</span>
+                <TituloAnimado as="h1" retraso={100} className="display mt-5 text-5xl sm:text-6xl">
+                  {vehiculo.marca}{" "}
+                  <span className="text-primary">
+                    {[vehiculo.modelo, vehiculo.version].filter(Boolean).join(" ")}
+                  </span>
                 </TituloAnimado>
 
                 <Revelar retraso={180}>
                   <p className="cifra mt-4 text-base text-base-content/50">
-                    {[vehiculo.anio, vehiculo.version, vehiculo.transmision]
+                    {[vehiculo.anioTexto || "Año a elegir", vehiculo.traccion, vehiculo.transmision]
                       .filter(Boolean)
                       .join(" · ")}
                   </p>
 
                   <div className="mt-8">
-                    <p className="cifra text-5xl font-bold leading-none text-primary sm:text-6xl">
+                    <p className="text-[0.7rem] uppercase tracking-wider text-base-content/45">
+                      {vehiculo.segmentoInfo.etiquetaPrecio}
+                    </p>
+                    <p className="cifra mt-1 text-5xl font-bold leading-none text-primary sm:text-6xl">
                       {enDolares(vehiculo.precio)}
                     </p>
-                    {enBs && (
-                      <p className="cifra mt-3 text-sm text-base-content/45">
-                        ≈ {enBolivares(enBs)} · tasa BCV {tasa.valor.toFixed(2)}
-                      </p>
-                    )}
-                    <p className="mt-2 text-sm text-base-content/60">
-                      Se ve y se prueba en {sede?.direccion || vehiculo.ubicacion}
+                    <p className="mt-3 text-sm text-base-content/60">
+                      {vehiculo.enSubasta
+                        ? "Lo que se estima pagar en la subasta. Reparación y envío se cotizan según tu país."
+                        : "Comprado, reparado y exportado. El envío se cotiza según tu país."}
                     </p>
                   </div>
                 </Revelar>
@@ -187,11 +196,10 @@ export default async function Vehiculo({ params }) {
                   <div className="mt-8">
                     {demo ? (
                       <AvisoBloqueado titulo="El contacto está desactivado en la demo">
-                        En la página entregada, este botón abre WhatsApp con{" "}
-                        {sede?.nombre} ({sede?.telefono}) y el mensaje ya escrito —«me
-                        interesa el {vehiculo.tituloLargo} {vehiculo.anio}, ¿sigue
-                        disponible?»— para que el comprador no tenga que explicar nada y
-                        conteste la sede que tiene la unidad delante.
+                        En la página entregada, este botón abre WhatsApp con el{" "}
+                        {config.business.whatsappVisible} y el mensaje ya escrito —«
+                        {mensajePorVehiculo(vehiculo)}»— para que el comprador no tenga que explicar
+                        nada.
                       </AvisoBloqueado>
                     ) : (
                       <BotonContacto
@@ -199,7 +207,7 @@ export default async function Vehiculo({ params }) {
                         demo={false}
                         className="btn btn-primary btn-lg w-full"
                       >
-                        Me interesa este vehículo
+                        {vehiculo.enSubasta ? "Quiero pujar por esta" : "Quiero cotizar uno así"}
                       </BotonContacto>
                     )}
                   </div>
@@ -210,7 +218,7 @@ export default async function Vehiculo({ params }) {
                         <li key={detalle} className="flex gap-3 text-sm leading-snug">
                           <span
                             className="mt-1 h-3 w-2 shrink-0 bg-primary"
-                            style={{ transform: "skewX(var(--angulo-dn))" }}
+                            style={{ transform: "skewX(var(--angulo-ls))" }}
                             aria-hidden="true"
                           />
                           <span className="display-recto tracking-wide text-base-content/80">
@@ -221,10 +229,10 @@ export default async function Vehiculo({ params }) {
                     </ul>
                   )}
 
-                  {(vehiculo.precioProvisional || vehiculo.deMuestra) && (
+                  {(vehiculo.precioProvisional || vehiculo.muestra) && (
                     <div className="mt-7 flex flex-wrap gap-3">
                       {vehiculo.precioProvisional && <AvisoPrecioProvisional />}
-                      {vehiculo.deMuestra && <AvisoDeMuestra />}
+                      {vehiculo.muestra && <AvisoDeMuestra />}
                     </div>
                   )}
                 </Revelar>
@@ -238,10 +246,25 @@ export default async function Vehiculo({ params }) {
                 <p className="mt-5 text-lg leading-relaxed text-base-content/70">
                   {vehiculo.descripcion}
                 </p>
-                <p className="mt-8 text-sm leading-relaxed text-base-content/45">
-                  Se ve y se prueba en {sede?.direccion}. Para verla, escribe antes al{" "}
-                  {sede?.telefono} y te la apartan.
-                </p>
+
+                {/* Los cinco pasos, en corto: es lo que pregunta todo el que llega
+                    a una ficha de subasta por primera vez. */}
+                <ol className="mt-10 space-y-3">
+                  {config.compra.pasos.map((paso, i) => (
+                    <li key={paso.titulo} className="flex items-baseline gap-4 text-sm">
+                      <span className="cifra shrink-0 text-primary">{i + 1}</span>
+                      <span className="display-recto tracking-wide text-base-content/75">
+                        {paso.titulo}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+                <Link
+                  href="/#como-funciona"
+                  className="mt-5 inline-block text-sm text-base-content/50 underline-offset-4 transition-colors hover:text-primary hover:underline"
+                >
+                  Cómo funciona, paso a paso →
+                </Link>
               </Revelar>
 
               <Revelar retraso={120}>
@@ -260,7 +283,7 @@ export default async function Vehiculo({ params }) {
                 <p className="rotulo">También te puede servir</p>
               </Revelar>
               <TituloAnimado as="h2" className="display mt-4 text-3xl sm:text-4xl">
-                {vehiculo.esCamion ? "Otros camiones" : "Otros vehículos"}
+                {vehiculo.enSubasta ? "Otros lotes en subasta" : "Otros modelos a pedido"}
               </TituloAnimado>
               <RejillaVehiculos vehiculos={parecidos} className="mt-10" />
             </div>

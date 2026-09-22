@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 /**
- * Genera los iconos de DealerNauta Cars.
+ * Genera los iconos de Lone Star All In Autos.
  * Uso: npm run generate-favicon  (o: node scripts/generate-favicon.mjs)
  *
- * El dibujo es el emblema reducido a lo que sobrevive a 32 px: el negro, el ala
- * naranja, la plateada por debajo y las siglas que van dentro del carro de su
- * logotipo. El escudo completo —el arco de texto, las estrellas, el rótulo— a
- * este tamaño es una mancha, así que no se intenta.
+ * El dibujo es el emblema reducido a lo que sobrevive a 32 px: el círculo
+ * negro con su filo rojo y la estrella partida en blanco y rojo. El rótulo, las
+ * pickups y el buque a este tamaño son una mancha, así que no se intentan.
  *
- * No hay ningún archivo de imagen que mantener a mano: si cambia el naranja, se
+ * No hay ningún archivo de imagen que mantener a mano: si cambia el rojo, se
  * cambia aquí y se vuelve a correr.
  */
 
@@ -20,35 +19,21 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const publicDir = join(__dirname, "..", "public");
 const appDir = join(__dirname, "..", "app");
 
-const NEGRO = "#0D0D0D";
-const NARANJA = "#F07423";
-const PLATA = "#C8CBD0";
+const NEGRO = "#0B0A0A";
+const ROJO = "#E3161E";
 const BLANCO = "#FFFFFF";
 
-const tamaños = [16, 32, 64, 180];
-
 function construir(lado) {
-  const u = lado / 64; // todo está medido sobre una rejilla de 64
-  // A 16 px "DC" tiene que ocupar casi toda la caja o no se lee nada.
-  const fuente = lado <= 16 ? 32 : 30;
-  void u;
+  // A 16 px el filo rojo se come la estrella si es tan grueso como a 64.
+  const filo = lado <= 16 ? 3 : 2.5;
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${lado}" height="${lado}" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="${NEGRO}"/>
-  <path d="M2 22 L60 14 L58 23 L4 31 Z" fill="${NARANJA}"/>
-  <path d="M8 50 L62 44 L60 50 L10 55 Z" fill="${PLATA}" opacity="0.55"/>
-  <text
-    x="50%"
-    y="56%"
-    dominant-baseline="central"
-    text-anchor="middle"
-    font-family="Arial Narrow, Arial, system-ui, sans-serif"
-    font-weight="700"
-    font-style="italic"
-    font-size="${fuente}"
-    fill="${BLANCO}"
-  >DC</text>
+  <circle cx="32" cy="32" r="${32 - filo / 2}" fill="${NEGRO}" stroke="${ROJO}" stroke-width="${filo}"/>
+  <g transform="translate(9 8.5) scale(0.46)">
+    <path d="M48.5 5 L38.5 37.2 L4.3 38.2 L31.5 59 L21.8 91.8 L48.5 73.5 Z" fill="${BLANCO}"/>
+    <path d="M51.5 5 L61.5 37.2 L95.7 38.2 L68.5 59 L78.2 91.8 L51.5 73.5 Z" fill="${ROJO}"/>
+  </g>
 </svg>
 `;
 }

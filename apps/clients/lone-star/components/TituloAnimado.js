@@ -6,9 +6,9 @@ import { contexto, revelarTexto } from "@/libs/animaciones";
 /**
  * Un titular que asoma línea a línea desde detrás de una máscara.
  *
- * Es el movimiento principal de la página, y no es un adorno: el catálogo de
- * DealerNauta rotula el modelo cortado contra el cielo, y esto es lo mismo
- * en movimiento —el texto no aparece, SALE de detrás de algo—.
+ * Es el movimiento principal de la página, y no es un adorno: las piezas de
+ * Lone Star rotulan el modelo en bloques que se cortan contra el humo rojo, y
+ * esto es lo mismo en movimiento —el texto no aparece, SALE de detrás de algo—.
  *
  * Se usa donde iría el `<h1>`/`<h2>` y se le pasa la etiqueta:
  *
@@ -32,8 +32,7 @@ export default function TituloAnimado({
   const nodo = useRef(null);
 
   useEffect(
-    () =>
-      contexto((g) => revelarTexto(g, nodo.current, { retraso, escalonado, sesgo }), nodo),
+    () => contexto((g) => revelarTexto(g, nodo.current, { retraso, escalonado, sesgo }), nodo),
     [retraso, escalonado, sesgo]
   );
 

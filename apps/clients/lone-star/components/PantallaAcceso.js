@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { LogoChapa } from "@/components/Logo";
-import MarcaDealernauta from "@/components/MarcaDealernauta";
+import { LogoChapa, Rotulo } from "@/components/Logo";
 import Escenario from "@/components/Escenario";
 import Cintillo from "@/components/Cintillo";
 import Contador from "@/components/demo/Contador";
@@ -22,8 +21,8 @@ import config from "@/config";
  * de antes, la fecha en que se acaba y la lista de lo que se lleva quien
  * compre. Si se vacía `precioAnterior`, el sello de rebaja desaparece solo.
  *
- * Aquí manda la firma de Vektor y no la marca de DealerNauta: quien
- * llega todavía no es cliente de DealerNauta, es alguien a quien se le está
+ * Aquí manda la firma de Vektor y no la marca de Lone Star: quien llega
+ * todavía no es cliente de Lone Star, es alguien a quien se le está
  * enseñando un trabajo. Al entrar, la jerarquía se invierte.
  *
  * Esto es la cara del candado; el candado de verdad está en el middleware.
@@ -74,8 +73,16 @@ export default function PantallaAcceso({ destino = "/" }) {
           .from("[data-puerta='insignia']", { opacity: 0, xPercent: -30, duration: 0.7 }, 0.85)
           .from("[data-puerta='titulo']", { opacity: 0, y: 16 }, 1.0)
           .from("[data-puerta='caja']", { opacity: 0, y: 24, duration: 0.9 }, 1.1)
-          .from("[data-puerta='sello']", { opacity: 0, scale: 0.4, rotate: -40, duration: 0.6 }, 1.5)
-          .from("[data-puerta='dlc'] > *", { opacity: 0, x: -18, duration: 0.5, stagger: 0.07 }, 1.3)
+          .from(
+            "[data-puerta='sello']",
+            { opacity: 0, scale: 0.4, rotate: -40, duration: 0.6 },
+            1.5
+          )
+          .from(
+            "[data-puerta='dlc'] > *",
+            { opacity: 0, x: -18, duration: 0.5, stagger: 0.07 },
+            1.3
+          )
           .from("[data-puerta='pie']", { opacity: 0, y: 12 }, 1.8);
       }, raiz),
     []
@@ -144,10 +151,9 @@ export default function PantallaAcceso({ destino = "/" }) {
       {/* ---------------- Fondo ---------------- */}
       <Escenario variante="portada" deslizar={false} />
 
-      {/* Velo. Sin él, "CARS" —que va en naranja— cae justo encima del cielo
-          naranja del escenario y desaparece: naranja sobre naranja. El velo
-          baja el fondo lo justo para que se siga viendo y el texto se lea
-          encima. */}
+      {/* Velo. Sin él, "STAR" —que va en rojo— cae justo encima del humo rojo
+          del escenario y desaparece: rojo sobre rojo. El velo baja el fondo lo
+          justo para que se siga viendo y el texto se lea encima. */}
       <div className="absolute inset-0 bg-base-100/72" aria-hidden="true" />
 
       <div className="malla malla-centro absolute inset-0 opacity-50" aria-hidden="true" />
@@ -158,7 +164,7 @@ export default function PantallaAcceso({ destino = "/" }) {
         aria-hidden="true"
         style={{
           background:
-            "radial-gradient(circle, color-mix(in oklab, var(--color-naranja) 35%, transparent), transparent 62%)",
+            "radial-gradient(circle, color-mix(in oklab, var(--color-rojo) 35%, transparent), transparent 62%)",
           filter: "blur(90px)",
         }}
       />
@@ -172,10 +178,9 @@ export default function PantallaAcceso({ destino = "/" }) {
           rara no cupiera, se desplazaría por dentro en vez de comerse el
           principio. La página, por fuera, no hace scroll nunca.
 
-          El `z-10` abre un contexto de apilamiento. Eso apagaría un
-          `mix-blend-mode`, que es por lo que el emblema NO usa blend para
-          comerse su fondo negro sino el filtro SVG `marca-alfa` del layout
-          raíz: a un filtro le da igual en qué contexto esté. */}
+          El `z-10` abre un contexto de apilamiento; el emblema va recortado
+          en círculo, así que no depende de ningún `mix-blend-mode` que eso
+          pudiera apagar. */}
       <div className="relative z-10 flex min-h-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-contain">
         <div className="m-auto grid w-full max-w-6xl gap-x-[clamp(1.5rem,4vw,3.5rem)] gap-y-[var(--puerta-v4)] px-5 py-[var(--puerta-v2)] lg:grid-cols-[1.15fr_1fr]">
           {/* ============ Columna izquierda: la carátula ============ */}
@@ -206,21 +211,35 @@ export default function PantallaAcceso({ destino = "/" }) {
               </span>
             </div>
 
-            <div data-puerta="logo" className="mt-[var(--puerta-v3)] flex flex-col items-center lg:items-start">
-              <p className="puerta-cortesia microgramma text-[0.6rem] text-base-content/40">Demo privada de</p>
+            <div
+              data-puerta="logo"
+              className="mt-[var(--puerta-v3)] flex flex-col items-center lg:items-start"
+            >
+              <p className="puerta-cortesia microgramma text-[0.6rem] text-base-content/40">
+                Demo privada de
+              </p>
               <div className="mt-[var(--puerta-v1)] flex items-center gap-4">
-                <LogoChapa lado="var(--puerta-logo)" prioridad />
-                <MarcaDealernauta className="h-10 w-32 text-base-content" />
+                <LogoChapa
+                  lado="var(--puerta-logo)"
+                  prioridad
+                  className="ring-2 ring-primary/70 shadow-[0_0_40px_-8px_var(--color-rojo)]"
+                />
+                <h1 className="flex flex-col items-start leading-none">
+                  <Rotulo className="text-[clamp(1.9rem,5.4vh,3.4rem)]" />
+                  <span className="mt-1 font-sans text-[0.62rem] font-semibold uppercase tracking-[0.42em] text-base-content/70">
+                    All in autos
+                  </span>
+                </h1>
               </div>
-              <h1 className="display mt-[var(--puerta-v2)] text-[clamp(1.6rem,4.4vh,3rem)]">
-                <span className="text-primary">Dealernauta</span>Cars
-              </h1>
             </div>
 
-            <p data-puerta="titulo" className="puerta-presentacion mt-[var(--puerta-v3)] max-w-md leading-relaxed text-sm text-base-content/65">
-              Tu inventario hecho página web, entero y funcionando: vehículos y camiones
-              separados, tus dos sedes, y la gráfica de tus publicaciones —el cielo
-              naranja, la ciudad, el asfalto—. Entra con tu contraseña y recórrela.
+            <p
+              data-puerta="titulo"
+              className="puerta-presentacion mt-[var(--puerta-v3)] max-w-md leading-relaxed text-sm text-base-content/65"
+            >
+              Tu Instagram hecho página web, entera y funcionando: lotes en subasta, modelos a
+              pedido, los cinco pasos hasta su país y tus pagos en USD, con la gráfica de tus piezas
+              —la estrella, el humo rojo, el puerto—. Entra con tu contraseña y recórrela.
             </p>
 
             {/* Lo que trae la edición. */}
@@ -231,13 +250,23 @@ export default function PantallaAcceso({ destino = "/" }) {
 
               <ul data-puerta="dlc" className="puerta-incluye mt-[var(--puerta-v2)]">
                 {incluye.map((cosa, i) => (
-                  <li key={cosa} className="linea-dlc flex items-start gap-3 px-3 py-[var(--puerta-v1)] text-left">
+                  <li
+                    key={cosa}
+                    className="linea-dlc flex items-start gap-3 px-3 py-[var(--puerta-v1)] text-left"
+                  >
                     <span className="microgramma shrink-0 text-[0.65rem] text-base-content/35">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="text-xs leading-snug text-base-content/80">{cosa}</span>
                     <span className="ml-auto shrink-0 text-primary/60" aria-hidden="true">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.4"
+                      >
                         <path d="m20 6-11 11-5-5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
@@ -299,7 +328,10 @@ export default function PantallaAcceso({ destino = "/" }) {
               </div>
 
               {/* La llave. */}
-              <form onSubmit={enviar} className="mt-[var(--puerta-v3)] border-t border-base-content/12 pt-[var(--puerta-v3)]">
+              <form
+                onSubmit={enviar}
+                className="mt-[var(--puerta-v3)] border-t border-base-content/12 pt-[var(--puerta-v3)]"
+              >
                 <p className="microgramma text-[0.65rem] text-base-content/60">
                   Acceso privado · con invitación
                 </p>
@@ -310,7 +342,7 @@ export default function PantallaAcceso({ destino = "/" }) {
                 <input
                   type="text"
                   name="username"
-                  value="dealernauta-cars-demo"
+                  value="lone-star-demo"
                   autoComplete="username"
                   readOnly
                   tabIndex={-1}
@@ -385,7 +417,12 @@ export default function PantallaAcceso({ destino = "/" }) {
       </div>
 
       {/* ---------------- Cinta de abajo, al revés ---------------- */}
-      <Cintillo variante="puertaInversa" invertido velocidad={32} className="relative z-20 shrink-0" />
+      <Cintillo
+        variante="puertaInversa"
+        invertido
+        velocidad={32}
+        className="relative z-20 shrink-0"
+      />
     </main>
   );
 }

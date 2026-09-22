@@ -10,18 +10,19 @@ export const getSEOTags = ({
 } = {}) => {
   const defaultKeywords = [
     config.appName,
-    "concesionario Caracas",
-    "venta de camiones Venezuela",
-    "camiones nuevos y usados Venezuela",
-    "carros 0 km Caracas",
-    "carros usados Caracas",
-    "consignación de vehículos Caracas",
-    "dealer San Antonio de los Altos",
-    "DealerNauta Cars",
+    "subastas de autos USA",
+    "comprar carro en subasta Estados Unidos",
+    "exportar vehículo a Venezuela",
+    "importar carro de Estados Unidos a Panamá",
+    "importar carro de Estados Unidos a Colombia",
+    "Copart IAA Texas exportación",
+    "Toyota de subasta",
+    "Lone Star All In Autos",
   ];
 
   return {
-    title: title || `${config.appName} — Vehículos y camiones en Caracas y San Antonio de los Altos`,
+    title:
+      title || `${config.appName} — Compramos en subasta, reparamos y exportamos a Latinoamérica`,
     description: description || config.appDescription,
     keywords: keywords || defaultKeywords,
     applicationName: config.appName,
@@ -86,32 +87,11 @@ export const renderSchemaTags = () => {
           }),
           address: {
             "@type": "PostalAddress",
-            streetAddress: config.business.direccion,
-            addressLocality: config.business.ciudad,
-            addressRegion: config.business.estado,
-            addressCountry: "VE",
+            addressRegion: "TX",
+            addressCountry: config.business.pais,
           },
-          areaServed: "Caracas y Miranda, Venezuela",
-          // Las dos sedes, cada una con su dirección y su teléfono. Sin esto,
-          // Google entiende que DealerNauta es un solo local y se queda con
-          // uno de los dos.
-          location: config.business.sedes.map((sede) => ({
-            "@type": "AutoDealer",
-            name: `${config.business.nombre} · ${sede.nombre}`,
-            telephone: `+${sede.whatsapp}`,
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: sede.zona,
-              addressLocality: sede.nombre,
-              addressRegion: sede.estado,
-              addressCountry: "VE",
-            },
-            sameAs: [sede.instagramUrl].filter(Boolean),
-          })),
-          sameAs: [
-            config.business.instagramUrl,
-            config.business.instagramCaracasUrl,
-          ].filter(Boolean),
+          areaServed: [...config.business.destinos.map((d) => d.nombre), "Latinoamérica"],
+          sameAs: [config.business.instagramUrl].filter(Boolean),
         }),
       }}
     />

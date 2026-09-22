@@ -1,5 +1,5 @@
 {
-  "name": "dealernautacars",
+  "name": "lone-star",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -35,5 +35,5 @@
     "react": "$react",
     "react-dom": "$react-dom"
   },
-  "description": "Página de inventario de DealerNauta Cars (@dealernautacars y @dealernautacarsccs, Caracas y San Antonio de los Altos): vehículos 0 km y usados, camiones nuevos y usados, ficha por unidad y WhatsApp a la sede que corresponde."
+  "description": "Página de Lone Star All In Autos (@lonestarallinautos, Texas): lotes en subasta de USA, modelos a pedido, reparación y exportación a Latinoamérica, ficha por unidad y WhatsApp con la unidad ya escrita."
 }

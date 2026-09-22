@@ -6,7 +6,7 @@ import TituloAnimado from "@/components/TituloAnimado";
 //
 // La sección funciona en dos planos a la vez, y por eso está redactada así:
 //
-//   · Para quien viene a comprar un carro: explica por qué lo que ve está al
+//   · Para quien viene a traer un carro: explica por qué lo que ve está al
 //     día —lo publica el propio vendedor, no un programador cada quince días—.
 //   · Para quien viene a comprar la página: enseña que no queda atado a nadie
 //     para actualizar su inventario, que es la objeción número uno.
@@ -27,13 +27,13 @@ const PASOS = [
     numero: "02",
     titulo: "Cargas el vehículo",
     detalle:
-      "La foto que ya hiciste para el post, el precio, el año, el kilometraje, y si es vehículo o camión. Los mismos datos que escribes en Instagram, una sola vez.",
+      "La foto que ya hiciste para el post, la puja estimada, el año, las millas, el daño primario y si es Run & Drive. Los mismos datos que escribes en Instagram, una sola vez.",
   },
   {
     numero: "03",
     titulo: "Queda publicado",
     detalle:
-      "Aparece al instante en el inventario y con su enlace propio, listo para pegarlo en la publicación o mandarlo por WhatsApp.",
+      "Aparece al instante en el inventario y con su enlace propio, listo para pegarlo en la publicación o mandarlo por WhatsApp a quien te preguntó por DM.",
   },
 ];
 
@@ -77,10 +77,10 @@ export default function SeccionPanel() {
 
         <Revelar retraso={160}>
           <p className="mx-auto mt-6 max-w-2xl text-center leading-relaxed text-base-content/60">
-            Cada unidad de esta página la publica el propio equipo de DealerNauta desde
-            su panel, en un par de minutos, y desde cualquiera de las dos sedes. Nadie
-            tiene que llamar a un programador para subir un camión, cambiar un precio o
-            marcar algo como vendido: por eso lo que ves aquí es lo que hay hoy.
+            Cada lote de esta página lo publica el propio equipo de Lone Star desde su panel, en un
+            par de minutos, desde el patio de la subasta si hace falta. Nadie tiene que llamar a un
+            programador para subir una unidad, cambiar una puja o marcarla como ganada: por eso lo
+            que ves aquí es lo que hay hoy.
           </p>
         </Revelar>
 
@@ -94,7 +94,7 @@ export default function SeccionPanel() {
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="size-2.5 rounded-full bg-base-content/15" aria-hidden="true" />
                 <span className="cifra ml-3 truncate text-[0.65rem] text-base-content/40">
-                  panel · dealernauta cars
+                  panel · lone star all in autos
                 </span>
               </div>
 
@@ -113,11 +113,11 @@ export default function SeccionPanel() {
                 <div className="mt-4 grid grid-cols-2 gap-2.5">
                   {[
                     ["Marca", "Toyota"],
-                    ["Modelo", "Frontlander"],
+                    ["Modelo", "Tacoma Off-Road"],
                     ["Año", "2026"],
-                    ["Tipo", "Vehículo · 0 km"],
-                    ["Precio", "$33.900"],
-                    ["Sede", "Caracas"],
+                    ["Millas", "1,186 mi"],
+                    ["Daño", "Rear End"],
+                    ["Condición", "Run & Drive"],
                   ].map(([etiqueta, valor]) => (
                     <div key={etiqueta}>
                       <p className="text-[0.6rem] uppercase tracking-wider text-base-content/40">
@@ -143,21 +143,21 @@ export default function SeccionPanel() {
                 </p>
                 <div className="mt-2 overflow-hidden border border-base-content/8">
                   <FilaMaqueta
-                    nombre="Toyota 4Runner Off Road 2026"
-                    precio="$79.000"
-                    estado="Disponible"
+                    nombre="Toyota Tundra SR5 2022"
+                    precio="$27,500"
+                    estado="En subasta"
                     tono="disponible"
                   />
                   <FilaMaqueta
-                    nombre="Chevrolet Silverado 2014"
-                    precio="$16.500"
-                    estado="Reservado"
+                    nombre="Toyota RAV4 XLE 2023"
+                    precio="$14,800"
+                    estado="Pujando"
                     tono="reservado"
                   />
                   <FilaMaqueta
-                    nombre="Mitsubishi Canter FE 2023"
-                    precio="$42.000"
-                    estado="Vendido"
+                    nombre="Toyota Camry SE 2024"
+                    precio="$11,900"
+                    estado="Exportado"
                     tono="vendido"
                   />
                 </div>
@@ -186,11 +186,9 @@ export default function SeccionPanel() {
             <Revelar retraso={360}>
               <div className="panel mt-7 p-5">
                 <p className="text-sm leading-relaxed text-base-content/65">
-                  <span className="font-semibold text-base-content">
-                    El panel va incluido.
-                  </span>{" "}
-                  No se paga aparte ni se cobra por unidad publicada: es parte de la
-                  página y el inventario es tuyo, no de nadie más.
+                  <span className="font-semibold text-base-content">El panel va incluido.</span> No
+                  se paga aparte ni se cobra por unidad publicada: es parte de la página y el
+                  inventario es tuyo, no de nadie más.
                 </p>
               </div>
             </Revelar>

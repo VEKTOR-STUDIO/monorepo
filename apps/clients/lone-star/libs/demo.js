@@ -1,19 +1,18 @@
 // -----------------------------------------------------------------------------
 // Modo demo.
 //
-// Esta página se le enseña a DealerNauta Cars antes de vendérsela. En demo se
-// ve casi todo —así se entiende qué se compra— pero no se puede usar de
-// verdad:
+// Esta página se le enseña a Lone Star All In Autos antes de vendérsela. En
+// demo se ve casi todo —así se entiende qué se compra— pero no se puede usar
+// de verdad:
 //
 //   · antes de ver nada hay que pasar una puerta con contraseña,
 //   · el inventario se corta a la sexta unidad y el resto queda difuminado,
 //   · el formulario de contacto no manda nada a ningún teléfono real,
-//   · los botones de WhatsApp no abren conversación con ninguna de las dos
-//     sedes.
+//   · los botones de WhatsApp no abren conversación con el negocio.
 //
-// Ese último corte no es cosmético: los dos números de DealerNauta son reales
-// y están publicados en su Instagram, así que si el botón abriera de verdad,
-// cualquiera que esté probando la demo les estaría mandando pedidos falsos.
+// Ese último corte no es cosmético: el +1 (281) 692-8067 es real y va impreso
+// en su emblema, así que si el botón abriera de verdad, cualquiera que esté
+// probando la demo les estaría mandando pedidos falsos.
 //
 // Todo pasa por aquí para que apagarlo sea una variable de entorno y no una
 // cacería por el código: NEXT_PUBLIC_DEMO=false.
@@ -41,39 +40,30 @@ export const MENSAJE_BLOQUEADO =
   "Esto es una demo: la acción está desactivada. El sistema completo sí la hace.";
 
 /**
- * A qué sede le toca una unidad.
- *
- * Los camiones se venden en San Antonio de los Altos y los vehículos en
- * Caracas: es la división real del negocio, la misma que tienen partida en dos
- * cuentas de Instagram. Por eso el botón de WhatsApp de cada ficha escribe al
- * número que corresponde y no siempre al mismo.
+ * Quién atiende una unidad. Hoy hay una sola base, en Texas; la función existe
+ * para que el día que haya dos no haya que tocar los botones.
  */
 export function sedeDe(vehiculo) {
   const sedes = config.business.sedes || [];
-  const slug = vehiculo?.sede || (vehiculo?.segmento === "camion" ? "san-antonio" : "caracas");
-  return sedes.find((s) => s.slug === slug) || sedes[0] || null;
+  return sedes.find((s) => s.slug === vehiculo?.sede) || sedes[0] || null;
 }
 
 /**
  * El mensaje con el que llega un comprador por una unidad concreta.
  *
- * Sin unidad —el botón general de la portada, o el de una sede, que solo lleva
- * `sede`— se manda el mensaje genérico: escribir "me interesa el undefined" es
- * peor que no personalizar nada.
+ * Sin unidad —el botón general de la portada— se manda el mensaje genérico:
+ * escribir "me interesa el undefined" es peor que no personalizar nada.
  */
 export function mensajePorVehiculo(vehiculo) {
-  const nombre = vehiculo?.tituloLargo || vehiculo?.titulo;
+  const nombre = vehiculo?.nombreCompleto || vehiculo?.titulo;
   if (!nombre) {
-    return "Hola, vi la página de DealerNauta Cars y quiero información sobre las unidades disponibles.";
+    return "Hola, vi la página de Lone Star All In Autos y quiero información para traer un vehículo.";
   }
 
-  const cual = `${nombre} ${vehiculo.anio}`;
-  if (vehiculo.segmento === "camion") {
-    return `Hola, me interesa el ${cual}. ¿Sigue disponible y qué documentación trae?`;
+  if (vehiculo.enSubasta === false) {
+    return `Hola, quiero cotizar un ${nombre} a pedido. ¿Cuánto me sale puesto en mi país?`;
   }
-  return vehiculo.esNuevo
-    ? `Hola, me interesa el ${cual} 0 km. ¿Sigue disponible?`
-    : `Hola, me interesa el ${cual}. ¿Sigue disponible?`;
+  return `Hola, me interesa el ${nombre} que está en subasta. ¿Sigue disponible y cuánto sería puesto en mi país?`;
 }
 
 /**
@@ -82,9 +72,6 @@ export function mensajePorVehiculo(vehiculo) {
  * En demo devuelve null y quien lo use enseña el cartel de bloqueado en vez
  * del botón: un desconocido probando la demo no puede hacerle llegar mensajes
  * al cliente real.
- *
- * Fuera de demo escribe al número de la sede donde está la unidad; si esa sede
- * no tuviera número, cae al general y, sin ninguno, al DM de Instagram.
  */
 export function enlaceDeWhatsapp(vehiculo) {
   if (esDemo()) return null;

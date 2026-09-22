@@ -51,7 +51,13 @@ export default function FormularioContacto() {
           <label htmlFor="nombre" className="mb-1.5 block text-sm text-base-content/60">
             Tu nombre
           </label>
-          <input id="nombre" name="nombre" required className="entrada" placeholder="Nombre y apellido" />
+          <input
+            id="nombre"
+            name="nombre"
+            required
+            className="entrada"
+            placeholder="Nombre y apellido"
+          />
         </div>
 
         <div>
@@ -79,11 +85,15 @@ export default function FormularioContacto() {
           required
           rows={4}
           className="entrada"
-          placeholder="Busco una camioneta 4x4 hasta $35.000, con papeles en regla."
+          placeholder="Busco una Tacoma o una 4Runner 2022 en adelante, hasta $30,000, para Venezuela."
         />
       </div>
 
-      <button type="submit" disabled={enviando} className="btn btn-primary w-full sm:w-auto sm:px-10">
+      <button
+        type="submit"
+        disabled={enviando}
+        className="btn btn-primary w-full sm:w-auto sm:px-10"
+      >
         {enviando ? "Enviando…" : "Enviar mensaje"}
       </button>
     </form>

@@ -20,7 +20,7 @@ export async function POST(peticion) {
     return NextResponse.json(
       {
         error:
-          "Esto es una demo: el mensaje no se envía. En la página entregada llega directo al WhatsApp de la sede que corresponda.",
+          "Esto es una demo: el mensaje no se envía. En la página entregada llega directo al WhatsApp de Lone Star.",
       },
       { status: 403 }
     );

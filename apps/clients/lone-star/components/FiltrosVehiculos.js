@@ -7,14 +7,14 @@ import { useCallback } from "react";
  * Los filtros del inventario.
  *
  * Todo vive en la URL y no en el estado del componente: así una búsqueda
- * —"camionetas 0 km hasta 30.000"— se copia y se manda por WhatsApp, que es
+ * —"pickups Run & Drive hasta 30,000"— se copia y se manda por WhatsApp, que es
  * exactamente lo que hace un vendedor con un cliente. Y al volver atrás, el
  * navegador recupera el filtro.
  *
- * El primer corte es el SEGMENTO —vehículo o camión—, en una fila propia y más
- * grande que el resto: en este negocio nadie busca "un sedán", busca "un carro"
- * o "un camión", y son dos compradores que no se parecen en nada. La condición
- * (0 km o usado) viene después, y la carrocería ya en tercer plano.
+ * El primer corte es el SEGMENTO —en subasta o a pedido—, en una fila propia y
+ * más grande que el resto: "¿cuánto por esa?" y "¿cuánto me sale una así?" son
+ * dos preguntas distintas. La condición del lote (Run & Drive o solo enciende)
+ * viene después, y la carrocería ya en tercer plano.
  */
 export default function FiltrosVehiculos({ facetas, total, mostrados }) {
   const router = useRouter();
@@ -37,13 +37,11 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
   const tipo = params.get("tipo") || "";
   const marca = params.get("marca") || "";
   const orden = params.get("orden") || "";
-  const hayFiltro = Boolean(
-    segmento || condicion || tipo || marca || orden || params.get("q")
-  );
+  const hayFiltro = Boolean(segmento || condicion || tipo || marca || orden || params.get("q"));
 
   return (
     <div className="space-y-5">
-      {/* El corte principal: vehículos o camiones. */}
+      {/* El corte principal: en subasta o a pedido. */}
       <div className="flex flex-wrap gap-2">
         <BotonFiltro activo={segmento === ""} onClick={() => cambiar("segmento", "")} grande>
           Todo
@@ -61,22 +59,25 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
         ))}
       </div>
 
-      {/* La condición, en segundo plano. */}
-      <div className="flex flex-wrap gap-2">
-        <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")}>
-          Nuevas y usadas
-        </BotonFiltro>
-        {facetas.condiciones.map((c) => (
-          <BotonFiltro
-            key={c.slug}
-            activo={condicion === c.slug}
-            onClick={() => cambiar("condicion", c.slug)}
-          >
-            {c.nombre}
-            <span className="cifra ml-1.5 opacity-55">{c.total}</span>
+      {/* La condición del lote, en segundo plano. Solo tiene sentido en
+          subasta: un modelo a pedido todavía no es un carro concreto. */}
+      {segmento !== "pedido" && (
+        <div className="flex flex-wrap gap-2">
+          <BotonFiltro activo={condicion === ""} onClick={() => cambiar("condicion", "")}>
+            Cualquier condición
           </BotonFiltro>
-        ))}
-      </div>
+          {facetas.condiciones.map((c) => (
+            <BotonFiltro
+              key={c.slug}
+              activo={condicion === c.slug}
+              onClick={() => cambiar("condicion", c.slug)}
+            >
+              {c.nombre}
+              <span className="cifra ml-1.5 opacity-55">{c.total}</span>
+            </BotonFiltro>
+          ))}
+        </div>
+      )}
 
       {/* La carrocería, ya en tercer plano. */}
       <div className="flex flex-wrap gap-2">
@@ -84,7 +85,11 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
           Cualquier carrocería
         </BotonFiltro>
         {facetas.tipos.map((t) => (
-          <BotonFiltro key={t.slug} activo={tipo === t.slug} onClick={() => cambiar("tipo", t.slug)}>
+          <BotonFiltro
+            key={t.slug}
+            activo={tipo === t.slug}
+            onClick={() => cambiar("tipo", t.slug)}
+          >
             {t.nombre}
             <span className="cifra ml-1.5 opacity-55">{t.total}</span>
           </BotonFiltro>
@@ -116,7 +121,7 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
           <option value="precio-asc">Precio: de menor a mayor</option>
           <option value="precio-desc">Precio: de mayor a menor</option>
           <option value="anio-desc">Año: más nuevo primero</option>
-          <option value="km-asc">Kilometraje: menos recorrido</option>
+          <option value="millas-asc">Millaje: menos recorrido</option>
         </select>
 
         {hayFiltro && (
@@ -138,11 +143,8 @@ export default function FiltrosVehiculos({ facetas, total, mostrados }) {
 }
 
 /**
- * Una pestaña de filtro, con la forma de pastilla de sus publicaciones.
- *
- * Redonda del todo y no rectangular a propósito: las etiquetas de año y
- * kilometraje que ellos ponen al pie de cada post son óvalos naranjas, y esta
- * es la misma pieza haciendo otro trabajo.
+ * Una pestaña de filtro, con la forma de las bandas rojas de sus piezas: recta
+ * y con el texto blanco cuando está activa.
  */
 function BotonFiltro({ activo, onClick, children, grande = false }) {
   return (
@@ -150,7 +152,7 @@ function BotonFiltro({ activo, onClick, children, grande = false }) {
       type="button"
       onClick={onClick}
       aria-pressed={activo}
-      className={`display-recto rounded-full tracking-wide transition-colors ${
+      className={`display-recto tracking-wide transition-colors ${
         grande ? "px-5 py-2.5 text-sm" : "px-4 py-1.5 text-xs"
       } ${
         activo

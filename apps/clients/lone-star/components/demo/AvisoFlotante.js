@@ -6,7 +6,7 @@ import BotonComprar from "@/components/demo/BotonComprar";
 import Contador from "@/components/demo/Contador";
 import config from "@/config";
 
-const LLAVE = "dealernauta-cars.demo.aviso-cerrado";
+const LLAVE = "lone-star.demo.aviso-cerrado";
 
 /**
  * Tarjeta que asoma por abajo cuando el visitante lleva media página bajada.
@@ -84,8 +84,8 @@ export default function AvisoFlotante() {
         <p className="microgramma text-[0.65rem] text-primary">Estás viendo una demo</p>
 
         <p className="mt-2.5 pr-5 text-sm leading-relaxed text-base-content/70">
-          Tus dos Instagram convertidos en página: vehículos y camiones, ficha por
-          unidad y WhatsApp a la sede que toca. Con tu naranja y tu emblema.
+          Tu Instagram convertido en página: lotes en subasta, modelos a pedido,
+          cómo funciona y cómo se paga. Con tu estrella y tu rojo.
         </p>
 
         <div className="mt-4 flex items-center justify-between gap-3">

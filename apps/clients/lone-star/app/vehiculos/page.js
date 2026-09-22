@@ -25,7 +25,7 @@ export const revalidate = 1800;
 export const metadata = getSEOTags({
   title: `Inventario | ${config.appName}`,
   description:
-    "Vehículos 0 km, usados en perfectas condiciones y camiones nuevos y usados en Caracas y San Antonio de los Altos. Filtra por tipo, condición, marca y precio; cada unidad con su ficha completa.",
+    "Lotes en las subastas de Estados Unidos y modelos a pedido, reparados y exportados a Venezuela, Panamá, Colombia y toda Latinoamérica. Filtra por tipo, condición, marca y precio; cada unidad con su ficha completa.",
   canonicalUrlRelative: "/vehiculos",
 });
 
@@ -69,10 +69,9 @@ export default async function Vehiculos({ searchParams }) {
             </TituloAnimado>
             <Revelar retraso={200}>
               <p className="mt-5 max-w-xl leading-relaxed text-base-content/60">
-                Todo lo que hay ahora mismo entre las dos sedes: vehículos en{" "}
-                {config.business.sedes[0].zona} y camiones en{" "}
-                {config.business.sedes[1].zona}. Cada unidad con su condición, su año, su
-                kilometraje y su motor.
+                Lo que está ahora mismo en las subastas de Estados Unidos, con sus millas,
+                su daño primario y si arranca y rueda, y los modelos que traemos a pedido
+                con su precio desde. Todo sale de Texas hacia tu país.
               </p>
             </Revelar>
           </div>
@@ -92,7 +91,8 @@ export default async function Vehiculos({ searchParams }) {
               <div className="panel mt-10 p-14 text-center">
                 <p className="display text-2xl">Nada con esos filtros</p>
                 <p className="mt-3 text-sm text-base-content/55">
-                  Prueba a quitar alguno; el inventario cambia cada semana.
+                  Prueba a quitar alguno, o escríbenos: si no está aquí, lo buscamos en
+                  subasta.
                 </p>
               </div>
             ) : (

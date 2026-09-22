@@ -39,9 +39,9 @@ export default function MuroDemo({ ocultos, children }) {
           </p>
 
           <p className="mt-3 text-sm leading-relaxed text-base-content/60">
-            La página completa lleva todo el inventario, la ficha de cada unidad, el
-            corte entre vehículos y camiones, y el botón de WhatsApp que llega a la
-            sede correcta con el modelo ya escrito.
+            La página completa lleva todo el inventario, la ficha de cada lote, el
+            corte entre lo que está en subasta y lo que se trae a pedido, y el botón
+            de WhatsApp que te llega con el modelo ya escrito.
           </p>
 
           <p className="mt-5 flex items-baseline justify-center gap-2.5">

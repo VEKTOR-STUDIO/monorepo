@@ -8,10 +8,10 @@
 // una ficha que entra en la portada y otra que entra en el inventario tienen
 // que sentirse iguales.
 //
-// El movimiento de esta página no es decorativo. La gráfica de DealerNauta son
-// dos alas barriendo por detrás del vehículo y un cielo naranja sobre asfalto,
-// así que casi todo entra BARRIENDO: alas que cruzan, líneas de titular que
-// suben desde detrás de una máscara y fotos que se abren con el mismo ángulo.
+// El movimiento de esta página no es decorativo. La gráfica de Lone Star son
+// bandas rojas cortadas en diagonal y humo rojo sobre un piso mojado, así que
+// casi todo entra BARRIENDO: bandas que cruzan, líneas de titular que suben
+// desde detrás de una máscara y fotos que se abren con el mismo ángulo.
 // Es la misma idea de sus publicaciones, pero en movimiento.
 //
 // Todo pasa por gsap.matchMedia(), que además de separar móvil y escritorio
@@ -41,7 +41,7 @@ export const TIEMPOS = {
  *
  * Mucho más tumbado que un corte diagonal al uso: en el emblema las alas son
  * casi horizontales, y ese es el gesto que hay que repetir. Tiene que ir a la
- * par con --angulo-dn de globals.css.
+ * par con --angulo-ls de globals.css.
  */
 export const ANGULO = -11;
 

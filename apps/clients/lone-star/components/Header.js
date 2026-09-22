@@ -8,21 +8,20 @@ import { usarGsap } from "@/libs/animaciones";
 import { esDemo } from "@/libs/demo";
 import config from "@/config";
 
-// El primer corte del menú es el del negocio: vehículos por un lado, camiones
-// por el otro. Es la misma división que tienen partida en dos cuentas de
-// Instagram y en dos sedes, y son dos compradores que no se parecen en nada.
+// El primer corte del menú es el del negocio: el lote que está en subasta
+// ahora mismo, o el modelo que se trae a pedido. Después, lo que más preguntan
+// por DM: cómo funciona y cómo se paga.
 const ENLACES = [
-  { href: "/vehiculos?segmento=auto", texto: "Vehículos" },
-  { href: "/vehiculos?segmento=camion", texto: "Camiones" },
-  { href: "/vehiculos?condicion=nuevo", texto: "0 km" },
-  { href: "/vehiculos", texto: "Todo el inventario" },
-  { href: "/#sedes", texto: "Las sedes" },
+  { href: "/vehiculos?segmento=subasta", texto: "En subasta" },
+  { href: "/vehiculos?segmento=pedido", texto: "A pedido" },
+  { href: "/#como-funciona", texto: "Cómo funciona" },
+  { href: "/#pagos", texto: "Pagos" },
   { href: "/contacto", texto: "Contacto" },
 ];
 
 // Atajo a la comparación con el Instagram suelto. Solo existe mientras se está
 // vendiendo la página: es un argumento para el dueño, no para quien viene a
-// ver carros.
+// traer un carro.
 const ENLACE_DEMO = { href: "/#por-que", texto: "¿Por qué no solo Instagram?" };
 
 /**
@@ -127,7 +126,14 @@ export default function Header() {
           aria-label={abierto ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={abierto}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             {abierto ? (
               <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" />
             ) : (

@@ -8,55 +8,55 @@
 }
 
 /* ---------------------------------------------------------------------------
- * Tema "dealernauta".
+ * Tema "lonestar".
  *
- * No se inventó una paleta: se copió la suya. Sus dos cuentas de Instagram
- * publican siempre la misma pieza —cielo naranja degradado, el perfil de la
- * ciudad recortado detrás, el vehículo posado sobre asfalto, el titular en
- * condensada pesadísima y una pastilla naranja abajo con el año y el
- * kilometraje—, y el logotipo es un emblema circular naranja, plata y blanco
- * sobre negro. Esa retícula es la identidad y la web la hereda entera.
+ * No se inventó una paleta: se copió la suya. El emblema de Lone Star es un
+ * círculo NEGRO con filo ROJO, una estrella mitad blanca mitad roja, "LONE" en
+ * blanco y "STAR" en rojo, y debajo tres pickups sobre un piso mojado que
+ * refleja el resplandor rojo, con un buque de contenedores al fondo. Sus
+ * publicaciones repiten lo mismo: negro, humo rojo, titulares en condensada
+ * pesadísima y el número de WhatsApp en una banda al pie.
  *
  * Cuatro decisiones que vienen de ahí y no de un gusto:
  *
- *   · FONDO NEGRO. Su emblema está calado sobre negro puro y sus piezas usan
- *     el negro como respiro entre naranjas. Una web clara habría sido otra
- *     marca.
- *   · EL NARANJA NO DECORA, SEÑALA. Es el precio, el botón, la condición
- *     "0 km" y el cielo de la portada. Si se usara de relleno en todas partes
- *     dejaría de significar nada, que es justo lo que le pasa a media
- *     Instagram.
- *   · LA PLATA ES EL TERCER COLOR, no un gris cualquiera. Las dos alas del
- *     emblema son plateadas; aquí esa plata es la de los bordes, los filetes y
- *     las cifras secundarias.
- *   · ARCOS, NO ESQUINAS. El logotipo son dos alas curvas y un arco de texto.
- *     Por eso aquí las cosas se redondean un poco y las pastillas se redondean
- *     del todo, al revés que en una marca de catálogo cuadriculado.
+ *   · FONDO NEGRO, Y NEGRO DE NOCHE. No es un gris oscuro de plantilla: sus
+ *     piezas son de noche, con el rojo saliendo de abajo como un foco.
+ *   · EL ROJO NO DECORA, SEÑALA. Es la puja, el botón, el "Run & Drive" y la
+ *     segunda palabra de cada titular —"LONE STAR", "TOYOTA COROLLA"—. Si
+ *     llenara todo dejaría de significar nada.
+ *   · EL BLANCO ES EL TERCER COLOR. El del rótulo y la estrella; aquí es el de
+ *     los filetes y las cifras secundarias, un blanco frío, casi plata.
+ *   · ESQUINAS VIVAS. Su gráfica son bandas rectas cortadas en diagonal, no
+ *     arcos: el radio es mínimo y las etiquetas van sesgadas.
  *
- * Para mover el naranja de marca: --color-primary aquí y config.colors.main.
+ * El azul marino de la bandera de Texas aparece en dos de sus piezas; aquí es
+ * un acento de fondo (--color-marino), nunca un color de botón.
+ *
+ * Para mover el rojo de marca: --color-primary aquí y config.colors.main.
  * ------------------------------------------------------------------------- */
 @plugin "daisyui/theme" {
-  name: "dealernauta";
+  name: "lonestar";
   default: true;
   color-scheme: dark;
 
-  --color-base-100: oklch(12.5% 0 0);
-  --color-base-200: oklch(17% 0 0);
-  --color-base-300: oklch(23.5% 0 0);
-  --color-base-content: oklch(97% 0 0);
+  --color-base-100: oklch(11.5% 0.004 20);
+  --color-base-200: oklch(16% 0.006 20);
+  --color-base-300: oklch(22% 0.008 20);
+  --color-base-content: oklch(97% 0.003 250);
 
-  /* El naranja del emblema (#F07423). */
-  --color-primary: oklch(68% 0.17 46);
-  --color-primary-content: oklch(14% 0.03 46);
+  /* El rojo de la estrella (#E3161E). Con texto blanco encima, como en sus
+     bandas. */
+  --color-primary: oklch(58% 0.225 27);
+  --color-primary-content: oklch(99% 0 0);
 
-  /* La plata de las alas, que es el otro color de la marca. */
-  --color-secondary: oklch(82% 0.006 250);
+  /* El blanco frío del rótulo. */
+  --color-secondary: oklch(90% 0.006 250);
   --color-secondary-content: oklch(13% 0 0);
 
-  --color-accent: oklch(80% 0.145 68);
-  --color-accent-content: oklch(14% 0.03 46);
+  --color-accent: oklch(33% 0.09 262);
+  --color-accent-content: oklch(97% 0 0);
 
-  --color-neutral: oklch(21% 0 0);
+  --color-neutral: oklch(20% 0.006 20);
   --color-neutral-content: oklch(95% 0 0);
 
   --color-info: oklch(70% 0.11 240);
@@ -68,11 +68,10 @@
   --color-error: oklch(62% 0.22 25);
   --color-error-content: oklch(99% 0 0);
 
-  /* Un redondeo suave, del lado de los arcos del emblema. Lo redondo del todo
-     se reserva para las pastillas, que es donde su gráfica lo pide. */
-  --radius-selector: 0.375rem;
-  --radius-field: 0.375rem;
-  --radius-box: 0.375rem;
+  /* Casi recto: su gráfica son bandas y cortes, no arcos. */
+  --radius-selector: 0.125rem;
+  --radius-field: 0.125rem;
+  --radius-box: 0.125rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -81,9 +80,10 @@
 }
 
 @theme {
-  /* Barlow Condensed en negrita itálica es lo más cerca que se llega del
-     titular de sus publicaciones sin licenciar su tipografía: condensada, muy
-     pesada, inclinada y con los remates cortados en recto. */
+  /* Barlow Condensed en negrita itálica es lo más cerca que se llega de los
+     titulares de sus piezas —"EXPORTA", "TOYOTA TACOMA", "¿QUIERES
+     INVERTIR?"— sin licenciar su tipografía: condensada, muy pesada e
+     inclinada. */
   --font-display: var(--font-barlow), "Arial Narrow", system-ui, sans-serif;
   --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
@@ -93,26 +93,26 @@
    *
    * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
    * mismo valor a propósito: así da igual cuál escriba cada componente, el
-   * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
-   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos y
-   * pastillas de verdad —el emblema, las etiquetas de año y kilometraje— y
-   * esos sí deben seguir siendo redondos.
+   * resultado es siempre el mismo. `rounded-full` se queda fuera, que es lo
+   * que hace los círculos de verdad —las banderas, el punto de "en vivo"—.
    * ----------------------------------------------------------------------- */
-  --radius-xs: 0.375rem;
-  --radius-sm: 0.375rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.375rem;
-  --radius-xl: 0.375rem;
-  --radius-2xl: 0.375rem;
-  --radius-3xl: 0.375rem;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.125rem;
+  --radius-lg: 0.125rem;
+  --radius-xl: 0.125rem;
+  --radius-2xl: 0.125rem;
+  --radius-3xl: 0.125rem;
 
-  --color-tinta: oklch(12.5% 0 0);
+  --color-tinta: oklch(11.5% 0.004 20);
   --color-humo: oklch(62% 0 0);
   --color-acero: oklch(30% 0 0);
-  --color-naranja: oklch(68% 0.17 46);
-  --color-naranja-claro: oklch(80% 0.145 68);
-  --color-naranja-hondo: oklch(55% 0.155 42);
-  --color-plata: oklch(82% 0.006 250);
+  --color-rojo: oklch(58% 0.225 27);
+  --color-rojo-claro: oklch(66% 0.22 29);
+  --color-rojo-hondo: oklch(42% 0.17 26);
+  --color-plata: oklch(90% 0.006 250);
+  /* El azul de la bandera de Texas de dos de sus piezas. Solo de fondo. */
+  --color-marino: oklch(27% 0.08 262);
 
   --animate-flecha: flecha 2.2s ease-in-out infinite;
   --animate-cinta: cinta 42s linear infinite;
@@ -175,12 +175,10 @@ html {
   /* Alto del crédito de autoría del final (components/FooterFoot.js). */
   --alto-credito: 1.9rem;
 
-  /* El ángulo de la marca. En sus piezas el corte del asfalto y el filo de las
-     etiquetas van inclinados, pero mucho menos que en un catálogo de
-     diagonales duras: aquí el gesto es el ala del emblema, que es casi
-     horizontal. Está arriba del todo para que cambiarlo cambie la página
-     entera de una vez. */
-  --angulo-dn: -11deg;
+  /* El ángulo de la marca: el de las bandas rojas cortadas en diagonal de sus
+     piezas y la inclinación de "LONE STAR" en el emblema. Está arriba del todo
+     para que cambiarlo cambie la página entera de una vez. */
+  --angulo-ls: -11deg;
 
   background-color: var(--color-base-100);
 }
@@ -211,7 +209,7 @@ body {
 }
 
 ::selection {
-  background-color: var(--color-naranja);
+  background-color: var(--color-rojo);
   color: #fff;
 }
 
@@ -221,7 +219,7 @@ body {
 
 /* El titular de sus publicaciones: condensado, muy pesado, en itálica y en
    mayúsculas. Es lo que hace que un bloque de texto se lea como una pieza de
-   DealerNauta y no como una web de plantilla. */
+   Lone Star y no como una web de plantilla. */
 .display {
   font-family: var(--font-display);
   font-weight: 800;
@@ -284,9 +282,9 @@ body {
  *
  * Esta página tiene DOS voces y conviene no confundirlas:
  *
- *   · Lo que ve el comprador —vehículos, camiones, cómo se compra, contacto—
+ *   · Lo que ve el comprador —lotes, modelos a pedido, cómo se trae, contacto—
  *     va con la tipografía de la casa.
- *   · Lo que le habla a DEALERNAUTA —cómo se publica, qué incluye, cuánto
+ *   · Lo que le habla a LONE STAR —cómo se publica, qué incluye, cuánto
  *     cuesta— va en Microgramma, que es la tipografía de la firma de
  *     Vektor, la misma del crédito del pie.
  *
@@ -328,15 +326,15 @@ body {
   animation-play-state: paused;
 }
 
-/* La voz de venta: el naranja de la casa, que aquí sí llena. */
+/* La voz de venta: el rojo de la casa, que aquí sí llena. */
 .cintillo-venta {
   background-image: linear-gradient(
     100deg,
-    var(--color-naranja-hondo),
-    var(--color-naranja) 45%,
-    var(--color-naranja-claro)
+    var(--color-rojo-hondo),
+    var(--color-rojo) 45%,
+    var(--color-rojo-claro)
   );
-  color: oklch(16% 0.03 46);
+  color: #fff;
 }
 
 /* La vuelta al escaparate: oscura y discreta, que no compita. */
@@ -352,15 +350,15 @@ body {
   font-weight: 600;
 }
 
-/* La separación entre una frase y la siguiente: el ala del emblema en
-   pequeño, no un punto cualquiera. */
+/* La separación entre una frase y la siguiente: una estrella pequeña, no un
+   punto cualquiera. */
 .cintillo-punto {
   display: inline-block;
   width: 0.75rem;
-  height: 0.4rem;
+  height: 0.75rem;
   background-color: currentColor;
   opacity: 0.55;
-  clip-path: polygon(0 40%, 100% 0, 85% 100%, 12% 72%);
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -370,28 +368,36 @@ body {
 }
 
 /* --------------------------------------------------------------------------
- * La gráfica de la casa: cielo naranja, ciudad y asfalto
+ * La gráfica de la casa: la noche roja, el puerto y el piso mojado
  *
- * Es la receta exacta de sus publicaciones, de arriba abajo: un cielo naranja
- * que va de ámbar a naranja quemado, el perfil de la ciudad recortado en
- * negro sobre él, y el asfalto gris ocupando el tercio de abajo con el
- * vehículo posado encima.
+ * Es la receta de su emblema, de arriba abajo: un fondo NEGRO de noche con el
+ * rojo saliendo de abajo como un foco, el PUERTO recortado al fondo —grúas,
+ * pilas de contenedores y el buque que se lleva las unidades—, y el PISO
+ * MOJADO donde se posan los carros, que devuelve el rojo como un reflejo.
+ * Cruzando por detrás, las BANDAS rojas en diagonal de sus piezas.
  *
- * Las tres capas van por separado a propósito: cada sección usa las que le
- * hagan falta y con la intensidad que aguante el texto que lleve encima.
+ * Las capas van por separado a propósito: cada sección usa las que le hagan
+ * falta y con la intensidad que aguante el texto que lleva encima.
  * ------------------------------------------------------------------------ */
 
-/* 1. El cielo. `--cielo-fuerza` gradúa cuánto pesa sin tocar el degradado. */
+/* 1. La noche. `--cielo-fuerza` gradúa cuánto rojo lleva sin tocar el
+      degradado. El rojo sale de abajo y hay un segundo foco, más débil,
+      arriba a la derecha: el humo de sus piezas. */
 .cielo {
   --cielo-fuerza: 1;
   background-color: var(--color-base-100);
   background-image:
     radial-gradient(
-      ellipse 120% 85% at 50% 100%,
-      color-mix(in oklab, var(--color-naranja-claro) calc(38% * var(--cielo-fuerza)), transparent) 0%,
-      color-mix(in oklab, var(--color-naranja) calc(30% * var(--cielo-fuerza)), transparent) 32%,
-      color-mix(in oklab, var(--color-naranja-hondo) calc(16% * var(--cielo-fuerza)), transparent) 58%,
+      ellipse 110% 70% at 50% 108%,
+      color-mix(in oklab, var(--color-rojo-claro) calc(34% * var(--cielo-fuerza)), transparent) 0%,
+      color-mix(in oklab, var(--color-rojo) calc(22% * var(--cielo-fuerza)), transparent) 34%,
+      color-mix(in oklab, var(--color-rojo-hondo) calc(12% * var(--cielo-fuerza)), transparent) 60%,
       transparent 82%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 92% 0%,
+      color-mix(in oklab, var(--color-rojo-hondo) calc(22% * var(--cielo-fuerza)), transparent) 0%,
+      transparent 70%
     );
 }
 
@@ -399,152 +405,190 @@ body {
   --cielo-fuerza: 0.45;
 }
 
-/* El cielo de una PIEZA suelta —la tarjeta de una unidad—, que no es lo mismo
-   que el de una sección.
-
-   En una sección el cielo tiñe un fondo negro y tiene que dejar leer el texto
-   que lleva encima, así que va mezclado con transparente. En una tarjeta el
-   cielo ES la pieza: ahí su naranja va a plena potencia, como en sus posts, y
-   lo único que se le pide es que el vehículo blanco recorte contra él. */
+/* El fondo de una PIEZA suelta —la tarjeta de una unidad sin foto—, que no es
+   lo mismo que el de una sección. Aquí el rojo va a plena potencia, como en
+   sus posts: negro arriba, humo rojo abajo, y el carro blanco recortando
+   contra él. */
 .cielo-pieza {
-  background-image: linear-gradient(
-    to bottom,
-    oklch(30% 0.09 42) 0%,
-    var(--color-naranja-hondo) 34%,
-    var(--color-naranja) 62%,
-    var(--color-naranja-claro) 88%
-  );
+  background-image:
+    radial-gradient(
+      ellipse 90% 55% at 50% 78%,
+      color-mix(in oklab, var(--color-rojo) 55%, transparent) 0%,
+      color-mix(in oklab, var(--color-rojo-hondo) 45%, transparent) 38%,
+      transparent 72%
+    ),
+    linear-gradient(to bottom, oklch(9% 0.004 20) 0%, oklch(14% 0.02 25) 60%, oklch(10% 0.01 25) 100%);
 }
 
-/* 2. La ciudad. Es el perfil de una ciudad de torres con el cerro detrás:
-      Caracas vista desde el sur, que es lo que sale en sus piezas. Va como
-      capa absoluta, anclada abajo, y se difumina por arriba para que no se vea
-      dónde termina el recorte. */
-/* `--horizonte-alto` es lo ALTO QUE SE DIBUJAN LOS EDIFICIOS, y no lo alto que
-   mide la capa. Son cosas distintas y confundirlas fue el primer error: con
-   `background-size: auto 100%` la ciudad se estiraba con la capa, así que en
-   una portada de 3.600 px salían torres de 1.600 px que ya no parecían una
-   ciudad, parecían un muro. Ahora los edificios miden siempre lo mismo y la
-   capa solo decide cuánto cielo queda por encima. */
+/* 2. El puerto. Grúas pórtico, contenedores y el buque, en negro contra el
+      rojo: es a donde van a parar todas las unidades, y en su emblema está
+      justo detrás de los carros.
+
+   `--horizonte-alto` es lo ALTO QUE SE DIBUJA EL PUERTO, y no lo alto que
+   mide la capa. Con `background-size: auto 100%` el dibujo se estiraba con la
+   capa y en una portada alta las grúas medían más que el titular. Ahora miden
+   siempre lo mismo y la capa solo decide cuánto cielo queda por encima. */
 .horizonte {
   --horizonte-alto: clamp(70px, 16vh, 190px);
   pointer-events: none;
   background-repeat: repeat-x;
   background-position: bottom center;
   background-size: auto var(--horizonte-alto);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='240' viewBox='0 0 1200 240' preserveAspectRatio='none'%3E%3Cg fill='%23000000'%3E%3Cpath d='M0 240 L0 150 L60 96 L120 126 L190 70 L250 112 L320 60 L400 104 L470 74 L540 120 L620 66 L700 110 L780 80 L860 124 L940 88 L1020 130 L1100 100 L1200 140 L1200 240 Z' opacity='0.55'/%3E%3Cg%3E%3Crect x='28' y='168' width='46' height='72'/%3E%3Crect x='86' y='140' width='34' height='100'/%3E%3Crect x='132' y='186' width='54' height='54'/%3E%3Crect x='198' y='120' width='40' height='120'/%3E%3Crect x='250' y='160' width='30' height='80'/%3E%3Crect x='292' y='178' width='62' height='62'/%3E%3Crect x='366' y='132' width='38' height='108'/%3E%3Crect x='416' y='172' width='44' height='68'/%3E%3Crect x='472' y='150' width='28' height='90'/%3E%3Crect x='512' y='186' width='58' height='54'/%3E%3Crect x='582' y='126' width='42' height='114'/%3E%3Crect x='636' y='166' width='32' height='74'/%3E%3Crect x='680' y='182' width='60' height='58'/%3E%3Crect x='752' y='144' width='36' height='96'/%3E%3Crect x='800' y='176' width='48' height='64'/%3E%3Crect x='860' y='156' width='30' height='84'/%3E%3Crect x='902' y='188' width='56' height='52'/%3E%3Crect x='970' y='134' width='40' height='106'/%3E%3Crect x='1022' y='170' width='34' height='70'/%3E%3Crect x='1068' y='184' width='62' height='56'/%3E%3Crect x='1142' y='150' width='38' height='90'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='240' viewBox='0 0 1200 240'%3E%3Cg fill='%23000'%3E %3Crect x='0' y='196' width='52' height='44'/%3E%3Crect x='54' y='178' width='52' height='62'/%3E%3Crect x='108' y='206' width='40' height='34'/%3E %3Crect x='176' y='60' width='9' height='180'/%3E%3Crect x='236' y='60' width='9' height='180'/%3E%3Crect x='120' y='52' width='250' height='10'/%3E%3Crect x='186' y='62' width='26' height='18'/%3E%3Crect x='332' y='30' width='6' height='24'/%3E%3Cpath d='M150 52 L335 30 L338 34 L150 56 Z'/%3E %3Crect x='262' y='188' width='60' height='52'/%3E%3Crect x='324' y='170' width='60' height='70'/%3E%3Crect x='386' y='200' width='44' height='40'/%3E %3Crect x='452' y='74' width='8' height='166'/%3E%3Crect x='508' y='74' width='8' height='166'/%3E%3Crect x='404' y='66' width='214' height='9'/%3E%3Crect x='464' y='76' width='24' height='16'/%3E%3Cpath d='M430 66 L604 46 L607 50 L430 70 Z'/%3E %3Crect x='540' y='204' width='56' height='36'/%3E%3Crect x='598' y='186' width='56' height='54'/%3E %3Cpath d='M690 240 L676 196 L1190 196 L1172 240 Z'/%3E %3Crect x='704' y='176' width='62' height='20'/%3E%3Crect x='768' y='160' width='62' height='36'/%3E%3Crect x='832' y='168' width='62' height='28'/%3E%3Crect x='896' y='152' width='62' height='44'/%3E%3Crect x='960' y='166' width='62' height='30'/%3E%3Crect x='1024' y='174' width='56' height='22'/%3E %3Crect x='1094' y='124' width='42' height='72'/%3E%3Crect x='1100' y='110' width='30' height='14'/%3E%3Crect x='1112' y='88' width='5' height='22'/%3E %3C/g%3E%3C/svg%3E");
   mask-image: linear-gradient(to top, #000 45%, transparent 100%);
   -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 100%);
 }
 
-/* 3. El asfalto. Gris oscuro con grano y el filo de la vía cortado en el
-      ángulo de la casa, como en sus piezas. */
+/* 3. El piso mojado. Casi negro, con el rojo reflejado en una franja justo
+      bajo el filo, como el asfalto con lluvia de su emblema. */
 .asfalto {
   pointer-events: none;
   background-image:
-    linear-gradient(
-      to top,
-      oklch(26% 0.004 250) 0%,
-      oklch(21% 0.004 250) 55%,
-      transparent 100%
-    );
+    radial-gradient(
+      ellipse 70% 22% at 50% 4%,
+      color-mix(in oklab, var(--color-rojo) 30%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(to top, oklch(9% 0.004 20) 0%, oklch(14% 0.006 20) 60%, transparent 100%);
 }
 
+/* Los reflejos del piso: rayas verticales tenues, que es como se ve la luz
+   sobre el suelo mojado. */
 .asfalto::after {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.35;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23a)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent 0 22px,
+    color-mix(in oklab, var(--color-plata) 40%, transparent) 22px 23px,
+    transparent 23px 61px
+  );
+  mask-image: linear-gradient(to bottom, #000, transparent 80%);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 80%);
 }
 
-/* El ala del emblema, para acentos cortos: bajo un titular, en un rótulo.
-   Es una cuña que arranca gruesa y muere en punta, como las dos alas que
-   cruzan por detrás del carro en su logotipo. */
+/* La banda roja, para acentos cortos: bajo un titular, en un rótulo. Es el
+   corte en diagonal con el que rematan sus piezas, en pequeño. */
 .ala {
   height: 0.3rem;
   width: 4rem;
-  background-image: linear-gradient(
-    to right,
-    var(--color-naranja),
-    color-mix(in oklab, var(--color-naranja) 30%, transparent)
-  );
-  clip-path: polygon(0 0, 100% 22%, 100% 78%, 0 100%);
+  background-color: var(--color-rojo);
+  clip-path: polygon(0.3rem 0, 100% 0, calc(100% - 0.3rem) 100%, 0 100%);
 }
 
 .ala-ancha {
   width: 100%;
 }
 
-/* La plateada, la que en el emblema va debajo de la naranja. */
+/* La blanca, la que en sus piezas acompaña a la roja. */
 .ala-plata {
-  background-image: linear-gradient(
-    to right,
-    color-mix(in oklab, var(--color-plata) 70%, transparent),
-    transparent
-  );
+  background-color: color-mix(in oklab, var(--color-plata) 70%, transparent);
 }
 
 /* El bisel, para botones y etiquetas: la caja va sesgada y el contenido se
    contra-sesga para que el texto salga recto. */
 .bisel {
   display: inline-block;
-  transform: skewX(var(--angulo-dn));
+  transform: skewX(var(--angulo-ls));
 }
 
 .bisel > * {
   display: inline-block;
-  transform: skewX(calc(var(--angulo-dn) * -1));
+  transform: skewX(calc(var(--angulo-ls) * -1));
 }
 
-/* La pastilla: el óvalo naranja con el año y el kilometraje que llevan todas
-   sus publicaciones al pie de la foto. */
+/* La etiqueta roja: la banda de "UNIDAD DISPONIBLE EN SUBASTA" o de "A PARTIR
+   DE", con el texto blanco. Recta, no redonda: así la dibujan ellos. */
 .pastilla {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 9999px;
-  background-image: linear-gradient(
-    100deg,
-    var(--color-naranja-hondo),
-    var(--color-naranja) 55%,
-    var(--color-naranja-claro)
-  );
-  color: oklch(16% 0.03 46);
+  border-radius: var(--radius-box);
+  background-image: linear-gradient(100deg, var(--color-rojo-hondo), var(--color-rojo) 45%, var(--color-rojo-claro));
+  color: #fff;
   font-weight: 700;
-  box-shadow: 0 10px 26px -14px color-mix(in oklab, var(--color-naranja) 90%, transparent);
+  box-shadow: 0 10px 26px -14px color-mix(in oklab, var(--color-rojo) 90%, transparent);
 }
 
 .pastilla-apagada {
   background-image: none;
   background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
-  color: color-mix(in oklab, var(--color-base-content) 75%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 80%, transparent);
   box-shadow: none;
 }
 
 /* El corte, para fotos y bloques enteros: una esquina rebajada, el mismo
-   gesto de sus etiquetas. */
+   gesto de sus bandas. */
 .corte {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.5rem), calc(100% - 1.5rem) 100%, 0 100%);
 }
 
-/* El fondo donde se posan las unidades: negro con una insinuación de foco,
-   como el suelo del salón. */
+/* El fondo donde se posan las fotos: negro con el foco rojo muy bajado. */
 .estudio {
   background:
     radial-gradient(
-      ellipse 70% 60% at 50% 42%,
-      oklch(25% 0 0) 0%,
-      oklch(18% 0 0) 48%,
-      oklch(12% 0 0) 100%
+      ellipse 70% 60% at 50% 70%,
+      oklch(20% 0.03 25) 0%,
+      oklch(14% 0.01 20) 50%,
+      oklch(10% 0.004 20) 100%
     );
 }
 
 /* La sombra elíptica bajo el vehículo. Sin esto las siluetas flotan. */
 .sombra-piso {
-  background: radial-gradient(ellipse 50% 50% at 50% 50%, oklch(0% 0 0 / 0.55), transparent 70%);
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, oklch(0% 0 0 / 0.7), transparent 70%);
   filter: blur(6px);
+}
+
+/* La bandera de Estados Unidos ondeando arriba a la izquierda, como en su
+   emblema y en la pieza de las subastas. Va muy apagada y fundida por los
+   bordes: es un fondo, no un estandarte. Las franjas son de la bandera; las
+   estrellas del cantón se sugieren con puntos. */
+.bandera {
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 50% 50%, #fff 0 1.6px, transparent 2.2px),
+    linear-gradient(var(--color-marino), var(--color-marino)),
+    repeating-linear-gradient(
+      to bottom,
+      var(--color-rojo-hondo) 0 22px,
+      color-mix(in oklab, var(--color-plata) 70%, transparent) 22px 44px
+    );
+  background-size: 26px 24px, 42% 154px, 100% 100%;
+  background-position: 8px 6px, 0 0, 0 0;
+  background-repeat: repeat, no-repeat, repeat;
+  mask-image: radial-gradient(ellipse 70% 80% at 0% 0%, #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 0% 0%, #000 0%, transparent 70%);
+}
+
+/* El puntillado de la esquina y las tres flechas ">>>" de sus piezas. */
+.puntillado {
+  pointer-events: none;
+  background-image: radial-gradient(circle, color-mix(in oklab, var(--color-rojo) 70%, transparent) 1.2px, transparent 1.8px);
+  background-size: 14px 14px;
+}
+
+.chevrones {
+  display: inline-flex;
+  gap: 0.2em;
+}
+
+.chevrones > span {
+  display: block;
+  width: 0.9em;
+  height: 1.1em;
+  background-color: currentColor;
+  clip-path: polygon(0 0, 45% 0, 100% 50%, 45% 100%, 0 100%, 55% 50%);
+}
+
+.chevrones > span:nth-child(1) {
+  opacity: 0.35;
+}
+
+.chevrones > span:nth-child(2) {
+  opacity: 0.6;
 }
 
 /* --------------------------------------------------------------------------
@@ -685,7 +729,7 @@ body:has(main.puerta) .footer-foot {
 
 .insignia-edicion {
   display: inline-block;
-  transform: skewX(var(--angulo-dn));
+  transform: skewX(var(--angulo-ls));
   border-radius: 9999px;
   border: 1px solid color-mix(in oklab, var(--color-base-content) 30%, transparent);
   background-image: linear-gradient(
@@ -702,7 +746,7 @@ body:has(main.puerta) .footer-foot {
 
 .insignia-edicion > * {
   display: inline-block;
-  transform: skewX(calc(var(--angulo-dn) * -1));
+  transform: skewX(calc(var(--angulo-ls) * -1));
 }
 
 /* El sello de rebaja. Va girado, como el adhesivo de una caja. */
@@ -711,14 +755,14 @@ body:has(main.puerta) .footer-foot {
   border-radius: 9999px;
   background-image: linear-gradient(
     140deg,
-    var(--color-naranja-claro),
-    var(--color-naranja) 55%,
-    var(--color-naranja-hondo)
+    var(--color-rojo-claro),
+    var(--color-rojo) 55%,
+    var(--color-rojo-hondo)
   );
-  color: oklch(16% 0.03 46);
+  color: #fff;
   box-shadow:
-    0 0 0 3px color-mix(in oklab, var(--color-naranja) 25%, transparent),
-    0 14px 30px -12px color-mix(in oklab, var(--color-naranja) 70%, transparent);
+    0 0 0 3px color-mix(in oklab, var(--color-rojo) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-rojo) 70%, transparent);
 }
 
 /* Cada cosa que trae la edición, como una línea de contenido descargable. */
@@ -734,7 +778,7 @@ body:has(main.puerta) .footer-foot {
 
 .linea-dlc:hover {
   transform: translateX(4px);
-  border-color: color-mix(in oklab, var(--color-naranja) 55%, transparent);
+  border-color: color-mix(in oklab, var(--color-rojo) 55%, transparent);
   background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
 }
 
@@ -742,14 +786,14 @@ body:has(main.puerta) .footer-foot {
 .resplandor {
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--color-base-content) 14%, transparent),
-    0 0 70px -14px color-mix(in oklab, var(--color-naranja) 55%, transparent);
+    0 0 70px -14px color-mix(in oklab, var(--color-rojo) 55%, transparent);
 }
 
 /* --------------------------------------------------------------------------
  * Tarjetas
  *
  * Nada de cristal ni de sombras pesadas: una línea finísima sobre el negro y
- * un filo naranja que aparece al pasar por encima. El peso visual lo tiene la
+ * un filo rojo que aparece al pasar por encima. El peso visual lo tiene la
  * unidad, que ya viene con la gráfica de la casa impresa.
  * ------------------------------------------------------------------------ */
 
@@ -767,11 +811,11 @@ body:has(main.puerta) .footer-foot {
 
 .ficha:hover {
   transform: translateY(-4px);
-  border-color: color-mix(in oklab, var(--color-naranja) 60%, transparent);
+  border-color: color-mix(in oklab, var(--color-rojo) 60%, transparent);
   box-shadow: 0 26px 60px -30px #000;
 }
 
-/* El filo naranja del borde inferior, que solo crece al pasar por encima. */
+/* El filo rojo del borde inferior, que solo crece al pasar por encima. */
 .ficha::after {
   content: "";
   position: absolute;
@@ -782,9 +826,9 @@ body:has(main.puerta) .footer-foot {
   border-bottom-right-radius: var(--radius-box);
   background-image: linear-gradient(
     to right,
-    var(--color-naranja-hondo),
-    var(--color-naranja) 50%,
-    var(--color-naranja-claro)
+    var(--color-rojo-hondo),
+    var(--color-rojo) 50%,
+    var(--color-rojo-claro)
   );
   transform: scaleX(0);
   transform-origin: left;
@@ -848,11 +892,11 @@ header.con-fondo {
  * Botones
  *
  * En la itálica condensada de la casa, mayúsculas y muy espaciados. Se pensó
- * en sesgarlos como las alas, y se descartó: un `skewX` sobre el botón inclina
+ * en sesgarlos como las bandas, y se descartó: un `skewX` sobre el botón inclina
  * también su texto, que YA viene inclinado por la itálica, y el resultado eran
  * dos pendientes distintas peleándose. El sesgo se queda donde se lee bien
  * —las etiquetas, las pastillas— y el botón se gana la marca por la tipografía
- * y por el degradado naranja del emblema.
+ * y por el rojo de la estrella.
  * ------------------------------------------------------------------------ */
 
 .btn {
@@ -868,19 +912,19 @@ header.con-fondo {
 .btn-primary {
   background-image: linear-gradient(
     100deg,
-    var(--color-naranja-hondo),
-    var(--color-naranja) 55%,
-    var(--color-naranja-claro)
+    var(--color-rojo-hondo),
+    var(--color-rojo) 55%,
+    var(--color-rojo-claro)
   );
-  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-naranja) 95%, transparent);
+  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-rojo) 95%, transparent);
 }
 
 .btn-primary:hover {
   background-image: linear-gradient(
     100deg,
-    var(--color-naranja),
-    var(--color-naranja-claro) 60%,
-    var(--color-naranja-claro)
+    var(--color-rojo),
+    var(--color-rojo-claro) 60%,
+    var(--color-rojo-claro)
   );
 }
 
@@ -931,8 +975,8 @@ header.con-fondo {
 }
 
 .entrada:focus {
-  border-color: var(--color-naranja);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-naranja) 22%, transparent);
+  border-color: var(--color-rojo);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-rojo) 22%, transparent);
 }
 
 /* Los desplegables nativos heredan el fondo del sistema en sus opciones, que
@@ -977,7 +1021,7 @@ header.con-fondo {
   background: var(--color-base-300);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-naranja);
+  background: var(--color-rojo);
 }
 
 /* Quien pide menos movimiento, no lo tiene. */

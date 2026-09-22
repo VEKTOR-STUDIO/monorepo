@@ -1,7 +1,7 @@
 /** Mapa del sitio. Las fichas de cada unidad entran solas: next-sitemap recorre
  *  la salida del build, que ya las pregenera una por una. */
 module.exports = {
-  siteUrl: process.env.SITE_URL || "https://dealernautacars.com",
+  siteUrl: process.env.SITE_URL || "https://lonestarallinautos.com",
   generateRobotsTxt: true,
   exclude: [
     "/twitter-image",

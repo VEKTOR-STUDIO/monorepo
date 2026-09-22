@@ -1,47 +1,49 @@
 // -----------------------------------------------------------------------------
-// Configuración de DealerNauta Cars.
+// Configuración de Lone Star All In Autos.
 //
-// Todo lo de aquí sale de sus DOS cuentas de Instagram, que es lo único que
-// mandó el cliente:
+// Todo lo de aquí sale de su cuenta de Instagram, @lonestarallinautos: la foto
+// de perfil y cinco publicaciones, guardadas en public/marca/. No hay más
+// material, y lo que no dicen ahí no se inventa aquí.
 //
-//   · @dealernautacars (68,4 mil seguidores, 1.107 publicaciones)
-//       "Concesionario | Venta | Compra | Consignación | Camiones"
-//       "Camiones usados y nuevos · N.º 1 en venta de camiones a nivel
-//        nacional · San Antonio de los Altos - Miranda"
-//       Enlace de la bio: wa.me/584142097517
+//   · El emblema: "LONE STAR · ALL IN AUTOS" bajo una estrella blanca y roja,
+//     y debajo sus tres verbos, "COMPRAMOS | REPARAMOS | EXPORTAMOS".
+//   · La frase: "Tu vehículo, nuestro compromiso".
+//   · El destino: "Envíos a toda Latinoamérica", con las banderas de
+//     Venezuela, Panamá y Colombia.
+//   · El contacto: +1 (281) 692-8067, por WhatsApp o por DM.
+//   · El proceso, en cinco pasos: compra en subasta → transporte → reparación
+//     y acondicionamiento → trámites y aduanas → envío a tu país.
+//   · Los pagos: Zelle, ACH, wire, efectivo en oficina y monedas electrónicas
+//     (USDT TRC20, Cash App, PayPal). Todos en USD.
 //
-//   · @dealernautacarsccs — la sede de Caracas, Los Chaguaramos.
-//       Sus publicaciones repiten tres frases: "Tu dealer de vehículos y
-//       camiones", "Tu vehículo soñado convertido en realidad" y "+6 años
-//       siendo el N.º 1 en el mercado". Contacto: 0424-1388112.
+// No es un concesionario con salón: es un comprador en las subastas de
+// Estados Unidos (Texas) que repara y exporta. Por eso la web no habla de
+// "sedes" ni de "0 km", sino de lotes en subasta, millas, daño primario y
+// "Run & Drive", que es como lo escriben ellos.
 //
-// La gráfica de la casa es la de esas publicaciones y la del logotipo:
-// NARANJA sobre NEGRO, con la plata del emblema como tercer color; cielo
-// naranja degradado, el perfil de la ciudad recortado al fondo, asfalto abajo
-// y titulares en condensada muy pesada. El logo son dos alas cruzadas con el
-// perfil de un deportivo dentro, así que la web usa arcos y no esquinas duras.
+// La gráfica es la de su emblema: NEGRO profundo, ROJO de la estrella y BLANCO
+// del rótulo, con el resplandor rojo, el piso mojado y el puerto con
+// contenedores al fondo. En dos piezas usan además el azul marino de la
+// bandera de Texas; aquí queda como acento, no como tema.
 //
 // PENDIENTE (antes de entregarla):
 //   · `domainName` / `siteUrl` — no tienen dominio propio todavía.
-//   · El correo que aparece en sus publicaciones no se lee bien en la captura;
-//     hay que pedírselo antes de publicarlo.
-//   · El inventario de data/vehiculos.json es EN PARTE de muestra y todos los
-//     precios son de referencia: Instagram no deja leer las publicaciones una
-//     a una. Ver data/vehiculos.json y el aviso de la portada.
-//   · Las fotos: no hay ninguna. Cada ficha se dibuja con la plantilla de sus
-//     propias publicaciones (components/PlantillaPublicacion.js) hasta que
-//     carguen las suyas.
+//   · La ciudad exacta y la dirección de la oficina: el 281 es Houston, pero
+//     ninguna publicación lo dice, así que la web dice "Texas, USA".
+//   · Seguidores y publicaciones de Instagram: no se pudieron leer.
+//   · El inventario de data/vehiculos.json es EN SU MAYORÍA de muestra: solo
+//     la Tacoma y el Corolla salen de sus publicaciones. Ver ese archivo.
 // -----------------------------------------------------------------------------
 
 const config = {
-  appName: "DealerNauta Cars",
+  appName: "Lone Star All In Autos",
   appDescription:
-    "Concesionario en Caracas y San Antonio de los Altos: vehículos 0 km, usados en perfectas condiciones y camiones nuevos y usados. Venta, compra y consignación.",
-  domainName: "dealernautacars.com",
+    "Compramos en las subastas de Estados Unidos, reparamos y exportamos tu vehículo a Venezuela, Panamá, Colombia y toda Latinoamérica. Desde Texas.",
+  domainName: "lonestarallinautos.com",
   siteUrl:
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
-      : process.env.SITE_URL || "https://dealernautacars.com",
+      : process.env.SITE_URL || "https://lonestarallinautos.com",
 
   crisp: {
     id: "",
@@ -49,124 +51,180 @@ const config = {
   },
 
   resend: {
-    fromNoReply: `DealerNauta Cars <noreply@dealernautacars.com>`,
-    fromAdmin: `DealerNauta Cars <contacto@dealernautacars.com>`,
+    fromNoReply: `Lone Star All In Autos <noreply@lonestarallinautos.com>`,
+    fromAdmin: `Lone Star All In Autos <contacto@lonestarallinautos.com>`,
     supportEmail: "",
   },
 
   colors: {
     // Tema único oscuro, definido en app/globals.css.
-    theme: "dealernauta",
-    // El naranja del emblema. Cambiarlo también en --color-primary de
+    theme: "lonestar",
+    // El rojo de la estrella. Cambiarlo también en --color-primary de
     // globals.css.
-    main: "#F07423",
+    main: "#E3161E",
   },
 
   business: {
-    nombre: "DealerNauta Cars",
-    razonSocial: "DealerNauta Cars",
+    nombre: "Lone Star All In Autos",
+    razonSocial: "Lone Star All In Autos",
 
-    // El WhatsApp que ellos mismos publican en el enlace de la bio de
-    // @dealernautacars. En modo demo NO se usa: libs/demo.js lo corta para que
-    // un desconocido probando la página no le escriba al negocio real.
-    whatsapp: "584142097517",
-    whatsappVisible: "0414-2097517",
+    // El número que va impreso en el emblema y en todas sus piezas. En modo
+    // demo NO se usa: libs/demo.js lo corta para que un desconocido probando
+    // la página no le escriba al negocio real.
+    whatsapp: "12816928067",
+    whatsappVisible: "+1 (281) 692-8067",
 
-    // La cuenta grande manda; la de Caracas va como segunda.
-    instagram: "dealernautacars",
-    instagramUrl: "https://www.instagram.com/dealernautacars/",
-    instagramCaracas: "dealernautacarsccs",
-    instagramCaracasUrl: "https://www.instagram.com/dealernautacarsccs/",
-    seguidores: "68,4 K",
-    publicaciones: "1.107",
+    instagram: "lonestarallinautos",
+    instagramUrl: "https://www.instagram.com/lonestarallinautos/",
 
-    // Dos sedes, y es lo que de verdad los distingue: una para vehículos en
-    // Caracas y otra para camiones en los Altos mirandinos. Cada una tiene su
-    // cuenta de Instagram y su teléfono, así que la web las separa igual.
+    // Una sola base: la oficina y el taller en Texas. Se deja como lista para
+    // que el día que abran una segunda base baste con añadirla aquí.
     sedes: [
       {
-        slug: "caracas",
-        nombre: "Caracas",
-        zona: "Los Chaguaramos",
-        estado: "Distrito Capital",
-        direccion: "Los Chaguaramos, Caracas",
-        telefono: "0424-1388112",
-        // Mismo número en formato internacional, para wa.me.
-        whatsapp: "584241388112",
-        instagram: "dealernautacarsccs",
-        instagramUrl: "https://www.instagram.com/dealernautacarsccs/",
+        slug: "texas",
+        nombre: "Texas",
+        zona: "Texas, USA",
+        estado: "Estados Unidos",
+        direccion: "Texas, USA",
+        telefono: "+1 (281) 692-8067",
+        whatsapp: "12816928067",
+        instagram: "lonestarallinautos",
+        instagramUrl: "https://www.instagram.com/lonestarallinautos/",
         resumen:
-          "El salón de vehículos: 0 km recién llegados y usados en perfectas condiciones, revisados antes de salir a la venta.",
+          "Donde se puja, se recibe, se repara y se prepara la exportación de cada unidad.",
+      },
+    ],
+
+    // A dónde mandan, tal como salen las banderas en su emblema. "Y toda
+    // Latinoamérica" es literal: el emblema dice "Envíos a toda
+    // Latinoamérica".
+    destinos: [
+      { slug: "venezuela", nombre: "Venezuela", bandera: "ve" },
+      { slug: "panama", nombre: "Panamá", bandera: "pa" },
+      { slug: "colombia", nombre: "Colombia", bandera: "co" },
+    ],
+    destinosNota: "y toda Latinoamérica",
+
+    ciudad: "Texas",
+    estado: "Texas",
+    pais: "US",
+    direccion: "Texas, USA",
+    direccionLarga: "Texas, USA · envíos a toda Latinoamérica",
+    horario: "Atención por WhatsApp y DM",
+
+    // La frase del emblema, y la que manda en la portada.
+    tagline: "Tu vehículo, nuestro compromiso",
+    lema: "Compramos · Reparamos · Exportamos",
+    // El remate de la pieza del Corolla.
+    remate: "USA → tu país, en manos de expertos",
+
+    // Los tres verbos del emblema, con lo que cada uno quiere decir en sus
+    // publicaciones.
+    servicios: [
+      {
+        slug: "compramos",
+        titulo: "Compramos",
+        detalle:
+          "Pujamos por ti en las subastas de Estados Unidos: buscamos, revisamos el reporte y pujamos con estrategia para llegar al mejor precio.",
       },
       {
-        slug: "san-antonio",
-        nombre: "San Antonio de los Altos",
-        zona: "San Antonio de los Altos",
-        estado: "Miranda",
-        direccion: "San Antonio de los Altos, Miranda",
-        telefono: "0414-2097517",
-        whatsapp: "584142097517",
-        instagram: "dealernautacars",
-        instagramUrl: "https://www.instagram.com/dealernautacars/",
-        resumen:
-          "La sede de camiones: unidades nuevas y usadas, el flanco con el que son el N.º 1 a nivel nacional.",
+        slug: "reparamos",
+        titulo: "Reparamos",
+        detalle:
+          "La unidad llega a nuestro taller en Texas y sale reparada y acondicionada, lista para viajar.",
+      },
+      {
+        slug: "exportamos",
+        titulo: "Exportamos",
+        detalle:
+          "Trámites, aduana y envío a tu país. Venezuela, Panamá, Colombia y toda Latinoamérica.",
       },
     ],
 
-    // Se conservan por compatibilidad con el esquema de SEO y el pie, que
-    // necesitan una sola dirección. Apuntan a la sede principal.
-    ciudad: "Caracas",
-    estado: "Distrito Capital",
-    direccion: "Los Chaguaramos, Caracas",
-    direccionLarga: "Los Chaguaramos, Caracas · San Antonio de los Altos, Miranda",
-    horario: "Lunes a sábado · atención en las dos sedes y por WhatsApp",
-
-    // La frase que más repiten en sus publicaciones, y la que manda en la
-    // portada.
-    tagline: "Tu vehículo soñado convertido en realidad",
-    lema: "Tu dealer de vehículos y camiones",
-    // El sello que llevan impreso en casi todas las piezas.
-    trayectoria: "+6 años siendo el N.º 1 en el mercado",
-    // Lo que dice el arco del logotipo, palabra por palabra.
-    arcoLogo: "Compra · Venta · Consignación",
-
-    servicios: [
-      "Venta de vehículos 0 km y usados",
-      "Camiones nuevos y usados",
-      "Compra de tu vehículo",
-      "Consignación",
+    // Lo que ofrecen alrededor de la subasta, palabra por palabra de su pieza
+    // "¿Tienes dudas cómo funcionan las subastas?".
+    subastas: [
+      "Acceso a las mejores subastas de USA",
+      "Búsqueda y selección del mejor vehículo para ti",
+      "Pujas estratégicas para obtener el mejor precio",
+      "Proceso 100 % transparente y confiable",
+      "Transporte y exportación a Latinoamérica",
     ],
 
-    // Las marcas que desfilan en la cabecera de sus publicaciones.
-    marcasQueMueven: [
-      "Toyota",
-      "Chevrolet",
-      "Ford",
-      "Mitsubishi",
-      "Mack",
-      "Iveco",
-      "Suzuki",
-    ],
+    // De su pieza "¿Quieres invertir en vehículos?".
+    inversion: {
+      titulo: "¿Quieres invertir en vehículos?",
+      bajada: "Compra en subasta y obtén grandes ganancias",
+      puntos: ["Mejores precios", "Alta demanda", "Inversión segura", "Gran rentabilidad"],
+    },
+
+    // De su pieza "FAQ · Métodos de pago".
+    pagos: {
+      nota: "Todos los pagos deben realizarse en USD.",
+      metodos: [
+        {
+          slug: "zelle",
+          nombre: "Zelle",
+          detalle: "Rápido, seguro y directo desde tu banco. Ideal para pagos en USD.",
+          sellos: ["Rápido", "Seguro", "Confiable"],
+        },
+        {
+          slug: "ach",
+          nombre: "ACH",
+          detalle: "Transferencia electrónica entre cuentas bancarias en USA. Segura y con tarifas bajas.",
+          sellos: ["Seguro", "Confiable", "Económico"],
+        },
+        {
+          slug: "wire",
+          nombre: "Transferencia wire",
+          detalle: "Transferencias internacionales rápidas y seguras. Ideal para pagos grandes.",
+          sellos: ["Rápido", "Seguro", "Global"],
+        },
+        {
+          slug: "efectivo",
+          nombre: "Efectivo",
+          detalle: "En nuestras oficinas. Consulta los detalles con nuestro equipo.",
+          sellos: ["Seguro", "Directo", "Confiable"],
+        },
+        {
+          slug: "cripto",
+          nombre: "Monedas electrónicas",
+          detalle: "USDT (TRC20), Cash App, PayPal y otras. Rápido, seguro y conveniente.",
+          sellos: ["Rápido", "Moderno", "Seguro"],
+        },
+      ],
+    },
+
+    // Las marcas que salen en sus piezas. Por ahora todas son Toyota: el
+    // emblema pone una Tundra, una RAV4 y un Camry, y las publicaciones son de
+    // una Tacoma y dos Corolla.
+    marcasQueMueven: ["Toyota"],
   },
 
-  // Cómo se cierra una compra. Es el recorrido que hoy hacen entre el
-  // Instagram, el WhatsApp y las dos sedes, puesto por escrito.
+  // Cómo se trae un vehículo, tal como lo dibujan en la pieza del Corolla:
+  // cinco pasos, de la subasta a tu país.
   compra: {
     pasos: [
       {
-        titulo: "Eliges la unidad",
+        titulo: "Compra en subasta",
         detalle:
-          "Cada ficha lleva año, kilometraje, motor y condición. Sabes si es 0 km, usado o camión antes de escribir.",
+          "Eliges la unidad —o nos dices qué buscas— y pujamos por ti en las subastas de Estados Unidos.",
       },
       {
-        titulo: "La ves en la sede",
-        detalle:
-          "Vehículos en Los Chaguaramos, Caracas. Camiones en San Antonio de los Altos. Se prueba, se revisa y se lleva al taller de tu confianza.",
+        titulo: "Transporte",
+        detalle: "Del patio de la subasta a nuestro taller en Texas.",
       },
       {
-        titulo: "Se cierra el trato",
-        detalle:
-          "Compra directa, parte de pago con tu vehículo o consignación. Acompañamiento en el traspaso hasta que quede a tu nombre.",
+        titulo: "Reparación y acondicionamiento",
+        detalle: "Se repara el daño que traiga y se prepara para el viaje.",
+      },
+      {
+        titulo: "Trámites y aduanas",
+        detalle: "Papeles de exportación y aduana, de nuestro lado.",
+      },
+      {
+        titulo: "Envío a tu país",
+        detalle: "Sale en barco hacia Venezuela, Panamá, Colombia o el país que nos digas.",
       },
     ],
   },
@@ -179,10 +237,10 @@ const config = {
   // ---------------------------------------------------------------------------
   // Modo demo
   //
-  // Esta página se le enseña a DealerNauta Cars antes de vendérsela. Con el
-  // modo demo activo se ve casi todo, pero no se puede USAR: hay que pasar una
-  // puerta con contraseña, el inventario se corta a mitad y el contacto no sale
-  // hacia ningún teléfono real.
+  // Esta página se le enseña a Lone Star antes de vendérsela. Con el modo demo
+  // activo se ve casi todo, pero no se puede USAR: hay que pasar una puerta con
+  // contraseña, el inventario se corta a mitad y el contacto no sale hacia
+  // ningún teléfono real.
   //
   // Se apaga con NEXT_PUBLIC_DEMO=false en el entorno, que es lo que hay que
   // hacer el día que el sistema se entregue.
@@ -212,19 +270,20 @@ const config = {
     urlCompra: "",
     textoBoton: "Quiero esta página",
 
-    // Cuántos vehículos se ven nítidos en /vehiculos antes del muro.
+    // Cuántas unidades se ven nítidas en /vehiculos antes del muro.
     elementosVisibles: 6,
 
-    // Lo que se lleva quien lo compre. Sale en el bloque de venta.
+    // Lo que se lleva quien lo compre. Sale en la puerta y en el bloque de
+    // venta.
     incluye: [
-      "Tu inventario completo en la web, con ficha propia para cada unidad",
-      "Vehículos y camiones separados, que es como vendes tú en tus dos cuentas",
-      "Tus dos sedes con su teléfono y su Instagram, cada una en su sitio",
-      "Buscador con filtros por tipo, condición, marca, año y precio",
-      "Cada unidad se comparte con su enlace directo, listo para el post",
+      "Tus lotes en subasta con millas, daño primario y Run & Drive a la vista",
+      "Los modelos que traes a pedido, con su precio desde",
+      "Ficha propia por unidad, con su enlace listo para el post o el estado",
+      "Los cinco pasos de la subasta a su país, explicados sin DM",
+      "Tus métodos de pago en USD, en una sola página",
       "Botón de WhatsApp que llega con la unidad ya escrita en el mensaje",
-      "Precio en dólares con su equivalente en bolívares a la tasa del BCV",
-      "Diseño sacado de tus publicaciones: tu naranja, tu emblema, tu asfalto",
+      "Buscador por tipo, estado, marca, año y precio",
+      "Tu estrella, tu rojo y tu puerto: la gráfica de tus publicaciones",
       "Dominio propio, el código es tuyo y no hay mensualidad",
     ],
   },

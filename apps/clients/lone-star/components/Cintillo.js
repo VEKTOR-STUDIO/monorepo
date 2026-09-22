@@ -4,8 +4,8 @@
 // Arriba de esta página conviven dos cosas distintas y el visitante tiene
 // derecho a saber cuál está leyendo:
 //
-//   · el ESCAPARATE, que le habla al comprador de un carro o de un camión;
-//   · la OFERTA, que le habla al dueño de DealerNauta Cars sobre el sistema
+//   · el ESCAPARATE, que le habla a quien quiere traer un carro de subasta;
+//   · la OFERTA, que le habla al dueño de Lone Star All In Autos sobre el sistema
 //     que se le está vendiendo.
 //
 // Entre una y otra pasa esta cinta, en Microgramma —la tipografía de la firma
@@ -18,15 +18,12 @@
 
 const MENSAJES = {
   venta: [
-    "Esto es para ti, DealerNauta",
+    "Esto es para ti, Lone Star",
     "Así se administra por dentro",
     "Lo que sigue es la oferta",
     "Tu página, tu dominio, tu código",
   ],
-  cliente: [
-    "Volvemos al escaparate",
-    "Lo que ve quien viene a comprar",
-  ],
+  cliente: ["Volvemos al escaparate", "Lo que ve quien viene a comprar"],
 
   // La puerta. Aquí el tono es de lanzamiento: es lo primero que se ve y
   // tiene que dejar claro en dos segundos que hay algo a la venta.
@@ -44,8 +41,8 @@ const MENSAJES = {
     "Dominio propio",
     "Inventario ilimitado",
     "Panel incluido",
-    "Vehículos y camiones separados",
-    "Tus dos sedes",
+    "Subasta y a pedido separados",
+    "Pagos en USD explicados",
     "Entrega en 7 días",
   ],
 };

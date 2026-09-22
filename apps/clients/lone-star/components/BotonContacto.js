@@ -7,14 +7,12 @@ import config from "@/config";
 /**
  * "Me interesa esta unidad".
  *
- * Fuera de demo abre WhatsApp con la unidad ya escrita en el mensaje y con el
- * número de LA SEDE QUE CORRESPONDE: los camiones se atienden en San Antonio de
- * los Altos y los vehículos en Caracas. Es el único paso que de verdad importa
- * en este negocio: el comprador escribe sabiendo qué pregunta, y le contesta
- * quien tiene la unidad delante.
+ * Fuera de demo abre WhatsApp con la unidad ya escrita en el mensaje: el
+ * comprador escribe sabiendo qué pregunta —ese lote, o ese modelo a pedido— y
+ * a Lone Star le llega la conversación con la mitad del trabajo hecho.
  *
- * En demo NO abre nada. No es un adorno desactivado: los dos números son
- * reales, así que si abriera, cualquiera que esté probando la demo le estaría
+ * En demo NO abre nada. No es un adorno desactivado: el número es real y va
+ * impreso en su emblema, así que si abriera, cualquiera que esté probando la demo le estaría
  * mandando mensajes falsos al negocio. En su lugar explica qué haría el sistema
  * entregado.
  *
@@ -38,8 +36,8 @@ export default function BotonContacto({
         className={className}
         onClick={() =>
           toast(
-            `En la página entregada, esto abre WhatsApp con ${
-              sede ? `${sede.nombre} (${sede.telefono})` : "el negocio"
+            `En la página entregada, esto abre WhatsApp con el ${
+              sede?.telefono || config.business.whatsappVisible
             } y el mensaje ya escrito: «${mensajePorVehiculo(vehiculo)}»`,
             { icon: "🔒", duration: 6000 }
           )

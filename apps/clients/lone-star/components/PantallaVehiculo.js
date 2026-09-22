@@ -5,14 +5,14 @@ import Escenario from "@/components/Escenario";
 import TituloAnimado from "@/components/TituloAnimado";
 import Revelar from "@/components/Revelar";
 import Parallax from "@/components/Parallax";
-import { enDolares, kilometrajeDe } from "@/libs/formato";
+import { enDolares, millajeDe } from "@/libs/formato";
 
 /**
  * Una unidad del escaparate de la portada.
  *
- * Está montada como una publicación suya puesta de lado: el modelo grande en
- * itálica a un lado, la imagen al otro, y el cielo y las alas de la casa
- * cruzando por detrás. El año va enorme y translúcido detrás del titular, que
+ * Está montada como su pieza de la Tacoma puesta de lado: el modelo grande en
+ * itálica a un lado, la imagen al otro, y la noche roja y las bandas de la
+ * casa cruzando por detrás. El año va enorme y translúcido detrás del titular, que
  * es el truco de cartel de toda la vida y aquí además informa.
  *
  * `invertido` alterna de qué lado va la foto para que cuatro seguidos no se
@@ -38,10 +38,12 @@ export default function PantallaVehiculo({
         {/* ---------------- La foto ---------------- */}
         <Revelar desde="corte" className={invertido ? "lg:order-2" : ""}>
           <Parallax desde={-5} hasta={5}>
+            {/* Sus fotos son de patio de subasta, apaisadas; la plantilla
+                dibujada es vertical, como sus piezas. */}
             <FotoVehiculo
               vehiculo={vehiculo}
               prioridad={prioridad}
-              className="aspect-4/5 w-full"
+              className={`${vehiculo.fotos?.length ? "aspect-4/3" : "aspect-4/5"} w-full`}
               sizes="(max-width: 1024px) 100vw, 45vw"
             />
           </Parallax>
@@ -55,7 +57,7 @@ export default function PantallaVehiculo({
             className="display pointer-events-none absolute -top-10 left-0 select-none text-[8rem] leading-none text-base-content/5 sm:text-[11rem] lg:-top-16"
             aria-hidden="true"
           >
-            {vehiculo.anio}
+            {vehiculo.anio || ""}
           </span>
 
           <div className="relative">
@@ -63,12 +65,14 @@ export default function PantallaVehiculo({
               <span className="bisel">
                 <span
                   className={`block px-3 py-1 text-[0.7rem] font-bold uppercase tracking-wider ${
-                    vehiculo.esNuevo
+                    vehiculo.enSubasta
                       ? "bg-primary text-primary-content"
                       : "bg-base-content/12 text-base-content"
                   }`}
                 >
-                  {vehiculo.esNuevo ? "0 km · sin rodar" : "Usado en perfectas condiciones"}
+                  {vehiculo.enSubasta
+                    ? `Unidad disponible en subasta${vehiculo.corre ? " · Run & Drive" : ""}`
+                    : "A pedido · la buscamos por ti"}
                 </span>
               </span>
             </Revelar>
@@ -80,16 +84,19 @@ export default function PantallaVehiculo({
             >
               {vehiculo.marca}
               <br />
-              <span className="text-primary">{vehiculo.modelo}</span>
+              <span className="text-primary">
+                {[vehiculo.modelo, vehiculo.version].filter(Boolean).join(" ")}
+              </span>
             </TituloAnimado>
 
             <Revelar retraso={180}>
               <p className="cifra mt-5 text-sm text-base-content/50">
                 {[
-                  vehiculo.version,
-                  kilometrajeDe(vehiculo),
+                  vehiculo.anioTexto,
+                  vehiculo.enSubasta && millajeDe(vehiculo),
+                  vehiculo.danio && `Daño ${vehiculo.danio}`,
                   vehiculo.motor,
-                  vehiculo.transmision,
+                  vehiculo.traccion,
                 ]
                   .filter(Boolean)
                   .join(" · ")}
@@ -103,12 +110,12 @@ export default function PantallaVehiculo({
             </Revelar>
 
             <Revelar retraso={300}>
-              <div className="mt-9 flex flex-wrap items-end gap-x-6 gap-y-2">
-                <p className="cifra text-4xl font-bold leading-none text-primary sm:text-5xl">
-                  {enDolares(vehiculo.precio)}
+              <div className="mt-9">
+                <p className="text-[0.7rem] uppercase tracking-wider text-base-content/45">
+                  {vehiculo.segmentoInfo.etiquetaPrecio}
                 </p>
-                <p className="text-sm text-base-content/55">
-                  {vehiculo.esCamion ? "Sede San Antonio de los Altos" : "Sede Caracas"}
+                <p className="cifra mt-1 text-4xl font-bold leading-none text-primary sm:text-5xl">
+                  {enDolares(vehiculo.precio)}
                 </p>
               </div>
 

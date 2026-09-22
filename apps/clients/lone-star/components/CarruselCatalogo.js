@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import FotoVehiculo from "@/components/FotoVehiculo";
 import { usarGsap } from "@/libs/animaciones";
-import { enDolares, kilometrajeDe } from "@/libs/formato";
+import { enDolares, millajeDe } from "@/libs/formato";
 
 // -----------------------------------------------------------------------------
 // El inventario, de lado.
@@ -37,52 +37,49 @@ export default function CarruselCatalogo({ vehiculos }) {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      mm.add(
-        "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
-        () => {
-          // Cuánto le sobra a la pista por la derecha. Se recalcula en cada
-          // `refresh` —con invalidateOnRefresh— porque al cambiar el ancho de
-          // la ventana cambian las dos medidas a la vez.
-          const recorrido = () =>
-            Math.max(0, pista.current.scrollWidth - seccion.current.offsetWidth);
+      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
+        // Cuánto le sobra a la pista por la derecha. Se recalcula en cada
+        // `refresh` —con invalidateOnRefresh— porque al cambiar el ancho de
+        // la ventana cambian las dos medidas a la vez.
+        const recorrido = () =>
+          Math.max(0, pista.current.scrollWidth - seccion.current.offsetWidth);
 
-          const desfile = gsap.to(pista.current, {
-            x: () => -recorrido(),
+        const desfile = gsap.to(pista.current, {
+          x: () => -recorrido(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: seccion.current,
+            pin: true,
+            scrub: 0.6,
+            start: "top top",
+            // El alto que se "gasta" bajando es el mismo que hay que
+            // recorrer de lado, más una pantalla de margen para que la
+            // última ficha se quede un momento a la vista.
+            end: () => `+=${recorrido() + window.innerHeight * 0.6}`,
+            invalidateOnRefresh: true,
+            anticipatePin: 1,
+          },
+        });
+
+        // La barrita de abajo va contando lo mismo que el desfile.
+        gsap.fromTo(
+          barra.current,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
             ease: "none",
             scrollTrigger: {
               trigger: seccion.current,
-              pin: true,
-              scrub: 0.6,
               start: "top top",
-              // El alto que se "gasta" bajando es el mismo que hay que
-              // recorrer de lado, más una pantalla de margen para que la
-              // última ficha se quede un momento a la vista.
               end: () => `+=${recorrido() + window.innerHeight * 0.6}`,
+              scrub: 0.6,
               invalidateOnRefresh: true,
-              anticipatePin: 1,
             },
-          });
+          }
+        );
 
-          // La barrita de abajo va contando lo mismo que el desfile.
-          gsap.fromTo(
-            barra.current,
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: seccion.current,
-                start: "top top",
-                end: () => `+=${recorrido() + window.innerHeight * 0.6}`,
-                scrub: 0.6,
-                invalidateOnRefresh: true,
-              },
-            }
-          );
-
-          return () => desfile.kill();
-        }
-      );
+        return () => desfile.kill();
+      });
     }, seccion);
 
     // Las fotos entran después del primer cálculo y cambian el ancho de la
@@ -114,8 +111,8 @@ export default function CarruselCatalogo({ vehiculos }) {
             <span className="text-primary"> completo</span>
           </h2>
           <p className="mt-4 max-w-md text-sm leading-relaxed text-base-content/55 lg:text-base">
-            Las {vehiculos.length} unidades, una por una: vehículos y camiones.{" "}
-            <span className="hidden lg:inline">Sigue bajando y desfilan solas.</span>
+            Las {vehiculos.length} unidades, una por una: lo que está en subasta y lo que traemos a
+            pedido. <span className="hidden lg:inline">Sigue bajando y desfilan solas.</span>
             <span className="lg:hidden">Arrastra para verlas.</span>
           </p>
         </div>
@@ -139,16 +136,16 @@ export default function CarruselCatalogo({ vehiculos }) {
                   sizes="(max-width: 640px) 16rem, (max-width: 1024px) 18rem, 20rem"
                 />
 
-                {/* Nada encima de la imagen: las cuatro esquinas de sus
-                    publicaciones ya están ocupadas. La condición va debajo. */}
+                {/* Nada encima de la imagen: la plantilla ya lleva sus datos
+                    escritos. Lo que se compara va debajo. */}
                 <div className="p-4">
                   <div className="flex items-center gap-2">
                     <span
                       className={`shrink-0 px-2 py-0.5 text-[0.55rem] font-bold uppercase tracking-wider ${
-                        vehiculo.esNuevo ? "pastilla" : "pastilla pastilla-apagada"
+                        vehiculo.enSubasta ? "pastilla" : "pastilla pastilla-apagada"
                       }`}
                     >
-                      {vehiculo.esNuevo ? "0 km" : "Usado"}
+                      {vehiculo.segmentoInfo.corto}
                     </span>
                     <p className="display-recto min-w-0 truncate text-xs tracking-wide text-base-content/60">
                       {vehiculo.tituloLargo}
@@ -160,7 +157,7 @@ export default function CarruselCatalogo({ vehiculos }) {
                       {enDolares(vehiculo.precio)}
                     </p>
                     <p className="cifra shrink-0 text-[0.65rem] text-base-content/40">
-                      {kilometrajeDe(vehiculo)}
+                      {vehiculo.enSubasta ? millajeDe(vehiculo) : "desde"}
                     </p>
                   </div>
                 </div>
@@ -174,7 +171,7 @@ export default function CarruselCatalogo({ vehiculos }) {
             >
               <span className="display text-3xl text-primary">Ver todo el inventario</span>
               <span className="text-sm text-base-content/55">
-                Con filtros por vehículo o camión, condición, marca y precio.
+                Con filtros por subasta o a pedido, tipo, marca, año y precio.
               </span>
               <span className="btn btn-primary mt-2">Entrar al inventario</span>
             </Link>

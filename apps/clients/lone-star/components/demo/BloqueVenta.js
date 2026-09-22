@@ -31,9 +31,9 @@ export default function BloqueVenta() {
 
         <Revelar retraso={140}>
           <p className="mx-auto mt-6 max-w-lg text-center leading-relaxed text-base-content/60">
-            No es una maqueta: es una página real funcionando, hecha con tu emblema, tu
-            naranja y la gráfica de tus publicaciones. Lo que falta por poner es tu
-            inventario real, tus precios, tus fotos y tu dominio.
+            No es una maqueta: es una página real funcionando, hecha con tu estrella, tu
+            rojo y la gráfica de tus publicaciones. Lo que falta por poner son tus lotes
+            de esta semana, sus pujas, sus fotos y tu dominio.
           </p>
         </Revelar>
 

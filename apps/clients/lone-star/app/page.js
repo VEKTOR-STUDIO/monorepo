@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -6,7 +7,8 @@ import TituloAnimado from "@/components/TituloAnimado";
 import Escenario from "@/components/Escenario";
 import Parallax from "@/components/Parallax";
 import Cifra from "@/components/Cifra";
-import MarcaDealernauta from "@/components/MarcaDealernauta";
+import Bandera from "@/components/Bandera";
+import { Estrella } from "@/components/Logo";
 import FotoVehiculo from "@/components/FotoVehiculo";
 import PantallaVehiculo from "@/components/PantallaVehiculo";
 import CarruselCatalogo from "@/components/CarruselCatalogo";
@@ -31,21 +33,40 @@ import config from "@/config";
 // de caché es de sobra y ahorra leer el JSON en cada visita.
 export const revalidate = 1800;
 
+/** Los iconos de los tres verbos del emblema: el mazo, las herramientas y el buque. */
+const ICONOS = {
+  compramos: <path d="M14 4l6 6M11 7l6 6M9.5 8.5l6 6M4 20l7-7M15.5 3.5l5 5-3 3-5-5z" />,
+  reparamos: (
+    <path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 8-8-1.3-1.3a4 4 0 0 0-5-5L13 5zM3 21l6-6M7 3l4 4-2 2-4-4z" />
+  ),
+  exportamos: (
+    <path d="M3 17l2 4h14l2-4H3zM6 17V9h12v8M9 9V5h6v4M12 5V2M2 22c2-1 4-1 6 0s4 1 6 0 4-1 6 0" />
+  ),
+};
+
 export default function Inicio() {
   const vehiculos = leerVehiculos();
   const facetas = facetasDe(vehiculos);
   const demo = esDemo();
+  const { business } = config;
 
-  // El escaparate: los marcados como destacados, y si no hay, los más nuevos.
+  // El escaparate: los marcados como destacados, y si no hay, los primeros.
   const escaparate = vehiculos.filter((v) => v.destacado && v.disponible).slice(0, 4);
   const portada = escaparate[0] || vehiculos[0];
   const desde = Math.min(...vehiculos.map((v) => v.precio));
 
-  // Los dos negocios de la casa: cuántas unidades hay de cada uno y desde
-  // cuánto arranca cada lado.
+  // Los dos caminos: el lote que está en subasta o el modelo a pedido.
   const caminos = SEGMENTOS.map((segmento) => {
     const lista = filtrar(vehiculos, { segmento: segmento.slug, orden: "precio-asc" });
-    return { ...segmento, total: lista.length, desde: lista[0]?.precio, muestra: lista[0] };
+    // La foto de muestra de cada camino: la primera con foto de verdad, y si
+    // no hay, la más barata.
+    const conFoto = lista.find((v) => v.fotos?.length);
+    return {
+      ...segmento,
+      total: lista.length,
+      desde: lista[0]?.precio,
+      muestra: conFoto || lista[0],
+    };
   }).filter((c) => c.total > 0);
 
   return (
@@ -55,9 +76,9 @@ export default function Inicio() {
       <main>
         {/* ------------------------------------------------------------------
             Portada.
-            Es la escena de sus publicaciones a pantalla completa: cielo
-            naranja, la ciudad recortada, el asfalto abajo. Lo único que cambia
-            es que aquí el titular es la frase con la que se presentan.
+            Es su emblema a pantalla completa: la noche con el humo rojo, la
+            bandera arriba, el puerto al fondo y el piso mojado abajo. El
+            titular es la frase del emblema.
            ---------------------------------------------------------------- */}
         <section className="relative flex min-h-svh items-center overflow-hidden px-4 pb-16 pt-10 sm:px-6">
           <Escenario variante="portada" />
@@ -68,9 +89,9 @@ export default function Inicio() {
             <div className="min-w-0">
               <Revelar desde="izquierda">
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <MarcaDealernauta className="h-7 w-24 shrink-0 text-base-content" />
-                  <span className="cifra text-[0.65rem] tracking-[0.28em] text-base-content/45">
-                    CARACAS · SAN ANTONIO DE LOS ALTOS
+                  <Estrella className="size-6 shrink-0 text-base-content" />
+                  <span className="cifra text-[0.65rem] tracking-[0.28em] text-base-content/55">
+                    TEXAS · USA → LATINOAMÉRICA
                   </span>
                 </div>
               </Revelar>
@@ -80,21 +101,20 @@ export default function Inicio() {
                 retraso={150}
                 className="display mt-7 text-5xl leading-[0.88] sm:text-6xl lg:text-7xl xl:text-8xl"
               >
-                Tu vehículo soñado <span className="text-primary">convertido en realidad</span>
+                Tu vehículo, <span className="text-primary">nuestro compromiso</span>
               </TituloAnimado>
 
               <Revelar retraso={420}>
-                <p className="mt-7 max-w-lg text-base leading-relaxed text-base-content/60 sm:text-lg">
-                  {config.business.lema}. Unidades 0 km, usados en perfectas condiciones y
-                  camiones nuevos y usados, cada uno con su ficha completa y su precio a
-                  la vista.
+                <p className="mt-7 max-w-lg text-base leading-relaxed text-base-content/65 sm:text-lg">
+                  Compramos en las subastas de Estados Unidos, lo reparamos en Texas y lo exportamos
+                  hasta tu país. Tú eliges la unidad; nosotros nos encargamos de todo.
                 </p>
               </Revelar>
 
               <Revelar retraso={520}>
                 <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:flex-row">
                   <Link href="/vehiculos" className="btn btn-primary flex-1">
-                    Ver el inventario
+                    Ver unidades
                   </Link>
                   <BotonContacto demo={demo} className="btn btn-filo flex-1">
                     Escribir por WhatsApp
@@ -107,10 +127,9 @@ export default function Inicio() {
                   final escrito, así que sin JavaScript se leen igual.
 
                   En móvil van más pequeñas y con menos hueco a propósito: a
-                  tamaño de escritorio, "$18.900" no cabe en un tercio de 390 px
+                  tamaño de escritorio, "$11,900" no cabe en un tercio de 390 px
                   y se montaba encima de la cifra de al lado. El `min-w-0` es lo
-                  que deja a las columnas encogerse; sin él, la anchura mínima
-                  del contenido manda sobre el reparto de la rejilla. */}
+                  que deja a las columnas encogerse. */}
               <Revelar retraso={620}>
                 <dl className="mt-14 grid w-full max-w-xl grid-cols-3 gap-3 border-t border-base-content/10 pt-7 sm:gap-6">
                   <div className="min-w-0">
@@ -118,23 +137,30 @@ export default function Inicio() {
                       <Cifra valor={vehiculos.length} />
                     </dt>
                     <dd className="mt-1.5 text-[0.6rem] uppercase tracking-wider text-base-content/40 sm:text-[0.7rem]">
-                      en inventario
+                      unidades hoy
                     </dd>
                   </div>
                   <div className="min-w-0">
                     <dt className="cifra text-2xl font-bold text-primary sm:text-3xl">
-                      <Cifra valor={desde} formato="dolaresRedondos" />
+                      {enDolares(desde)}
                     </dt>
                     <dd className="mt-1.5 text-[0.6rem] uppercase tracking-wider text-base-content/40 sm:text-[0.7rem]">
                       desde
                     </dd>
                   </div>
                   <div className="min-w-0">
-                    <dt className="cifra text-2xl font-bold text-base-content sm:text-3xl">
-                      {config.business.seguidores}
+                    <dt className="flex items-center gap-1.5">
+                      {business.destinos.map((d) => (
+                        <Bandera
+                          key={d.slug}
+                          codigo={d.bandera}
+                          nombre={d.nombre}
+                          className="size-6 sm:size-7"
+                        />
+                      ))}
                     </dt>
-                    <dd className="mt-1.5 text-[0.6rem] uppercase tracking-wider text-base-content/40 sm:text-[0.7rem]">
-                      en Instagram
+                    <dd className="mt-2 text-[0.6rem] uppercase tracking-wider text-base-content/40 sm:text-[0.7rem]">
+                      y toda Latam
                     </dd>
                   </div>
                 </dl>
@@ -146,16 +172,22 @@ export default function Inicio() {
               <Revelar desde="corte" retraso={260} className="hidden lg:block">
                 <Parallax desde={-6} hasta={6}>
                   <Link href={`/vehiculo/${portada.slug}`} className="group block">
-                    <FotoVehiculo
-                      vehiculo={portada}
-                      prioridad
-                      className="aspect-4/5 w-full"
-                      sizes="45vw"
-                    />
+                    <div className="relative">
+                      <FotoVehiculo
+                        vehiculo={portada}
+                        prioridad
+                        className="aspect-4/3 w-full"
+                        sizes="45vw"
+                      />
+                      {/* La banda de "unidad disponible en subasta" de su pieza. */}
+                      {portada.enSubasta && (
+                        <span className="display absolute right-0 top-5 bg-primary py-1.5 pl-5 pr-4 text-sm text-primary-content [clip-path:polygon(0.8rem_0,100%_0,100%_100%,0_100%)]">
+                          Unidad disponible en subasta
+                        </span>
+                      )}
+                    </div>
                     <p className="display mt-4 flex items-baseline justify-between gap-4 text-lg">
-                      <span className="text-base-content/70">
-                        {portada.marca} {portada.modelo}
-                      </span>
+                      <span className="text-base-content/75">{portada.nombreCompleto}</span>
                       <span className="cifra text-xl font-bold text-primary">
                         {enDolares(portada.precio)}
                       </span>
@@ -186,14 +218,53 @@ export default function Inicio() {
         </section>
 
         {/* ------------------------------------------------------------------
+            Los tres verbos del emblema, uno por columna. Es lo primero que
+            dice su logotipo y lo primero que hay que entender: no venden
+            carros de un salón, los traen.
+           ---------------------------------------------------------------- */}
+        <section className="relative overflow-hidden border-t border-base-content/8 bg-base-200 px-4 py-16 sm:px-6">
+          <div className="textura absolute inset-0" aria-hidden="true" />
+          <div className="relative mx-auto grid max-w-7xl gap-px overflow-hidden border border-base-content/10 bg-base-content/10 md:grid-cols-3">
+            {business.servicios.map((servicio, i) => (
+              <Revelar key={servicio.slug} retraso={i * 120} className="bg-base-200">
+                <div className="flex h-full gap-5 p-7 sm:p-8">
+                  <span
+                    className="grid size-12 shrink-0 place-items-center rounded-full border border-base-content/25 text-base-content"
+                    aria-hidden="true"
+                  >
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      {ICONOS[servicio.slug]}
+                    </svg>
+                  </span>
+                  <div className="min-w-0">
+                    <h2 className="display text-3xl">{servicio.titulo}</h2>
+                    <p className="mt-3 text-sm leading-relaxed text-base-content/60">
+                      {servicio.detalle}
+                    </p>
+                  </div>
+                </div>
+              </Revelar>
+            ))}
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
             El inventario entero, desfilando de lado.
            ---------------------------------------------------------------- */}
         <CarruselCatalogo vehiculos={vehiculos} />
 
         {/* ------------------------------------------------------------------
-            Los dos caminos: vehículos o camiones. Es el corte que de verdad
-            hace este negocio —dos sedes, dos cuentas de Instagram— y la
-            primera pregunta de cualquiera que llega.
+            Los dos caminos: el lote que ya está en subasta, o el modelo que
+            se busca a pedido. Es la primera pregunta de cualquiera que llega.
            ---------------------------------------------------------------- */}
         <section className="relative overflow-hidden border-t border-base-content/8 px-4 py-24 sm:px-6">
           <Escenario variante="seccion" />
@@ -206,7 +277,7 @@ export default function Inicio() {
             </Revelar>
 
             <TituloAnimado as="h2" className="display mt-4 text-4xl sm:text-5xl">
-              Dos negocios, una sola casa
+              La que está en subasta, <span className="text-primary">o la que tú pidas</span>
             </TituloAnimado>
 
             <div className="mt-14 grid gap-6 lg:grid-cols-2">
@@ -220,7 +291,6 @@ export default function Inicio() {
                       <FotoVehiculo
                         vehiculo={camino.muestra}
                         className="aspect-16/10 w-full"
-                        encajar="cover"
                         compacta
                         sizes="(max-width: 1024px) 100vw, 50vw"
                       />
@@ -232,13 +302,13 @@ export default function Inicio() {
 
                     <div className="flex flex-1 flex-col p-6 sm:p-7">
                       <p className="display text-3xl sm:text-4xl">
-                        {camino.slug === "camion" ? (
+                        {camino.slug === "subasta" ? (
                           <>
-                            <span className="text-primary">Camiones</span> nuevos y usados
+                            <span className="text-primary">En subasta</span> ahora
                           </>
                         ) : (
                           <>
-                            Vehículos <span className="text-primary">0 km y usados</span>
+                            <span className="text-primary">A pedido</span>, a tu medida
                           </>
                         )}
                       </p>
@@ -253,7 +323,7 @@ export default function Inicio() {
                           </p>
                           <p className="mt-1 text-[0.7rem] uppercase tracking-wider text-base-content/40">
                             desde · {camino.total}{" "}
-                            {camino.total === 1 ? "unidad" : "unidades"}
+                            {camino.total === 1 ? camino.singular : camino.plural}
                           </p>
                         </div>
                         <span
@@ -269,10 +339,10 @@ export default function Inicio() {
               ))}
             </div>
 
-            {/* Las marcas que mueven, que es la tira que encabeza sus piezas. */}
+            {/* Las marcas que hay hoy en el inventario. */}
             <Revelar retraso={180}>
               <div className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-base-content/10 pt-8">
-                <p className="rotulo">Marcas que movemos</p>
+                <p className="rotulo">Marcas de hoy</p>
                 {facetas.marcas.map((m) => (
                   <Link
                     key={m.valor}
@@ -301,51 +371,210 @@ export default function Inicio() {
         ))}
 
         {/* ------------------------------------------------------------------
-            Cómo se compra. Es el recorrido que hoy se hace entre el Instagram,
-            el WhatsApp y las dos sedes, puesto por escrito para que el
-            comprador sepa a qué atenerse.
+            Cómo funciona. Los cinco pasos de su pieza del Corolla, de la
+            subasta a tu país, puestos por escrito para que quien pregunta por
+            DM llegue con la respuesta.
            ---------------------------------------------------------------- */}
         <section
-          id="como-comprar"
+          id="como-funciona"
           className="relative overflow-hidden border-t border-base-content/8 bg-base-200 px-4 py-24 sm:px-6"
         >
           <div className="textura absolute inset-0" aria-hidden="true" />
           <div className="textura-via absolute inset-0" aria-hidden="true" />
 
-          <div className="relative mx-auto max-w-5xl">
+          <div className="relative mx-auto max-w-6xl">
             <Revelar className="text-center">
-              <p className="rotulo">Cómo comprar</p>
+              <p className="rotulo">Cómo funciona</p>
             </Revelar>
 
             <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
-              Tres pasos, sin vueltas
+              De la subasta <span className="text-primary">a tu país</span>
             </TituloAnimado>
 
-            <div className="mt-16 grid gap-8 md:grid-cols-3">
+            <Revelar retraso={140}>
+              <p className="mx-auto mt-5 max-w-xl text-center leading-relaxed text-base-content/60">
+                Compra, repara, exporta: nosotros nos encargamos de todo. {business.remate}.
+              </p>
+            </Revelar>
+
+            <ol className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-5 lg:gap-5">
               {config.compra.pasos.map((paso, i) => (
-                <Revelar key={paso.titulo} desde="giro" retraso={i * 130}>
-                  <div className="relative h-full border-t-2 border-primary/40 pt-6">
+                <Revelar
+                  key={paso.titulo}
+                  as="li"
+                  desde="giro"
+                  retraso={i * 110}
+                  className="relative h-full border-t-2 border-primary/50 pt-6"
+                >
+                  <div>
                     <span className="display absolute -top-11 left-0 text-5xl text-base-content/12">
-                      0{i + 1}
+                      {i + 1}
                     </span>
-                    <h3 className="display text-xl">{paso.titulo}</h3>
+                    <h3 className="display text-xl leading-tight">{paso.titulo}</h3>
                     <p className="mt-3 text-sm leading-relaxed text-base-content/60">
                       {paso.detalle}
                     </p>
                   </div>
                 </Revelar>
               ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            Las subastas y la inversión. Son dos piezas suyas —"¿Tienes dudas
+            cómo funcionan las subastas?" y "¿Quieres invertir en vehículos?"—
+            y aquí van juntas porque contestan lo mismo: por qué comprar en
+            subasta y no en un lote.
+           ---------------------------------------------------------------- */}
+        <section
+          id="subastas"
+          className="relative overflow-hidden border-t border-base-content/8 px-4 py-24 sm:px-6"
+        >
+          <Escenario variante="sutil" />
+          <div className="textura absolute inset-0" aria-hidden="true" />
+
+          <div className="relative mx-auto grid max-w-7xl items-center gap-14 lg:grid-cols-2 lg:gap-20">
+            <div className="min-w-0">
+              <Revelar>
+                <span className="ala" aria-hidden="true" />
+                <p className="rotulo mt-5">Las subastas</p>
+              </Revelar>
+
+              <TituloAnimado as="h2" className="display mt-4 text-4xl sm:text-5xl">
+                ¿Tienes dudas <span className="text-primary">de cómo funcionan?</span>
+              </TituloAnimado>
+
+              <Revelar retraso={140}>
+                <p className="mt-6 max-w-lg leading-relaxed text-base-content/60">
+                  Te explicamos todo el proceso paso a paso para que compres tu vehículo con
+                  seguridad y confianza. En {business.nombre} te ofrecemos:
+                </p>
+              </Revelar>
+
+              <ul className="mt-8 divide-y divide-base-content/10 border-y border-base-content/10">
+                {business.subastas.map((punto, i) => (
+                  <Revelar
+                    key={punto}
+                    as="li"
+                    retraso={i * 80}
+                    className="flex items-center gap-5 py-4"
+                  >
+                    <span className="cifra shrink-0 text-xs text-primary">0{i + 1}</span>
+                    <span className="display-recto text-lg tracking-wide text-base-content/85">
+                      {punto}
+                    </span>
+                  </Revelar>
+                ))}
+              </ul>
+            </div>
+
+            {/* La inversión, con la foto del Corolla negro en el patio. */}
+            <Revelar desde="corte" retraso={120}>
+              <div className="ficha overflow-hidden">
+                <div className="relative aspect-16/10">
+                  <Image
+                    src="/vehiculos/corolla-negro.jpg"
+                    alt="Toyota Corolla negro en el patio de una subasta"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                  <div
+                    className="absolute inset-0 bg-linear-to-t from-base-200 via-transparent to-transparent"
+                    aria-hidden="true"
+                  />
+                </div>
+                <div className="p-7 sm:p-8">
+                  <p className="display text-3xl sm:text-4xl">
+                    ¿Quieres <span className="text-primary">invertir?</span>
+                  </p>
+                  <p className="display-recto mt-2 text-base tracking-wide text-base-content/70">
+                    {business.inversion.bajada}
+                  </p>
+                  <ul className="mt-6 grid grid-cols-2 gap-3">
+                    {business.inversion.puntos.map((punto) => (
+                      <li
+                        key={punto}
+                        className="flex items-center gap-2.5 text-sm text-base-content/75"
+                      >
+                        <span
+                          className="h-3 w-2 shrink-0 bg-primary"
+                          style={{ transform: "skewX(var(--angulo-ls))" }}
+                          aria-hidden="true"
+                        />
+                        {punto}
+                      </li>
+                    ))}
+                  </ul>
+                  <BotonContacto demo={demo} className="btn btn-primary mt-7 w-full">
+                    Quiero saber más
+                  </BotonContacto>
+                </div>
+              </div>
+            </Revelar>
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------------
+            Métodos de pago, de su pieza "FAQ". Es la otra pregunta que llega
+            por DM a diario, y la respuesta es corta: en USD, por cinco vías.
+           ---------------------------------------------------------------- */}
+        <section
+          id="pagos"
+          className="relative overflow-hidden border-t border-base-content/8 bg-base-200 px-4 py-24 sm:px-6"
+        >
+          <div className="textura absolute inset-0" aria-hidden="true" />
+
+          <div className="relative mx-auto max-w-6xl">
+            <Revelar className="text-center">
+              <p className="rotulo">Preguntas frecuentes</p>
+            </Revelar>
+
+            <TituloAnimado as="h2" className="display mt-4 text-center text-4xl sm:text-5xl">
+              Métodos <span className="text-primary">de pago</span>
+            </TituloAnimado>
+
+            <Revelar retraso={140}>
+              <p className="mx-auto mt-5 max-w-xl text-center leading-relaxed text-base-content/60">
+                Te ofrecemos varias opciones de pago seguras y confiables.
+              </p>
+            </Revelar>
+
+            <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {business.pagos.metodos.map((metodo, i) => (
+                <Revelar key={metodo.slug} retraso={(i % 3) * 110}>
+                  <div className="panel flex h-full flex-col p-6">
+                    <p className="display text-2xl">{metodo.nombre}</p>
+                    <p className="mt-3 flex-1 text-sm leading-relaxed text-base-content/60">
+                      {metodo.detalle}
+                    </p>
+                    <p className="cifra mt-5 border-t border-base-content/10 pt-4 text-[0.65rem] uppercase tracking-[0.2em] text-base-content/45">
+                      {metodo.sellos.join(" · ")}
+                    </p>
+                  </div>
+                </Revelar>
+              ))}
+
+              {/* El aviso de su pieza, en su sitio: la casilla que sobra. */}
+              <Revelar retraso={220}>
+                <div className="flex h-full flex-col justify-center gap-3 bg-primary p-6 text-primary-content">
+                  <p className="display text-2xl">Importante</p>
+                  <p className="text-sm leading-relaxed">
+                    {business.pagos.nota} Escríbenos y te decimos qué método se adapta mejor a ti.
+                  </p>
+                </div>
+              </Revelar>
             </div>
           </div>
         </section>
 
         {/* ------------------------------------------------------------------
-            Las dos sedes. Va con sección propia porque es lo que de verdad
-            distingue a DealerNauta: dos locales, dos cuentas y dos teléfonos,
-            uno para carros y otro para camiones.
+            A dónde mandan. Las banderas de su emblema y el número en grande,
+            como la banda de abajo de todas sus piezas.
            ---------------------------------------------------------------- */}
         <section
-          id="sedes"
+          id="destinos"
           className="relative overflow-hidden border-t border-base-content/8 px-4 py-24 sm:px-6"
         >
           <Escenario variante="seccion" />
@@ -354,108 +583,60 @@ export default function Inicio() {
           <div className="relative mx-auto max-w-6xl">
             <Revelar>
               <span className="ala" aria-hidden="true" />
-              <p className="rotulo mt-5">Dónde estamos</p>
+              <p className="rotulo mt-5">Envíos</p>
             </Revelar>
 
             <TituloAnimado as="h2" className="display mt-4 text-4xl sm:text-5xl lg:text-6xl">
-              Dos sedes, dos especialidades
+              A toda <span className="text-primary">Latinoamérica</span>
             </TituloAnimado>
 
             <Revelar retraso={180}>
               <p className="mt-6 max-w-xl leading-relaxed text-base-content/60">
-                Los vehículos se ven en Caracas y los camiones en San Antonio de los
-                Altos. Cada sede tiene su equipo, su teléfono y su cuenta, así que
-                escribes directo a quien te va a atender.
+                Salen de Texas en barco y llegan a tu país con los trámites y la aduana hechos.
+                Estos son los destinos de siempre; si el tuyo no está, pregúntanos.
               </p>
             </Revelar>
 
-            <div className="mt-14 grid gap-6 lg:grid-cols-2">
-              {config.business.sedes.map((sede, i) => (
-                <Revelar key={sede.slug} desde="corte" retraso={i * 140}>
-                  <div className="ficha flex h-full flex-col p-7 sm:p-8">
-                    <p className="rotulo">{sede.estado}</p>
-                    <h3 className="display mt-3 text-3xl sm:text-4xl">{sede.nombre}</h3>
-                    <p className="cifra mt-2 text-sm text-primary">{sede.zona}</p>
-
-                    <p className="mt-5 flex-1 leading-relaxed text-base-content/60">
-                      {sede.resumen}
-                    </p>
-
-                    <dl className="mt-7 grid grid-cols-2 gap-4 border-t border-base-content/10 pt-5">
-                      <div className="min-w-0">
-                        <dt className="text-[0.65rem] uppercase tracking-wider text-base-content/40">
-                          Teléfono
-                        </dt>
-                        <dd className="cifra mt-1 truncate text-base font-semibold text-base-content">
-                          {sede.telefono}
-                        </dd>
-                      </div>
-                      <div className="min-w-0">
-                        <dt className="text-[0.65rem] uppercase tracking-wider text-base-content/40">
-                          Instagram
-                        </dt>
-                        <dd className="mt-1 truncate text-base font-semibold">
-                          <a
-                            href={sede.instagramUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-base-content transition-colors hover:text-primary"
-                          >
-                            @{sede.instagram}
-                          </a>
-                        </dd>
-                      </div>
-                    </dl>
-
-                    <BotonContacto
-                      demo={demo}
-                      vehiculo={{ sede: sede.slug }}
-                      className="btn btn-primary mt-6 w-full"
-                    >
-                      Escribir a {sede.nombre}
-                    </BotonContacto>
+            <div className="mt-12 grid gap-4 sm:grid-cols-3">
+              {business.destinos.map((destino, i) => (
+                <Revelar key={destino.slug} desde="corte" retraso={i * 120}>
+                  <div className="ficha flex items-center gap-4 p-6">
+                    <Bandera codigo={destino.bandera} nombre={destino.nombre} className="size-11" />
+                    <div className="min-w-0">
+                      <p className="display text-2xl">{destino.nombre}</p>
+                      <p className="cifra mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-base-content/45">
+                        USA → {destino.nombre}
+                      </p>
+                    </div>
                   </div>
                 </Revelar>
               ))}
             </div>
 
-            {/* Lo que hacen, tal como lo dice el arco de su emblema. */}
             <Revelar retraso={200}>
-              <ul className="mt-12 divide-y divide-base-content/10 border-y border-base-content/10">
-                {config.business.servicios.map((servicio, i) => (
-                  <li key={servicio} className="flex items-center gap-5 py-6">
-                    <span className="cifra shrink-0 text-xs text-primary">0{i + 1}</span>
-                    <span className="display text-2xl text-base-content/85">{servicio}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <dl className="mt-8 grid grid-cols-2 gap-4">
+              <div className="panel mt-10 flex flex-col items-center gap-6 p-7 text-center sm:flex-row sm:justify-between sm:p-8 sm:text-left">
                 <div className="min-w-0">
-                  <dt className="cifra text-3xl font-bold text-base-content">
-                    {config.business.publicaciones}
-                  </dt>
-                  <dd className="mt-1 text-[0.7rem] uppercase tracking-wider text-base-content/40">
-                    publicaciones
-                  </dd>
+                  <p className="display text-3xl">
+                    ¿Tienes dudas? <span className="text-primary">Escríbenos</span>
+                  </p>
+                  <p className="cifra mt-2 text-2xl font-bold text-base-content sm:text-3xl">
+                    {business.whatsappVisible}
+                  </p>
+                  <p className="mt-1 text-sm text-base-content/50">
+                    Por WhatsApp o por DM en @{business.instagram}. Pregunta sin compromiso.
+                  </p>
                 </div>
-                <div className="min-w-0">
-                  <dt className="cifra text-3xl font-bold text-base-content">
-                    {config.business.seguidores}
-                  </dt>
-                  <dd className="mt-1 text-[0.7rem] uppercase tracking-wider text-base-content/40">
-                    seguidores
-                  </dd>
-                </div>
-              </dl>
+                <BotonContacto demo={demo} className="btn btn-primary shrink-0 px-8">
+                  Escribir por WhatsApp
+                </BotonContacto>
+              </div>
             </Revelar>
           </div>
         </section>
 
         {/* ------------------------------------------------------------------
             Aquí cambia el interlocutor: lo que viene le habla al dueño de
-            DealerNauta, no a quien vino a comprar un carro. El cintillo lo
-            avisa.
+            Lone Star, no a quien vino a traer un carro. El cintillo lo avisa.
            ---------------------------------------------------------------- */}
         {/* El panel se queda aunque se apague la demo: al comprador le explica
             por qué el inventario está al día. Lo que sí desaparece con la demo
@@ -471,22 +652,23 @@ export default function Inicio() {
             <div className="panel mx-auto max-w-3xl p-7 text-center">
               <p className="rotulo">Sobre este inventario</p>
               <p className="mt-4 text-sm leading-relaxed text-base-content/60">
-                Las {totalVerificadas()} primeras unidades salen de la cuadrícula de{" "}
+                {totalVerificadas() === 1
+                  ? "Una unidad sale"
+                  : `${totalVerificadas()} unidades salen`}{" "}
+                de tus publicaciones de{" "}
                 <a
-                  href={config.business.instagramCaracasUrl}
+                  href={business.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-medium text-primary hover:underline"
                 >
-                  @{config.business.instagramCaracas}
+                  @{business.instagram}
                 </a>
-                : son tus modelos, tus años y tus kilometrajes. El resto son unidades de
-                muestra entre las marcas que tú mueves, puestas para que la página se
-                pueda enseñar llena. Ningún precio es tuyo —tus publicaciones no llevan
-                precio—, así que todos son referencias de mercado y se sustituyen desde
-                el panel. Las fotos tampoco: Instagram no deja descargarlas, así que
-                cada ficha dibuja la plantilla de tus propias publicaciones hasta que
-                subas las tuyas.
+                : la Tacoma Off-Road 2026 en subasta, con sus fotos, sus millas y su daño, y el
+                Corolla a pedido desde $16,000. El resto son unidades de ejemplo, puestas para que
+                la página se pueda enseñar llena, y cada una lo dice en su ficha. La Tacoma no
+                publica puja, así que la suya y la de los ejemplos son referencias; al cargar las
+                tuyas desde el panel, los avisos se van solos.
               </p>
             </div>
           </section>

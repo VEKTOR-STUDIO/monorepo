@@ -1,60 +1,73 @@
-import { kilometrajeDe } from "@/libs/formato";
+import { millajeDe, enKilometrosDesdeMillas } from "@/libs/formato";
 
 /**
- * La hoja de datos del vehículo: cuatro cifras en fila, separadas por líneas
- * finas. Es lo primero que mira quien compra y lo primero que pregunta quien
- * escribe, así que va antes que cualquier texto de venta.
+ * La hoja de datos: cuatro cifras en fila, separadas por líneas finas. Es lo
+ * primero que mira quien puja y lo primero que pregunta quien escribe, así que
+ * va antes que cualquier texto de venta.
  *
- * La primera casilla es la CONDICIÓN y no el año: en este inventario conviven
- * unidades 0 km y usadas, y esa es la respuesta que todo el mundo busca antes
- * que ninguna otra.
+ * En un lote de subasta las cuatro son las de su pieza de la Tacoma: millaje,
+ * daño primario, condición y motor. En un modelo a pedido no hay ni millas ni
+ * daño —todavía no es un carro concreto—, así que ahí va lo que sí se sabe.
  *
  * La retícula y los separadores están en globals.css (.specs).
  */
 export default function Especificaciones({ vehiculo, className = "" }) {
-  const datos = [
-    { etiqueta: "Condición", valor: vehiculo.esNuevo ? "0 km" : "Usado" },
-    { etiqueta: "Año", valor: vehiculo.anio },
-    { etiqueta: "Kilometraje", valor: kilometrajeDe(vehiculo) },
-    { etiqueta: "Motor", valor: vehiculo.motor },
-  ];
+  const datos = vehiculo.enSubasta
+    ? [
+        { etiqueta: "Millaje", valor: millajeDe(vehiculo) },
+        { etiqueta: "Daño primario", valor: vehiculo.danio || "—" },
+        { etiqueta: "Condición", valor: vehiculo.condicionInfo?.nombre || "—" },
+        { etiqueta: "Motor", valor: vehiculo.motor || "—" },
+      ]
+    : [
+        { etiqueta: "Años", valor: vehiculo.anioTexto || "A elegir" },
+        { etiqueta: "Tipo", valor: vehiculo.tipo?.singular },
+        { etiqueta: "Motor", valor: vehiculo.motor || "A elegir" },
+        { etiqueta: "Entrega", valor: "En tu país" },
+      ];
 
   return (
     <dl className={`specs ${className}`}>
       {datos.map((dato) => (
-        <div key={dato.etiqueta}>
+        <div key={dato.etiqueta} className="min-w-0">
           <dt className="text-[0.7rem] uppercase tracking-wider text-base-content/40">
             {dato.etiqueta}
           </dt>
-          <dd className="cifra mt-1.5 text-lg font-semibold text-base-content">{dato.valor}</dd>
+          <dd className="cifra mt-1.5 text-base leading-snug font-semibold text-base-content">
+            {dato.valor}
+          </dd>
         </div>
       ))}
     </dl>
   );
 }
 
-/** La lista larga, para la ficha del vehículo. */
+/** La lista larga, para la ficha. Lo que no se sabe no se escribe. */
 export function EspecificacionesCompletas({ vehiculo, className = "" }) {
+  const km = enKilometrosDesdeMillas(vehiculo.millas);
+
   const datos = [
-    { etiqueta: "Condición", valor: vehiculo.condicionInfo?.nombre },
+    { etiqueta: "Estado", valor: vehiculo.segmentoInfo?.nombre },
     { etiqueta: "Marca", valor: vehiculo.marca },
     {
       etiqueta: "Modelo",
       valor: [vehiculo.modelo, vehiculo.version].filter(Boolean).join(" "),
     },
-    { etiqueta: "Año", valor: vehiculo.anio },
-    { etiqueta: "Kilometraje", valor: kilometrajeDe(vehiculo) },
+    { etiqueta: vehiculo.anio ? "Año" : "Años", valor: vehiculo.anioTexto },
+    vehiculo.enSubasta && {
+      etiqueta: "Millaje",
+      valor: km ? `${millajeDe(vehiculo)} · ${km}` : millajeDe(vehiculo),
+    },
+    { etiqueta: "Daño primario", valor: vehiculo.danioTexto },
+    { etiqueta: "Condición", valor: vehiculo.condicionInfo?.nombre },
     { etiqueta: "Motor", valor: vehiculo.motor },
     { etiqueta: "Transmisión", valor: vehiculo.transmision },
     { etiqueta: "Tracción", valor: vehiculo.traccion },
     { etiqueta: "Combustible", valor: vehiculo.combustible },
-    { etiqueta: "Puestos", valor: vehiculo.puestos },
     { etiqueta: "Color", valor: vehiculo.color },
-    { etiqueta: "Tipo", valor: vehiculo.segmentoInfo?.singular },
     { etiqueta: "Carrocería", valor: vehiculo.tipo?.singular },
-    { etiqueta: "Documentos", valor: vehiculo.documentos },
-    { etiqueta: "Sede", valor: vehiculo.ubicacion },
-  ].filter((d) => d.valor);
+    { etiqueta: "Patio de la subasta", valor: vehiculo.ubicacion },
+  ].filter((d) => d && d.valor);
 
   return (
     <dl className={`divide-y divide-base-content/10 ${className}`}>
