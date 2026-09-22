@@ -37,7 +37,7 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-// Microgramma: la tipografía de la firma de Alessandrovaru. No es del tema de
+// Microgramma: la tipografía de la firma de Vektor. No es del tema de
 // la tienda, solo se usa en el crédito de autoría (components/FooterFoot.js),
 // igual que en RollPrep y en los demás proyectos.
 const microgramma = localFont({

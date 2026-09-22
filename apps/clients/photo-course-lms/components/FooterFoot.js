@@ -1,12 +1,12 @@
-// Mini pie con el crédito de autoría. Va al pie de la pantalla de acceso
-// (app/signin/page.js), fijo abajo del todo.
+// Mini pie transversal: el crédito de autoría, al final del documento en toda
+// la web (portada, acceso, panel...). Se monta una sola vez en el layout raíz.
 //
 // La tipografía es Microgramma, la de la firma de Vektor: se declara en
 // app/layout.js como --microgramma-font.
 export default function FooterFoot() {
   return (
-    <div className="bg-base-100 border-t border-base-300 fixed bottom-0 left-0 right-0 z-50 py-2 px-4 shadow-sm">
-      <p className="text-xs md:text-sm text-base-content/80 text-center">
+    <div className="footer-foot flex min-h-6 w-full items-center justify-center border-t border-base-content/10 bg-base-100 px-4 py-1">
+      <p className="text-center text-[0.55rem] font-semibold text-base-content/50">
         Hecho por{" "}
         <a
           href="https://vektorstudio.tech/"

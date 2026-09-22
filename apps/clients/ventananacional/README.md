@@ -192,7 +192,7 @@ Entre una y otra se cruza un **cintillo animado** (`components/Cintillo.js`),
 que se pausa al pasar el ratón y se detiene entero con `prefers-reduced-motion`.
 
 La **puerta de acceso** (`/entrar`) va aparte: ahí manda la firma de
-Alessandrovaru y la marca del cliente aparece debajo, como lo que hay detrás de
+Vektor y la marca del cliente aparece debajo, como lo que hay detrás de
 la puerta. Quien llega todavía no es cliente de la concesionaria, es alguien a
 quien se le está enseñando un trabajo. Al entrar, la jerarquía se invierte.
 

@@ -9,7 +9,7 @@
 //     está vendiendo.
 //
 // Entre una y otra pasa esta cinta, en Microgramma —la tipografía de la firma
-// de Alessandrovaru— para que se lea como una voz ajena a la marca del
+// de Vektor— para que se lea como una voz ajena a la marca del
 // cliente. No es decoración: es el aviso de que cambia el interlocutor.
 //
 // El texto va duplicado a propósito; el porqué está en .cintillo-pista

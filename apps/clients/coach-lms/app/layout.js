@@ -1,4 +1,5 @@
 import { Anton, Barlow } from "next/font/google";
+import localFont from "next/font/local";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import config from "@/config";
@@ -17,6 +18,16 @@ const barlow = Barlow({
   variable: "--font-barlow",
 });
 
+// Microgramma: la tipografía de la firma de Vektor. No es del tema de la
+// página, solo se usa en el crédito de autoría (components/FooterFoot.js y
+// components/Footer.js), igual que en el resto del monorepo.
+const microgramma = localFont({
+  src: "../public/fonts/microgramma.otf",
+  variable: "--microgramma-font",
+  weight: "400",
+  display: "swap",
+});
+
 export const viewport = {
   themeColor: config.colors.main,
   width: "device-width",
@@ -30,7 +41,7 @@ export default function RootLayout({ children }) {
     <html
       lang="es"
       data-theme={config.colors.theme}
-      className={`${anton.variable} ${barlow.variable}`}
+      className={`${anton.variable} ${barlow.variable} ${microgramma.variable}`}
     >
       <head>{renderSchemaTags()}</head>
       <body className="grain font-sans antialiased bg-base-100 text-base-content">

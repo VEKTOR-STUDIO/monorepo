@@ -107,7 +107,7 @@ export default function Footer() {
             <p>
               Tienda hecha por{" "}
               <a
-                href="https://alessandrovaru.com"
+                href="https://vektorstudio.tech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="uppercase transition-colors hover:text-primary"
@@ -116,7 +116,7 @@ export default function Footer() {
                   letterSpacing: "0.1em",
                 }}
               >
-                Alessandrovaru
+                Vektor
               </a>
             </p>
           </div>

@@ -57,7 +57,7 @@ Podrás publicar actualizaciones en esta página.
 
 ${config.resend.supportEmail}
 
-Desarrollo: WADOOM (crédito de plantilla).`}
+Desarrollo: Vektor (https://vektorstudio.tech/).`}
         </pre>
       </div>
     </main>

@@ -181,7 +181,7 @@ Aquí conviven dos cosas y el visitante tiene derecho a saber cuál está leyend
   de la casa (Barlow Condensed itálica, Archivo).
 - **La oferta**, que le habla al dueño de LM 2006 sobre el sistema que se le
   está vendiendo. Va en **Microgramma** —la tipografía de la firma de
-  Alessandrovaru, la misma del crédito del pie— y sus rótulos, sus cintillos,
+  Vektor, la misma del crédito del pie— y sus rótulos, sus cintillos,
   el sello de rebaja y los ticks de la comparación van **en rojo**.
 
 El rojo marca dónde cambia el interlocutor, y no desentona porque también es
@@ -196,7 +196,7 @@ Entre una y otra se cruza un `Cintillo`, que no es decoración: es el aviso de
 que cambia el interlocutor.
 
 En **la puerta** (`/entrar`) la jerarquía se invierte y manda la firma de
-Alessandrovaru: quien llega todavía no es cliente del concesionario, es alguien
+Vektor: quien llega todavía no es cliente del concesionario, es alguien
 a quien se le está enseñando un trabajo. Al entrar, vuelve a mandar la marca de
 LM 2006.
 

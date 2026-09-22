@@ -171,11 +171,11 @@ funcionar. No hay nada más que tocar en el código.
 - **El escaparate** le habla a quien viene a comprar un carro. Va con la
   tipografía de la casa (Russo One + Titillium Web).
 - **La oferta** le habla al dueño de Top Miami Cars sobre el sistema que se le
-  vende. Va en **Microgramma**, la tipografía de la firma de Alessandrovaru.
+  vende. Va en **Microgramma**, la tipografía de la firma de Vektor.
 
 Entre una y otra se cruza un cintillo azul animado (`components/Cintillo.js`),
 con un escudo pequeño de separador. En la puerta la jerarquía se invierte: manda
-la firma de Alessandrovaru, porque quien llega todavía no es cliente de nadie.
+la firma de Vektor, porque quien llega todavía no es cliente de nadie.
 
 ---
 

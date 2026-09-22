@@ -184,13 +184,13 @@ Aquí conviven dos cosas y el visitante tiene derecho a saber cuál está leyend
   suyo. Va con la tipografía de la casa (Cinzel, Archivo).
 - **La oferta**, que le habla al dueño de SUSU sobre el sistema que se le está
   vendiendo. Va en **Microgramma**, la tipografía de la firma de
-  Alessandrovaru, la misma del crédito del pie.
+  Vektor, la misma del crédito del pie.
 
 Entre una y otra se cruza un `Cintillo`, que no es decoración: es el aviso de
 que cambia el interlocutor.
 
 En **la puerta** (`/entrar`) la jerarquía se invierte y manda la firma de
-Alessandrovaru: quien llega todavía no es cliente de SUSU, es alguien a quien
+Vektor: quien llega todavía no es cliente de SUSU, es alguien a quien
 se le está enseñando un trabajo. Al entrar, vuelve a mandar la marca de SUSU.
 
 ---

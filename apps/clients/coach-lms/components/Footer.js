@@ -94,14 +94,21 @@ const Footer = () => {
             <Link href="/tos" className="transition-colors hover:text-primary">
               Términos
             </Link>
-            <a
-              href="https://wadoom.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-bold transition-colors hover:text-primary"
-            >
-              WADOOM
-            </a>
+            <span>
+              Hecho por{" "}
+              <a
+                href="https://vektorstudio.tech/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-primary"
+                style={{
+                  fontFamily: "var(--microgramma-font)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Vektor
+              </a>
+            </span>
           </div>
         </div>
       </div>

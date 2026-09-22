@@ -46,7 +46,7 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-// Microgramma: la tipografía de la firma de Alessandrovaru. No es del tema de
+// Microgramma: la tipografía de la firma de Vektor. No es del tema de
 // la página, solo se usa en el crédito de autoría (components/FooterFoot.js) y
 // en lo que le habla al dueño de Kings Cars, igual que en el resto del
 // monorepo.

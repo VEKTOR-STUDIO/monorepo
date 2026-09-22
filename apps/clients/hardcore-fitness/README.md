@@ -319,7 +319,7 @@ supabase/                  migración y seed
 ### La firma
 
 El crédito de autoría va en **Microgramma**, la tipografía de la firma de
-Alessandrovaru, igual que en RollPrep y en los demás proyectos del monorepo.
+Vektor, igual que en RollPrep y en los demás proyectos del monorepo.
 La fuente vive en `public/fonts/microgramma.otf` y se declara en
 `app/layout.js` con `next/font/local` como `--microgramma-font`. **No es del
 tema de la tienda**: solo se usa para la firma.
@@ -329,7 +329,7 @@ Aparece en dos sitios:
 - `components/FooterFoot.js` — la franja del final del documento, montada una
   sola vez en el layout raíz, así que sale en todas las páginas incluida la
   puerta de acceso.
-- `components/Footer.js` — la línea "Tienda hecha por ALESSANDROVARU" junto al
+- `components/Footer.js` — la línea "Tienda hecha por VEKTOR" junto al
   copyright del cliente.
 
 La franja no es fija: se ve al llegar abajo. En modo demo la tarjeta flotante

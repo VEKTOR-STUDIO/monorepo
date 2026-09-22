@@ -21,7 +21,7 @@ import config from "@/config";
  * de antes, la fecha en que se acaba y la lista de lo que se lleva quien
  * compre. Si se vacía `precioAnterior`, el sello de rebaja desaparece solo.
  *
- * Aquí manda la firma de Alessandrovaru y no la marca de Aprovéchalo: quien
+ * Aquí manda la firma de Vektor y no la marca de Aprovéchalo: quien
  * llega todavía no es cliente de Aprovéchalo, es alguien a quien se le está
  * enseñando un trabajo. Al entrar, la jerarquía se invierte.
  *
@@ -188,13 +188,13 @@ export default function PantallaAcceso({ destino = "/" }) {
           <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">
             <div data-puerta="marca" className="flex items-center gap-2 sm:gap-3">
               <a
-                href="https://alessandrovaru.com"
+                href="https://vektorstudio.tech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="microgramma text-xs text-base-100/80 transition-colors hover:text-base-100"
                 style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
               >
-                Alessandrovaru
+                Vektor
               </a>
               <span className="h-px w-4 bg-base-100/25 sm:w-8" aria-hidden="true" />
               <span className="microgramma whitespace-nowrap text-[0.6rem] text-base-100/45">
@@ -378,17 +378,17 @@ export default function PantallaAcceso({ destino = "/" }) {
             >
               Construida por{" "}
               <a
-                href="https://alessandrovaru.com"
+                href="https://vektorstudio.tech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="microgramma text-base-100/70 underline-offset-4 transition-colors hover:text-base-100 hover:underline"
                 style={{ fontFamily: "var(--microgramma-font)" }}
               >
-                Alessandrovaru
+                Vektor
               </a>
               .{" "}
               <span className="hidden lg:inline">
-                Si llegaste sin contraseña, escríbeme y te doy acceso.
+                Si llegaste sin contraseña, escríbenos y te damos acceso.
               </span>
             </p>
           </div>

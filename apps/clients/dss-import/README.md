@@ -174,7 +174,7 @@ Conviven dos discursos y el visitante tiene derecho a saber cuál lee:
 - **El escaparate** le habla a quien viene a financiar un carro o una moto. Va
   con la tipografía de la casa (Barlow Condensed itálica).
 - **La oferta** le habla al dueño de DSS sobre el sistema que se le vende. Va en
-  **Microgramma**, la tipografía de la firma de Alessandrovaru.
+  **Microgramma**, la tipografía de la firma de Vektor.
 
 Entre una y otra pasa un `Cintillo`, que no es decoración: es el aviso de que
 cambia el interlocutor.

@@ -21,7 +21,7 @@ import config from "@/config";
  * rebaja solo aparece si `precioAnterior` tiene algo; vacío, no se inventa
  * ninguna oferta.
  *
- * Aquí manda la firma de Alessandrovaru y no la marca de Hardcore: quien llega
+ * Aquí manda la firma de Vektor y no la marca de Hardcore: quien llega
  * todavía no es cliente de Hardcore, es alguien a quien se le está enseñando
  * un trabajo. Al entrar, la jerarquía se invierte y la tienda pasa a ser suya.
  *
@@ -197,13 +197,13 @@ export default function PantallaAcceso({ destino = "/" }) {
           <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">
             <div data-puerta="marca" className="flex items-center gap-2 sm:gap-3">
               <a
-                href="https://alessandrovaru.com"
+                href="https://vektorstudio.tech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="microgramma text-xs text-base-content/85 transition-colors hover:text-primary"
                 style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
               >
-                Alessandrovaru
+                Vektor
               </a>
               <span className="h-px w-4 bg-base-content/20 sm:w-8" aria-hidden="true" />
               <span className="microgramma whitespace-nowrap text-[0.6rem] text-base-content/40">
@@ -387,17 +387,17 @@ export default function PantallaAcceso({ destino = "/" }) {
             >
               Construida por{" "}
               <a
-                href="https://alessandrovaru.com"
+                href="https://vektorstudio.tech/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="microgramma text-base-content/60 underline-offset-4 transition-colors hover:text-primary hover:underline"
                 style={{ fontFamily: "var(--microgramma-font)" }}
               >
-                Alessandrovaru
+                Vektor
               </a>
               .{" "}
               <span className="hidden lg:inline">
-                Si llegaste sin contraseña, escríbeme y te doy acceso.
+                Si llegaste sin contraseña, escríbenos y te damos acceso.
               </span>
             </p>
           </div>
