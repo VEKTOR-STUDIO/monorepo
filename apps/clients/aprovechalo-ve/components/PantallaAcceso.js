@@ -84,9 +84,13 @@ export default function PantallaAcceso({ destino = "/" }) {
     []
   );
 
-  // Al terminar la entrada, el cursor ya está en el campo.
+  // Al terminar la entrada, el cursor ya está en el campo. Solo en escritorio:
+  // en el móvil la caja queda debajo de la lista de lo que trae la edición, y
+  // el foco desplazaría la puerta hasta el formulario saltándose el logotipo y
+  // lo que se vende (y en Android abriría el teclado encima de todo).
   useEffect(() => {
-    const t = setTimeout(() => campo.current?.focus(), 1700);
+    if (!window.matchMedia("(min-width: 64rem)").matches) return;
+    const t = setTimeout(() => campo.current?.focus({ preventScroll: true }), 1700);
     return () => clearTimeout(t);
   }, []);
 
@@ -300,7 +304,10 @@ export default function PantallaAcceso({ destino = "/" }) {
                     justo encima del formulario, así que ahí va la misma cuenta en
                     una línea y pegada a su etiqueta. */}
                 <span className="lg:hidden">
-                  <Contador formato="compacto" className="text-sm" />
+                  {/* Color explícito: esta puerta va en la paleta invertida
+                      (texto base-100 sobre fondo oscuro) y el contador, si
+                      hereda, sale en base-content: oscuro sobre oscuro. */}
+                  <Contador formato="compacto" className="text-sm text-base-100" />
                 </span>
                 <div className="hidden lg:block">
                   <Contador formato="completo" className="mt-[var(--puerta-v1)]" />

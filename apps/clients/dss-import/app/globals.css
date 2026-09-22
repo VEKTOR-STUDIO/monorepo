@@ -712,54 +712,24 @@ body:has(main.puerta) .footer-foot {
 
 /* Lo que trae la edición.
  *
- * Son ocho o nueve renglones que en un móvil no caben en vertical junto a la
- * caja de acceso, así que ahí la lista se tumba: una fila que se arrastra de
- * lado, con los puntos enganchados, y que se sale del margen para que se vea
- * que hay más a la derecha. De `lg` en adelante vuelve a ser la lista de
- * siempre, que es como se lee mejor. */
+ * Son ocho o nueve renglones y se enseñan TODOS, también en el móvil: es la
+ * lista de lo que se vende, y tanto una tira que hay que arrastrar de lado
+ * como un recorte por altura la escondían. Va en vertical a cualquier ancho;
+ * si en un móvil no cabe junto a la caja de acceso, el cuerpo de la puerta se
+ * desplaza por dentro, que para eso es la única parte que hace scroll. */
 .puerta-incluye {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-  scrollbar-width: none;
-}
-
-.puerta-incluye::-webkit-scrollbar {
-  display: none;
-}
-
-.puerta-incluye > li {
-  flex: 0 0 14rem;
-  scroll-snap-align: start;
+  display: grid;
+  gap: var(--puerta-v1);
 }
 
 /* Por debajo de 45rem de alto —un Android de gama baja, un iPhone SE, un
-   portátil de 13 pulgadas con muchas barras— no cabe todo, y hay que elegir
-   qué se va. Primero los adornos; después la lista de lo que trae la edición,
-   que es lo único que se cuenta dos veces: las dos cintas llevan girando esas
-   mismas ventajas sin parar. Lo que no se toca es el emblema, el precio y el
-   formulario, que es a lo que se viene. */
+   portátil de 13 pulgadas con muchas barras— no cabe todo. Se va el rótulo de
+   cortesía de encima del logotipo, que es un adorno; la lista de lo que trae
+   la edición se queda entera y el cuerpo se desplaza por dentro. Lo que no se
+   toca es el logotipo, el precio y el formulario, que es a lo que se viene. */
 @media (height < 45rem) {
-  .puerta-cortesia,
-  .puerta-incluido {
+  .puerta-cortesia {
     display: none;
-  }
-}
-
-@media (width >= 64rem) {
-  .puerta-incluye {
-    display: grid;
-    gap: var(--puerta-v1);
-    overflow: visible;
-    margin-inline: 0;
-    padding-inline: 0;
-  }
-
-  .puerta-incluye > li {
-    flex: initial;
   }
 }
 

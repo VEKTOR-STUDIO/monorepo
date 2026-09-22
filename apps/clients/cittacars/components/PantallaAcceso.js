@@ -84,9 +84,13 @@ export default function PantallaAcceso({ destino = "/" }) {
     []
   );
 
-  // Al terminar la entrada, el cursor ya está en el campo.
+  // Al terminar la entrada, el cursor ya está en el campo. Solo en escritorio:
+  // en el móvil la caja queda debajo de la lista de lo que trae la edición, y
+  // el foco desplazaría la puerta hasta el formulario saltándose el logotipo y
+  // lo que se vende (y en Android abriría el teclado encima de todo).
   useEffect(() => {
-    const t = setTimeout(() => campo.current?.focus(), 1700);
+    if (!window.matchMedia("(min-width: 64rem)").matches) return;
+    const t = setTimeout(() => campo.current?.focus({ preventScroll: true }), 1700);
     return () => clearTimeout(t);
   }, []);
 

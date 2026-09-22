@@ -541,65 +541,25 @@ body:has(main.puerta) .footer-foot {
 
 /* Lo que trae la edición.
  *
- * Son siete u ocho renglones que en un móvil no caben en vertical junto a la
- * caja de acceso, así que ahí la lista se tumba: una fila que se arrastra de
- * lado, con los puntos enganchados, y que se sale del margen para que se vea
- * que hay más a la derecha. De `lg` en adelante vuelve a ser la lista de
- * siempre, que es como se lee mejor. */
+ * Son ocho o nueve renglones y se enseñan TODOS, también en el móvil: es la
+ * lista de lo que se vende, y tanto una tira que hay que arrastrar de lado
+ * como un recorte por altura la escondían. Va en vertical a cualquier ancho;
+ * si en un móvil no cabe junto a la caja de acceso, el cuerpo de la puerta se
+ * desplaza por dentro, que para eso es la única parte que hace scroll. */
 .puerta-incluye {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  margin-inline: -1.25rem;
-  padding-inline: 1.25rem;
-  scrollbar-width: none;
+  display: grid;
+  gap: var(--puerta-v1);
 }
 
-.puerta-incluye::-webkit-scrollbar {
-  display: none;
-}
-
-.puerta-incluye > li {
-  flex: 0 0 14rem;
-  scroll-snap-align: start;
-}
-
-/* Cuando no cabe todo hay que elegir qué se va, y se va en este orden: primero
-   los adornos, después la lista de lo que trae la edición —que es lo único que
-   se cuenta dos veces, porque las dos cintas llevan girando esas mismas
-   ventajas sin parar—. Lo que no se toca nunca es el logotipo, el precio y el
-   formulario, que es a lo que se viene.
-
-   Los dos umbrales están MEDIDOS, no elegidos a ojo. Con uno solo a 45rem, un
-   Android de 360×800 —el tamaño más repetido que hay— desbordaba 13 px: ahí
-   cabía la lista pero no el "Demo privada de" de encima del logotipo. De ahí
-   que la cortesía se vaya antes, a 52rem, y la lista aguante hasta 45rem.
-   Si se toca el ritmo vertical de la puerta, hay que volver a medir los cuatro
-   tamaños; 13 px no se ven a ojo y dejan el botón debajo de la cinta. */
+/* Cuando no cabe todo, lo único que se va es el rótulo de cortesía de encima
+   del logotipo: un adorno. La lista de lo que trae la edición se queda entera
+   a cualquier alto —es lo que se vende— y, si no cabe, el cuerpo de la puerta
+   se desplaza por dentro. Lo que no se toca nunca es el logotipo, el precio y
+   el formulario, que es a lo que se viene. El umbral de 52rem viene de medir
+   un Android de 360×800, el tamaño más repetido que hay. */
 @media (height < 52rem) {
   .puerta-cortesia {
     display: none;
-  }
-}
-
-@media (height < 45rem) {
-  .puerta-incluido {
-    display: none;
-  }
-}
-
-@media (width >= 64rem) {
-  .puerta-incluye {
-    display: grid;
-    gap: var(--puerta-v1);
-    overflow: visible;
-    margin-inline: 0;
-    padding-inline: 0;
-  }
-
-  .puerta-incluye > li {
-    flex: initial;
   }
 }
 
