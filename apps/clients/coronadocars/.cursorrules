@@ -1,0 +1,66 @@
+# Coronado Carss — reglas del proyecto
+
+Inventario web de Coronado Carss (@coronadocarss), concesionaria de
+automóviles en Valencia, Carabobo, parte del Grupo Autos del Centro
+(@autosdel.centro). Compra, venta y consignación de vehículos usados y 0 km.
+Léete el README antes de tocar nada: explica de dónde sale cada decisión de
+diseño, y sobre todo **qué material del cliente NO se pudo conseguir**.
+
+## Pila
+- Next.js 15 (App Router) + React 19, Turbopack en dev
+- Tailwind CSS 4 (configurado en CSS, sin tailwind.config) + daisyUI 5
+- GSAP 3 (ScrollTrigger y SplitText)
+- **Sin base de datos.** El inventario es `data/vehiculos.json`. No hay
+  Supabase, no hay Stripe, no hay cuentas de usuario. Si algo pide una, está
+  mal.
+
+## Cómo se escribe aquí
+- **Todo en español**: nombres de componentes, funciones, variables, props y
+  comentarios. `leerVehiculos`, no `getVehicles`.
+- Los comentarios explican **por qué**, no qué. Si un comentario se limita a
+  repetir el código, sobra.
+- Nada de `any`, nada de abstracciones a futuro: se escribe lo que hace falta
+  hoy.
+
+## La identidad, en corto (lo largo está en app/globals.css)
+- **Azul rey + amarillo neón sobre noche azul.** No es negro ni blanco.
+- **El amarillo solo vive sobre azul** y señala: precio, 0 km, llamada a la
+  acción, filete. Nunca sobre blanco.
+- **Todo va inclinado −12°** (`--angulo-cc` y su gemelo `ANGULO` en
+  `libs/animaciones.js`; se cambian a la vez). Los rótulos van en Exo 2 itálica.
+- **La fila de cajas** de `PlantillaPublicacion` (AÑO azul · MODELO ·
+  KILOMETRAJE · TRANSMISIÓN) es SU pieza, copiada de sus posts. No se le cambia
+  el orden ni las etiquetas. No publican precio y no se le añade.
+- **La pared de prensa** son placas sin nombre: no se dibuja el logo de autocom.
+
+## Lo que no se toca sin pensarlo
+- **El candado de la demo vive en el servidor** (`middleware.js`, las rutas de
+  API). Bloquear algo solo en pantalla no es bloquearlo.
+- **La contraseña no puede entrar en `config.js`**: ese archivo lo importan
+  componentes de cliente y acabaría en el bundle. Va en `libs/acceso.js`.
+- **GSAP: `fromTo`, nunca `from`** para lo que entra en escena. El CSS deja
+  `[data-anima]` en `opacity: 0` y `from` animaría de 0 a 0.
+- **El corte principal es `condicion` (usado / 0 km)**, no la carrocería.
+  Aquí **no existe `segmento` ni `sedes`**: hay un solo local y se vende una
+  sola cosa. Si algo los reintroduce, está copiado de otro cliente.
+- **El WhatsApp es el de su bio** (+58 414 405 5202). En demo ningún botón lo
+  abre (`libs/demo.js`, `BotonContacto`).
+- **No hay horario ni dirección exacta.** No se inventan.
+- **No hay ni una foto del cliente**, y no se inventa ninguna: lo que se dibuja
+  es la plantilla de sus posts (`components/PlantillaPublicacion.js`). Meter
+  fotos de banco de imágenes como si fueran suyas está prohibido aquí.
+- Cuando haya fotos, **se enseñan enteras** y no se les superpone nada: sus
+  posts ya llevan la etiqueta y las cajas impresas.
+- **El logotipo va en vector** (`MarcaCoronado`), no el JPG: el archivo
+  original es un cuadrado blanco y recortarlo parte la camioneta.
+
+## Comprobar antes de dar algo por hecho
+```bash
+npx next build && npx next lint
+NEXT_PUBLIC_DEMO=false npx next dev   # ¿sigue siendo el sistema entero?
+grep -rl "<la-clave>" .next/static/   # no debe devolver nada
+```
+Y mirar la pantalla entera, de arriba abajo: los fallos de esta capa son
+secciones que no aparecen, y esas no dan error en consola. La puerta además se
+**mide** en 390×844, 360×800, 360×640 y 1440×800, con el desbordamiento a cero
+en los cuatro.

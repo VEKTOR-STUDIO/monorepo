@@ -189,6 +189,52 @@ importers:
         specifier: ^4.0.0
         version: 4.3.0
 
+  apps/clients/coronadocars:
+    dependencies:
+      eslint:
+        specifier: ^9.17.0
+        version: 9.39.4(jiti@2.7.0)
+      eslint-config-next:
+        specifier: ^15.5.7
+        version: 15.5.18(eslint@9.39.4(jiti@2.7.0))(typescript@6.0.3)
+      gsap:
+        specifier: ^3.13.0
+        version: 3.15.0
+      next:
+        specifier: ^15.5.7
+        version: 15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      next-sitemap:
+        specifier: ^4.2.3
+        version: 4.2.3(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))
+      nextjs-toploader:
+        specifier: ^3.7.15
+        version: 3.9.17(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      react:
+        specifier: ^19.2.1
+        version: 19.2.6
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.6(react@19.2.6)
+      react-hot-toast:
+        specifier: ^2.4.1
+        version: 2.6.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.0.0
+        version: 4.3.0
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.5.0(postcss@8.5.15)
+      daisyui:
+        specifier: ^5.0.50
+        version: 5.5.20
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.15
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.0
+
   apps/clients/dealernautacars:
     dependencies:
       eslint:
@@ -636,6 +682,52 @@ importers:
       stripe:
         specifier: ^17.3.1
         version: 17.7.0
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.0.0
+        version: 4.3.0
+      autoprefixer:
+        specifier: ^10.4.20
+        version: 10.5.0(postcss@8.5.15)
+      daisyui:
+        specifier: ^5.0.50
+        version: 5.5.20
+      postcss:
+        specifier: ^8.4.49
+        version: 8.5.15
+      tailwindcss:
+        specifier: ^4.0.0
+        version: 4.3.0
+
+  apps/clients/lone-star:
+    dependencies:
+      eslint:
+        specifier: ^9.17.0
+        version: 9.39.4(jiti@2.7.0)
+      eslint-config-next:
+        specifier: ^15.5.7
+        version: 15.5.18(eslint@9.39.4(jiti@2.7.0))(typescript@6.0.3)
+      gsap:
+        specifier: ^3.13.0
+        version: 3.15.0
+      next:
+        specifier: ^15.5.7
+        version: 15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      next-sitemap:
+        specifier: ^4.2.3
+        version: 4.2.3(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))
+      nextjs-toploader:
+        specifier: ^3.7.15
+        version: 3.9.17(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      react:
+        specifier: ^19.2.1
+        version: 19.2.6
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.6(react@19.2.6)
+      react-hot-toast:
+        specifier: ^2.4.1
+        version: 2.6.0(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.0.0

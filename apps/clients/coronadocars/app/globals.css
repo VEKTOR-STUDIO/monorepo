@@ -1,0 +1,1069 @@
+@import "tailwindcss";
+
+@source "./**/*.{js,ts,jsx,tsx,mdx}";
+@source "../components/**/*.{js,ts,jsx,tsx,mdx}";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+/* ---------------------------------------------------------------------------
+ * Tema "coronado".
+ *
+ * No se inventó una paleta: se copió la suya. Su logotipo es un recuadro AZUL
+ * REY con "CORONADO CARSS" en AMARILLO NEÓN, grueso e inclinado, y sus
+ * publicaciones repiten lo mismo: cajas azules con el dato en blanco, un
+ * filete amarillo, la etiqueta blanca con el modelo y, detrás de cada carro,
+ * la pared de prensa de su local.
+ *
+ * Cinco decisiones que vienen de ahí y no de un gusto:
+ *
+ *   · EL FONDO ES AZUL DE NOCHE, NO NEGRO. Es el mismo azul del recuadro
+ *     llevado a oscuro. Un negro plano habría sido cualquier concesionario; un
+ *     fondo blanco, el de Top Miami Cars. Sobre azul hondo el azul rey se lee
+ *     como marca y el amarillo brilla como en su logotipo.
+ *   · EL AMARILLO SOLO VIVE SOBRE AZUL. En su gráfica el neón nunca va sobre
+ *     blanco, donde no se lee. Aquí señala tres cosas: el precio, el 0 km y la
+ *     llamada a la acción. Si se usara de relleno dejaría de señalar.
+ *   · EL AZUL REY ES EL COLOR DE LAS CAJAS. La caja del AÑO, el recuadro del
+ *     logotipo, la pastilla del @usuario y el teléfono. Es lo que en sus
+ *     piezas contiene, y aquí contiene lo mismo: rótulos, datos, cintillos.
+ *   · TODO VA INCLINADO. Las letras del logotipo van en cursiva y las cajas de
+ *     sus posts tienen el lado derecho cortado en diagonal. Esa pendiente es
+ *     el gesto de la casa (`--angulo-cc`, `.faceta`, `.bisel`).
+ *   · LA PARED DE PRENSA. Todas sus fichas se fotografían contra la misma
+ *     pared de logos del local. Aquí es `.pared` + `.pared-logos`: el fondo
+ *     de la casa, repetido como en un photocall, muy bajito.
+ *
+ * Para mover el acento: --color-primary aquí. Para el azul: --color-azul y
+ * config.colors.main.
+ * ------------------------------------------------------------------------- */
+@plugin "daisyui/theme" {
+  name: "coronado";
+  default: true;
+  color-scheme: dark;
+
+  /* El azul del recuadro llevado a noche. */
+  --color-base-100: oklch(18.5% 0.06 263);
+  --color-base-200: oklch(22.5% 0.075 263);
+  --color-base-300: oklch(29% 0.09 263);
+  --color-base-content: oklch(98% 0.006 263);
+
+  /* El amarillo neón de "CORONADO CARSS". Sobre él el texto va en azul
+     hondo, igual que al revés en su logotipo. */
+  --color-primary: oklch(93% 0.2 116);
+  --color-primary-content: oklch(21% 0.08 263);
+
+  /* El azul rey del recuadro (#0B4DC4). */
+  --color-secondary: oklch(48% 0.2 263);
+  --color-secondary-content: oklch(99% 0 0);
+
+  --color-accent: oklch(96% 0.14 112);
+  --color-accent-content: oklch(21% 0.08 263);
+
+  --color-neutral: oklch(25% 0.08 263);
+  --color-neutral-content: oklch(96% 0 0);
+
+  --color-info: oklch(70% 0.13 245);
+  --color-info-content: oklch(13% 0 0);
+  --color-success: oklch(74% 0.16 155);
+  --color-success-content: oklch(13% 0 0);
+  --color-warning: oklch(84% 0.15 80);
+  --color-warning-content: oklch(13% 0 0);
+  --color-error: oklch(63% 0.21 25);
+  --color-error-content: oklch(99% 0 0);
+
+  /* Redondeo mínimo: las cajas de sus posts son rectas, con el corte en
+     diagonal. Lo redondo se reserva para las pastillas del @usuario. */
+  --radius-selector: 0.2rem;
+  --radius-field: 0.2rem;
+  --radius-box: 0.2rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  /* Exo 2 en negra itálica es lo más cerca que se llega de "CORONADO CARSS"
+     sin licenciar su tipografía: técnica, de esquinas cuadradas y redondeadas
+     a la vez, y en cursiva. "Servimos con Excelencia" es la misma familia en
+     peso normal, así que también sirve para lo largo de los rótulos. */
+  --font-display: var(--font-exo), "Arial Narrow", system-ui, sans-serif;
+  --font-sans: var(--font-archivo), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SF Mono", monospace;
+
+  /* -------------------------------------------------------------------------
+   * Un solo radio en toda la web.
+   *
+   * Las escalas de Tailwind (rounded-sm … rounded-3xl) se aplastan todas al
+   * mismo valor a propósito: así da igual cuál escriba cada componente, el
+   * resultado es siempre el mismo y no vuelven a colarse cuatro redondeos
+   * distintos. `rounded-full` se queda fuera, que es lo que hace círculos y
+   * pastillas de verdad, y esos sí deben seguir siendo redondos.
+   * ----------------------------------------------------------------------- */
+  --radius-xs: 0.2rem;
+  --radius-sm: 0.2rem;
+  --radius-md: 0.2rem;
+  --radius-lg: 0.2rem;
+  --radius-xl: 0.2rem;
+  --radius-2xl: 0.2rem;
+  --radius-3xl: 0.2rem;
+
+  --color-tinta: oklch(18.5% 0.06 263);
+  --color-humo: oklch(66% 0.03 263);
+  --color-acero: oklch(34% 0.07 263);
+  --color-lima: oklch(93% 0.2 116);
+  --color-lima-claro: oklch(97% 0.13 112);
+  --color-lima-hondo: oklch(85% 0.2 120);
+  --color-hueso: oklch(99% 0 0);
+  --color-azul: oklch(48% 0.2 263);
+  --color-azul-claro: oklch(60% 0.19 262);
+  --color-azul-hondo: oklch(33% 0.15 264);
+  /* El gris claro de la pared del local, detrás de cada carro. */
+  --color-pared: oklch(89% 0.008 263);
+
+  --animate-flecha: flecha 2.2s ease-in-out infinite;
+  --animate-cinta: cinta 42s linear infinite;
+
+  /* La flecha de "sigue bajando" del final de la portada. */
+  @keyframes flecha {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateY(0.4rem);
+      opacity: 1;
+    }
+  }
+
+  @keyframes cinta {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes latido {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(0.8);
+    }
+  }
+
+  /* El latido del punto de "en directo" de la puerta. */
+  @keyframes pulso {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.82);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+
+  /* Alto de la franja de demo. Sin demo vale 0 y la cabecera vuelve arriba
+     del todo; con demo, la cabecera se pega justo debajo de la franja. */
+  --alto-barra-demo: 0px;
+
+  /* Alto del crédito de autoría del final (components/FooterFoot.js). */
+  --alto-credito: 1.9rem;
+
+  /* LA PENDIENTE. La cursiva de "CORONADO CARSS" y el lado cortado de las
+     cajas de sus posts van en el mismo ángulo, y es el de toda la página.
+     Tiene que ir a la par con ANGULO en libs/animaciones.js. */
+  --angulo-cc: -12deg;
+
+  /* Cuánto se come el corte diagonal del lado derecho de una caja. */
+  --bisel-cc: 0.9rem;
+
+  background-color: var(--color-base-100);
+}
+
+html[data-demo="true"] {
+  --alto-barra-demo: 2.5rem;
+}
+
+/* En demo, la tarjeta flotante de venta se posa abajo. En pantalla estrecha
+   ocupa todo el ancho y taparía el crédito, así que se le da aire. */
+html[data-demo="true"] .footer-foot {
+  padding-bottom: 9.5rem;
+}
+
+@media (min-width: 640px) {
+  html[data-demo="true"] .footer-foot {
+    padding-bottom: 0.25rem;
+  }
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-base-100);
+}
+
+:target {
+  scroll-margin-top: calc(var(--alto-barra-demo) + 5rem);
+}
+
+::selection {
+  background-color: var(--color-lima);
+  color: var(--color-azul-hondo);
+}
+
+/* --------------------------------------------------------------------------
+ * Tipografía
+ * ------------------------------------------------------------------------ */
+
+/* El rótulo de la casa: grueso, técnico, en mayúsculas y EN CURSIVA, como
+   "CORONADO CARSS". Es lo que hace que un bloque de texto se lea como una
+   pieza suya y no como una web de plantilla. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+/* Variante recta y espaciada, para lo corto: las etiquetas de sus cajas
+   ("AÑO", "MODELO", "KILOMETRAJE") van derechas y abiertas. */
+.display-abierto {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* Etiquetas pequeñas de sección. */
+.rotulo {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--color-base-content) 50%, transparent);
+}
+
+/* Cifras que se comparan entre sí: precios, kilómetros, años. */
+.cifra {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* --------------------------------------------------------------------------
+ * Los titulares que entran línea a línea
+ *
+ * SplitText envuelve cada línea en una caja con `overflow: clip` para que el
+ * texto ASOME en vez de aparecer. El recorte es exactamente a ras de la caja
+ * de la línea, así que en español se comería las tildes de las mayúsculas
+ * —"CONSIGNACIÓN", "AVALÚO"— y, con la cursiva, el rabo de la última letra
+ * por la derecha.
+ *
+ * Se le da hueco con padding y se recupera con un margen negativo igual, que
+ * en un elemento generado por GSAP no compite con ninguna utilidad de
+ * Tailwind.
+ * ------------------------------------------------------------------------ */
+.linea-titulo-mask {
+  padding-top: 0.24em;
+  margin-top: -0.24em;
+  padding-right: 0.18em;
+  margin-right: -0.18em;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+/* --------------------------------------------------------------------------
+ * Microgramma y los cintillos
+ *
+ * Esta página tiene DOS voces y conviene no confundirlas:
+ *
+ *   · Lo que ve el comprador —vehículos, cómo se compra, cómo se consigna,
+ *     contacto— va con la tipografía de la casa.
+ *   · Lo que le habla a CORONADO CARSS —cómo se publica, qué incluye, cuánto
+ *     cuesta— va en Microgramma, que es la tipografía de la firma de
+ *     Vektor, la misma del crédito del pie.
+ *
+ * Entre una voz y otra se cruza un cintillo animado, para que se vea de un
+ * golpe dónde termina el escaparate y dónde empieza la oferta.
+ * ------------------------------------------------------------------------ */
+
+.microgramma {
+  font-family: var(--microgramma-font), var(--font-mono), monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cintillo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  padding-block: 0.7rem;
+  user-select: none;
+  /* Se difumina por los bordes: el texto nace y muere, no se corta en seco. */
+  mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* La pista lleva el contenido DOS veces y se desplaza media pista: al llegar
+   al -50 % la segunda copia está exactamente donde empezó la primera, así que
+   el salto al reiniciar no se ve. */
+.cintillo-pista {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  animation: cinta 38s linear infinite;
+}
+
+.cintillo:hover .cintillo-pista {
+  animation-play-state: paused;
+}
+
+/* La voz de venta: el amarillo, que aquí sí llena una banda entera. Es el
+   único sitio donde lo hace, y por eso avisa de que cambia el interlocutor. */
+.cintillo-venta {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-lima-hondo),
+    var(--color-lima) 45%,
+    var(--color-lima-claro)
+  );
+  color: var(--color-azul-hondo);
+}
+
+/* La vuelta al escaparate: el azul rey de sus cajas. */
+.cintillo-cliente {
+  background-color: var(--color-azul);
+  color: color-mix(in oklab, var(--color-hueso) 80%, transparent);
+  border-block: 1px solid color-mix(in oklab, var(--color-hueso) 14%, transparent);
+}
+
+.cintillo-texto {
+  font-size: 0.7rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+/* La separación entre una frase y la siguiente: un paralelogramo con la
+   pendiente de la casa, como el corte de sus cajas. */
+.cintillo-punto {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.45rem;
+  background-color: currentColor;
+  opacity: 0.6;
+  clip-path: polygon(30% 0, 100% 0, 70% 100%, 0 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cintillo-pista {
+    animation: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * La gráfica de la casa: la pared, el recuadro y la pendiente
+ *
+ * Todas sus fichas se fotografían contra la MISMA PARED del local: un
+ * photocall claro con logos repetidos en filas. Esa pared es el fondo de toda
+ * la marca, y aquí se usa en dos intensidades: bajita y en azul sobre la
+ * noche de la página (`.pared`), y a plena luz detrás de cada carro dibujado
+ * (`.pared-clara`, en components/PlantillaPublicacion.js).
+ * ------------------------------------------------------------------------ */
+
+/* 1. La luz de la página: un foco azul rey arriba y otro abajo, como si el
+      recuadro del logotipo iluminara el cuarto. `--pared-fuerza` gradúa
+      cuánto pesa sin tocar la receta. */
+.pared {
+  --pared-fuerza: 1;
+  pointer-events: none;
+  background-color: var(--color-base-100);
+  background-image:
+    radial-gradient(
+      ellipse 90% 70% at 70% 0%,
+      color-mix(in oklab, var(--color-azul) calc(55% * var(--pared-fuerza)), transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 60% at 12% 92%,
+      color-mix(in oklab, var(--color-azul) calc(34% * var(--pared-fuerza)), transparent) 0%,
+      transparent 68%
+    );
+}
+
+/* 2. Los logos de la pared, repetidos en filas desplazadas, como en un
+      photocall: un recuadro azul con su filete amarillo y, en la fila de al
+      lado, una placa clara. Son solo rectángulos: a este tamaño y opacidad se
+      lee "pared de prensa" sin que haga falta escribir ningún nombre, y así
+      tampoco se repite la marca hermana (autocom) que comparte su pared. */
+.pared-logos {
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='80' viewBox='0 0 160 80'%3E%3Crect x='8' y='10' width='60' height='22' rx='1' fill='%234d7cff'/%3E%3Crect x='14' y='26' width='40' height='2' fill='%23e6ff3a'/%3E%3Crect x='88' y='10' width='60' height='22' rx='1' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3Crect x='48' y='50' width='60' height='22' rx='1' fill='none' stroke='%23ffffff' stroke-width='1.5'/%3E%3Crect x='-32' y='50' width='60' height='22' rx='1' fill='%234d7cff'/%3E%3Crect x='128' y='50' width='60' height='22' rx='1' fill='%234d7cff'/%3E%3Crect x='134' y='66' width='40' height='2' fill='%23e6ff3a'/%3E%3Crect x='-26' y='66' width='40' height='2' fill='%23e6ff3a'/%3E%3C/svg%3E");
+  background-size: 160px 80px;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 80%);
+}
+
+/* 3. La pared a plena luz: la de detrás de cada carro en sus fichas. Gris
+      claro, logos oscuros y azules, y el piso de cemento abajo. Solo se usa
+      dentro de la plantilla de una unidad. */
+.pared-clara {
+  background-color: var(--color-pared);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60' viewBox='0 0 120 60'%3E%3Crect x='6' y='8' width='46' height='16' rx='1' fill='%230b4dc4'/%3E%3Crect x='11' y='19' width='30' height='2' fill='%23d9f21e'/%3E%3Crect x='66' y='8' width='46' height='16' rx='1' fill='%23171a22'/%3E%3Crect x='72' y='14' width='26' height='3' fill='%23ffffff' opacity='.8'/%3E%3Crect x='36' y='38' width='46' height='16' rx='1' fill='%23171a22'/%3E%3Crect x='42' y='44' width='26' height='3' fill='%23ffffff' opacity='.8'/%3E%3Crect x='96' y='38' width='46' height='16' rx='1' fill='%230b4dc4'/%3E%3Crect x='-24' y='38' width='46' height='16' rx='1' fill='%230b4dc4'/%3E%3Crect x='101' y='49' width='30' height='2' fill='%23d9f21e'/%3E%3Crect x='-19' y='49' width='30' height='2' fill='%23d9f21e'/%3E%3C/svg%3E");
+  background-size: 17cqw 8.5cqw;
+}
+
+/* La silueta sobre la pared clara va MACIZA: con la transparencia que lleva
+   para el fondo oscuro, las placas de la pared se veían a través de la
+   carrocería. El cristal se queda algo translúcido para que no sea un hueco
+   negro. */
+.silueta-maciza path,
+.silueta-maciza circle {
+  opacity: 1;
+}
+
+.silueta-maciza path[fill="#0b0b0b"] {
+  opacity: 0.78;
+}
+
+/* El piso de cemento donde se posa el carro en sus fotos. */
+.piso {
+  pointer-events: none;
+  background-image: linear-gradient(
+    to bottom,
+    oklch(64% 0.006 263) 0%,
+    oklch(56% 0.006 263) 45%,
+    oklch(46% 0.006 263) 100%
+  );
+}
+
+/* 4. La pendiente. `.faceta` corta el lado derecho de una caja en diagonal,
+      que es exactamente como están cortadas la caja del AÑO y la etiqueta
+      del modelo en sus posts. */
+.faceta {
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--bisel-cc)) 100%, 0 100%);
+}
+
+/* Para fotos y bloques enteros: una esquina rebajada, más grande. */
+.corte {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 1.6rem), calc(100% - 1.6rem) 100%, 0 100%);
+}
+
+/* El paralelogramo, para piezas pequeñas: la caja va sesgada y el contenido
+   se contra-sesga para que el texto no se tuerza dos veces. */
+.bisel {
+  display: inline-block;
+  transform: skewX(var(--angulo-cc));
+}
+
+.bisel > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-cc) * -1));
+}
+
+/* El filete: la raya amarilla que en sus posts separa la foto de los datos.
+   Va con los extremos cortados en la pendiente de la casa. */
+.filo {
+  height: 0.3rem;
+  width: 3.5rem;
+  background-color: var(--color-lima);
+  clip-path: polygon(12% 0, 100% 0, 88% 100%, 0 100%);
+}
+
+.filo-ancho {
+  width: 100%;
+  background-image: linear-gradient(
+    to right,
+    var(--color-lima),
+    color-mix(in oklab, var(--color-lima) 12%, transparent)
+  );
+}
+
+.filo-blanco {
+  background-color: var(--color-hueso);
+  background-image: none;
+}
+
+/* --------------------------------------------------------------------------
+ * Las cajas de datos: LA pieza de la casa
+ *
+ * El pie de cada publicación suya es una fila de cajas RECTAS: la primera,
+ * AZUL, con "AÑO" y el año en blanco; las demás, BLANCAS, con "MODELO",
+ * "KILOMETRAJE" y "TRANSMISIÓN" en negrita y el dato debajo. Encima, un
+ * filete amarillo. Es lo que más se repite en sus 2.567 publicaciones, así
+ * que aquí es un componente de estilo y no un adorno.
+ * ------------------------------------------------------------------------ */
+.tarjeta-dato {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  background-color: var(--color-hueso);
+  color: oklch(16% 0.03 263);
+  padding: 0.6rem 0.9rem;
+  box-shadow: 0 10px 28px -16px #000;
+}
+
+.tarjeta-dato-etiqueta {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: oklch(18% 0.04 263);
+}
+
+.tarjeta-dato-valor {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.05;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: oklch(22% 0.03 263);
+}
+
+/* La caja del AÑO: azul, con el texto en blanco y el lado derecho cortado. */
+.tarjeta-dato-azul {
+  background-color: var(--color-azul);
+  color: var(--color-hueso);
+}
+
+.tarjeta-dato-azul .tarjeta-dato-etiqueta,
+.tarjeta-dato-azul .tarjeta-dato-valor {
+  color: var(--color-hueso);
+}
+
+.tarjeta-dato-azul .tarjeta-dato-valor {
+  font-weight: 700;
+}
+
+/* La etiqueta del modelo, arriba a la izquierda de sus posts: caja blanca con
+   el nombre en negro y una banda azul cortada en diagonal a la derecha. */
+.rotulo-post {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: oklch(16% 0.03 263);
+  background-color: var(--color-hueso);
+}
+
+/* La pastilla del pie de sus posts: "@CoronadoCarss +58 414 405 5202" en
+   blanco sobre azul. */
+.pastilla {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-azul);
+  color: var(--color-hueso);
+  font-weight: 700;
+  box-shadow: 0 10px 26px -16px #000;
+}
+
+.pastilla-apagada {
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  color: color-mix(in oklab, var(--color-base-content) 75%, transparent);
+  box-shadow: none;
+}
+
+/* La pastilla que señala: amarilla. Se reserva para lo que de verdad es un
+   aviso —"0 km", una rebaja—, no para etiquetar cualquier cosa. */
+.pastilla-lima {
+  background-color: var(--color-lima);
+  color: var(--color-azul-hondo);
+  box-shadow: 0 10px 26px -16px color-mix(in oklab, var(--color-lima) 70%, transparent);
+}
+
+/* El fondo donde se posan las unidades cuando no hay pared: la noche azul con
+   una insinuación de foco. */
+.estudio {
+  background:
+    radial-gradient(
+      ellipse 70% 60% at 50% 42%,
+      oklch(32% 0.1 263) 0%,
+      oklch(23% 0.075 263) 48%,
+      oklch(17% 0.055 263) 100%
+    );
+}
+
+/* La sombra elíptica bajo el vehículo. Sin esto las siluetas flotan. */
+.sombra-piso {
+  background: radial-gradient(ellipse 50% 50% at 50% 50%, oklch(0% 0 0 / 0.55), transparent 70%);
+  filter: blur(6px);
+}
+
+/* --------------------------------------------------------------------------
+ * Texturas
+ *
+ * Kilómetros de azul liso se ven baratos en una pantalla grande. Estas capas
+ * le dan superficie sin llamar la atención, y van como CAPA —un div absoluto
+ * dentro de la sección— y no como pseudoelemento: con un z-index negativo
+ * acabarían por detrás del propio fondo y no se verían nunca.
+ *
+ *   <div className="textura absolute inset-0" aria-hidden="true" />
+ * ------------------------------------------------------------------------ */
+
+/* Grano fino. Es ruido que genera el navegador (feTurbulence), así que no hay
+   que servir ninguna imagen. Sobre la noche azul tiene que ACLARAR. */
+.textura {
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+/* Rayas en la pendiente de la casa: las de sus cajas cortadas, repetidas muy
+   tenues. Se reserva para las secciones que hablan del negocio; en todas
+   dejaría de significar nada. */
+.textura-diagonal {
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: repeating-linear-gradient(
+    102deg,
+    transparent 0 38px,
+    #fff 38px 40px,
+    transparent 40px 96px
+  );
+}
+
+/* -----------------------------------------------------------------------------
+ * La puerta, de una sola pantalla.
+ *
+ * Es lo primero —y muchas veces lo único— que ve quien recibe el enlace, así
+ * que aquí no se hace scroll: la carátula, la caja de acceso y las dos cintas
+ * caben en `100svh` y ahí se quedan. `svh` y no `vh` porque en el móvil `vh`
+ * mide como si la barra del navegador no existiera y dejaría el pie fuera.
+ *
+ * Para que eso aguante igual en un portátil de 720 px que en un monitor, el
+ * ritmo vertical no va en `rem` fijos: estas medidas se calculan en `vh`, así
+ * que la página se encoge con la pantalla en vez de desbordarla. El mínimo de
+ * cada `clamp()` es el suelo por debajo del cual dejaría de respirar.
+ * -------------------------------------------------------------------------- */
+.puerta {
+  --puerta-v1: clamp(0.3rem, 0.9vh, 0.75rem); /* una etiqueta y su dato */
+  --puerta-v2: clamp(0.5rem, 1.6vh, 1.25rem); /* piezas de un mismo bloque */
+  --puerta-v3: clamp(0.7rem, 2.4vh, 1.75rem); /* de un bloque al siguiente */
+  /* Entre las dos columnas. Solo pesa cuando la puerta va APILADA —en
+     escritorio las columnas van una al lado de la otra y quien manda es el
+     `gap-x`—, así que apretarlo no le cuesta nada al portátil y es lo primero
+     que se toca cuando el móvil no cuadra por unos píxeles. Está en 2,6vh y no
+     en 3,2 porque a 360×800 la puerta se pasaba 2 px: 735 pedidos en 733
+     disponibles. Medido, no estimado. */
+  --puerta-v4: clamp(0.9rem, 2.6vh, 3.5rem);
+
+  /* El emblema se pide en píxeles porque el mismo componente sirve en la
+     cabecera; aquí se le pasa esta medida para que encoja con el alto. */
+  --puerta-logo: clamp(3.25rem, 8.5vh, 5.25rem);
+}
+
+/* El crédito de autoría se monta en el layout raíz, así que también cae debajo
+   de la puerta. Ahí sobra: la puerta lleva su propia firma, y con el aire que
+   el modo demo le da al crédito son 171 px que rompen la pantalla única. */
+body:has(main.puerta) .footer-foot {
+  display: none;
+}
+
+/* El párrafo de presentación solo sale cuando hay sitio de sobra: en el móvil
+   la columna es estrecha y lo que se vende ya lo cuentan la insignia, el
+   carrusel y las cintas; en un portátil bajo es lo primero que estorba.
+
+   El corte está en 52rem de alto y no en 46 porque está MEDIDO: con las nueve
+   líneas de `demo.incluye`, a 1440×800 la columna izquierda pedía 741 px en
+   733 disponibles y el párrafo eran justo los 110 px que sobraban. Si algún día
+   crece la lista, este número se vuelve a medir; no se adivina. */
+.puerta-presentacion {
+  display: none;
+}
+
+@media (width >= 64rem) and (height >= 52rem) {
+  .puerta-presentacion {
+    display: block;
+  }
+}
+
+/* Lo que trae la edición.
+ *
+ * Son ocho o nueve renglones y se enseñan TODOS, también en el móvil: es la
+ * lista de lo que se vende, y tanto una tira que hay que arrastrar de lado
+ * como un recorte por altura la escondían. Va en vertical a cualquier ancho;
+ * si en un móvil no cabe junto a la caja de acceso, el cuerpo de la puerta se
+ * desplaza por dentro, que para eso es la única parte que hace scroll. */
+.puerta-incluye {
+  display: grid;
+  gap: var(--puerta-v1);
+}
+
+/* Por debajo de 45rem de alto —un Android de gama baja, un iPhone SE, un
+   portátil de 13 pulgadas con muchas barras— no cabe todo. Se va el rótulo de
+   cortesía de encima del logotipo, que es un adorno; la lista de lo que trae
+   la edición se queda entera y el cuerpo se desplaza por dentro. Lo que no se
+   toca es el logotipo, el precio y el formulario, que es a lo que se viene. */
+@media (height < 45rem) {
+  .puerta-cortesia {
+    display: none;
+  }
+}
+
+/* Rejilla técnica muy tenue, para los fondos que piden textura sin gráfica:
+   el 404, la pantalla de error y el fondo de la puerta. Se desvanece hacia los
+   bordes con una máscara para que no se vea dónde termina. */
+.malla {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, var(--color-base-content) 8%, transparent) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 10%, transparent 72%);
+}
+
+.malla-centro {
+  mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 2%, transparent 58%);
+}
+
+/* --------------------------------------------------------------------------
+ * Portada de edición  (solo la puerta de la demo)
+ *
+ * La puerta no es una pantalla de login: es el escaparate donde se vende el
+ * sistema. De ahí el lenguaje de carátula de edición especial —insignia,
+ * lista de lo que trae, sello de rebaja, cuenta atrás—, que todo el mundo
+ * sabe leer de un vistazo y que aquí además es verdad: hay un precio, hay una
+ * fecha y hay una lista de lo que se lleva quien compre.
+ *
+ * Nada de esto entra en el escaparate del cliente: ahí vende él, no nosotros.
+ * ------------------------------------------------------------------------ */
+
+.insignia-edicion {
+  display: inline-block;
+  transform: skewX(var(--angulo-cc));
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 30%, transparent);
+  background-image: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    color-mix(in oklab, var(--color-base-content) 4%, transparent)
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklab, var(--color-base-content) 22%, transparent),
+    0 12px 30px -16px #000;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.insignia-edicion > * {
+  display: inline-block;
+  transform: skewX(calc(var(--angulo-cc) * -1));
+}
+
+/* El sello de rebaja. Va girado, como el adhesivo de una caja. */
+.sello-descuento {
+  transform: rotate(-9deg);
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    140deg,
+    var(--color-lima-claro),
+    var(--color-lima) 55%,
+    var(--color-lima-hondo)
+  );
+  color: var(--color-azul-hondo);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-lima) 25%, transparent),
+    0 14px 30px -12px color-mix(in oklab, var(--color-lima) 70%, transparent);
+}
+
+/* Cada cosa que trae la edición, como una línea de contenido descargable. */
+.linea-dlc {
+  border-radius: var(--radius-box);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 4%, transparent);
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.linea-dlc:hover {
+  transform: translateX(4px);
+  border-color: color-mix(in oklab, var(--color-lima) 55%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* Resplandor detrás de lo que tiene que mirarse primero. */
+.resplandor {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-base-content) 14%, transparent),
+    0 0 70px -14px color-mix(in oklab, var(--color-azul) 80%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Tarjetas
+ *
+ * Nada de cristal ni de sombras pesadas: una línea finísima sobre la noche y
+ * un filete amarillo que aparece al pasar por encima, el mismo que en sus
+ * posts separa la foto de los datos. El peso visual lo tiene la unidad,
+ * que ya viene con la gráfica de la casa impresa.
+ * ------------------------------------------------------------------------ */
+
+.ficha {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  transition:
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.3s ease;
+}
+
+.ficha:hover {
+  transform: translateY(-4px);
+  border-color: color-mix(in oklab, var(--color-azul-claro) 70%, transparent);
+  box-shadow: 0 26px 60px -30px #000;
+}
+
+/* El filete amarillo del borde inferior, que solo crece al pasar por encima. */
+.ficha::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 3px;
+  background-color: var(--color-lima);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ficha:hover::after {
+  transform: scaleX(1);
+}
+
+/* Panel sin interacción: avisos, bloques de datos. */
+.panel {
+  border-radius: var(--radius-box);
+  background-color: var(--color-base-200);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 8%, transparent);
+}
+
+/* La cabecera cuando ya se ha bajado un poco. La clase la pone y la quita
+   GSAP desde components/Header.js, en vez de un estado de React: así el fondo
+   cambia en el mismo fotograma que el scroll y no en el siguiente render. */
+header.con-fondo {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-base-content) 10%, transparent);
+}
+
+/* Barra translúcida de la cabecera. */
+.barra-vidrio {
+  background-color: color-mix(in oklab, var(--color-base-100) 80%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* --------------------------------------------------------------------------
+ * Hoja de especificaciones
+ * ------------------------------------------------------------------------ */
+
+.specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background-color: color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+  border-radius: var(--radius-box);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .specs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.specs > * {
+  background-color: var(--color-base-100);
+  padding: 1rem 1.15rem;
+}
+
+/* --------------------------------------------------------------------------
+ * Botones
+ *
+ * EL BOTÓN PRINCIPAL ES AMARILLO CON EL TEXTO EN AZUL: es "CORONADO CARSS"
+ * al revés, y en su gráfica es lo que se ve primero. El secundario es la caja
+ * azul rey de sus posts. Los dos llevan la cursiva de la casa.
+ * ------------------------------------------------------------------------ */
+
+.btn {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  font-size: 0.9375rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--color-lima);
+  background-image: none;
+  color: var(--color-azul-hondo);
+  box-shadow: 0 14px 34px -20px color-mix(in oklab, var(--color-lima) 80%, transparent);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-lima-claro);
+  color: var(--color-azul-hondo);
+}
+
+/* La caja azul de sus posts. Se usa para el segundo camino —consignar,
+   escribir por WhatsApp— al lado del amarillo. */
+.btn-azul {
+  background-color: var(--color-azul);
+  color: var(--color-hueso);
+  box-shadow: 0 14px 34px -18px color-mix(in oklab, var(--color-azul) 95%, transparent);
+}
+
+.btn-azul:hover {
+  background-color: var(--color-azul-claro);
+  color: var(--color-hueso);
+}
+
+/* El botón secundario sobre la noche: solo un filo claro. */
+.btn-filo {
+  background-color: transparent;
+  color: var(--color-base-content);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-hueso) 32%, transparent);
+}
+
+.btn-filo:hover {
+  background-color: color-mix(in oklab, var(--color-base-content) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-hueso) 65%, transparent);
+}
+
+/* El botón que va encima de una foto. */
+.btn-sobre-foto {
+  background-color: color-mix(in oklab, var(--color-base-100) 72%, transparent);
+  color: var(--color-base-content);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-sobre-foto:hover {
+  background-color: color-mix(in oklab, var(--color-base-100) 92%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+ * Formularios
+ * ------------------------------------------------------------------------ */
+
+.entrada {
+  width: 100%;
+  border-radius: var(--radius-field);
+  border: 1px solid color-mix(in oklab, var(--color-base-content) 18%, transparent);
+  background-color: color-mix(in oklab, var(--color-base-content) 5%, transparent);
+  padding: 0.75rem 1.1rem;
+  font-size: 0.9375rem;
+  color: var(--color-base-content);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.entrada::placeholder {
+  color: color-mix(in oklab, var(--color-base-content) 35%, transparent);
+}
+
+.entrada:focus {
+  border-color: var(--color-lima);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-lima) 22%, transparent);
+}
+
+/* Los desplegables nativos heredan el fondo del sistema en sus opciones, que
+   en un tema oscuro sale blanco sobre blanco en varios navegadores. */
+.entrada option {
+  background-color: var(--color-base-200);
+  color: var(--color-base-content);
+}
+
+/* --------------------------------------------------------------------------
+ * Entrada en escena por scroll (ver components/Revelar.js)
+ * ------------------------------------------------------------------------ */
+
+/* Lo que va a entrar animado se oculta ya en el HTML, para que no dé un salto
+   entre que el servidor lo pinta y GSAP toma el control. Quien no tenga
+   JavaScript lo recupera con el <noscript> del layout. */
+[data-anima] {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anima] {
+    opacity: 1;
+  }
+}
+
+/* La barra de progreso de lectura, arriba del todo. */
+.progreso {
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* Barra de scroll discreta. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-base-100);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-base-300);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-lima);
+}
+
+/* Quien pide menos movimiento, no lo tiene. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
