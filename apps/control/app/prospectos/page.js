@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Copiable from "@/components/Copiable";
-import { BotonImportar, PlantillaMensaje } from "@/components/AccionesProspectos";
-import { leerPlantillaMensaje, listarProspectos, marcasConVideo, videosDe } from "@/libs/prospectos.mjs";
+import { BotonesMensaje, BotonImportar, PlantillaMensaje } from "@/components/AccionesProspectos";
+import { componerMensaje, leerPlantillaMensaje, listarProspectos, marcasConVideo, videosDe } from "@/libs/prospectos.mjs";
 import { ESTADOS, estadoPorId, TONOS_CONTACTO } from "@/libs/contacto";
 import { fechaCorta, haceCuanto } from "@/libs/formato";
 
@@ -9,7 +9,14 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Prospectos" };
 
 export default function PaginaProspectos() {
-  const prospectos = listarProspectos().map((p) => ({ ...p, videos: videosDe(p.id) }));
+  const plantilla = leerPlantillaMensaje();
+  // El mensaje se compone aquí, en el servidor, y viaja ya rellenado a los
+  // botones de cada fila: copiar o abrir WhatsApp no necesita abrir la ficha.
+  const prospectos = listarProspectos().map((p) => ({
+    ...p,
+    videos: videosDe(p.id),
+    mensajeListo: componerMensaje(p, plantilla),
+  }));
   const enEstudio = marcasConVideo();
   const sinImportar = enEstudio.filter((m) => !prospectos.some((p) => p.id === m.id));
   const cuenta = (estado) => prospectos.filter((p) => p.estado === estado).length;
@@ -55,7 +62,7 @@ export default function PaginaProspectos() {
         </section>
       ) : (
         <div className="overflow-x-auto rounded-box border border-base-300 bg-base-200/50">
-          <table className="w-full min-w-[64rem] text-left text-sm">
+          <table className="w-full min-w-[74rem] text-left text-sm">
             <thead className="border-b border-base-300 text-xs text-base-content/55">
               <tr>
                 <th className="px-4 py-2.5 font-normal">Negocio</th>
@@ -64,7 +71,8 @@ export default function PaginaProspectos() {
                 <th className="px-3 py-2.5 font-normal">Demo</th>
                 <th className="px-3 py-2.5 font-normal">Video</th>
                 <th className="px-3 py-2.5 font-normal">Último mensaje</th>
-                <th className="px-4 py-2.5 font-normal">Siguiente</th>
+                <th className="px-3 py-2.5 font-normal">Siguiente</th>
+                <th className="px-4 py-2.5 font-normal">Escribirle</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-base-300/60">
@@ -132,11 +140,18 @@ export default function PaginaProspectos() {
                         <span className="text-base-content/40">Nunca</span>
                       )}
                     </td>
-                    <td className="max-w-56 px-4 py-3 text-xs">
+                    <td className="max-w-56 px-3 py-3 text-xs">
                       {p.seguimientoEl && (
                         <p className={`font-mono ${vencido ? "text-warning" : "text-base-content/60"}`}>{p.seguimientoEl}</p>
                       )}
                       <p className="mt-0.5 line-clamp-2 leading-snug text-base-content/60">{p.proximoPaso || (p.respuesta ? "—" : "")}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      {["vendido", "descartado"].includes(p.estado) ? (
+                        <span className="text-xs text-base-content/40">—</span>
+                      ) : (
+                        <BotonesMensaje id={p.id} mensaje={p.mensajeListo} whatsapp={p.whatsapp} canal={p.canal} />
+                      )}
                     </td>
                   </tr>
                 );
@@ -147,7 +162,7 @@ export default function PaginaProspectos() {
       )}
 
       <div className="mt-5">
-        <PlantillaMensaje plantilla={leerPlantillaMensaje()} />
+        <PlantillaMensaje plantilla={plantilla} />
       </div>
 
       <p className="mt-4 max-w-3xl text-xs leading-relaxed text-base-content/50">

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { guardarPlantillaAccion, importarProspectosAccion } from "@/app/acciones-prospectos";
+import { guardarPlantillaAccion, importarProspectosAccion, marcarContactadoAccion } from "@/app/acciones-prospectos";
 import { CAMPOS_MENSAJE } from "@/libs/contacto";
 
 // Trae a la lista lo que tenga video en apps/video y aún no esté aquí. Los
@@ -77,5 +77,57 @@ export function PlantillaMensaje({ plantilla }) {
         </div>
       </div>
     </details>
+  );
+}
+
+// Los tres gestos de escribirle a alguien, en la fila de la lista: copiar el
+// mensaje ya rellenado, abrir WhatsApp con él escrito y apuntar que se mandó.
+// Así los que quedan por contactar se despachan desde la lista sin abrir cada
+// ficha; la ficha queda para cuando ya hay conversación.
+export function BotonesMensaje({ id, mensaje, whatsapp, canal }) {
+  const router = useRouter();
+  const [trabajando, empezar] = useTransition();
+  const numero = String(whatsapp || "").replace(/\D/g, "");
+
+  async function copiar() {
+    try {
+      await navigator.clipboard.writeText(mensaje);
+      toast.success("Mensaje copiado.");
+    } catch {
+      toast.error("No pude copiar. Ábrelo en la ficha y cópialo a mano.");
+    }
+  }
+
+  function abrirWhatsApp() {
+    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
+  }
+
+  function marcarEnviado() {
+    empezar(async () => {
+      const r = await marcarContactadoAccion(id, numero ? "whatsapp" : canal || "instagram");
+      if (!r.ok) return toast.error(r.error);
+      toast.success("Apuntado como enviado.");
+      router.refresh();
+    });
+  }
+
+  return (
+    <div className="flex flex-wrap gap-1">
+      <button type="button" onClick={copiar} className="btn btn-xs" title="Copia el mensaje con su enlace y su contraseña">
+        Copiar mensaje
+      </button>
+      <button
+        type="button"
+        onClick={abrirWhatsApp}
+        disabled={!numero}
+        className="btn btn-xs btn-primary"
+        title={numero ? `wa.me/${numero}` : "Sin número de WhatsApp"}
+      >
+        WhatsApp
+      </button>
+      <button type="button" onClick={marcarEnviado} disabled={trabajando} className="btn btn-xs btn-ghost" title="Fecha el contacto y pasa la ficha a «Contactado»">
+        Ya lo mandé
+      </button>
+    </div>
   );
 }
