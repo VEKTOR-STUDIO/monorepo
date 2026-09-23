@@ -179,7 +179,17 @@ export default function PantallaAcceso({ destino = "/" }) {
         <div className="m-auto grid w-full max-w-6xl gap-x-[clamp(1.5rem,4vw,3.5rem)] gap-y-[var(--puerta-v4)] px-5 py-[var(--puerta-v2)] lg:grid-cols-[1.15fr_1fr]">
           {/* ============ Columna izquierda: la carátula ============ */}
           <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left">
-            <div data-puerta="marca" className="flex items-center gap-2 sm:gap-3">
+            <div data-puerta="marca" className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 sm:gap-x-3 lg:justify-start">
+              <a
+                href="https://alessandrovaru.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="microgramma text-xs text-base-content/80 transition-colors hover:text-base-content"
+                style={{ fontFamily: "var(--microgramma-font)", letterSpacing: "0.22em" }}
+              >
+                Alessandrovaru
+              </a>
+              <span className="microgramma text-[0.6rem] text-base-content/45">de</span>
               <a
                 href="https://vektorstudio.tech/"
                 target="_blank"
@@ -189,9 +199,11 @@ export default function PantallaAcceso({ destino = "/" }) {
               >
                 Vektor
               </a>
-              <span className="h-px w-4 bg-base-content/25 sm:w-8" aria-hidden="true" />
-              <span className="microgramma whitespace-nowrap text-[0.6rem] text-base-content/45">
-                Sistemas a medida
+              <span className="flex items-center gap-2 sm:gap-3">
+                <span className="h-px w-4 bg-base-content/25 sm:w-8" aria-hidden="true" />
+                <span className="microgramma whitespace-nowrap text-[0.6rem] text-base-content/45">
+                  Sistemas a medida
+                </span>
               </span>
             </div>
 
@@ -369,6 +381,16 @@ export default function PantallaAcceso({ destino = "/" }) {
               className="mt-[var(--puerta-v2)] text-center text-xs leading-relaxed text-base-content/40"
             >
               Construida por{" "}
+              <a
+                href="https://alessandrovaru.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="microgramma text-base-content/70 underline-offset-4 transition-colors hover:text-base-content hover:underline"
+                style={{ fontFamily: "var(--microgramma-font)" }}
+              >
+                Alessandrovaru
+              </a>{" "}
+              de{" "}
               <a
                 href="https://vektorstudio.tech/"
                 target="_blank"

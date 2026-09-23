@@ -40,6 +40,19 @@ const Footer = () => {
             <p className="mt-4 text-sm text-base-content/60">
               Hecho por{" "}
               <a
+                href="https://alessandrovaru.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link link-hover uppercase transition-colors hover:text-primary"
+                style={{
+                  fontFamily: "var(--microgramma-font)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Alessandrovaru
+              </a>{" "}
+              de{" "}
+              <a
                 href="https://vektorstudio.tech/"
                 target="_blank"
                 rel="noopener noreferrer"

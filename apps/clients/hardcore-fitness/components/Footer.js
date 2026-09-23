@@ -107,6 +107,19 @@ export default function Footer() {
             <p>
               Tienda hecha por{" "}
               <a
+                href="https://alessandrovaru.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="uppercase transition-colors hover:text-primary"
+                style={{
+                  fontFamily: "var(--microgramma-font)",
+                  letterSpacing: "0.1em",
+                }}
+              >
+                Alessandrovaru
+              </a>{" "}
+              de{" "}
+              <a
                 href="https://vektorstudio.tech/"
                 target="_blank"
                 rel="noopener noreferrer"

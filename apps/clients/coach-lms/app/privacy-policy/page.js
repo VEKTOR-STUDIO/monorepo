@@ -57,7 +57,7 @@ Podrás publicar actualizaciones en esta página.
 
 ${config.resend.supportEmail}
 
-Desarrollo: Vektor (https://vektorstudio.tech/).`}
+Desarrollo: Alessandrovaru de Vektor (https://alessandrovaru.com · https://vektorstudio.tech/).`}
         </pre>
       </div>
     </main>
