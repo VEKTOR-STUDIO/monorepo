@@ -17,6 +17,9 @@ importers:
 
   apps/clients/aprovechalo-ve:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -63,6 +66,9 @@ importers:
 
   apps/clients/cittacars:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -191,6 +197,9 @@ importers:
 
   apps/clients/coronadocars:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -237,6 +246,9 @@ importers:
 
   apps/clients/dealernautacars:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -283,6 +295,9 @@ importers:
 
   apps/clients/dss-import:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -484,6 +499,9 @@ importers:
 
   apps/clients/hb-inversiones:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -530,6 +548,9 @@ importers:
 
   apps/clients/im2006:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -576,6 +597,9 @@ importers:
 
   apps/clients/kingscars:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -701,6 +725,9 @@ importers:
 
   apps/clients/lone-star:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -953,6 +980,9 @@ importers:
 
   apps/clients/susu-cars:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -1090,6 +1120,9 @@ importers:
 
   apps/clients/top-miami-cars:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -1136,6 +1169,9 @@ importers:
 
   apps/clients/veloce-autos:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -1182,6 +1218,9 @@ importers:
 
   apps/clients/ventananacional:
     dependencies:
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)
       eslint:
         specifier: ^9.17.0
         version: 9.39.4(jiti@2.7.0)
@@ -6987,6 +7026,11 @@ snapshots:
     optionalDependencies:
       next: 15.5.18(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
+
+  '@vercel/analytics@2.0.1(next@15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react@19.2.6)':
+    optionalDependencies:
+      next: 15.5.18(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      react: 19.2.6
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:

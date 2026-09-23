@@ -87,6 +87,7 @@ export function rutaLibre(pathname) {
     pathname === "/entrar" ||
     pathname === "/api/entrar" ||
     pathname.startsWith("/_next") ||
+    pathname.startsWith("/_vercel") ||
     pathname.startsWith("/marca/") ||
     pathname === "/favicon.ico"
   );

@@ -1,6 +1,6 @@
 ---
 name: publicar-en-vercel
-description: Publica una app de `apps/clients/*` en Vercel y deja un enlace que se le pueda mandar a un cliente por WhatsApp. Cubre crear el proyecto ligado al repo, apuntarlo a la carpeta correcta dentro del monorepo, quitar la protección de Vercel que impediría entrar, poner la contraseña de la demo y verificar que la puerta cierra de verdad. Úsala siempre que se hable de "subir", "publicar", "desplegar", "deployar", "sacar a producción", "poner en línea" o "mandarle el enlace" a un cliente; de crear un proyecto en Vercel; de por qué un enlace pide iniciar sesión, da 404 o entra sin pedir contraseña; y para revisar qué clientes del monorepo siguen sin publicar. También sirve para cambiar la clave o el dominio de una demo ya publicada.
+description: Publica una app de `apps/clients/*` en Vercel y deja un enlace que se le pueda mandar a un cliente por WhatsApp. Cubre crear el proyecto ligado al repo, apuntarlo a la carpeta correcta dentro del monorepo, quitar la protección de Vercel que impediría entrar, poner la contraseña de la demo y verificar que la puerta cierra de verdad. Úsala siempre que se hable de "subir", "publicar", "desplegar", "deployar", "sacar a producción", "poner en línea" o "mandarle el enlace" a un cliente; de crear un proyecto en Vercel; de por qué un enlace pide iniciar sesión, da 404 o entra sin pedir contraseña; y para revisar qué clientes del monorepo siguen sin publicar. También sirve para cambiar la clave o el dominio de una demo ya publicada, y para activar o revisar Web Analytics de Vercel en una demo: úsala cuando se hable de "analytics", "visitas", "cuánta gente entró", "si abrió el enlace" o de dónde ver quién ha visto una demo.
 ---
 
 # Publicar en Vercel
@@ -16,7 +16,8 @@ ven hasta que el enlace ya está mandado. Están todas documentadas abajo, en
 
 ## Antes de publicar
 
-Dos comprobaciones que ahorran un despliegue fallido:
+Tres comprobaciones que ahorran un despliegue fallido o una demo que no cuenta
+visitas:
 
 **Que el cliente esté en GitHub.** Vercel construye desde el repo, no desde el
 disco. Un cliente que solo existe en local es invisible para Vercel:
@@ -45,9 +46,32 @@ al prerenderizar. Compruébalo con
 hay resultados, esa app necesita su proyecto de Supabase antes de publicarse, o
 el despliegue se cae.
 
+**Que lleve Web Analytics.** Todas las demos publicadas mandan sus visitas al
+panel de Vercel: una visita a `/entrar` dice que el prospecto abrió el enlace,
+y una a `/` que pasó la puerta. Una carpeta copiada de otra demo ya lo trae;
+compruébalo igual, porque sin esto la demo se publica bien pero a ciegas:
+
+```bash
+grep -c "@vercel/analytics/next\|<Analytics />" <carpeta>/app/layout.js   # 2
+grep -c '"@vercel/analytics"' <carpeta>/package.json                       # 1
+grep -c "_vercel" <carpeta>/middleware.js <carpeta>/libs/acceso.js        # 1 y 1
+```
+
+Si falta algo, son cuatro toques: `"@vercel/analytics": "^2.0.1"` en
+`dependencies`; `import { Analytics } from "@vercel/analytics/next"` y
+`<Analytics />` al final del `<body>` de `app/layout.js`; `_vercel` en el
+`matcher` de `middleware.js`; y `pathname.startsWith("/_vercel")` en
+`rutaLibre` de `libs/acceso.js`. Los dos últimos están en
+`demo-de-venta/references/puerta.md` y no son opcionales: `/_vercel/insights/*`
+es por donde el script se carga y manda cada visita, y si la puerta lo atrapa,
+la visita a `/entrar` —justo la que interesa— se pierde en un 307. Después,
+`pnpm install`, porque el paquete tiene que entrar en `pnpm-lock.yaml` y el
+lockfile viaja en el mismo commit.
+
 ## El procedimiento
 
-Cuatro pasos y una verificación. Los cuatro usan las herramientas MCP de Vercel.
+Cinco pasos y una verificación. Cuatro usan las herramientas MCP de Vercel; el
+de Web Analytics va por el CLI, porque el MCP no lo tiene.
 
 ### 1. Crear el proyecto
 
@@ -97,7 +121,25 @@ por esto: quien la protege es su propia puerta con contraseña.
 reconstruya cuando cambie su carpeta. Sin esto, con quince clientes colgando de
 `main`, cada commit dispara quince builds que además van en cola de uno en uno.
 
-### 3. Poner las variables
+### 3. Activar Web Analytics
+
+El `<Analytics />` del layout no cuenta nada hasta que el proyecto de Vercel
+tiene Web Analytics activado: sin eso, `/_vercel/insights/script.js` ni
+existe. Es un interruptor por proyecto y va por el CLI (el subcomando llegó en
+la versión 59; la instalada en este WSL es la 48, de ahí el `npx`):
+
+```bash
+npx -y vercel@latest project web-analytics <nombre> --scope alessandro-varuzzas-projects
+```
+
+Hace falta sesión en el CLI (`npx -y vercel@latest login`), que es interactiva
+y la abre el usuario una sola vez. Si no hay sesión, no te pares aquí: sigue
+con el resto y deja el comando listo en la entrega. Se puede activar después,
+pero entonces hay que volver a desplegar, porque Vercel monta las rutas
+`/_vercel/insights/*` en el siguiente despliegue tras activarlo. Por eso va
+antes del paso 5. A mano es Proyecto → Analytics → Enable, en el panel.
+
+### 4. Poner las variables
 
 ```
 create_project_env(idOrName: "<nombre>", upsert: "true", requestBody: [
@@ -114,10 +156,10 @@ sin estarlo. Genera una corta y dictable por teléfono — el patrón
 `<negocio>-<4 hex>` funciona bien (`head -c 2 /dev/urandom | xxd -p`) — y
 dísela al usuario en claro, porque es él quien se la pasa al cliente.
 
-`SITE_URL` puede que haya que corregirla después del paso 5, si el alias no
+`SITE_URL` puede que haya que corregirla después del paso 6, si el alias no
 resultó ser el esperado.
 
-### 4. Desplegar
+### 5. Desplegar
 
 ```
 create_deployment(skipAutoDetectionConfirmation: "1", requestBody: {
@@ -134,7 +176,7 @@ al usuario antes de la primera vez si no te lo ha dado ya. Y ojo: pedir un
 preview **no** es una forma más suave de hacerlo — cualquier despliegue contra
 `main` se marca como producción igual, porque `main` es la rama de producción.
 
-### 5. Verificar (esto no es opcional)
+### 6. Verificar (esto no es opcional)
 
 Un despliegue en `READY` no significa que el enlace sirva. Hay que mirar dos
 cosas.
@@ -164,6 +206,19 @@ que investigarla antes de dar el enlace por bueno:
 - **Sale una pantalla de login de Vercel**: quedó `ssoProtection` activada.
 - **`404` en todo**: el build aún no ha terminado; el alias corto no se asigna
   hasta que el despliegue está `READY`.
+
+**Y que cuenta las visitas.** Contra el mismo alias:
+
+```bash
+curl -s -o /dev/null -w '%{http_code} %{content_type}\n' https://<alias>/_vercel/insights/script.js
+```
+
+Lo correcto es `200 application/javascript`. Un `404` es que al proyecto le
+falta Web Analytics (paso 3) o que no se ha vuelto a desplegar desde que se
+activó; un `307` a `/entrar` es que el middleware de esa demo no excluye
+`_vercel`. Las visitas se ven en el panel de Vercel, pestaña Analytics del
+proyecto, y también por MCP con `count_pageviews` y `aggregate_pageviews`
+(agrupando por `path`: `/entrar` es quien abrió el enlace, `/` quien entró).
 
 ## Las trampas de esta cuenta
 
@@ -222,6 +277,10 @@ falta y deja que él decida.
 Entrega siempre, junto al enlace, la contraseña en claro y una línea de lo que
 quedó pendiente en esa demo. El enlace sin la contraseña no sirve de nada, y el
 usuario va a copiar ambos en un chat.
+
+Si Web Analytics quedó sin activar porque no había sesión en el CLI, dilo en
+esa misma línea de pendientes, con el comando del paso 3 y el recordatorio de
+volver a desplegar después.
 
 Para cambiar una clave más tarde basta con `create_project_env` con
 `upsert: "true"` y volver a desplegar.

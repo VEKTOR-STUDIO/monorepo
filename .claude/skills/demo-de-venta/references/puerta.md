@@ -101,6 +101,7 @@ export function rutaLibre(pathname) {
     pathname === "/entrar" ||
     pathname === "/api/entrar" ||
     pathname.startsWith("/_next") ||
+    pathname.startsWith("/_vercel") ||
     pathname.startsWith("/marca/") ||   // lo que la pantalla necesita para pintarse
     pathname === "/favicon.ico"
   );
@@ -147,7 +148,7 @@ export async function middleware(request) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|_vercel|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
 ```

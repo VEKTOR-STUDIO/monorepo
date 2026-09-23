@@ -1,5 +1,6 @@
 import { Saira, Inter, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import { getSEOTags, renderSchemaTags } from "@/libs/seo";
 import ClientLayout from "@/components/LayoutClient";
 import FooterFoot from "@/components/FooterFoot";
@@ -80,6 +81,10 @@ export default function RootLayout({ children }) {
         <ClientLayout>{children}</ClientLayout>
         <FooterFoot />
         {demo && <AvisoFlotante />}
+        {/* Web Analytics de Vercel: cuenta las visitas, también las de /entrar,
+            que es como se sabe si el prospecto abrió el enlace. Solo funciona
+            con Web Analytics activado en el proyecto de Vercel. */}
+        <Analytics />
       </body>
     </html>
   );

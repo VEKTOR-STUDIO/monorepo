@@ -27,8 +27,10 @@ export const config = {
   matcher: [
     /*
      * Todo menos los archivos estáticos y las imágenes, que no necesitan
-     * pasar por aquí.
+     * pasar por aquí, y menos /_vercel, que es por donde Web Analytics carga
+     * su script y manda las visitas: si pasara por la puerta, cada visita a
+     * /entrar se perdería en un 307.
      */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|_vercel|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };
