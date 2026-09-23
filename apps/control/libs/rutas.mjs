@@ -35,6 +35,18 @@ export const carpetaDatos = () => path.join(carpetaControl(), "data");
 export const carpetaCandidatos = () => path.join(carpetaDatos(), "candidatos");
 export const archivoCerrojo = () => path.join(carpetaDatos(), "rutina.lock");
 
+// Prospectos: una carpeta por negocio con demo y video, con su ficha de
+// contacto. Aparte de los candidatos porque son otra fase: ya tienen carpeta,
+// demo publicada y video; lo que falta es hablar con la persona.
+export const carpetaProspectos = () => path.join(carpetaDatos(), "prospectos");
+export const archivoProspecto = (id) => path.join(carpetaProspectos(), `${id}.json`);
+export const archivoMensaje = () => path.join(carpetaProspectos(), "mensaje.md");
+
+// El estudio de video: de ahí salen las marcas (lo que ya tiene video) y los MP4.
+export const archivoMarcasVideo = () =>
+  path.join(raiz(), "apps", "video", "src", "projects", "concesionarios", "marcas.ts");
+export const carpetaVideos = () => path.join(raiz(), "apps", "video", "out", "concesionarios");
+
 export const carpetaCandidato = (id) => path.join(carpetaCandidatos(), id);
 export const archivoCandidato = (id) =>
   path.join(carpetaCandidato(id), "candidato.json");

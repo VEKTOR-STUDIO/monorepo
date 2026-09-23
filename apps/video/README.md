@@ -197,13 +197,13 @@ de su inventario.
 
 | Escena | Qué cuenta |
 | --- | --- |
-| La marca (3 s) | Logo, nombre, lema y ciudad. Arriba, pequeño: «Vektor presenta». |
+| La marca (3 s) | Logo, nombre, lema y ciudad. Arriba, pequeño: «Alessandrovaru de Vektor presenta». |
 | Lo que pasa hoy (3,4 s) | Sus seguidores de Instagram y la pregunta: ¿dónde ven tu inventario? |
 | Su web (6,6 s) | Un teléfono con SU web: portada, inventario, ficha y botón de WhatsApp. |
 | Diferencial (3,3 s) | El corte de su negocio (consignación, crédito, subastas, camiones…). |
-| Cierre (3,7 s) | El enlace de su demo en Vercel, $740 tachado → $449 y «Hecho por Vektor». |
+| Cierre (3,7 s) | El enlace de su demo en Vercel, $740 tachado → $449 y «Hecho por Alessandrovaru de Vektor» con los dos dominios. |
 
-Tipografías: **Microgramma** (la de Vektor/Alessandrovaru) en etiquetas, dominio
+Tipografías: **Microgramma** (la firma de la casa, Alessandrovaru de Vektor) en etiquetas, dominio
 y firma; **Questrial** como voz de todo el texto corrido; y la de titulares de
 cada web (Sora, Saira, Barlow Condensed, Cinzel, Chakra Petch, Russo One, Exo 2).
 

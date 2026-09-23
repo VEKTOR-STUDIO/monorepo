@@ -3,6 +3,7 @@
 @source "./**/*.{js,ts,jsx,tsx,mdx}";
 @source "../components/**/*.{js,ts,jsx,tsx,mdx}";
 @source "../libs/etapas.js";
+@source "../libs/contacto.js";
 
 @plugin "daisyui" {
   themes: false;

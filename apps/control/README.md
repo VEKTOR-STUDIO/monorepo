@@ -101,6 +101,9 @@ ejecutable (`CONTROL_CLAUDE_BIN`). Ver `.env.example`.
 ```
 apps/control/data/              ← fuera de git (.gitignore)
 ├── rutina.lock                 ← quién está corriendo ahora
+├── prospectos/
+│   ├── mensaje.md              ← la plantilla común del mensaje
+│   └── <id>.json               ← la ficha: contacto, estado, respuesta, notas
 └── candidatos/<id>/
     ├── candidato.json          ← la tarjeta: datos, etapa, rutina, historial
     ├── material/               ← lo que subiste
@@ -124,6 +127,37 @@ si llevan la capa de demo, si está apagada, si están vinculadas a Vercel en
 este equipo, cuántos cambios tienen sin subir, su último commit, en qué columna
 del tablero están y el comando para levantarlas.
 
+## La página de Prospectos
+
+La fase que viene después de «Publicada»: hablar con la persona. Un prospecto
+es un negocio que ya tiene demo publicada **y video** (ver `apps/video` y la
+skill `video-de-venta`): tener video significa que la demo está adaptada,
+presentable y en línea, así que es alguien a quien escribir.
+
+- **Importar desde los videos** lee `marcas.ts` del estudio y crea una ficha
+  por marca que no exista aún, con su enlace de Vercel, su Instagram y su
+  WhatsApp (del `config.js` del cliente) y la contraseña de la demo (la del
+  `.env.local` o, si no hay, la de reserva de `libs/acceso.js`). Los que ya
+  existen no se tocan: su conversación vale más que los datos de origen.
+- Cada ficha lleva el **estado** de la conversación (por contactar →
+  contactado → respondió → negociando → vendido / descartado), con quién se
+  habla y por dónde, qué contestó, el siguiente paso y una fecha de
+  seguimiento (vencida, sube arriba en la lista).
+- **El mensaje** sale de una plantilla común (`data/prospectos/mensaje.md`,
+  editable desde la lista) rellenada con `{nombre}`, `{enlace}`, `{clave}`,
+  `{ciudad}` e `{instagram}`. Se copia con un clic o se abre WhatsApp con el
+  texto ya escrito (`wa.me`). Si se retoca en una ficha, se guarda solo para
+  ese prospecto. Lo que falte sale entre corchetes para que se note.
+- **El video** se ve y se descarga desde la ficha
+  (`/api/prospectos/<id>/video?formato=vertical|wide`); WhatsApp no deja
+  adjuntarlo desde un enlace, así que se arrastra al chat a mano.
+- **«Ya lo mandé»** fecha el primer contacto, renueva el último y pasa la
+  ficha a «Contactado» si estaba por contactar.
+
+Ojo con la contraseña: es la que hay en el disco. Si al publicar se puso una
+`DEMO_PASSWORD` distinta en Vercel, hay que corregirla en la ficha, que avisa
+de dónde la leyó.
+
 ## Mapa del código
 
 | Archivo | Qué hay |
@@ -134,6 +168,9 @@ del tablero están y el comando para levantarlas.
 | `libs/rutina.mjs` | El prompt, los permisos, el cerrojo y la cola |
 | `scripts/rutina.mjs` | El proceso de la rutina |
 | `libs/clientes.mjs` | El estado de cada carpeta de `apps/clients` |
+| `libs/prospectos.mjs` | Las fichas de prospectos, la plantilla del mensaje y la importación desde `apps/video` |
+| `libs/contacto.js` | Los estados de la conversación y los canales |
+| `app/acciones-prospectos.js` | Todo lo que la página de Prospectos puede cambiar |
 | `libs/local.js` | Lo que impide usarlo desde fuera de tu máquina |
 | `app/acciones.js` | Todo lo que el tablero puede cambiar |
 

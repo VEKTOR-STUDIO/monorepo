@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const ENLACES = [
   { href: "/", texto: "Tablero", activo: (ruta) => ruta === "/" || ruta.startsWith("/candidatos") },
   { href: "/clientes", texto: "Clientes", activo: (ruta) => ruta.startsWith("/clientes") },
+  { href: "/prospectos", texto: "Prospectos", activo: (ruta) => ruta.startsWith("/prospectos") },
 ];
 
 export default function Navegacion() {
