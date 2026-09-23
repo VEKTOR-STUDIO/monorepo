@@ -129,15 +129,24 @@ existe. Es un interruptor por proyecto y va por el CLI (el subcomando llegó en
 la versión 59; la instalada en este WSL es la 48, de ahí el `npx`):
 
 ```bash
-npx -y vercel@latest project web-analytics <nombre> --scope alessandro-varuzzas-projects
+env -u CLAUDECODE npx -y vercel@latest project web-analytics enable <nombre> --scope alessandro-varuzzas-projects
 ```
 
-Hace falta sesión en el CLI (`npx -y vercel@latest login`), que es interactiva
-y la abre el usuario una sola vez. Si no hay sesión, no te pares aquí: sigue
-con el resto y deja el comando listo en la entrega. Se puede activar después,
-pero entonces hay que volver a desplegar, porque Vercel monta las rutas
-`/_vercel/insights/*` en el siguiente despliegue tras activarlo. Por eso va
-antes del paso 5. A mano es Proyecto → Analytics → Enable, en el panel.
+**Este comando lo ejecuta el usuario, no tú.** El CLI detecta que lo lanza
+Claude Code (por la variable `CLAUDECODE`), se pone en modo no interactivo y
+responde `confirmation_required` en vez de activar: quiere que una persona
+confirme en una terminal, porque en Hobby es gratis con límites y en Pro se
+cobra. No tiene `--yes`, y saltarse esa confirmación no es decisión tuya. Así
+que dale el comando listo para que lo pegue en una terminal fuera de Claude
+Code (o con `!` en la sesión, que para eso lleva el `env -u CLAUDECODE`),
+tras hacer sesión una sola vez con `npx -y vercel@latest login`. Para varios
+proyectos, un `for` con los nombres: confirma uno a uno con `y`.
+
+No te pares aquí mientras lo hace: sigue con el resto y deja el comando en la
+entrega. Se puede activar después, pero entonces hay que volver a desplegar,
+porque Vercel monta las rutas `/_vercel/insights/*` en el siguiente despliegue
+tras activarlo. Por eso va antes del paso 5. A mano es Proyecto → Analytics →
+Enable, en el panel.
 
 ### 4. Poner las variables
 
@@ -278,7 +287,7 @@ Entrega siempre, junto al enlace, la contraseña en claro y una línea de lo que
 quedó pendiente en esa demo. El enlace sin la contraseña no sirve de nada, y el
 usuario va a copiar ambos en un chat.
 
-Si Web Analytics quedó sin activar porque no había sesión en el CLI, dilo en
+Si el usuario aún no ha confirmado la activación de Web Analytics, dilo en
 esa misma línea de pendientes, con el comando del paso 3 y el recordatorio de
 volver a desplegar después.
 
