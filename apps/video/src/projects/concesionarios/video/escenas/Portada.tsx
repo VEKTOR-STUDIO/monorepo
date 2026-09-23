@@ -5,13 +5,16 @@ import { useStage } from "../../../../lib/layout";
 import { Columna } from "../../components/Columna";
 import { Estelas, Fondo, Franja } from "../../components/Fondo";
 import { Logo } from "../../components/Logo";
-import { Etiqueta, tamParaCaber, Titular, useMarca, Voz } from "../../components/Tipos";
+import { Etiqueta, tamEtiqueta, tamParaCaber, Titular, useMarca, Voz } from "../../components/Tipos";
 
 /**
  * 01 · La marca. Entra el logo, luego su nombre en la letra de su web y su
- * propio lema. Lo primero que ve el dueño es SU marca, no la de Vektor: la
- * firma de la casa queda arriba, pequeña, y vuelve al final.
+ * propio lema. Lo primero que ve el dueño es SU marca, no la de la casa: la
+ * firma (Alessandrovaru de Vektor) queda arriba, pequeña, y vuelve al final.
  */
+/** La firma de la casa, arriba y pequeña: los dos nombres, como en el crédito. */
+const PRESENTA = "Alessandrovaru de Vektor presenta";
+
 export const Portada: React.FC = () => {
   const frame = useCurrentFrame();
   const { u, vertical } = useStage();
@@ -28,8 +31,12 @@ export const Portada: React.FC = () => {
       <Estelas opacity={estelas} speed={2.2} count={20} />
       <Columna gap={2.6}>
         <div style={riseIn(frame, { delay: 0, duration: 14 })}>
-          <Etiqueta size={1.6} color={marca.colores.humo}>
-            Vektor presenta
+          <Etiqueta
+            size={tamEtiqueta(PRESENTA, 1.6, vertical ? 56 : 110)}
+            color={marca.colores.humo}
+            style={{ whiteSpace: "nowrap" }}
+          >
+            {PRESENTA}
           </Etiqueta>
         </div>
 

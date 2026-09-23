@@ -16,7 +16,7 @@ import soraBold from "./assets/fonts/Sora-Bold.ttf";
  * `delayRender`.
  *
  * Dos son de la casa y salen en los trece videos:
- *   · **Microgramma** — la firma de Vektor (y antes de Alessandrovaru): las
+ *   · **Microgramma** — la firma de la casa (Alessandrovaru de Vektor): las
  *     etiquetas, el dominio y el crédito final.
  *   · **Questrial** — la voz del texto corrido. Es la del cuerpo de
  *     Aprovéchalo y Citta, y aquí hace de narrador neutro entre marcas.

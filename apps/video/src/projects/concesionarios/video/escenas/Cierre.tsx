@@ -17,12 +17,15 @@ const PRECIO = {
   nota: "Pago único · dominio, montaje y carga del catálogo incluidos",
 };
 
+/** Los dos sitios de la firma, en el orden del crédito. */
+const DOMINIOS = "alessandrovaru.com · vektorstudio.tech";
+
 /** Frame en el que el precio viejo se tacha y cae el nuevo. */
 const TACHA = 30;
 
 /**
- * 05 · La web ya existe: el enlace donde está publicada, el precio y la firma de Vektor en
- * Microgramma, como en el pie de cada demo.
+ * 05 · La web ya existe: el enlace donde está publicada, el precio y la firma
+ * («Hecho por Alessandrovaru de Vektor») en Microgramma, como en el pie de cada demo.
  */
 export const Cierre: React.FC = () => {
   const frame = useCurrentFrame();
@@ -31,6 +34,8 @@ export const Cierre: React.FC = () => {
   const { colores } = marca;
 
   const tacha = progress(frame, { delay: TACHA, duration: 10 });
+  // La línea de la firma: 14 + 6 letras en Microgramma más el «de» y sus huecos.
+  const tamFirma = tamEtiqueta("Alessandrovaru de Vektor", 3, vertical ? 56 : 110, 0.14);
 
   return (
     <Fondo halo={0.9}>
@@ -121,16 +126,28 @@ export const Cierre: React.FC = () => {
             gap: u * 0.9,
           }}
         >
-          <div style={{ display: "flex", alignItems: "baseline", gap: u * 1.4 }}>
-            <Voz size={2.2} dim>
-              Hecho por
+          <Voz size={2.2} dim>
+            Hecho por
+          </Voz>
+          {/* Los dos nombres en una línea, como en el pie de cada demo. En 9:16
+              no caben a 3u, así que el tamaño sale de lo que mide la línea. */}
+          <div style={{ display: "flex", alignItems: "baseline", gap: u * 1.2 }}>
+            <Etiqueta size={tamFirma} color={colores.tinta} style={{ letterSpacing: "0.14em" }}>
+              Alessandrovaru
+            </Etiqueta>
+            <Voz size={tamFirma * 0.75} dim>
+              de
             </Voz>
-            <Etiqueta size={3} color={colores.tinta} style={{ letterSpacing: "0.14em" }}>
+            <Etiqueta size={tamFirma} color={colores.tinta} style={{ letterSpacing: "0.14em" }}>
               Vektor
             </Etiqueta>
           </div>
-          <Etiqueta size={1.4} color={colores.humo} style={{ textTransform: "none", letterSpacing: "0.18em" }}>
-            vektorstudio.tech
+          <Etiqueta
+            size={tamEtiqueta(DOMINIOS, 1.4, vertical ? 56 : 110, 0.18)}
+            color={colores.humo}
+            style={{ textTransform: "none", letterSpacing: "0.18em", whiteSpace: "nowrap" }}
+          >
+            {DOMINIOS}
           </Etiqueta>
         </div>
       </Columna>
