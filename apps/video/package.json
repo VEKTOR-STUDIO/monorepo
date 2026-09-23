@@ -15,7 +15,9 @@
     "render:ep02-wide": "remotion render competidores-ep02-wide out/roll-prep-competidores-ep02-wide.mp4",
     "render:recap": "remotion render recap-ep01-vertical out/roll-prep-recap-ep01-vertical.mp4",
     "render:recap-wide": "remotion render recap-ep01-wide out/roll-prep-recap-ep01-wide.mp4",
-    "clean": "rm -rf dist out node_modules"
+    "clean": "rm -rf dist out node_modules",
+    "render:concesionarios": "scripts/render-concesionarios.sh vertical",
+    "render:concesionarios-wide": "scripts/render-concesionarios.sh wide"
   },
   "dependencies": {
     "@remotion/cli": "4.0.509",

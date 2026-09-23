@@ -29,6 +29,7 @@ apps/video/
     │   └── anim.ts             ← slamIn, flyIn, riseIn, shake, countTo…
     └── projects/
         ├── index.ts            ← EL REGISTRO. Una línea por cliente.
+        ├── concesionarios/     ← 13 marcas de carros, un montaje compartido
         └── roll-prep/
             ├── index.tsx       ← las <Composition /> del cliente
             ├── theme.ts        ← paleta y tipografías de la marca
@@ -185,6 +186,48 @@ en vez de desaparecer, para que se siga leyendo de qué lado le tocó a cada uno
 
 Una escena por pelea sale de `MATCHES`: un torneo de ocho combates se recorta
 solo desde `content.ts` sin tocar el montaje.
+
+### Concesionarios · Video de venta (13 marcas)
+
+Un video de 20 s por cada demo de carros de `apps/clients/`, para mandárselo al
+dueño por WhatsApp. Un solo montaje (`src/projects/concesionarios/video/`)
+parametrizado por marca: cada video sale con la paleta de su `globals.css`, la
+tipografía de titulares de su `layout.js`, su logo, su tagline y cuatro unidades
+de su inventario.
+
+| Escena | Qué cuenta |
+| --- | --- |
+| La marca (3 s) | Logo, nombre, lema y ciudad. Arriba, pequeño: «Vektor presenta». |
+| Lo que pasa hoy (3,4 s) | Sus seguidores de Instagram y la pregunta: ¿dónde ven tu inventario? |
+| Su web (6,6 s) | Un teléfono con SU web: portada, inventario, ficha y botón de WhatsApp. |
+| Diferencial (3,3 s) | El corte de su negocio (consignación, crédito, subastas, camiones…). |
+| Cierre (3,7 s) | El enlace de su demo en Vercel, $740 tachado → $449 y «Hecho por Vektor». |
+
+Tipografías: **Microgramma** (la de Vektor/Alessandrovaru) en etiquetas, dominio
+y firma; **Questrial** como voz de todo el texto corrido; y la de titulares de
+cada web (Sora, Saira, Barlow Condensed, Cinzel, Chakra Petch, Russo One, Exo 2).
+
+```bash
+pnpm --filter @alessandrovaru/video run render:concesionarios        # 13 verticales
+pnpm --filter @alessandrovaru/video run render:concesionarios-wide   # 13 horizontales
+scripts/render-concesionarios.sh vertical kingscars                  # solo una
+```
+
+Salen en `out/concesionarios/<marca>-<formato>.mp4`.
+
+- **Datos de marca**: `marcas.ts`. **Inventario**: `inventario.ts` (copiado de
+  `data/vehiculos.json` de cada cliente; los precios son los de la demo, casi
+  todos de muestra). Si llega el inventario real, se cambia ahí y se re-renderiza.
+- Solo hay foto donde la demo ya la tiene (Aprovéchalo, Citta y Venta Nacional
+  con fotos de stock; HB y Lone Star con las suyas). El resto va con la silueta
+  de su carrocería, igual que su web.
+- Veloce y Coronado usan su logo en vector (portado de `MarcaVeloce.js` y
+  `MarcaCoronado.js`); los demás, su avatar de Instagram recortado en círculo.
+- El precio ($740 → $449) es el de todas las demos y vive en `escenas/Cierre.tsx`.
+- El enlace (`dominio` en `marcas.ts`) es el alias de producción de cada
+  proyecto en Vercel, leído del proyecto y no compuesto a mano: a Veloce le tocó
+  `veloce-autos-nine.vercel.app`. El tamaño se ajusta solo a su largo. Cuando un
+  cliente compre su dominio, se cambia ahí y se re-renderiza su video.
 
 ---
 
